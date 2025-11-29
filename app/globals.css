@@ -130,3 +130,7 @@ section{
     hover:after:w-full hover:after:left-0;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
