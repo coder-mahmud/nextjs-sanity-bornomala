@@ -7,7 +7,7 @@ import { ChevronDown, ChevronUp, HelpCircle, MessageCircle } from 'lucide-react'
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(null)
 
-  const toggleFAQ = (index) => {
+  const toggleFAQ = (index: any) => {
     setOpenIndex(openIndex === index ? null : index)
   }
 
