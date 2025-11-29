@@ -43,7 +43,7 @@ export default function RootLayout({
       <body
         className={`font-inter antialiased`}
       >
-        <ThemeProvider attribute='class' defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+        <ThemeProvider attribute='class' defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </body>
