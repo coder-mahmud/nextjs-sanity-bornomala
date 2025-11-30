@@ -43,7 +43,8 @@ const TestimonialsSection = () => {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
             <Quote className="w-4 h-4 mr-2" />
             শিক্ষার্থীদের মতামত
@@ -57,8 +58,8 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
+          {testimonials.map((testimonial,idx) => (
+            <Card key={testimonial.id} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx*100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <CardContent className="p-6">
                 <div className="flex items-center mb-4">
                   {renderStars(testimonial.rating)}
@@ -85,7 +86,7 @@ const TestimonialsSection = () => {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 text-center">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Star className="w-4 h-4 mr-2" />
             ৪.৯/৫ গড় রেটিং ৫০০+ রিভিউ এ

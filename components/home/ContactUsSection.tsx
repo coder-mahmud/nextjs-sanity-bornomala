@@ -76,7 +76,7 @@ const ContactSection = () => {
   return (
     <section id="contact_section" className="py-16 md:py-24 bg-linear-to-br from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
             <Mail className="w-4 h-4 mr-2" />
             যোগাযোগ করুন
@@ -91,11 +91,11 @@ const ContactSection = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div>
+          <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-xl font-bold text-gray-900">
-                  বার্তা পাঠান
+                 ইমেইল পাঠান
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -150,7 +150,7 @@ const ContactSection = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="message">বার্তা *</Label>
+                    <Label htmlFor="message">মেসেজ *</Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -171,10 +171,10 @@ const ContactSection = () => {
           </div>
 
           {/* Contact Information */}
-          <div>
+          <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {contactInfo.map((info, index) => (
-                <Card key={index} className="border-0 shadow-lg h-full">
+                <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index * 100} className="border-0 shadow-lg h-full">
                   <CardContent className="p-6">
                     <div className="flex items-start mb-4">
                       <div className="mr-4 mt-1">
@@ -198,7 +198,7 @@ const ContactSection = () => {
               ))}
             </div>
 
-            <Card className="border-0 shadow-lg">
+            <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="border-0 shadow-lg">
               <CardContent className="p-6">
                 <h3 className="font-bold text-gray-900 mb-4">
                   বিনামূল্যে পরামর্শের জন্য যোগাযোগ করুন

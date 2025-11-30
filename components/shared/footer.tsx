@@ -54,7 +54,7 @@ const Footer = () => {
   const socialLinks = [
     { name: "Facebook", icon: <Facebook className="h-5 w-5" />, href: "https://www.facebook.com/dailyfrenchbybornomala/" },
     { name: "YouTube", icon: <Youtube className="h-5 w-5" />, href: "https://www.youtube.com/channel/UC6o8HLJnUKj0bRwd5gKjKhg" },
-    { name: "Instagram", icon: <Instagram className="h-5 w-5" />, href: "#" }
+    // { name: "Instagram", icon: <Instagram className="h-5 w-5" />, href: "#" }
   ]
 
   return (
@@ -62,7 +62,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
-          <div className="lg:col-span-1">
+          <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="lg:col-span-1">
             <div className="flex items-center mb-4">
               <Link href="/">
                 <Image src="/images/logo.jpg" alt="Logo" width={120} height={120} className="w-auto h-12" />
@@ -88,7 +88,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="100">
             <h3 className="text-lg font-bold mb-4">দ্রুত লিংক</h3>
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
@@ -105,7 +105,7 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="lg:col-span-2">
+          <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="200" className="lg:col-span-2">
             <h3 className="text-lg font-bold mb-4">যোগাযোগের তথ্য</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {contactInfo.map((info, index) => (
@@ -132,7 +132,7 @@ const Footer = () => {
         </div>
 
         {/* Newsletter Subscription */}
-        <div className="bg-gray-800 rounded-lg p-6 mb-12">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="bg-gray-800 rounded-lg p-6 mb-12">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0 md:mr-6">
               <h3 className="text-lg font-bold mb-2">নিউজলেটার সাবস্ক্রাইব করুন</h3>
@@ -154,7 +154,7 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="pt-8 border-t border-gray-800">
+        <div  className="pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               © {currentYear} বর্ণমালা ফরাসি ভাষা স্কুল। সর্বস্বত্ব সংরক্ষিত।

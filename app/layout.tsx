@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import AOSInit from "@/components/shared/AOSInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,9 @@ export const metadata: Metadata = {
   description: `Learn French for Bangladeshi students`,
 };
 
+
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,6 +50,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           {children}
         </ThemeProvider>
+        <AOSInit />
       </body>
     </html>
   );

@@ -1,5 +1,8 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+/* @import "tw-animate-css"; */
+@import "aos/dist/aos.css";
+
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -116,7 +119,8 @@ section{
 }
 .container{
   max-width:1240px;
-  margin:0 auto;
+  margin-left:auto;
+  margin-right:auto;
   padding-left:20px;
   padding-right: 20px;  
 }
@@ -134,3 +138,4 @@ section{
 html {
   scroll-behavior: smooth;
 }
+

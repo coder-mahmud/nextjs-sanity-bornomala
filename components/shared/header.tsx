@@ -83,12 +83,12 @@ const Header = () => {
       </div> */}
 
       {/* Main Header */}
-      <div className={`main_header fixed w-full bg-white ${isScrolled ? 'md:fixed top-0 w-full' : 'md:relative'}`}>
-        <div className={`container py-4   ` }>
+      <div className={`main_header fixed top-0 w-full bg-white z-20 ${isScrolled ? 'md:fixed top-0 w-full' : 'md:relative'}`}>
+        <div className={`container ${isScrolled ? "py-0" : "py-2"}   ` }>
           <div className="header_inner flex justify-between items-center relative">
             <div className="header_left">
               <Link href="/">
-                <Image src="/images/logo.jpg" alt="Logo" width={150} height={150} className="w-auto h-12 md:h-16" />
+                <Image src="/images/logo.jpg" alt="Logo" width={150} height={150}  className={`w-auto h-12 md:h-16 transition-transform duration-200 origin-left ${isScrolled ? 'scale-75' : 'scale-100'}`}  />
               </Link>
             </div>
             
@@ -112,6 +112,10 @@ const Header = () => {
                 </li>
                 <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/exam">Delf Exam</Link>
+                </li>
+                
+                <li>
+                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/contact">Contact</Link>
                 </li>
               </ul>
             </div>
@@ -183,6 +187,15 @@ const Header = () => {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Delf Exam
+                      </Link>
+                    </li>
+                    <li>
+                      <Link 
+                        className='block hover:text-primary nav-underline px-2 py-2' 
+                        href="/contact" 
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Contact
                       </Link>
                     </li>
                   </ul>

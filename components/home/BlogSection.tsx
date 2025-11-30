@@ -39,7 +39,7 @@ const BlogSection = () => {
   return (
     <section className="py-16 md:py-24 bg-linear-to-br from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
             <BookOpen className="w-4 h-4 mr-2" />
             ব্লগ ও নিউজ
@@ -53,8 +53,8 @@ const BlogSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post) => (
-            <Card key={post.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
+          {blogPosts.map((post,idx) => (
+            <Card key={post.id} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx * 100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
               <div className="relative h-48 overflow-hidden">
                 <Image 
                   src={post.image} 
@@ -89,7 +89,7 @@ const BlogSection = () => {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 text-center">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <BookOpen className="w-4 h-4 mr-2" />
             আরও পড়ুন

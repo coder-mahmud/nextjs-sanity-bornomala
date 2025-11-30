@@ -48,7 +48,8 @@ const WhyChooseUsSection = () => {
   return (
     <section className="py-16 md:py-24 bg-linear-to-br from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
             <Award className="w-4 h-4 mr-2" />
             কেন আমাদের বেছে নেবেন
@@ -64,7 +65,7 @@ const WhyChooseUsSection = () => {
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {stats.map((stat, index) => (
-            <Card key={index} className="border-0 shadow-lg text-center py-6">
+            <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index*100} className="border-0 shadow-lg text-center py-6">
               <CardContent className="p-0">
                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
                   {stat.value}
@@ -80,7 +81,7 @@ const WhyChooseUsSection = () => {
         {/* Advantages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {advantages.map((advantage, index) => (
-            <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
+            <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index*100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <CardContent className="p-6">
                 <div className="mb-4">
                   {advantage.icon}
@@ -97,7 +98,7 @@ const WhyChooseUsSection = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">

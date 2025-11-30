@@ -41,7 +41,7 @@ const FAQSection = () => {
   return (
     <section className="py-16 md:py-24 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
             <HelpCircle className="w-4 h-4 mr-2" />
             প্রায়শই জিজ্ঞাসিত প্রশ্ন
@@ -56,7 +56,7 @@ const FAQSection = () => {
 
         <div className="max-w-3xl mx-auto">
           {faqs.map((faq, index) => (
-            <Card key={index} className="mb-4 border-0 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index * 100} className="mb-4 border-0 shadow-sm hover:shadow-md transition-shadow duration-300">
               <CardHeader 
                 className="cursor-pointer pb-4" 
                 onClick={() => toggleFAQ(index)}
@@ -85,7 +85,7 @@ const FAQSection = () => {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 text-center">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <MessageCircle className="w-4 h-4 mr-2" />
             আরও প্রশ্ন আছে?

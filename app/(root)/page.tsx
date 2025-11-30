@@ -8,6 +8,7 @@ import ContactSection from "@/components/home/ContactUsSection";
 import ScheduleSection from "@/components/home/Schedule";
 import FAQSection from "@/components/home/Faq";
 import BlogSection from "@/components/home/BlogSection";
+import ScheduleSectionNew from "@/components/home/ScheduleNew";
 
 export default function Home() {
   return (
@@ -17,7 +18,8 @@ export default function Home() {
       <TestimonialsSection />
       <CoursesSection />
       <WhyChooseUsSection />
-      <ScheduleSection />
+      {/* <ScheduleSection /> */}
+      <ScheduleSectionNew />
       <ContactSection />
       <FAQSection />
       <BlogSection />

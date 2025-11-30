@@ -40,17 +40,17 @@ const FeaturesSection = () => {
     <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 data-aos="fade-up" data-aos-offset="0" data-aos-duration="800" data-aos-delay="0" className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             কেন আমাদের বেছে নেবেন?
           </h2>
-          <p className="text-lg text-gray-700">
+          <p data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="100" className="text-lg text-gray-700">
             আমাদের ব্যক্তিগত ফরাসি ভাষা কোচিং আপনাকে আপনার লক্ষ্য অর্জনে সাহায্য করবে
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
+            <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index * 100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <CardHeader className="pb-4">
                 <div className="mb-4">{feature.icon}</div>
                 <CardTitle className="text-xl font-bold text-gray-900">
@@ -66,7 +66,7 @@ const FeaturesSection = () => {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 text-center">
           <div className="inline-flex items-center bg-blue-50 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Award className="w-4 h-4 mr-2" />
             ৯৫% শিক্ষার্থী তাদের লক্ষ্য অর্জন করেছে
