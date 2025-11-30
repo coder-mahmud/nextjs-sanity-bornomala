@@ -22,7 +22,7 @@ const BlogSection = () => {
       excerpt: "DELF পরীক্ষা ফরাসি ভাষার দক্ষতা যাচাইয়ের একটি আন্তর্জাতিক মানদণ্ড। এই নিবন্ধে আমরা DELF পরীক্ষার বিভিন্ন স্তর, পরীক্ষার ফরম্যাট এবং প্রস্তুতির কৌশল নিয়ে আলোচনা করব।",
       date: "২৮ মে, ২০২৩",
       author: "রিয়া সেনগুপ্ত",
-      image: "/images/blog-delf-guide.jpg",
+      image: "/images/blog-french-tips.jpg",
       slug: "delf-exam-guide"
     },
     {
@@ -31,7 +31,7 @@ const BlogSection = () => {
       excerpt: "ভাষা শেখা মানে শুধু ব্যাকরণ এবং শব্দভান্ডার মুখস্থ করা নয়, এর সাথে সংস্কৃতিও জড়িত। ফরাসি ভাষা শেখার সময় ফরাসি সংস্কৃতি সম্পর্কে জানা আপনার শেখার অভিজ্ঞতাকে সমৃদ্ধ করবে।",
       date: "১০ মে, ২০২৩",
       author: "অরিন্দম চক্রবর্তী",
-      image: "/images/blog-french-culture.jpg",
+      image: "/images/blog-french-tips.jpg",
       slug: "french-culture-and-language"
     }
   ]

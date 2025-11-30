@@ -8,63 +8,43 @@ const CoursesSection = () => {
   const courses = [
     {
       id: 1,
-      title: "বিগিনার্স ফরাসি কোর্স",
+      title: "DELF A1",
       level: "A1-A2",
-      duration: "৩ মাস",
+      duration: "১৩ সপ্তাহ",
       students: "১২০+",
       rating: "৪.৮",
-      description: "ফরাসি ভাষার ভিত্তি শিখুন। বর্ণমালা, সাধারণ বাক্য, পরিচয় এবং দৈনন্দিন কথোপকথনের জন্য প্রয়োজনীয় শব্দভান্ডার অন্তর্ভুক্ত।",
+      description: "১৩ সপ্তাহ, প্রতি ক্লাস ৩ ঘণ্টা। প্রাথমিক পর্যায়ে ফরাসি শেখা।",
       features: ["বর্ণমালা ও উচ্চারণ", "সাধারণ বাক্য গঠন", "দৈনন্দিন কথোপকথন", "সংস্কৃতিক পরিচিতি"]
     },
     {
       id: 2,
-      title: "ইন্টারমিডিয়েট ফরাসি কোর্স",
-      level: "B1-B2",
-      duration: "৪ মাস",
+      title: "DELF A2",
+      level: "A1-A2",
+      duration: "১৭ সপ্তাহ",
       students: "৯৫+",
       rating: "৪.৯",
-      description: "আপনার ফরাসি দক্ষতা উন্নত করুন। জটিল বাক্য গঠন, বিভিন্ন কাল এবং বিষয়ভিত্তিক শব্দভান্ডার শিখুন।",
+      description: "১৭ সপ্তাহ, মোট ৫১ ঘণ্টা। মধ্যম পর্যায়ে দক্ষতা বৃদ্ধি।",
       features: ["জটিল বাক্য গঠন", "বিভিন্ন কালের ব্যবহার", "বিষয়ভিত্তিক শব্দভান্ডার", "লেখার দক্ষতা"]
     },
     {
       id: 3,
-      title: "অ্যাডভান্সড ফরাসি কোর্স",
-      level: "C1-C2",
-      duration: "৬ মাস",
+      title: "DELF B1",
+      level: "B1-B2",
+      duration: "১৮ সপ্তাহ",
       students: "৬৫+",
       rating: "৪.৯",
-      description: "ফরাসি ভাষায় দক্ষতা অর্জন করুন। উন্নত ব্যাকরণ, সাহিত্যিক বিশ্লেষণ এবং পেশাদার যোগাযোগের কৌশল শিখুন।",
+      description: "১৮ সপ্তাহ, মোট ৫৪ ঘণ্টা। কথোপকথন ও দক্ষতায় ফোকাস।",
       features: ["উন্নত ব্যাকরণ", "সাহিত্যিক বিশ্লেষণ", "পেশাদার যোগাযোগ", "বিতর্ক ও উপস্থাপনা"]
     },
     {
       id: 4,
-      title: "DELF পরীক্ষার প্রস্তুতি",
-      level: "A1-B2",
-      duration: "২-৩ মাস",
+      title: "DELF B2",
+      level: "B1-B2",
+      duration: "২০ সপ্তাহ",
       students: "১৫০+",
       rating: "৪.৯",
-      description: "DELF পরীক্ষার জন্য বিশেষ প্রস্তুতি। পরীক্ষার ফরম্যাট, প্রশ্নের ধরণ এবং কৌশল নিয়ে বিস্তারিত অনুশীলন।",
+      description: "২০ সপ্তাহ, মোট ৬০ ঘণ্টা। দীর্ঘমেয়াদী উন্নত পর্যায়।",
       features: ["পরীক্ষার ফরম্যাট", "প্রশ্নের ধরণ ও কৌশল", "মক টেস্ট", "ব্যক্তিগত ফিডব্যাক"]
-    },
-    {
-      id: 5,
-      title: "ব্যবসায়িক ফরাসি",
-      level: "B1-C1",
-      duration: "৩ মাস",
-      students: "৮০+",
-      rating: "৪.৮",
-      description: "ব্যবসায়িক পরিবেশে ফরাসি ব্যবহার শিখুন। ব্যবসায়িক পরিভাষা, ইমেল লেখা, মিটিং পরিচালনা এবং উপস্থাপনা করার দক্ষতা অর্জন করুন।",
-      features: ["ব্যবসায়িক পরিভাষা", "ইমেল ও রিপোর্ট লেখা", "মিটিং পরিচালনা", "উপস্থাপনা কৌশল"]
-    },
-    {
-      id: 6,
-      title: "কনভারসেশন ক্লাব",
-      level: "A2-C2",
-      duration: "চলমান",
-      students: "২০০+",
-      rating: "৪.৯",
-      description: "আত্মবিশ্বাসের সাথে ফরাসি কথা বলতে শিখুন। সাপ্তাহিক গ্রুপ সেশনে বিভিন্ন বিষয়ে আলোচনা করুন এবং আপনার কথোপকথনের দক্ষতা উন্নত করুন।",
-      features: ["গ্রুপ আলোচনা", "বিভিন্ন বিষয়", "সংশোধন ও ফিডব্যাক", "সাপ্তাহিক সেশন"]
     }
   ]
 
@@ -85,7 +65,7 @@ const CoursesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-center">
           {courses.map((course,idx) => (
             <Card key={course.id} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx*100} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col">
               <CardHeader className="pb-4">
