@@ -89,7 +89,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="100">
-            <h3 className="text-lg font-bold mb-4">দ্রুত লিংক</h3>
+            <h3 className="text-lg font-bold mb-4">গুরুত্বপূর্ণ লিংক</h3>
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
                 <li key={index}>
