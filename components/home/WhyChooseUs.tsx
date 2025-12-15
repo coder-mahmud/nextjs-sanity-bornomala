@@ -39,10 +39,10 @@ const WhyChooseUsSection = () => {
   ]
 
   const stats = [
-    { value: "৯৫%", label: "সাফল্যের হার" },
-    { value: "৫০০+", label: "সন্তুষ্ট শিক্ষার্থী" },
-    { value: "১০+", label: "অভিজ্ঞ টিউটর" },
-    { value: "৪.৯/৫", label: "গড় রেটিং" }
+    { value: "৯৮%", label: "পাশের হার" },
+    { value: "৪০০+", label: "DELF সনদপ্রাপ্ত" },
+    { value: "৩০০০+", label: "শিক্ষার্থী" },
+    { value: "৫/৫ ", label: "গড় রেটিং গুগল এবং ফেসবুকে" }
   ]
 
   return (
@@ -55,7 +55,7 @@ const WhyChooseUsSection = () => {
             কেন আমাদের বেছে নেবেন
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            আপনার ফরাসি শেখার সেরা সঙ্গী
+          île-de-France- এর  ফরাসি ভাষা শেখার একটি অন্যতম   বিশ্বস্ত প্রতিষ্ঠান)
           </h2>
           <p className="text-lg text-gray-700">
             আমাদের ব্যতিক্রমী পদ্ধতি এবং অভিজ্ঞতা আপনাকে ফরাসি ভাষায় দক্ষতা অর্জনে সাহায্য করবে
@@ -79,7 +79,7 @@ const WhyChooseUsSection = () => {
         </div>
 
         {/* Advantages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {advantages.map((advantage, index) => (
             <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index*100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <CardContent className="p-6">
@@ -95,10 +95,10 @@ const WhyChooseUsSection = () => {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </div> */}
 
         {/* CTA Section */}
-        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+        {/* <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
@@ -134,7 +134,7 @@ const WhyChooseUsSection = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       
       {/* Wave Separator */}

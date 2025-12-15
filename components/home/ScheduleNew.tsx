@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Clock, MapPin, Users, Star, CalendarCheck } from 'lucide-react'
+import Link from 'next/link'
 
 const ScheduleSectionNew = () => {
   const schedules = [
@@ -614,28 +615,28 @@ const ScheduleSectionNew = () => {
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                ক্লাসে ভর্তি হতে চান?
+              সফলতার গল্প
               </h3>
               <p className="text-gray-700 mb-6">
-                আপনার পছন্দের সময়সূচী অনুযায়ী ক্লাসে ভর্তি হতে আমাদের সাথে যোগাযোগ করুন। আমরা আপনাকে সঠিক কোর্স নির্বাচনে সাহায্য করব।
+              আমাদের সাফল্যের গল্প পড়ুন: অনুপ্রেরণামূলক যাত্রা, সাফল্যের রহস্য এবং অর্জনের গল্প।
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="text-lg px-6 py-3">
-                  যোগাযোগ করুন
+                <Button size="lg" className="text-lg px-6 py-3" asChild>
+                <Link href="success-stories">সফলতার গল্প দেখুন</Link>
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg px-6 py-3">
+                {/* <Button variant="outline" size="lg" className="text-lg px-6 py-3">
                   কোর্স দেখুন
-                </Button>
+                </Button> */}
               </div>
             </div>
-            <div className="md:w-1/3 flex justify-center">
+            {/* <div className="md:w-1/3 flex justify-center">
               <div className="bg-white rounded-xl shadow-lg p-6 text-center">
                 <div className="text-5xl font-bold text-primary mb-2">২০%</div>
                 <div className="text-gray-700 font-medium mb-1">ছাড়</div>
                 <div className="text-sm text-gray-600">প্রথম কোর্সের উপর</div>
                 <div className="text-xs text-gray-500 mt-2">সীমিত সময়ের জন্য</div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

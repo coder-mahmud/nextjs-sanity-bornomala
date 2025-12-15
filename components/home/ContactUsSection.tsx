@@ -43,24 +43,23 @@ const ContactSection = () => {
       icon: <Phone className="h-6 w-6 text-primary" />,
       title: "ফোন নম্বর",
       details: [
-        "প্যারিস ১৮: ০৭ ৫৩ ৩০ ১৮ ৭৫",
-        "প্যান্টিন হোশে: ০৭ ৫৬ ৯৯ ৯০ ৮৫"
+        "Paris 18: +33 7 53 30 18 75",
+        "Pantin Hoche: 07 56 99 90 85"
       ]
     },
     {
       icon: <Mail className="h-6 w-6 text-primary" />,
-      title: "ইমেল ঠিকানা",
+      title: "ইমেল",
       details: [
-        "info@bornomala.com",
-        "support@bornomala.com"
+        "contact.ecolebornomala@gmail.com ",
       ]
     },
     {
       icon: <MapPin className="h-6 w-6 text-primary" />,
       title: "ঠিকানা",
       details: [
-        "প্যারিস ক্যাম্পাস: ১২৩ রু ডি প্যারিস, ৭৫০১৮ প্যারিস",
-        "প্যান্টিন ক্যাম্পাস: ৪৫৬ এভিনিউ ডি হোশে, ৯৩৫০০ প্যান্টিন"
+        "প্যারিস ক্যাম্পাস: 135 rue du mont Cenis 75018 Paris",
+        "প্যান্টিন ক্যাম্পাস: 1 rue du pré saint Gervais 93500 Pantin "
       ]
     },
     {
@@ -92,7 +91,7 @@ const ContactSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0">
-            <Card className="border-0 shadow-lg">
+            {/* <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-xl font-bold text-gray-900">
                  ইমেইল পাঠান
@@ -167,7 +166,12 @@ const ContactSection = () => {
                   </Button>
                 </form>
               </CardContent>
-            </Card>
+            </Card> */}
+
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2622.9542371499892!2d2.3467397999999995!3d48.8972093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66ef5436faf3d%3A0xa43e5f1c0edcf3df!2s135%20Rue%20du%20Mont-Cenis%2C%2075018%20Paris%2C%20France!5e0!3m2!1sen!2sbd!4v1765777897260!5m2!1sen!2sbd" width="600" height="450" className="border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+
+
+
           </div>
 
           {/* Contact Information */}
@@ -176,7 +180,7 @@ const ContactSection = () => {
               {contactInfo.map((info, index) => (
                 <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index * 100} className="border-0 shadow-lg h-full">
                   <CardContent className="p-6">
-                    <div className="flex items-start mb-4">
+                    <div className="flex items-start mb-4 ">
                       <div className="mr-4 mt-1">
                         {info.icon}
                       </div>
@@ -186,7 +190,7 @@ const ContactSection = () => {
                         </h3>
                         <ul className="space-y-1">
                           {info.details.map((detail, idx) => (
-                            <li key={idx} className="text-gray-700">
+                            <li key={idx} className="text-gray-700 break-all">
                               {detail}
                             </li>
                           ))}
@@ -198,7 +202,7 @@ const ContactSection = () => {
               ))}
             </div>
 
-            <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="border-0 shadow-lg">
+            {/* <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="border-0 shadow-lg">
               <CardContent className="p-6">
                 <h3 className="font-bold text-gray-900 mb-4">
                   বিনামূল্যে পরামর্শের জন্য যোগাযোগ করুন
@@ -210,7 +214,10 @@ const ContactSection = () => {
                   এখনই কল করুন
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
+
+
+
           </div>
         </div>
       </div>

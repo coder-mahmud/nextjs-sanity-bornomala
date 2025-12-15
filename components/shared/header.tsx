@@ -94,7 +94,7 @@ const Header = () => {
             
             {/* Desktop Navigation */}
             <div className="header_right hidden md:block">
-              <ul className='flex gap-2 items-center'>
+              <ul className='flex gap-2 items-center font-bold'>
                 <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/">Home</Link>
                 </li>
@@ -111,7 +111,7 @@ const Header = () => {
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/result">Result</Link>
                 </li>
                 <li>
-                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/exam">Delf Exam</Link>
+                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/success-stories">Success Stories</Link>
                 </li>
                 
                 <li>
@@ -134,7 +134,7 @@ const Header = () => {
               <div className="absolute w-full left-0 top-full md:hidden bg-white shadow-lg h-[80vh] overflow-y-scroll">
                 <div className="container py-4 ">
                   
-                  <ul className='flex flex-col gap-3'>
+                  <ul className='flex flex-col gap-3 font-bold'>
                     <li>
                       <Link 
                         className='block hover:text-primary nav-underline px-2 py-2 border-b' 
@@ -183,10 +183,10 @@ const Header = () => {
                     <li>
                       <Link 
                         className='block hover:text-primary nav-underline px-2 py-2' 
-                        href="/exam" 
+                        href="/success-stories" 
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        Delf Exam
+                        Success Stories
                       </Link>
                     </li>
                     <li>
