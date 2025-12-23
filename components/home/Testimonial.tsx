@@ -22,7 +22,7 @@ type TestimonialsSectionProps = {
 
 const TestimonialsSection = ({testimonials} : TestimonialsSectionProps ) => {
 
-  console.log("Testimonials:", testimonials)
+  // console.log("Testimonials:", testimonials)
   /*
   const testimonials = [
     {
