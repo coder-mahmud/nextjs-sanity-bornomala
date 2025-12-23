@@ -45,7 +45,7 @@ async function getHomeData() {
   })
 
   const json = await res.json()
-  console.log("JSON data:", json)
+  // console.log("JSON data:", json)
   return json.data.pageBy.homePageFields
 }
 
