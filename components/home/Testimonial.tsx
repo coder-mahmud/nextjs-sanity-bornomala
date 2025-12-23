@@ -3,7 +3,27 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Star, Quote } from 'lucide-react'
 import Image from 'next/image'
 
-const TestimonialsSection = () => {
+type Testimonial = {
+  name: string
+  testimonialText: string
+  rating:string
+  image?: {
+    node: {
+      sourceUrl: string
+      altText?: string
+    }
+  }
+}
+
+type TestimonialsSectionProps = {
+  testimonials: Testimonial[]
+}
+
+
+const TestimonialsSection = ({testimonials} : TestimonialsSectionProps ) => {
+
+  console.log("Testimonials:", testimonials)
+  /*
   const testimonials = [
     {
       id: 1,
@@ -30,6 +50,7 @@ const TestimonialsSection = () => {
       image: "/images/student3.jpg"
     }
   ]
+    */
 
   const renderStars = (rating: any ) => {
     return Array(5).fill(0).map((_, i) => (
@@ -41,7 +62,7 @@ const TestimonialsSection = () => {
   }
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-50">
+    <section className="py-16 md:py-24 bg-linear-to-br from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
@@ -59,26 +80,48 @@ const TestimonialsSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial,idx) => (
-            <Card key={testimonial.id} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx*100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
+            <Card key={idx} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx*100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <CardContent className="p-6">
                 <div className="flex items-center mb-4">
-                  {renderStars(testimonial.rating)}
+                  {renderStars(+testimonial?.rating)}
                 </div>
-                <p className="text-gray-700 mb-6 italic">
-                  "{testimonial.content}"
-                </p>
+                <div className="text-gray-700 mb-6 italic">
+                  
+                <div className="testimonial-text flex gap-1">
+  <span className="quote">“</span>
+
+  <span
+    dangerouslySetInnerHTML={{
+      __html: testimonial.testimonialText,
+    }}
+  />
+
+  <span className="quote">”</span>
+</div>
+                </div>
                 <div className="flex items-center">
                   <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
-                    <Image 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover"
-                    />
+                  {testimonial.image?.node?.sourceUrl && (
+                    // <Image
+                    //   src={testimonial.image.node.sourceUrl}
+                    //   alt={testimonial.image.node.altText || ""}
+                    //   width={80}
+                    //   height={80}
+                    // />
+                    <Image
+                    src={testimonial.image.node.sourceUrl}
+                    alt={testimonial.image.node.altText || ""}
+                    width={80}
+                    height={80}
+                    unoptimized
+                    className='object-contain'
+                  />
+
+                  )}
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                    {/* <p className="text-sm text-gray-600">{testimonial.role}</p> */}
                   </div>
                 </div>
               </CardContent>

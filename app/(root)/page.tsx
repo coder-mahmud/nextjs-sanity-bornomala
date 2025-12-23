@@ -10,12 +10,61 @@ import FAQSection from "@/components/home/Faq";
 import BlogSection from "@/components/home/BlogSection";
 import ScheduleSectionNew from "@/components/home/ScheduleNew";
 
-export default function Home() {
+
+const HOME_QUERY = `
+  query HomePage {
+    pageBy(uri: "/home") {
+    title
+		homePageFields{
+      numberOfStudents
+      successRate
+      certifiedStudents
+      testimonials {
+        name
+        testimonialText
+        rating
+        image {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+      }
+    }
+  }
+}
+`
+
+async function getHomeData() {
+  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query: HOME_QUERY }),
+    // next: { revalidate: 60 }, // ISR
+    // cache: "no-store",
+  })
+
+  const json = await res.json()
+  console.log("JSON data:", json)
+  return json.data.pageBy.homePageFields
+}
+
+
+
+
+
+export default async function Home() {
+  const homeData = await getHomeData()
+  const numberOfStudents = homeData.numberOfStudents
+  const successRate = homeData.successRate
+  const certifiedStudents = homeData.certifiedStudents
+  const testimonials = homeData.testimonials
+
   return (
     <>
-      <HomeHero />
+      <HomeHero data={{numberOfStudents,successRate, certifiedStudents}} />
       <FeaturesSection />
-      <TestimonialsSection />
+      <TestimonialsSection testimonials={testimonials} />
       <CoursesSection />
       <WhyChooseUsSection />
       {/* <ScheduleSection /> */}

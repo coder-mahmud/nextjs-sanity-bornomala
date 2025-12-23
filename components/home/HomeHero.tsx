@@ -5,8 +5,16 @@ import { ArrowRight, BookOpen, Users, Award, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
+type heroData = {
+  data:{
+    numberOfStudents : string,
+    successRate:string,
+    certifiedStudents:string,
+  }
+}
 
-const HomeHero = () => {
+const HomeHero = ({data}:heroData) => {
+  // console.log("Data from hero:",data)
   return (
     <section className="relative bg-linear-to-br from-blue-50 to-indigo-100 py-12 md:py-20 lg:py-24 overflow-hidden">
       {/* Background Pattern */}
@@ -60,15 +68,15 @@ const HomeHero = () => {
             <div className="flex flex-wrap gap-6">
               <div data-aos="fade-left" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="flex items-center">
                 <Users className="h-5 w-5 text-primary mr-2" />
-                <span className="text-gray-700">৩০০০ + শিক্ষার্থী</span>
+                <span className="text-gray-700">{data.numberOfStudents} + শিক্ষার্থী</span>
               </div>
               <div data-aos="fade-left" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="100" className="flex items-center">
                 <GraduationCap className="h-5 w-5 text-primary mr-2" />
-                <span className="text-gray-700">৯৮ % সাফল্যের হার</span>
+                <span className="text-gray-700">{data.successRate} % সাফল্যের হার</span>
               </div>
               <div data-aos="fade-left" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="200" className="flex items-center">
                 <Award className="h-5 w-5 text-primary mr-2" />
-                <span className="text-gray-700">৪০০+ DELF সনদপ্রাপ্ত </span>
+                <span className="text-gray-700">{data.certifiedStudents}+ DELF সনদপ্রাপ্ত </span>
               </div>
             </div>
           </div>
