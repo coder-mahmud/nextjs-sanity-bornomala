@@ -24,6 +24,9 @@ type TestimonialsSectionProps = {
 
 const TestimonialsSection = ({testimonials,subtitleBelowTestimonials} : TestimonialsSectionProps ) => {
 
+  if (!testimonials || testimonials.length === 0) {
+    return null
+  }
   // console.log("Testimonials:", testimonials)
   /*
   const testimonials = [
