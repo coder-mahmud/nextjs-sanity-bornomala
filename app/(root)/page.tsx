@@ -118,15 +118,14 @@ export default async function Home() {
 
   return (
     <>
-      {/* <HomeHero data={{numberOfStudents,successRate, certifiedStudents}} /> */}
-      {/* <FeaturesSection data={{successRate}} /> */}
-      {/* <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} /> */}
+      <HomeHero data={{numberOfStudents,successRate, certifiedStudents}} />
+      <FeaturesSection data={{successRate}} />
+      <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
       <CoursesSection />
-      {/* <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} /> */}
-      {/* <ScheduleSection /> */}
+      <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} />
       <ScheduleSectionNew />
       <ContactSection />
-      {/* <FAQSection faqs={faqs} /> */}
+      <FAQSection faqs={faqs} />
       <BlogSection />
 
     </>
