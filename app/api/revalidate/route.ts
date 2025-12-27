@@ -2,27 +2,37 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  console.log("Validate body:", body);
-  
+  let body;
 
-  // Secret check
-  if (body.secret !== process.env.NEXT_PUBLIC_REVALIDATE_TOKEN) {
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json(
+      { message: "Invalid JSON body" },
+      { status: 400 }
+    );
+  }
+
+  if (body.secret !== process.env.REVALIDATE_SECRET) {
+    return NextResponse.json(
+      { message: "Invalid token" },
+      { status: 401 }
+    );
   }
 
   try {
-    // Revalidate homepage
-    await revalidatePath("/");
+    revalidatePath("/");
 
-    // Revalidate dynamic blog post if slug provided
     if (body.postSlug) {
-      await revalidatePath(`/blog/${body.postSlug}`);
+      revalidatePath(`/blog/${body.postSlug}`);
     }
 
     return NextResponse.json({ revalidated: true });
   } catch (err) {
     console.error("Revalidation error:", err);
-    return NextResponse.json({ message: "Error revalidating", err }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error revalidating" },
+      { status: 500 }
+    );
   }
 }
