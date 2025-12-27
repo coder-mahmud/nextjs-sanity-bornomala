@@ -47,6 +47,10 @@ async function getHomeData() {
 
   const json = await res.json()
   // console.log("JSON data:", json)
+
+  if (!json?.data?.pageBy?.homePageFields) {
+    return null
+  }
   return json.data.pageBy.homePageFields
 }
 
@@ -79,6 +83,10 @@ async function getFaqsData() {
   const json = await res.json()
   // console.log("Faqs:", json)
   // return true
+
+  if (!json?.data?.faqs?.nodes) {
+    return null
+  }
   return json.data.faqs.nodes[0]
 
 }
