@@ -84,10 +84,13 @@ async function getFaqsData() {
   // console.log("Faqs:", json)
   // return true
 
-  if (!json?.data?.faqs?.nodes) {
-    return null
+  const node = json?.data?.faqs?.nodes?.[0]
+  if (!node || !node?.faqs?.faqs) {
+    return []
   }
-  return json.data.faqs.nodes[0]
+
+
+  return node.faqs.faqs
 
 }
 
@@ -96,6 +99,9 @@ async function getFaqsData() {
 
 export default async function Home() {
   const homeData = await getHomeData()
+  if (!homeData) {
+    return null
+  }
   const numberOfStudents = homeData.numberOfStudents
   const successRate = homeData.successRate
   const certifiedStudents = homeData.certifiedStudents
