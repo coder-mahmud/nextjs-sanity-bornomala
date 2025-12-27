@@ -109,7 +109,7 @@ export default async function Home() {
   const subtitleBelowTestimonials = homeData.subtitleBelowTestimonials
 
   const faqData =  await getFaqsData();
-  const faqs = faqData.faqs.faqs
+  const faqs = faqData?.faqs?.faqs || []
   // console.log("Faqs Data:",faqData.faqs.faqs )
 
   // const faqs = faqData.data.faqs.nodes[0].faqs
