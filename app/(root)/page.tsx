@@ -122,11 +122,11 @@ export default async function Home() {
       <FeaturesSection data={{successRate}} />
       <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
       <CoursesSection />
-      <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} />
+      {/* <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} /> */}
       {/* <ScheduleSection /> */}
       <ScheduleSectionNew />
       <ContactSection />
-      <FAQSection faqs={faqs} />
+      {/* <FAQSection faqs={faqs} /> */}
       <BlogSection />
 
     </>
