@@ -16,6 +16,10 @@ type Faqs = {
 
 const FAQSection =  ({faqs}:{faqs:Faqs[]} ) => {
 
+  if (!faqs || faqs.length === 0) {
+    return null
+  }
+
 
   const [openIndex, setOpenIndex] = useState(null)
 
