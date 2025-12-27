@@ -4,13 +4,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronUp, HelpCircle, MessageCircle } from 'lucide-react'
 
-const FAQSection = () => {
+
+type Faqs = {
+  question: string
+  answer: string
+}
+
+
+
+
+
+const FAQSection =  ({faqs}:{faqs:Faqs[]} ) => {
+
+
   const [openIndex, setOpenIndex] = useState(null)
 
   const toggleFAQ = (index: any) => {
     setOpenIndex(openIndex === index ? null : index)
   }
 
+  /*
   const faqs = [
     {
       question: "কোর্সের মেয়াদ কতদিন?",
@@ -49,6 +62,8 @@ const FAQSection = () => {
       answer: "আমরা আমাদের শিক্ষার্থীদের পক্ষ থেকে পরীক্ষার ফর্ম পূরণ করি। এবং ফ্রিতে একের অধিক মক টেস্ট নিয়ে থাকি । আর মার্কশিট (Attestation de réussite) ? স্পিকিং অংশে অংশগ্রহণের পড়, সাধারণত শিক্ষার্থীরা মৌখিক পরীক্ষার ৬ সপ্তাহের পর আমাদের প্যারিস শাখা থেকে মার্কশিট  সংগ্রহ করতে পারবেন, যা আপনি আপনার প্রশাসনিক যেকোন প্রয়োজনে ব্যবহার করতে পারবেন। পরবর্তীতে, পরীক্ষার তারিখ থেকে, ৬মাসের মধ্যে DELF সনদটি আমাদের  অফিসে পাবেন। চিন্তা করবেন না, ফলাফল এবং ডিপ্লোমা সংগ্রহের দিন এবং সময় আমাদের অফিসিয়াল ওয়েব সাইটে পাব্লিশ করা হবে।"
     }
   ]
+*/
+
 
   return (
     <section className="py-16 md:py-24 ">

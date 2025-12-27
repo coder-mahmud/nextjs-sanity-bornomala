@@ -19,6 +19,7 @@ const HOME_QUERY = `
       numberOfStudents
       successRate
       certifiedStudents
+      subtitleBelowTestimonials
       testimonials {
         name
         testimonialText
@@ -51,6 +52,38 @@ async function getHomeData() {
 
 
 
+const FAQS_QUERY = `
+  query allCourses {
+    faqs {
+      nodes {
+        faqs {
+          faqs {
+            question
+            answer
+          }
+        }
+      }
+    }
+  }
+`
+
+async function getFaqsData() {
+  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query: FAQS_QUERY }),
+    // next: { revalidate: 60 }, // ISR
+    // cache: "no-store",
+  })
+
+  const json = await res.json()
+  // console.log("Faqs:", json)
+  // return true
+  return json.data.faqs.nodes[0]
+
+}
+
+
 
 
 export default async function Home() {
@@ -59,18 +92,26 @@ export default async function Home() {
   const successRate = homeData.successRate
   const certifiedStudents = homeData.certifiedStudents
   const testimonials = homeData.testimonials
+  const subtitleBelowTestimonials = homeData.subtitleBelowTestimonials
+
+  const faqData =  await getFaqsData();
+  const faqs = faqData.faqs.faqs
+  // console.log("Faqs Data:",faqData.faqs.faqs )
+
+  // const faqs = faqData.data.faqs.nodes[0].faqs
+
 
   return (
     <>
       <HomeHero data={{numberOfStudents,successRate, certifiedStudents}} />
-      <FeaturesSection />
-      <TestimonialsSection testimonials={testimonials} />
+      <FeaturesSection data={{successRate}} />
+      <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
       <CoursesSection />
-      <WhyChooseUsSection />
+      <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} />
       {/* <ScheduleSection /> */}
       <ScheduleSectionNew />
       <ContactSection />
-      <FAQSection />
+      <FAQSection faqs={faqs} />
       <BlogSection />
 
     </>

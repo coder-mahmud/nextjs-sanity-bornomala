@@ -4,7 +4,15 @@ import { Button } from '@/components/ui/button'
 import { CheckCircle, Users, Award, Clock, Globe, Target } from 'lucide-react'
 import Link from 'next/link'
 
-const WhyChooseUsSection = () => {
+type heroData = {
+  data:{
+    numberOfStudents : string,
+    successRate:string,
+    certifiedStudents:string,
+  }
+}
+
+const WhyChooseUsSection = ({data}:heroData) => {
   const advantages = [
     {
       icon: <CheckCircle className="h-8 w-8 text-primary" />,
@@ -38,12 +46,12 @@ const WhyChooseUsSection = () => {
     }
   ]
 
-  const stats = [
-    { value: "৯৮%", label: "পাশের হার" },
-    { value: "৪০০+", label: "DELF সনদপ্রাপ্ত" },
-    { value: "৩০০০+", label: "শিক্ষার্থী" },
-    { value: "৫/৫ ", label: "গড় রেটিং গুগল এবং ফেসবুকে" }
-  ]
+  // const stats = [
+  //   { value: "৯৮%", label: "পাশের হার" },
+  //   { value: "৪০০+", label: "DELF সনদপ্রাপ্ত" },
+  //   { value: "৩০০০+", label: "শিক্ষার্থী" },
+  //   { value: "৫/৫ ", label: "গড় রেটিং গুগল এবং ফেসবুকে" }
+  // ]
 
   return (
     <section className="py-16 md:py-24 bg-linear-to-br from-blue-50 to-indigo-50">
@@ -64,7 +72,7 @@ const WhyChooseUsSection = () => {
 
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, index) => (
+          {/* {stats.map((stat, index) => (
             <Card key={index} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index*100} className="border-0 shadow-lg text-center py-6">
               <CardContent className="p-0">
                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
@@ -75,7 +83,59 @@ const WhyChooseUsSection = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          ))} */}
+
+            <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0*100} className="border-0 shadow-lg text-center py-6">
+              <CardContent className="p-0">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                  {data.successRate}%
+                </div>
+                <div className="text-gray-700">
+                  Success Rate
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0*100} className="border-0 shadow-lg text-center py-6">
+              <CardContent className="p-0">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                  {data.certifiedStudents}+
+                </div>
+                <div className="text-gray-700">
+                DELF সনদপ্রাপ্ত
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0*100} className="border-0 shadow-lg text-center py-6">
+              <CardContent className="p-0">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                  {data.numberOfStudents}+
+                </div>
+                <div className="text-gray-700">
+                শিক্ষার্থী
+                </div>
+              </CardContent>
+            </Card>
+
+
+            <Card data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0*100} className="border-0 shadow-lg text-center py-6">
+              <CardContent className="p-0">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                ৫/৫
+                </div>
+                <div className="text-gray-700">
+                গড় রেটিং গুগল এবং ফেসবুকে
+                </div>
+              </CardContent>
+            </Card>
+
+
+
+
+
+
+
         </div>
 
         {/* Advantages Grid */}

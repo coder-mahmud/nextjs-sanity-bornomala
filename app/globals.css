@@ -139,3 +139,12 @@ html {
   scroll-behavior: smooth;
 }
 
+.rich_text ul{
+  list-style: circle;
+}
+
+@layer utilities {
+  .bg-primary-gradient {
+    @apply bg-linear-to-br from-blue-50 to-indigo-50;
+  }
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BookOpen, Users, Clock, Award, Globe, Target } from 'lucide-react'
 
-const FeaturesSection = () => {
+const FeaturesSection = ({data} : {data:{successRate:string}} ) => {
   const features = [
     {
       icon: <BookOpen className="h-10 w-10 text-primary" />,
@@ -73,7 +73,7 @@ const FeaturesSection = () => {
         <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 text-center">
           <div className="inline-flex items-center bg-blue-50 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Award className="w-4 h-4 mr-2" />
-            ৯৫% শিক্ষার্থী তাদের লক্ষ্য অর্জন করেছে
+            {data.successRate}% শিক্ষার্থী তাদের লক্ষ্য অর্জন করেছে
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
             আজই আপনার ফরাসি শেখার যাত্রা শুরু করুন

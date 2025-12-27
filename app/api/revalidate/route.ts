@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache"; // IMPORTANT: correct import
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  // console.log("Validate body:", body);
+  console.log("Validate body:", body);
 
   // Secret check
   if (body.secret !== process.env.NEXT_PUBLIC_REVALIDATE_TOKEN) {

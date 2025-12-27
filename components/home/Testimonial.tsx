@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Star, Quote } from 'lucide-react'
+import { Star, Quote, } from 'lucide-react'
+import Link from 'next/link'
 import Image from 'next/image'
 
 type Testimonial = {
@@ -17,10 +18,11 @@ type Testimonial = {
 
 type TestimonialsSectionProps = {
   testimonials: Testimonial[]
+  subtitleBelowTestimonials:string
 }
 
 
-const TestimonialsSection = ({testimonials} : TestimonialsSectionProps ) => {
+const TestimonialsSection = ({testimonials,subtitleBelowTestimonials} : TestimonialsSectionProps ) => {
 
   // console.log("Testimonials:", testimonials)
   /*
@@ -88,17 +90,18 @@ const TestimonialsSection = ({testimonials} : TestimonialsSectionProps ) => {
                 <div className="text-gray-700 mb-6 italic">
                   
                 <div className="testimonial-text flex gap-1">
-  <span className="quote">“</span>
+                  <span className="quote">“</span>
 
-  <span
-    dangerouslySetInnerHTML={{
-      __html: testimonial.testimonialText,
-    }}
-  />
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: testimonial.testimonialText,
+                    }}
+                  />
 
-  <span className="quote">”</span>
-</div>
+                  <span className="quote">”</span>
                 </div>
+                </div>
+                
                 <div className="flex items-center">
                   <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
                   {testimonial.image?.node?.sourceUrl && (
@@ -132,7 +135,7 @@ const TestimonialsSection = ({testimonials} : TestimonialsSectionProps ) => {
         <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 text-center">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Star className="w-4 h-4 mr-2" />
-            ৪.৯/৫ গড় রেটিং ৫০০+ রিভিউ এ
+            {subtitleBelowTestimonials}
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
             আপনিও আমাদের সাফল্যের অংশ হন
@@ -140,9 +143,9 @@ const TestimonialsSection = ({testimonials} : TestimonialsSectionProps ) => {
           <p className="text-gray-700 max-w-2xl mx-auto mb-8">
             আমাদের শিক্ষার্থীদের মতো আপনিও ফরাসি ভাষায় দক্ষতা অর্জন করুন এবং আপনার লক্ষ্য পূরণ করুন।
           </p>
-          <button className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+          <a href="#contact_section" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
             আজই যোগ দিন
-          </button>
+          </a>
         </div>
       </div>
       

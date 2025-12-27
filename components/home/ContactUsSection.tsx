@@ -73,7 +73,7 @@ const ContactSection = () => {
   ]
 
   return (
-    <section id="contact_section" className="py-16 md:py-24 bg-linear-to-br from-blue-50 to-indigo-50">
+    <section id="contact_section" className="py-16 md:py-24 bg-primary-gradient">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
