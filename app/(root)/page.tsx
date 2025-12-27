@@ -120,7 +120,7 @@ export default async function Home() {
     <>
       <HomeHero data={{numberOfStudents,successRate, certifiedStudents}} />
       <FeaturesSection data={{successRate}} />
-      <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
+      {/* <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} /> */}
       <CoursesSection />
       {/* <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} /> */}
       {/* <ScheduleSection /> */}
