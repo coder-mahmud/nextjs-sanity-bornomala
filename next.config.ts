@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'bornomala.local',
+        protocol: 'https',
+        hostname: 'bornomala.premiumchickenltd.com',
         pathname: '/**',
       },
     ],
