@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   console.log("Validate body:", body);
+  
 
   // Secret check
   if (body.secret !== process.env.NEXT_PUBLIC_REVALIDATE_TOKEN) {
