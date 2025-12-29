@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
+
+  console.log("/api/revalidate path accessed!")
   let body;
 
   try {
     body = await req.json();
+    console.log("Body Data:", body)
   } catch {
     return NextResponse.json(
       { message: "Invalid JSON body" },
