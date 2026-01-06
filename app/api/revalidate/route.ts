@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
     console.log("Body Data:", body)
-    console.log("Body secret:", body.secret);
-    console.log("ENV secret:", process.env.REVALIDATE_SECRET);
+    // console.log("Body secret:", body.secret);
+    // console.log("ENV secret:", process.env.REVALIDATE_SECRET);
   } catch {
     return NextResponse.json(
       { message: "Invalid JSON body" },

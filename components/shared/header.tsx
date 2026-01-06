@@ -88,7 +88,7 @@ const Header = () => {
           <div className="header_inner flex justify-between items-center relative">
             <div className="header_left">
               <Link href="/">
-                <Image src="/images/logo.jpg" alt="Logo" width={150} height={150}  className={`w-auto h-12 md:h-16 transition-transform duration-200 origin-left ${isScrolled ? 'scale-75' : 'scale-100'}`}  />
+                <Image src="/images/GreenLogo.png" alt="Logo" width={120} height={150}  className={`w-auto  transition-transform duration-200 origin-left ${isScrolled ? 'scale-75' : 'scale-100'} max-w-[170px] lg:max-w-none lg:h-16 lg:w-auto`}  />
               </Link>
             </div>
             

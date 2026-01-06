@@ -147,4 +147,12 @@ html {
   .bg-primary-gradient {
     @apply bg-linear-to-br from-blue-50 to-indigo-50;
   }
+  .bg-green-gradient {
+    @apply bg-linear-to-br from-green-50 to-green-500;
+  }
 }
+
+
+/* *{
+  border:1px solid red;
+} */

@@ -16,6 +16,9 @@ const HOME_QUERY = `
     pageBy(uri: "/home") {
     title
 		homePageFields{
+      homeSubtitle
+      homeTitle
+      homeDescription
       numberOfStudents
       successRate
       certifiedStudents
@@ -102,6 +105,9 @@ export default async function Home() {
   if (!homeData) {
     return null
   }
+  const homeSubtitle = homeData.homeSubtitle
+  const homeTitle = homeData.homeTitle
+  const homeDescription = homeData.homeDescription
   const numberOfStudents = homeData.numberOfStudents
   const successRate = homeData.successRate
   const certifiedStudents = homeData.certifiedStudents
@@ -118,7 +124,7 @@ export default async function Home() {
 
   return (
     <>
-      <HomeHero data={{numberOfStudents,successRate, certifiedStudents}} />
+      <HomeHero data={{numberOfStudents,successRate, certifiedStudents, homeSubtitle, homeTitle, homeDescription}} />
       <FeaturesSection data={{successRate}} />
       <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
       <CoursesSection />

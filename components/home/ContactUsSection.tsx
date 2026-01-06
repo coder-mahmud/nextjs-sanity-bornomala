@@ -168,7 +168,7 @@ const ContactSection = () => {
               </CardContent>
             </Card> */}
 
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2622.9542371499892!2d2.3467397999999995!3d48.8972093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66ef5436faf3d%3A0xa43e5f1c0edcf3df!2s135%20Rue%20du%20Mont-Cenis%2C%2075018%20Paris%2C%20France!5e0!3m2!1sen!2sbd!4v1765777897260!5m2!1sen!2sbd" width="600" height="450" className="border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2622.9542371499892!2d2.3467397999999995!3d48.8972093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66ef5436faf3d%3A0xa43e5f1c0edcf3df!2s135%20Rue%20du%20Mont-Cenis%2C%2075018%20Paris%2C%20France!5e0!3m2!1sen!2sbd!4v1765777897260!5m2!1sen!2sbd" width="600" height="450" className="border-0 max-w-full" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
 
 
 

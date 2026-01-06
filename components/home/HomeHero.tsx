@@ -10,6 +10,9 @@ type heroData = {
     numberOfStudents : string,
     successRate:string,
     certifiedStudents:string,
+    homeSubtitle:string,
+    homeTitle:string,
+    homeDescription:string
   }
 }
 
@@ -37,11 +40,11 @@ const HomeHero = ({data}:heroData) => {
             
             <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
               <BookOpen className="w-4 h-4 mr-2" />
-              Private French Language Coaching
+              {data.homeSubtitle}
             </div>
             
             <h1 data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="100"  className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 mb-4 leading-tight">
-            আপনার ফরাসি শেখার যাত্রা শুরু হোক,- একটি বিশ্বস্ত ও পেশাদার ভাষা স্কুলের সাথে।
+            {data.homeTitle}
             </h1>
             
             {/* <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl">
@@ -49,7 +52,7 @@ const HomeHero = ({data}:heroData) => {
               From beginners to advanced learners, we help you achieve fluency with confidence.
             </p>             */}
             <p data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="200" className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl">
-            ভাষা শিক্ষার সব সুবিধা এক ছাদের নিচে  - École Bornomala হলো আপনার ফরাসি ভাষা শেখার সম্পূর্ণ সমাধান। এখানে প্রফেসনাল শিক্ষকদের দিকনির্দেশনায়, আপনি পৌঁছাবেন  DELF A1 থেকে  DELF B2 পর্যন্ত, ঠিক ২ বছরের মধ্যে, সম্পূর্ণ  আত্মবিশ্বাসের সাথে। প্রতিটি লেভেল শেষে পরীক্ষায় সফলতা এবং  ফরাসিতে সাবলীলভাবে কথা বলতে পারা—দুটোরই নিশ্চয়তা পাচ্ছেন আমাদের প্রতিষ্ঠানে ।
+            {data.homeDescription}
             </p>
             
             <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="300" className="flex flex-col sm:flex-row gap-4 mb-10">
