@@ -149,13 +149,22 @@ export async function generateStaticParams() {
 
   const json = await res.json();
 
-  // console.log("Json", json)
+  // console.log("Course Json", JSON.stringify(json, null,10)
 
   return json.data.allCourses.nodes.map((course: { slug: string }) => ({
     slug: course.slug,
   }));
 
 }
+  
+
+
+
+
+
+
+
+
 
 export default async function CoursePage({params}: { params: { slug: string }}) {
   const paramList = await params

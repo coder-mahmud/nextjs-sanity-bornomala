@@ -27,9 +27,34 @@ export async function POST(req: NextRequest) {
 
   try {
     revalidatePath("/");
+    revalidatePath("/about");
+    revalidatePath("/contact");
 
     if (body.postSlug) {
       revalidatePath(`/blog/${body.postSlug}`);
+    }
+
+    if(body.postType === 'post'){
+      revalidatePath("/blog");
+      revalidatePath(`/blog/${body.postSlug}`);
+    }
+
+    // if(body.postType === 'class-schedule'){
+    //   revalidatePath("/blog");
+    //   revalidatePath(`/blog/${body.postSlug}`);
+    // }
+
+    if(body.postType === 'courses'){
+      revalidatePath("/courses");
+      revalidatePath(`/courses/${body.postSlug}`);
+    }
+    if(body.postType === 'result'){
+      revalidatePath("/results");
+      revalidatePath(`/results/${body.postSlug}`);
+    }
+    if(body.postType === 'success-story'){
+      revalidatePath("/success-stories");
+      revalidatePath(`/success-stories/${body.postSlug}`);
     }
 
     return NextResponse.json({ revalidated: true });

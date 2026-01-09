@@ -108,7 +108,7 @@ const Header = () => {
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/blog">Blog</Link>
                 </li>
                 <li>
-                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/result">Result</Link>
+                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/results">Result</Link>
                 </li>
                 <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/success-stories">Success Stories</Link>
