@@ -48,6 +48,10 @@ async function getHomeData() {
     // cache: "no-store",
   })
 
+  if (!res.ok) {
+    throw new Error("GraphQL request for getHomeData failed")
+  }
+
   const json = await res.json()
   // console.log("JSON data:", json)
 
@@ -82,6 +86,10 @@ async function getFaqsData() {
     // next: { revalidate: 60 }, // ISR
     // cache: "no-store",
   })
+
+  if (!res.ok) {
+    throw new Error("GraphQL request for getFaqs data failed")
+  }
 
   const json = await res.json()
   // console.log("Faqs:", json)
