@@ -10,7 +10,7 @@ import FAQSection from "@/components/home/Faq";
 import BlogSection from "@/components/home/BlogSection";
 import ScheduleSectionNew from "@/components/home/ScheduleNew";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 const HOME_QUERY = `
   query HomePage {
