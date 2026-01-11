@@ -137,7 +137,7 @@ const BlogPage = async ({
   const before = params?.before || undefined
   const posts = await getBlogsData({ after, before })
 
-  console.log("Posts",JSON.stringify(posts, null, 10) )
+  // console.log("Posts",JSON.stringify(posts, null, 10) )
 
   return (
     <>
