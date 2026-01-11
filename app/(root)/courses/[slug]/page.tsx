@@ -1,6 +1,6 @@
 // app/courses/[slug]/page.tsx
 import Link from "next/link";
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 
 type Course = {
