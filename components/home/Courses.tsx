@@ -31,7 +31,9 @@ async function getCoursesData() {
     // next: { revalidate: 60 }, // ISR
     // cache: "no-store",
   })
-
+  if (!res.ok) {
+    throw new Error("GraphQL request for courses failed")
+  }
   const json = await res.json()
   // console.log("JSON data:", json)
   // return json.data.pageBy.homePageFields

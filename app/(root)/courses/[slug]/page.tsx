@@ -65,7 +65,9 @@ async function getCourse(slug:string): Promise<Course | null> {
     }),
     //next: { revalidate: 60 }, // ISR
   });
-
+  if (!res.ok) {
+    throw new Error("GraphQL request for single course failed")
+  }
   const json = await res.json();
   // console.log("Page data:", JSON.stringify(json, null, 2));
   // console.log("getCourse data:", json);

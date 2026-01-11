@@ -54,6 +54,9 @@ async function getResultsData(page: number) {
     }),
     cache: "no-store",
   });
+  if (!res.ok) {
+    throw new Error("GraphQL request for results failed")
+  }
 
   const json = await res.json();
 

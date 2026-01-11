@@ -67,6 +67,10 @@ async function getBlogsData({ after, before }: { after?: string; before?: string
     //next: { revalidate: 60 },
   })
 
+  if (!res.ok) {
+    throw new Error("GraphQL request failed")
+  }
+
   const json = await res.json()
   return json.data.posts
 }

@@ -54,6 +54,10 @@ async function getBlogPost(slug:string): Promise<Blog | null> {
     //next: { revalidate: 60 }, // ISR
   });
 
+  if (!res.ok) {
+    throw new Error("GraphQL request failed")
+  }
+
   const json = await res.json();
   // console.log("Page data:", JSON.stringify(json, null, 2));
   // console.log("getCourse data:", json);

@@ -62,6 +62,9 @@ async function getResultPost(slug:string): Promise<any | null> {
     }),
     //next: { revalidate: 60 }, // ISR
   });
+  if (!res.ok) {
+    throw new Error("GraphQL request for single result page failed")
+  }
 
   const json = await res.json();
   // console.log("Page data:", JSON.stringify(json, null, 2));

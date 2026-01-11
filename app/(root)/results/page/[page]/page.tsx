@@ -55,6 +55,10 @@ async function getResultsData(page: number) {
     cache: "no-store",
   });
 
+  if (!res.ok) {
+    throw new Error("GraphQL request for inner page failed")
+  }
+
   const json = await res.json();
 
   // console.log("Results Data:", JSON.stringify(json,null, 10))
