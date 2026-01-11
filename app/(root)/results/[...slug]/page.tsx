@@ -3,6 +3,9 @@ import Image from "next/image";
 import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
 import ImageOverlay from "@/components/ImageOverlay";
 
+export const dynamic = "force-dynamic";
+
+
 type result = {
   title: string;
   content: string;
