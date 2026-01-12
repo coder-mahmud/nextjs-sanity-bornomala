@@ -3,9 +3,11 @@ import Link from "next/link";
 const Pagination = ({
   currentPage,
   totalPages,
+  pogeSlug = 'results'
 }: {
   currentPage: number;
   totalPages: number;
+  pogeSlug?:string
 }) => {
   const pages: (number | string)[] = [];
 
@@ -31,7 +33,7 @@ const Pagination = ({
         ) : (
           <Link
             key={index}
-            href={`/results/page/${page}`}
+            href={`/${pogeSlug}/page/${page}`}
             className={`px-3 py-1 border ${
               page === currentPage
                 ? "bg-black text-white"

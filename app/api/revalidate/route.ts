@@ -37,6 +37,14 @@ export async function POST(req: NextRequest) {
     if(body.postType === 'post'){
       revalidatePath("/blog");
       revalidatePath(`/blog/${body.postSlug}`);
+
+      const totalPages = Math.ceil(body.totalPosts / 1)
+
+      for (let i = 1; i <= totalPages; i++) {
+        console.log("revalidatingPath", `/blog/page/${i}`)
+        revalidatePath(`/blog/page/${i}`);
+      }
+
     }
 
     // if(body.postType === 'class-schedule'){

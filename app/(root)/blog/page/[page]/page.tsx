@@ -8,7 +8,7 @@ import Pagination from '@/components/Pagination'
 
 const POSTS_PER_PAGE = 1
 
-/*
+
 const BLOGS_QUERY = `
   query allPosts($offset: Int!, $size: Int! ) {
     posts(where: {
@@ -39,34 +39,9 @@ const BLOGS_QUERY = `
   }
 `
 
-*/
-
-const BLOGS_QUERY = `
-  query allPosts( $size: Int!) {
-    posts(first: $size) {
-      nodes {
-        title
-        slug
-        date
-        excerpt
-        featuredImage{
-          node{
-            slug
-            sourceUrl
-          }
-        }
-      }
-      pageInfo {
-        offsetPagination {
-          total
-        }
-      }
-    }
-  }
-`
 
 async function getBlogsData(page: number) {
-  // const offset = (page - 1) * POSTS_PER_PAGE;
+  const offset = (page - 1) * POSTS_PER_PAGE;
   const res = await fetch(process.env.WP_GRAPHQL_URL!, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -74,32 +49,80 @@ async function getBlogsData(page: number) {
       query: BLOGS_QUERY,
       variables: {
         size: POSTS_PER_PAGE,
+        offset
       },
     }),
     //next: { revalidate: 60 },
   })
 
   if (!res.ok) {
+    console.log("Error res:", res)
     throw new Error("GraphQL request failed for blog posts")
   }
 
   const json = await res.json()
-  console.log("results in query",JSON.stringify(json, null, 10) )
+  // console.log("results in query",JSON.stringify(json, null, 10) )
   // console.log("Total Posts",json.data.posts.pageInfo.offsetPagination.total )
 
   return {
     results: json.data.posts.nodes,
-    totalPages: json.data.posts.pageInfo.offsetPagination.total
+    total: json.data.posts.pageInfo.offsetPagination.total,
   };
+}
+
+async function getTotalBlogPages() {
+  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+        query {
+          posts {
+            pageInfo {
+              offsetPagination {
+                total
+              }
+            }
+          }
+        }
+      `,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch total blog count");
+  }
+
+  const json = await res.json();
+  const totalPosts = json.data.posts.pageInfo.offsetPagination.total;
+
+  return Math.ceil(totalPosts / POSTS_PER_PAGE);
+}
+
+export async function generateStaticParams() {
+  const totalPages = await getTotalBlogPages();
+
+  return Array.from({ length: totalPages }, (_, i) => ({
+    page: String(i + 1),
+  }));
 }
 
 
 
-const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
 
-  // const params = await searchParams
-  const currentPage =  1;
-  const { results,totalPages } = await getBlogsData(currentPage)
+
+
+
+
+
+
+const BlogPage = async ({params}: {params?:  { page: string }}) => {
+
+  const paramsData = await params
+  console.log("ParamsData", paramsData)
+  const currentPage = Number(paramsData!.page);
+  const { results, total } = await getBlogsData(currentPage)
+  const totalPages = Math.ceil(total / POSTS_PER_PAGE);
   // console.log("results in body",JSON.stringify(results, null, 10) )
   // console.log("totalPages",totalPages)
 
@@ -118,7 +141,7 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {results.map((post: any, idx: number) => (
-              <Card key={idx} className="h-full py-0 pb-6">
+              <Card key={post.slug} className="h-full py-0 pb-6">
                 <div className="relative h-48 overflow-hidden">
                   {post.featuredImage?.node?.sourceUrl ? (<Image 
                     src={post.featuredImage?.node?.sourceUrl} 
@@ -142,6 +165,9 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
                       // hour: "2-digit",
                       // minute: "2-digit",
                     })}</span>
+                    {/* <span className="mx-2">•</span>
+                    <User className="w-4 h-4 mr-1" />
+                    <span>{post.author}</span> */}
                   </div>                  
                   
                   <CardTitle>{post.title}</CardTitle>
@@ -149,10 +175,9 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
                   </p>                
 
                 </CardHeader>
-
-
                 <CardContent>
                   
+                    {/* {post.excerpt} */}
                     <div
                       className="prose text-gray-700 mb-4"
                       dangerouslySetInnerHTML={{ __html: post.excerpt }}
@@ -164,8 +189,6 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
                     </Link>
                   </Button>
                 </CardContent>
-
-
               </Card>
             ))}
           </div>
