@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 
 type Blog = {
