@@ -7,11 +7,7 @@ const POSTS_PER_PAGE = 10
 
 const RESULTS_QUERY = `
   query AllResults($offset: Int!, $size: Int!) {
-    results(
-      where: {
-        offsetPagination: { offset: $offset, size: $size }
-      }
-    ) {
+    results( where: {offsetPagination: { offset: $offset, size: $size }}) {
       edges {
         node {
           title
@@ -52,7 +48,7 @@ async function getResultsData(page: number) {
         size: POSTS_PER_PAGE,
       },
     }),
-    cache: "no-store",
+    // cache: "no-store",
   });
 
   if (!res.ok) {
@@ -69,6 +65,43 @@ async function getResultsData(page: number) {
   };
 }
 
+async function getTotalResultPages() {
+  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+        query {
+          results {
+            pageInfo {
+              offsetPagination {
+                total
+              }
+            }
+          }
+        }
+      `,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch total blog count");
+  }
+
+  const json = await res.json();
+  const totalPosts = json.data.results.pageInfo.offsetPagination.total;
+
+  return Math.ceil(totalPosts / POSTS_PER_PAGE);
+}
+
+
+export async function generateStaticParams() {
+  const totalPages = await getTotalResultPages();
+
+  return Array.from({ length: totalPages }, (_, i) => ({
+    page: String(i + 1),
+  }));
+}
 
 
 
@@ -100,7 +133,7 @@ const ResultsPage = async({params}: { params: { page: string }}) => {
         <div className="container py-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {results.map(({ node }: any, index: number) => (
-              <div className="single_result border rounded  flex justify-start flex-col">
+              <div key={index} className="single_result border rounded  flex justify-start flex-col">
                 {node.featuredImage? (
                   <Image className='w-full h-auto' src={node.featuredImage.node.sourceUrl} alt={node.title} width={300} height={300} />
                 ) : ""}
@@ -115,11 +148,12 @@ const ResultsPage = async({params}: { params: { page: string }}) => {
             ))}
           </div>
 
-          {/* PAGINATION */}
+           
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
           />
+          
         </div>
 
 

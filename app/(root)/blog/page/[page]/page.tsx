@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Pagination from '@/components/Pagination'
 
 
-const POSTS_PER_PAGE = 1
+const POSTS_PER_PAGE = 10
 
 
 const BLOGS_QUERY = `

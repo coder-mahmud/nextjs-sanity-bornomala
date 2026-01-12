@@ -6,40 +6,7 @@ import Link from 'next/link'
 import Pagination from '@/components/Pagination'
 
 
-const POSTS_PER_PAGE = 1
-
-/*
-const BLOGS_QUERY = `
-  query allPosts($offset: Int!, $size: Int! ) {
-    posts(where: {
-        offsetPagination: { offset: $offset, size: $size }
-      } ) {
-      nodes {
-        title
-        slug
-        date
-        excerpt
-        featuredImage{
-          node{
-            slug
-            sourceUrl
-          }
-        }
-
-
-
-
-      }
-      pageInfo {
-        offsetPagination {
-          total
-        }
-      }
-    }
-  }
-`
-
-*/
+const POSTS_PER_PAGE = 10
 
 const BLOGS_QUERY = `
   query allPosts( $size: Int!) {
@@ -84,12 +51,12 @@ async function getBlogsData(page: number) {
   }
 
   const json = await res.json()
-  console.log("results in query",JSON.stringify(json, null, 10) )
+  // console.log("results in query",JSON.stringify(json, null, 10) )
   // console.log("Total Posts",json.data.posts.pageInfo.offsetPagination.total )
 
   return {
     results: json.data.posts.nodes,
-    totalPages: json.data.posts.pageInfo.offsetPagination.total
+    total: json.data.posts.pageInfo.offsetPagination.total
   };
 }
 
@@ -99,10 +66,10 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
 
   // const params = await searchParams
   const currentPage =  1;
-  const { results,totalPages } = await getBlogsData(currentPage)
+  const { results,total } = await getBlogsData(currentPage)
   // console.log("results in body",JSON.stringify(results, null, 10) )
   // console.log("totalPages",totalPages)
-
+  const totalPages = Math.ceil(total / POSTS_PER_PAGE)
   return (
     <>
       <section className='bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url('/images/BlogBG.png')` }}>

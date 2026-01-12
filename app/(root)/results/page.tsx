@@ -6,12 +6,8 @@ import Image from 'next/image';
 const POSTS_PER_PAGE = 10
 
 const RESULTS_QUERY = `
-  query AllResults($offset: Int!, $size: Int!) {
-    results(
-      where: {
-        offsetPagination: { offset: $offset, size: $size }
-      }
-    ) {
+  query AllResults( $size: Int!) {
+    results(first: $size) {
       edges {
         node {
           title
@@ -40,7 +36,7 @@ const RESULTS_QUERY = `
 
 
 async function getResultsData(page: number) {
-  const offset = (page - 1) * POSTS_PER_PAGE;
+  // const offset = (page - 1) * POSTS_PER_PAGE;
 
   const res = await fetch(process.env.WP_GRAPHQL_URL!, {
     method: "POST",
@@ -48,11 +44,10 @@ async function getResultsData(page: number) {
     body: JSON.stringify({
       query: RESULTS_QUERY,
       variables: {
-        offset,
         size: POSTS_PER_PAGE,
       },
     }),
-    cache: "no-store",
+    // cache: "no-store",
   });
   if (!res.ok) {
     throw new Error("GraphQL request for results failed")
@@ -75,13 +70,13 @@ async function getResultsData(page: number) {
 
 const ResultsPage = async({params}: { params: { page: string }}) => {
 
-  const paramsData = await params
-  const currentPage = Number(paramsData.page || 1);
+  // const paramsData = await params
+  const currentPage =  1;
   // console.log("Current Page:", currentPage)
   const { results, total } = await getResultsData(currentPage);
   // console.log("Results Page data:", JSON.stringify(results, null,10))
   const totalPages = Math.ceil(total / POSTS_PER_PAGE);
-
+  // console.log("Total Page:", totalPages)
 
 
   return (
@@ -99,13 +94,13 @@ const ResultsPage = async({params}: { params: { page: string }}) => {
         <div className="container py-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {results.map(({ node }: any, index: number) => (
-              <div className="single_result border rounded  flex justify-start flex-col">
+              <div key={index} className="single_result border rounded  flex justify-start flex-col">
                 {node.featuredImage? (
                   <Image className='w-full h-auto' src={node.featuredImage.node.sourceUrl} alt={node.title} width={300} height={300} />
                 ) : ""}
 
                 <div className="short_info p-3">
-                  <h2 key={index} className="text-xl mb-4 text-center">
+                  <h2 className="text-xl mb-4 text-center">
                     {node.title}
                   </h2>
                   <Link className='block px-2 py-1 rounded bg-green-500 cursor-pointer text-white hover:bg-green-900 text-center' href={`/results/${node.slug}`}>See Result</Link>
