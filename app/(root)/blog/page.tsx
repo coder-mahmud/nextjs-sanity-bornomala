@@ -4,9 +4,10 @@ import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Pagination from '@/components/Pagination'
+import BlogHero from '@/components/blog/BlogHero'
 
 
-const POSTS_PER_PAGE = 10
+const POSTS_PER_PAGE = 12
 
 const BLOGS_QUERY = `
   query allPosts( $size: Int!) {
@@ -72,20 +73,14 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
   const totalPages = Math.ceil(total / POSTS_PER_PAGE)
   return (
     <>
-      <section className='bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url('/images/BlogBG.png')` }}>
-        <div className="container bg-linear-to-r from-black/70 via-black/50 to-transparent">
-
-
-          <h1 className='text-center py-24 md:py-40 text-3xl md:text-5xl text-white'>আমাদের ব্লগ</h1>
-        </div>
-      </section>
+      <BlogHero />
 
 
       <section className='py-20'>
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {results.map((post: any, idx: number) => (
-              <Card key={idx} className="h-full py-0 pb-6">
+              <Card  data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx*100}  key={idx} className="h-full py-0 pb-6">
                 <div className="relative h-48 overflow-hidden">
                   {post.featuredImage?.node?.sourceUrl ? (<Image 
                     src={post.featuredImage?.node?.sourceUrl} 

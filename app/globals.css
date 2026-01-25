@@ -50,7 +50,8 @@
   --background: #F5F6F6;
   --foreground: #0E1A2F;
 
-  --primary: #264C95;           /* Blue */
+  /* --primary: #264C95; */
+  --primary: #118f6b;           /* Blue */
   --primary-foreground: #FFFFFF;
 
   --secondary: #0C6D4F;         /* Green */

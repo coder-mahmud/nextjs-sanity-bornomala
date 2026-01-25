@@ -2,6 +2,9 @@ import React from 'react'
 import { Phone, Mail, MapPin, Facebook, Youtube, Instagram, Clock } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { subsCribeAction } from '@/actions/form'
+import Subscribe from './Subscribe'
+import FloatingContact from './FloatingContacts'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -12,13 +15,13 @@ const Footer = () => {
     { name: "কোর্সসমূহ", href: "/courses" },
     { name: "ব্লগ", href: "/blog" },
     { name: "যোগাযোগ", href: "/contact" },
-    { name: "ফলাফল", href: "/result" },
-    { name: "DELF পরীক্ষা", href: "/exam" }
+    { name: "ফলাফল", href: "/results" },
+    // { name: "DELF পরীক্ষা", href: "/exam" }
   ]
 
   const contactInfo = [
     {
-      icon: <Phone className="h-5 w-5 text-primary" />,
+      icon: <Phone className="h-5 w-5 text-white" />,
       title: "ফোন নম্বর",
       details: [
         "প্যারিস ১৮: ০৭ ৫৩ ৩০ ১৮ ৭৫",
@@ -26,7 +29,7 @@ const Footer = () => {
       ]
     },
     {
-      icon: <Mail className="h-5 w-5 text-primary" />,
+      icon: <Mail className="h-5 w-5 text-white" />,
       title: "ইমেল ঠিকানা",
       details: [
         "info@bornomala.com",
@@ -34,7 +37,7 @@ const Footer = () => {
       ]
     },
     {
-      icon: <MapPin className="h-5 w-5 text-primary" />,
+      icon: <MapPin className="h-5 w-5 text-white" />,
       title: "ঠিকানা",
       details: [
         "প্যারিস ক্যাম্পাস: ১২৩ রু ডি প্যারিস, ৭৫০১৮ প্যারিস",
@@ -42,7 +45,7 @@ const Footer = () => {
       ]
     },
     {
-      icon: <Clock className="h-5 w-5 text-primary" />,
+      icon: <Clock className="h-5 w-5 text-white" />,
       title: "সময়সূচী",
       details: [
         "সোমবার - শুক্রবার: সকাল ৯টা - রাত ৮টা",
@@ -58,17 +61,28 @@ const Footer = () => {
   ]
 
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
+
+    <>
+
+      <Subscribe />
+
+
+
+
+
+
+    <footer className="bg-primary text-white pt-16 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="lg:col-span-1">
             <div className="flex items-center mb-4">
               <Link href="/">
-                <Image src="/images/logo.jpg" alt="Logo" width={120} height={120} className="w-auto h-12" />
+                <Image src="/images/LogoWhite.png" alt="Logo" width={120} height={120} className="w-auto h-12" />
               </Link>
             </div>
-            <p className="text-gray-300 mb-6">
+            <p className="text-white mb-6">
               বর্ণমালা ফরাসি ভাষা স্কুলে আমরা ব্যক্তিগতকৃত ফরাসি ভাষা কোচিং প্রদান করি। আমাদের লক্ষ্য হলো প্রতিটি শিক্ষার্থীকে ফরাসি ভাষায় দক্ষতা অর্জনে সাহায্য করা।
             </p>
             <div className="flex space-x-4">
@@ -95,7 +109,7 @@ const Footer = () => {
                 <li key={index}>
                   <Link 
                     href={link.href}
-                    className="text-gray-300 hover:text-primary transition-colors duration-300"
+                    className="text-white hover:text-gray-200 transition-colors duration-300"
                   >
                     {link.name}
                   </Link>
@@ -115,10 +129,10 @@ const Footer = () => {
                       {info.icon}
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-300">{info.title}</h4>
+                      <h4 className="font-medium text-white">{info.title}</h4>
                       <ul className="mt-1">
                         {info.details.map((detail, idx) => (
-                          <li key={idx} className="text-gray-400 text-sm">
+                          <li key={idx} className="text-white text-sm">
                             {detail}
                           </li>
                         ))}
@@ -131,46 +145,40 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Newsletter Subscription */}
-        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="bg-gray-800 rounded-lg p-6 mb-12">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-4 md:mb-0 md:mr-6">
-              <h3 className="text-lg font-bold mb-2">নিউজলেটার সাবস্ক্রাইব করুন</h3>
-              <p className="text-gray-400 text-sm">
-                আমাদের কোর্স, ইভেন্ট এবং অফার সম্পর্কে আপডেট পেতে সাইন আপ করুন
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row w-full md:w-auto">
-              <input 
-                type="email" 
-                placeholder="আপনার ইমেল ঠিকানা" 
-                className="px-4 py-2 rounded-l-lg focus:outline-none text-gray-900 w-full sm:w-auto"
-              />
-              <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-r-lg font-medium transition-colors duration-300 mt-2 sm:mt-0">
-                সাবস্ক্রাইব
-              </button>
-            </div>
-          </div>
-        </div>
+
 
         {/* Copyright */}
-        <div  className="pt-8 border-t border-gray-800">
+        <div  className="pt-8 border-t border-gray-800 text-white">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">
+            <p className=" text-sm mb-4 md:mb-0">
               © {currentYear} বর্ণমালা ফরাসি ভাষা স্কুল। সর্বস্বত্ব সংরক্ষিত।
             </p>
-            <div className="flex space-x-6">
-              <Link href="/privacy-policy" className="text-gray-400 hover:text-primary text-sm transition-colors duration-300">
+
+            {/* <div className="flex space-x-6">
+              <Link href="/privacy-policy" className=" hover:text-primary text-sm transition-colors duration-300">
                 গোপনীয়তা নীতি
               </Link>
-              <Link href="/terms-conditions" className="text-gray-400 hover:text-primary text-sm transition-colors duration-300">
+              <Link href="/terms-conditions" className=" hover:text-primary text-sm transition-colors duration-300">
                 শর্তাবলী
               </Link>
-            </div>
+            </div> */}
+
+
           </div>
         </div>
+        
+        {/* <div className="developer_link">
+          <div className="">
+            <p className='text-sm text-center'>Website Developed By: <a href="https://codermahmud.xyz">Mahmud</a></p>
+          </div>
+        </div> */}
+
+
       </div>
     </footer>
+
+    <FloatingContact />
+    </>
   )
 }
 

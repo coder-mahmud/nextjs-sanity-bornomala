@@ -174,7 +174,7 @@ const Header = () => {
                     <li>
                       <Link 
                         className='block hover:text-primary nav-underline px-2 py-2 border-b' 
-                        href="/result" 
+                        href="/results" 
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Result

@@ -1,12 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
-import ImageOverlay from "@/components/ImageOverlay";
 
 // export const dynamic = "force-dynamic";
 
 
-type result = {
+type Blog = {
   title: string;
   content: string;
   slug: string;
@@ -24,7 +23,7 @@ type result = {
   };
 };
 
-async function getResultPost(slug:string): Promise<any | null> {
+async function getBlogPost(slug:string): Promise<any | null> {
   
   
   const res = await fetch(process.env.WP_GRAPHQL_URL!, {
@@ -34,30 +33,20 @@ async function getResultPost(slug:string): Promise<any | null> {
     },
     body: JSON.stringify({
       query: `
-        query resultBySlug($slug: String!) {
-          resultBy(slug: $slug) {
+        query postBySlug($slug: String!) {
+          successStoryBy(slug: $slug) {
             title
-            date
             content
-            resultsFields{
-              resultsDates{
-                date
-                resultImage{
-                node{
-                  sourceUrl
-                }
-                }
-              }
-            }
-            featuredImage{
-              node{
+            date
+            featuredImage {
+              node {
                 sourceUrl
+                
               }
             }
-
-
           }
         }
+
       `,
       variables: {
         slug,
@@ -65,8 +54,9 @@ async function getResultPost(slug:string): Promise<any | null> {
     }),
     //next: { revalidate: 60 }, // ISR
   });
+
   if (!res.ok) {
-    throw new Error("GraphQL request for single result page failed")
+    throw new Error("GraphQL request failed")
   }
 
   const json = await res.json();
@@ -74,7 +64,7 @@ async function getResultPost(slug:string): Promise<any | null> {
   // console.log("getCourse data:", json);
 
 
-  return json?.data?.resultBy ?? null;
+  return json?.data?.successStoryBy ?? null;
 }
 
 
@@ -118,45 +108,54 @@ export async function generateStaticParams() {
 export default async function CoursePage({params}: { params: { slug: string }}) {
   const paramList = await params
   // console.log("paramList", paramList)
-  const result = await getResultPost(paramList.slug[0]);
+  const blog = await getBlogPost(paramList.slug[0]);
   // const course = null
-  // console.log("Result Data:", JSON.stringify(result, null, 10))
+  // console.log("Course Data:", blog)
 
 
 
   // console.log("thisCourseSchedules",JSON.stringify(thisCourseSchedules, null, 2))
 
 
-  if (!result) {
-    return <h1>result not found!</h1>;
+  if (!blog) {
+    return <h1>Blog not found</h1>;
   }
 
   return (
     <>
 
-      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="result_hero_section py-10">
-        
+      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="blog_hero_section py-10">
+        {/* <div className="bg_image absolute z-10 top-0 left-0 w-full h-full bg-green-500 overflow-hidden">
+          
+          
+          
+        </div> */}
         <div className="container relative h-full">
           
             <div className="flex flex-col items-center">
 
               {
-                result?.featuredImage?.node?.sourceUrl ? (
-                  <Image src={result.featuredImage.node.sourceUrl} width={500} height={150} alt={result.title} className="w-[400px] h-auto object-contain block mx-auto rounded-2xl" />
+                blog?.featuredImage?.node?.sourceUrl ? (
+                  <Image src={blog.featuredImage.node.sourceUrl} width={500} height={150} alt={blog.title} className="w-[400px] h-auto object-contain block mx-auto rounded-2xl" />
                 ) : ''
               }
 
 
 
-              <h1 className="text-3xl md:text-5xl mt-8 mb-2">{result.title}</h1>
+              <h1 className="text-3xl md:text-5xl mt-4 mb-2">{blog.title}</h1>
 
               <div className="flex items-center text-gray-600 mb-2 text-xl">
                 <Calendar className="w-6 h-6 mr-1" />
-                <span>{new Date(result.date).toLocaleString("en-US", {
+                <span>{new Date(blog.date).toLocaleString("en-US", {
                   year: "numeric",
                   month: "short",
                   day: "numeric",
+                  // hour: "2-digit",
+                  // minute: "2-digit",
                 })}</span>
+                {/* <span className="mx-2">•</span>
+                <User className="w-4 h-4 mr-1" />
+                <span>{post.author}</span> */}
               </div> 
 
 
@@ -167,25 +166,12 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
         </div>
       </section>
 
-      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="pb-20">
+      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="py-20">
         <div className="container">
-        <div className="max-w-5xl mx-auto"
-          dangerouslySetInnerHTML={{ __html: result.content }}
+        <div
+          dangerouslySetInnerHTML={{ __html: blog.content }}
         />
           
-        </div>
-      </section>
-
-      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="pb-20">
-        <div className="container">
-          <p className="text-center mb-6">রেজাল্ট দেখতে Date এর উপর ক্লিক করুন:</p>
-          <div className="flex flex-wrap gap-6 items-center justify-center">
-            {result.resultsFields.resultsDates.map((date:any,index:number) => (
-              <div key={index} className="">
-                <ImageOverlay text={date.date} imageUrl={date.resultImage.node.sourceUrl} />
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

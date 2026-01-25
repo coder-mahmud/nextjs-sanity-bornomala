@@ -4,9 +4,10 @@ import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Pagination from '@/components/Pagination'
+import BlogHero from '@/components/blog/BlogHero'
 
 
-const POSTS_PER_PAGE = 10
+const POSTS_PER_PAGE = 12
 
 
 const BLOGS_QUERY = `
@@ -119,7 +120,7 @@ export async function generateStaticParams() {
 const BlogPage = async ({params}: {params?:  { page: string }}) => {
 
   const paramsData = await params
-  console.log("ParamsData", paramsData)
+  // console.log("ParamsData", paramsData)
   const currentPage = Number(paramsData!.page);
   const { results, total } = await getBlogsData(currentPage)
   const totalPages = Math.ceil(total / POSTS_PER_PAGE);
@@ -128,13 +129,7 @@ const BlogPage = async ({params}: {params?:  { page: string }}) => {
 
   return (
     <>
-      <section className='bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url('/images/BlogBG.png')` }}>
-        <div className="container bg-linear-to-r from-black/70 via-black/50 to-transparent">
-
-
-          <h1 className='text-center py-24 md:py-40 text-3xl md:text-5xl text-white'>আমাদের ব্লগ</h1>
-        </div>
-      </section>
+      <BlogHero />
 
 
       <section className='py-20'>

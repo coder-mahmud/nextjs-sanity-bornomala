@@ -5,7 +5,71 @@ import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const BlogSection = () => {
+const POSTS_PER_PAGE = 3
+
+const BLOGS_QUERY = `
+  query allPosts( $size: Int!) {
+    posts(first: $size) {
+      nodes {
+        title
+        slug
+        date
+        excerpt
+        featuredImage{
+          node{
+            slug
+            sourceUrl
+          }
+        }
+      }
+      pageInfo {
+        offsetPagination {
+          total
+        }
+      }
+    }
+  }
+`
+
+async function getBlogsData(page: number) {
+  // const offset = (page - 1) * POSTS_PER_PAGE;
+  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: BLOGS_QUERY,
+      variables: {
+        size: POSTS_PER_PAGE,
+      },
+    }),
+    //next: { revalidate: 60 },
+  })
+
+  if (!res.ok) {
+    throw new Error("GraphQL request failed for blog posts")
+  }
+
+  const json = await res.json()
+  // console.log("results in query",JSON.stringify(json, null, 10) )
+  // console.log("Total Posts",json.data.posts.pageInfo.offsetPagination.total )
+
+  return {
+    results: json.data.posts.nodes,
+    total: json.data.posts.pageInfo.offsetPagination.total
+  };
+}
+
+
+
+
+
+const BlogSection = async() => {
+  
+  const currentPage =  1;
+  const { results,total } = await getBlogsData(currentPage)
+  
+  // console.log("Blog Result:", JSON.stringify(results, null,10))
+  
   const blogPosts = [
     {
       id: 1,
@@ -53,15 +117,18 @@ const BlogSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post,idx) => (
-            <Card key={post.id} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx * 100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
+          {results.map((post:any,idx:number) => (
+            <Card key={idx} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx * 100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
               <div className="relative h-48 overflow-hidden">
-                <Image 
-                  src={post.image} 
-                  alt={post.title}
-                  fill
-                  className="object-cover w-full h-full"
-                />
+                {post.featuredImage && (
+                  <Image 
+                    src={post.featuredImage.node.sourceUrl} 
+                    alt={post.title}
+                    fill
+                    className="object-cover w-full h-full"
+                  />
+                ) }
+                
               </div>
               <CardHeader className="pb-3">
                 <div className="flex items-center text-sm text-gray-600 mb-2">

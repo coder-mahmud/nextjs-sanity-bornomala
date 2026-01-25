@@ -2,6 +2,7 @@ import Pagination from '@/components/Pagination';
 import Link from 'next/link';
 import React from 'react'
 import Image from 'next/image';
+import ResultsHero from '@/components/others/ResultsHero';
 
 const POSTS_PER_PAGE = 10
 
@@ -82,19 +83,13 @@ const ResultsPage = async({params}: { params: { page: string }}) => {
   return (
     <>
 
-      <section className='bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url('/images/BlogBG.png')` }}>
-        <div className="container bg-linear-to-r from-black/70 via-black/50 to-transparent">
-
-
-          <h1 className='text-center py-24 md:py-40 text-3xl md:text-5xl text-white'>DELF পরীক্ষার ফলাফল</h1>
-        </div>
-      </section>
+      <ResultsHero />
 
       <section>
         <div className="container py-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {results.map(({ node }: any, index: number) => (
-              <div key={index} className="single_result border rounded  flex justify-start flex-col">
+              <div  data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={index*100} key={index} className="single_result border rounded  flex justify-start flex-col">
                 {node.featuredImage? (
                   <Image className='w-full h-auto' src={node.featuredImage.node.sourceUrl} alt={node.title} width={300} height={300} />
                 ) : ""}

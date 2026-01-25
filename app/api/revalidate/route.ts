@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       revalidatePath("/blog");
       revalidatePath(`/blog/${body.postSlug}`);
 
-      const totalPages = Math.ceil(body.totalPosts / 1)
+      const totalPages = Math.ceil(body.totalPosts / 12)
 
       for (let i = 1; i <= totalPages; i++) {
         console.log("revalidatingPath", `/blog/page/${i}`)
@@ -56,16 +56,36 @@ export async function POST(req: NextRequest) {
       revalidatePath("/courses");
       revalidatePath(`/courses/${body.postSlug}`);
     }
+
     if(body.postType === 'result'){
       revalidatePath("/results");
       revalidatePath(`/results/${body.postSlug}`);
+
+      const totalPages = Math.ceil(body.totalResults / 12)
+
+      for (let i = 1; i <= totalPages; i++) {
+        console.log("revalidatingPath", `/blog/page/${i}`)
+        revalidatePath(`/results/page/${i}`);
+      }
+
+
     }
+
+
     if(body.postType === 'success-story'){
       revalidatePath("/success-stories");
       revalidatePath(`/success-stories/${body.postSlug}`);
+      
+      const totalPages = Math.ceil(body.total_sstories / 12)
+
+      for (let i = 1; i <= totalPages; i++) {
+        console.log("revalidatingPath", `/blog/page/${i}`)
+        revalidatePath(`/success-stories/page/${i}`);
+      }
     }
 
     return NextResponse.json({ revalidated: true });
+
   } catch (err) {
     console.error("Revalidation error:", err);
     return NextResponse.json(

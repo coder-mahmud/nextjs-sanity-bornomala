@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, BookOpen, Users, Award, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import Slider from './Slider'
 
 type heroData = {
   data:{
@@ -33,6 +34,9 @@ const HomeHero = ({data}:heroData) => {
 
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="slider">
+          {/* <Slider /> */}
+        </div>
         <div  className="flex flex-col lg:flex-row items-center gap-5">
           {/* Left Content */}
 

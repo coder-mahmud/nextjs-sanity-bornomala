@@ -180,8 +180,10 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
   const schedules = await getSchedules()
   // console.log("Schedules:", schedules)
 
+  const validSchedules = schedules.filter((schedule:any) => !!schedule?.node?.classScheduleFields?.course?.nodes)
+
   // schedules!.map((schedule:any) => console.log(schedule.node.classScheduleFields.course.nodes[0].slug))
-  const thisCourseSchedules = schedules.filter((schedule:any) => schedule.node.classScheduleFields.course.nodes[0].slug === course!.slug )
+  const thisCourseSchedules = validSchedules.filter((schedule:any) => schedule.node.classScheduleFields.course.nodes[0].slug === course!.slug )
 
   // console.log("thisCourseSchedules",JSON.stringify(thisCourseSchedules, null, 2))
 
@@ -207,7 +209,7 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
   return (
     <>
 
-      <section className="bg-green-gradient ">
+      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0} className="bg-green-gradient ">
         <div className="container mx-auto px-4 py-12 md:py-20">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
@@ -282,7 +284,7 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
 
                     {/* Days */}
                     <div className="space-y-0">
-                      {days.map((dayItem:any, dayIndex:number) => (
+                      {days && days.map((dayItem:any, dayIndex:number) => (
                         <div key={dayIndex} className="rounded-md " >
                           
                           {dayItem.day} | {dayItem.time} | ক্লাস স্টার্ট: {dayItem.startingDate}
@@ -301,7 +303,7 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
+      <section data-aos="fade-up" data-aos-offset="100" data-aos-duration="1000" data-aos-delay={0} className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
@@ -370,7 +372,7 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0} className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">
               আপনি কী শিখবেন {/* What You'll Learn */}
             </h2>
@@ -380,6 +382,7 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition border-l-4 border-indigo-500">
               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
                 <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -439,152 +442,157 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
               <h3 className="text-lg font-semibold mb-2">পরীক্ষার প্রস্তুতি {/* Exam Preparation */}</h3>
               <p className="text-gray-600 text-sm">DELF, TEF ও TCF পরীক্ষার জন্য পূর্ণ প্রস্তুতি {/* Full preparation for DELF, TEF and TCF exams */}</p>
             </div>
+
+
           </div>
         </div>
       </section>
 
+    {/*
       <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            কোর্স কারিকুলাম {/* Course Curriculum */}
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            বিস্তারিত কোর্স সিলেবাস ও মডিউল {/* Detailed course syllabus and modules */}
-          </p>
-        </div>
-        
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-indigo-700 text-white p-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-semibold">৬ মাসের কোর্স কাঠামো {/* 6 Month Course Structure */}</h3>
-                <span className="bg-white text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold">
-                  ২৪ মডিউল {/* 24 Modules */}
-                </span>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              কোর্স কারিকুলাম
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              বিস্তারিত কোর্স সিলেবাস ও মডিউল 
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="bg-indigo-700 text-white p-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold">৬ মাসের কোর্স কাঠামো </h3>
+                  <span className="bg-white text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold">
+                    ২৪ মডিউল 
+                  </span>
+                </div>
               </div>
-            </div>
-            
-            <div className="divide-y">
-              {/* Module 1 */}
-              <div className="p-6 hover:bg-gray-50 transition">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-800">মডিউল ১: ফ্রেঞ্চ পরিচয় {/* Module 1: Introduction to French */}</h4>
-                    <p className="text-sm text-gray-500">সপ্তাহ ১-২ {/* Week 1-2 */}</p>
+              
+              <div className="divide-y">
+                
+                <div className="p-6 hover:bg-gray-50 transition">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-800">মডিউল ১: ফ্রেঞ্চ পরিচয় </h4>
+                      <p className="text-sm text-gray-500">সপ্তাহ ১-২</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                   </div>
-                  <svg className="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>ফ্রেঞ্চ বর্ণমালা ও উচ্চারণ রীতি {/* French alphabet and pronunciation rules */}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>অভিবাদন ও পরিচিতি {/* Greetings and introductions */}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>সংখ্যা, দিন, মাস ও ঋতু {/* Numbers, days, months and seasons */}</span>
-                  </li>
-                </ul>
-                <div className="mt-3 flex items-center text-sm text-gray-500">
-                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                    <path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                  </svg>
-                  <span>১০ টি ভিডিও লেকচার, ৫ টি কুইজ {/* 10 Video Lectures, 5 Quizzes */}</span>
-                </div>
-              </div>
-              
-              {/* Module 2 */}
-              <div className="p-6 hover:bg-gray-50 transition">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-800">মডিউল ২: মৌলিক ব্যাকরণ {/* Module 2: Basic Grammar */}</h4>
-                    <p className="text-sm text-gray-500">সপ্তাহ ৩-৪ {/* Week 3-4 */}</p>
+                  <ul className="space-y-2 text-gray-600">
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>ফ্রেঞ্চ বর্ণমালা ও উচ্চারণ রীতি </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>অভিবাদন ও পরিচিতি </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>সংখ্যা, দিন, মাস ও ঋতু </span>
+                    </li>
+                  </ul>
+                  <div className="mt-3 flex items-center text-sm text-gray-500">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>১০ টি ভিডিও লেকচার, ৫ টি কুইজ </span>
                   </div>
-                  <svg className="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
                 </div>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>বিশেষ্য ও লিঙ্গ {/* Nouns and genders */}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>নির্দিষ্ট ও অনির্দিষ্ট আর্টিকেল {/* Definite and indefinite articles */}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>সাধারণ ক্রিয়াপদ ও বর্তমান কাল {/* Common verbs and present tense */}</span>
-                  </li>
-                </ul>
-                <div className="mt-3 flex items-center text-sm text-gray-500">
-                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                    <path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                  </svg>
-                  <span>১২ টি ভিডিও লেকচার, ৬ টি কুইজ {/* 12 Video Lectures, 6 Quizzes */}</span>
-                </div>
-              </div>
-              
-              {/* Module 3 */}
-              <div className="p-6 hover:bg-gray-50 transition">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-800">মডিউল ৩: যোগাযোগ দক্ষতা {/* Module 3: Communication Skills */}</h4>
-                    <p className="text-sm text-gray-500">সপ্তাহ ৫-৬ {/* Week 5-6 */}</p>
+                
+                
+                <div className="p-6 hover:bg-gray-50 transition">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-800">মডিউল ২: মৌলিক ব্যাকরণ </h4>
+                      <p className="text-sm text-gray-500">সপ্তাহ ৩-৪</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                   </div>
-                  <svg className="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
+                  <ul className="space-y-2 text-gray-600">
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>বিশেষ্য ও লিঙ্গ </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>নির্দিষ্ট ও অনির্দিষ্ট আর্টিকেল </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>সাধারণ ক্রিয়াপদ ও বর্তমান কাল </span>
+                    </li>
+                  </ul>
+                  <div className="mt-3 flex items-center text-sm text-gray-500">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>১২ টি ভিডিও লেকচার, ৬ টি কুইজ</span>
+                  </div>
                 </div>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>রেস্তোরাঁয় খাবার অর্ডার দেওয়া {/* Ordering food at restaurants */}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>দিকনির্দেশনা চাওয়া ও দেওয়া {/* Asking for and giving directions */}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-600 mr-2">•</span>
-                    <span>শপিং ও দামাদামি {/* Shopping and bargaining */}</span>
-                  </li>
-                </ul>
-                <div className="mt-3 flex items-center text-sm text-gray-500">
-                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                    <path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                  </svg>
-                  <span>৮ টি ভিডিও লেকচার, ৪ টি কুইজ, ২ টি অ্যাসাইনমেন্ট {/* 8 Video Lectures, 4 Quizzes, 2 Assignments */}</span>
+                
+                
+                <div className="p-6 hover:bg-gray-50 transition">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-800">মডিউল ৩: যোগাযোগ দক্ষতা </h4>
+                      <p className="text-sm text-gray-500">সপ্তাহ ৫-৬</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
+                  <ul className="space-y-2 text-gray-600">
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>রেস্তোরাঁয় খাবার অর্ডার দেওয়া </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>দিকনির্দেশনা চাওয়া ও দেওয়া </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-indigo-600 mr-2">•</span>
+                      <span>শপিং ও দামাদামি </span>
+                    </li>
+                  </ul>
+                  <div className="mt-3 flex items-center text-sm text-gray-500">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>৮ টি ভিডিও লেকচার, ৪ টি কুইজ, ২ টি অ্যাসাইনমেন্ট </span>
+                  </div>
                 </div>
-              </div>
-              
-              {/* More modules can be added similarly */}
-              
-              <div className="p-6 bg-indigo-50">
-                <div className="text-center">
-                  <p className="text-gray-600 mb-4">আরও ২১ টি মডিউল রয়েছে {/* 21 more modules available */}</p>
-                  <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">
-                    সম্পূর্ণ কারিকুলাম দেখুন {/* View Full Curriculum */}
-                  </button>
+                
+                
+                
+                <div className="p-6 bg-indigo-50">
+                  <div className="text-center">
+                    <p className="text-gray-600 mb-4">আরও ২১ টি মডিউল রয়েছে</p>
+                    <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">
+                      সম্পূর্ণ কারিকুলাম দেখুন
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="py-16">
+    */}
+
+    <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0} className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
@@ -739,7 +747,9 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
       </div>
     </section>
  */}
-    <section className="py-16 bg-gray-50">
+
+
+    <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={0} className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">

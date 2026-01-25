@@ -52,13 +52,14 @@ const ScheduleSectionNew = async() => {
 
   const sechedulesData = await getSchedulesData();
   // console.log("Schedules:", sechedulesData)
+  const activeSchedules = sechedulesData.filter((sch:any) => sch.classScheduleFields.active === 'Active')
 
 
 
   const getLevelColor = (level:any) => {
-    if (level.includes("Beginner") ) return "bg-green-100 text-green-800"
-    if (level.includes("Intermediate") || level.includes("B2")) return "bg-blue-100 text-blue-800"
-    if (level.includes("Expert") || level.includes("C2")) return "bg-purple-100 text-purple-800"
+    if (level?.includes("Beginner") ) return "bg-green-100 text-green-800"
+    if (level?.includes("Intermediate") || level.includes("B2")) return "bg-blue-100 text-blue-800"
+    if (level?.includes("Expert") || level.includes("C2")) return "bg-purple-100 text-purple-800"
     return "bg-gray-100 text-gray-800"
   }
 
@@ -82,7 +83,7 @@ const ScheduleSectionNew = async() => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-            {sechedulesData.map((schedule : any, idx:number) =>(
+            {activeSchedules.map((schedule : any, idx:number) =>(
               <Card key={idx} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="100" className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col">
               
               <CardHeader className="pb-4">
@@ -94,9 +95,12 @@ const ScheduleSectionNew = async() => {
                     </div>
                     
                   </CardTitle>
-                  <Badge className={getLevelColor(schedule.classScheduleFields.level)}>
-                    {schedule.classScheduleFields.level}
-                  </Badge>
+                  {schedule.classScheduleFields.level ? (
+                    <Badge className={getLevelColor(schedule.classScheduleFields.level)}>
+                      {schedule.classScheduleFields.level}
+                    </Badge>
+                  ) : ""}
+                  
                 </div>
                 <CardDescription className="text-gray-700">
                   {schedule.classScheduleFields.shortDescription}
@@ -105,26 +109,29 @@ const ScheduleSectionNew = async() => {
                             
               <CardContent className="grow">
                 
+                {schedule.classScheduleFields.days ? 
 
-                {schedule.classScheduleFields.days.map((day:any,idx:number) => (
-                  <div key={idx} className="space-y-4 mb-6 border rounded p-4">
+                  schedule.classScheduleFields.days.map((day:any,idx:number) => (
+                    <div key={idx} className="space-y-4 mb-6 border rounded p-4">
 
-                  <div className="flex items-center text-sm text-gray-600 font-semibold">
-                    <Calendar className="w-4 h-4 mr-2 text-primary" />
-                    <span>{day.day}</span>
-                  </div>
+                    <div className="flex items-center text-sm text-gray-600 font-semibold">
+                      <Calendar className="w-4 h-4 mr-2 text-primary" />
+                      <span>{day.day}</span>
+                    </div>
 
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-4 h-4 mr-2 text-primary" />
-                    <span>{day.time}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <CalendarCheck className="w-4 h-4 mr-2 text-primary" />
-                    <span>{day.startingDate}</span>
-                  </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Clock className="w-4 h-4 mr-2 text-primary" />
+                      <span>{day.time}</span>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <CalendarCheck className="w-4 h-4 mr-2 text-primary" />
+                      <span>{day.startingDate}</span>
+                    </div>
 
-                </div>                  
-                ))}
+                  </div>                  
+                  ))
+                : ""}
+
                 
 
 

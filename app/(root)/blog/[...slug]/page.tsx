@@ -126,13 +126,13 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
   return (
     <>
 
-      <section className="blog_hero_section py-10">
+      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="blog_hero_section py-10">
         {/* <div className="bg_image absolute z-10 top-0 left-0 w-full h-full bg-green-500 overflow-hidden">
           
           
           
         </div> */}
-        <div className="container relative h-full">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="container relative h-full">
           
             <div className="flex flex-col items-center">
 
@@ -168,7 +168,7 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
         </div>
       </section>
 
-      <section className="py-20">
+      <section data-aos="fade-up" data-aos-offset="100" data-aos-duration="1000" data-aos-delay="0" className="py-20">
         <div className="container">
         <div
           dangerouslySetInnerHTML={{ __html: blog.content }}
