@@ -1,5 +1,7 @@
 import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function RootLayout({
   children,
@@ -13,6 +15,8 @@ export default function RootLayout({
         {children}
       </main>
       <Footer />
+      <ToastContainer />
+      
     </div>
   );
 }

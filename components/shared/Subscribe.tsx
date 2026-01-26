@@ -1,6 +1,8 @@
 'use client'
 import React from 'react'
+import { useTransition } from "react";
 import { subsCribeAction } from '@/actions/form'
+import {toast} from 'react-toastify'
 
 const submitForm = async (e:any) => {
   e.preventDefault();
@@ -10,11 +12,19 @@ const submitForm = async (e:any) => {
    
   const res = await subsCribeAction(formData.get("email"))
   console.log("ApiRes:", res)
+  if(res.success){
+    toast.success("Thank you. Subscription has been added!")
+  }else{
+    console.log("Error", res)
+  }
   form.reset();
 }
 
+
+
 const Subscribe = () => {
-  return (
+
+   return (
       <section className="">
         <div className="container">
           

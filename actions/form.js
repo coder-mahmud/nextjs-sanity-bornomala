@@ -6,6 +6,7 @@ const mailerlite = new MailerLite({
   api_key: process.env.MAILERLITE_API_KEY
 });
 
+/*
 export const subsCribeAction = async (email) => {
 
   const params = {
@@ -31,23 +32,40 @@ export const subsCribeAction = async (email) => {
   
     mailerlite.subscribers.createOrUpdate(params)
       .then(response => {
-        console.log(response.data);
+        console.log("Response data:",response.data);
+        return JSON.stringify(response.data)
       })
       .catch(error => {
         if (error.response) console.log(error.response.data);
+        return JSON.stringify(error.response.data)
     });
-
-    // const apiRes = await fetch('https://connect.mailerlite.com/api/subscribers',{
-    //   method:"POST",
-    //   body: JSON.stringify(params),
-    //   headers:{
-    //     Authorization: `Bearer ${process.env.MAILERLITE_API_KEY!}`
-    //   }
-    // })
-
-    // const data = await apiRes.json();
-    // console.log("Data:",data)
-
-
-  return true
+  
 }
+*/
+
+export const subsCribeAction = async (email) => {
+  try {
+    const params = {
+      email,
+      groups: [process.env.MAILERLITE_GROUP_ID],
+      status: "active",
+    };
+
+    const response = await mailerlite.subscribers.createOrUpdate(params);
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    console.error("MailerLite error:", error?.response?.data || error);
+
+    return {
+      success: false,
+      error: error?.response?.data || "Something went wrong",
+    };
+  }
+};
+
+
+
