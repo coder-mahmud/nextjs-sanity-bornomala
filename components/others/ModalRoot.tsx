@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function ModalRoot({ children,open }: { children: React.ReactNode, open:Boolean }) {
   const [mounted, setMounted] = useState(false);
+  
   useEffect(() => {
     if (!open) return;
 

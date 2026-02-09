@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'bornomala.premiumchickenltd.com',
+        hostname: 'admin.ecolebornomala.com',
         pathname: '/**',
       },
     ],
