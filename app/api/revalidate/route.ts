@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function POST(req: NextRequest) {
 
@@ -47,10 +47,9 @@ export async function POST(req: NextRequest) {
 
     }
 
-    // if(body.postType === 'class-schedule'){
-    //   revalidatePath("/blog");
-    //   revalidatePath(`/blog/${body.postSlug}`);
-    // }
+    if(body.postType === 'class-schedule'){
+      revalidateTag("courses","default")
+    }
 
     if(body.postType === 'courses'){
       revalidatePath("/courses");
@@ -82,6 +81,13 @@ export async function POST(req: NextRequest) {
         console.log("revalidatingPath", `/blog/page/${i}`)
         revalidatePath(`/success-stories/page/${i}`);
       }
+    }
+
+    if(body.postType === 'acf-options'){
+      revalidatePath("/success-stories");
+      revalidatePath("/blog");
+      revalidatePath("/results");
+      
     }
 
     return NextResponse.json({ revalidated: true });

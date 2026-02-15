@@ -209,14 +209,16 @@ export default async function AboutPage() {
             
           {aboutData.teachers.map((teacher:any,idx:number) => (
             <div key={idx} className="text-center max-w-[540px] mx-auto">
-            <Image
+            
+            {teacher?.image?.node?.sourceUrl && <Image
               className="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg"
-              src={teacher.image.node.sourceUrl} width={300} height={300}
+              src={teacher?.image?.node?.sourceUrl} width={300} height={300}
               alt={teacher.title}
-            />
+            /> }
+            
             <h3 className="text-xl font-semibold text-gray-900">{teacher.title}</h3>
             <p className=" font-medium">{teacher.subTitle}</p>
-            <p className="mt-3 text-gray-600 text-sm">
+            <p className="mt-3 text-gray-600 ">
               {teacher.description}
             </p>
             </div>

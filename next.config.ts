@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: 'admin.ecolebornomala.com',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'bornomala.local',
+        pathname: '/**',
+      },
     ],
   },
 };

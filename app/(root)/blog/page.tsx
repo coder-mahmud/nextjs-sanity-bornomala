@@ -71,6 +71,8 @@ const BlogPage = async ({searchParams}: {searchParams?:  { page: string }}) => {
   // console.log("results in body",JSON.stringify(results, null, 10) )
   // console.log("totalPages",totalPages)
   const totalPages = Math.ceil(total / POSTS_PER_PAGE)
+
+
   return (
     <>
       <BlogHero />

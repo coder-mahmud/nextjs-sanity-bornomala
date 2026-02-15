@@ -17,6 +17,11 @@ const HOME_QUERY = `
     pageBy(uri: "/home") {
     title
 		homePageFields{
+      homeImage {
+        node {
+          sourceUrl
+        }
+      }
       homeSubtitle
       homeTitle
       homeDescription
@@ -114,6 +119,7 @@ export default async function Home() {
   if (!homeData) {
     return null
   }
+  const homeImage = homeData.homeImage.node.sourceUrl
   const homeSubtitle = homeData.homeSubtitle
   const homeTitle = homeData.homeTitle
   const homeDescription = homeData.homeDescription
@@ -133,7 +139,7 @@ export default async function Home() {
 
   return (
     <>
-      <HomeHero data={{numberOfStudents,successRate, certifiedStudents, homeSubtitle, homeTitle, homeDescription}} />
+      <HomeHero data={{numberOfStudents,successRate, certifiedStudents, homeSubtitle, homeTitle, homeDescription, homeImage}} />
       <FeaturesSection data={{successRate}} />
       <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
       <CoursesSection />

@@ -13,7 +13,8 @@ type heroData = {
     certifiedStudents:string,
     homeSubtitle:string,
     homeTitle:string,
-    homeDescription:string
+    homeDescription:string,
+    homeImage:string,
   }
 }
 
@@ -97,13 +98,14 @@ const HomeHero = ({data}:heroData) => {
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
               
               <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden">
-                <Image 
-                  src="/images/hero-img.webp" 
+                {data.homeImage && <Image 
+                  src={data.homeImage}
                   alt="French language learning" 
                   width={600} 
                   height={400} 
                   className="w-full h-auto object-cover"
-                />
+                /> }
+                
               </div>
             </div>
           </div>

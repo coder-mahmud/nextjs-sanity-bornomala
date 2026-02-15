@@ -117,7 +117,9 @@ const ResultsPage = async({params}: { params: { page: string }}) => {
   // console.log("Results Page data:", JSON.stringify(results, null,10))
   const totalPages = Math.ceil(total / POSTS_PER_PAGE);
 
-
+  if(results.length == 0){
+    return 'No results found!'
+  }
 
   return (
     <>

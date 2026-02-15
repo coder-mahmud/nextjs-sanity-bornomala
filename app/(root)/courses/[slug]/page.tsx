@@ -65,6 +65,9 @@ async function getCourse(slug:string): Promise<Course | null> {
         slug,
       },
     }),
+    next: {
+      tags: ["courses"],
+    },
     //next: { revalidate: 60 }, // ISR
   });
   if (!res.ok) {
@@ -149,6 +152,7 @@ export async function generateStaticParams() {
         }
       `,
     }),
+    
   });
 
   const json = await res.json();

@@ -120,7 +120,7 @@ const BlogSection = async() => {
           {results.map((post:any,idx:number) => (
             <Card key={idx} data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay={idx * 100} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
               <div className="relative h-48 overflow-hidden">
-                {post.featuredImage && (
+                {post.featuredImage.node.sourceUrl && (
                   <Image 
                     src={post.featuredImage.node.sourceUrl} 
                     alt={post.title}

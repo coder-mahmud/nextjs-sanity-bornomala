@@ -6,7 +6,52 @@ import { subsCribeAction } from '@/actions/form'
 import Subscribe from './Subscribe'
 import FloatingContact from './FloatingContacts'
 
-const Footer = () => {
+const OPTIONS_QUERY = `
+  query SiteOptions {
+    siteOptions {
+      globalOptions {
+        address
+        contactTimes
+        emails
+        footerPhoneNumber
+        footerShortDescription
+        facebookLink
+        youtubeLink
+      }
+    }
+  }
+`
+
+async function getSiteOpions() {
+  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query: OPTIONS_QUERY }),
+  })
+
+  if (!res.ok) {
+    throw new Error("GraphQL request for getHomeData failed")
+  }
+
+  const json = await res.json()
+  // console.log("Options data:", json)
+
+
+  if (!json.data.siteOptions.globalOptions) {
+    return null
+  }
+  return json.data.siteOptions.globalOptions
+}
+
+
+
+
+
+
+
+
+
+const Footer = async () => {
   const currentYear = new Date().getFullYear()
 
   const quickLinks = [
@@ -19,46 +64,10 @@ const Footer = () => {
     // { name: "DELF পরীক্ষা", href: "/exam" }
   ]
 
-  const contactInfo = [
-    {
-      icon: <Phone className="h-5 w-5 text-white" />,
-      title: "ফোন নম্বর",
-      details: [
-        "প্যারিস ১৮: ০৭ ৫৩ ৩০ ১৮ ৭৫",
-        "প্যান্টিন হোশে: ০৭ ৫৬ ৯৯ ৯০ ৮৫"
-      ]
-    },
-    {
-      icon: <Mail className="h-5 w-5 text-white" />,
-      title: "ইমেল ঠিকানা",
-      details: [
-        "info@bornomala.com",
-        "support@bornomala.com"
-      ]
-    },
-    {
-      icon: <MapPin className="h-5 w-5 text-white" />,
-      title: "ঠিকানা",
-      details: [
-        "প্যারিস ক্যাম্পাস: ১২৩ রু ডি প্যারিস, ৭৫০১৮ প্যারিস",
-        "প্যান্টিন ক্যাম্পাস: ৪৫৬ এভিনিউ ডি হোশে, ৯৩৫০০ প্যান্টিন"
-      ]
-    },
-    {
-      icon: <Clock className="h-5 w-5 text-white" />,
-      title: "সময়সূচী",
-      details: [
-        "সোমবার - শুক্রবার: সকাল ৯টা - রাত ৮টা",
-        "শনিবার - রবিবার: সকাল ১০টা - সন্ধ্যা ৬টা"
-      ]
-    }
-  ]
 
-  const socialLinks = [
-    { name: "Facebook", icon: <Facebook className="h-5 w-5" />, href: "https://www.facebook.com/dailyfrenchbybornomala/" },
-    { name: "YouTube", icon: <Youtube className="h-5 w-5" />, href: "https://www.youtube.com/channel/UC6o8HLJnUKj0bRwd5gKjKhg" },
-    // { name: "Instagram", icon: <Instagram className="h-5 w-5" />, href: "#" }
-  ]
+
+  const siteOptions = await getSiteOpions();
+  // console.log("siteOptions",siteOptions)
 
   return (
 
@@ -83,21 +92,27 @@ const Footer = () => {
               </Link>
             </div>
             <p className="text-white mb-6">
-              বর্ণমালা ফরাসি ভাষা স্কুলে আমরা ব্যক্তিগতকৃত ফরাসি ভাষা কোচিং প্রদান করি। আমাদের লক্ষ্য হলো প্রতিটি শিক্ষার্থীকে ফরাসি ভাষায় দক্ষতা অর্জনে সাহায্য করা।
+              {siteOptions.footerShortDescription}
             </p>
             <div className="flex space-x-4">
-              {socialLinks.map((social, index) => (
-                <a 
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gray-800 hover:bg-primary p-2 rounded-full transition-colors duration-300"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </a>
-              ))}
+            
+              <a href={siteOptions.facebookLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gray-800 hover:bg-primary p-2 rounded-full transition-colors duration-300"
+                aria-label='Facebook Link'
+              >
+                {<Facebook className="h-5 w-5" />}
+              </a>
+              <a href={siteOptions.youtubeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gray-800 hover:bg-primary p-2 rounded-full transition-colors duration-300"
+                aria-label='YouTube Link'
+              >
+                {<Youtube className="h-5 w-5" />}
+              </a>
+
             </div>
           </div>
 
@@ -121,7 +136,90 @@ const Footer = () => {
           {/* Contact Info */}
           <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="200" className="lg:col-span-2">
             <h3 className="text-lg font-bold mb-4">যোগাযোগের তথ্য</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                
+                <div className="mb-4">
+                  <div className="flex items-start mb-2">
+                    <div className="mr-3 mt-1">
+                      {<Phone className="h-5 w-5 text-white" />}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-white">ফোন নম্বর</h4>
+                      <ul className="mt-1">
+                        
+                        <div className="text-white text-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: siteOptions?.footerPhoneNumber || "",
+                            }}
+                          />
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>                
+                
+                <div className="mb-4">
+                  <div className="flex items-start mb-2">
+                    <div className="mr-3 mt-1">
+                      {<Mail className="h-5 w-5 text-white" />}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-white">ইমেল ঠিকানা</h4>
+                      <ul className="mt-1">
+                        
+                        <div className="text-white text-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: siteOptions?.emails || "",
+                            }}
+                          />
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>         
+                
+                <div className="mb-4">
+                  <div className="flex items-start mb-2">
+                    <div className="mr-3 mt-1">
+                      {<MapPin className="h-5 w-5 text-white" />}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-white">ঠিকানা</h4>
+                      <ul className="mt-1">
+                        
+                        <div className="text-white text-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: siteOptions?.address || "",
+                            }}
+                          />
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>                
+                <div className="mb-4">
+                  <div className="flex items-start mb-2">
+                    <div className="mr-3 mt-1">
+                      {<Clock className="h-5 w-5 text-white" />}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-white">সময়সূচী</h4>
+                      <ul className="mt-1">
+                        
+                        <div className="text-white text-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: siteOptions?.contactTimes || "",
+                            }}
+                          />
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+{/*               
               {contactInfo.map((info, index) => (
                 <div key={index} className="mb-4">
                   <div className="flex items-start mb-2">
@@ -140,7 +238,9 @@ const Footer = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
+
+
             </div>
           </div>
         </div>
