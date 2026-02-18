@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react'
 import { Phone, Facebook, Youtube, Instagram, Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import HeaderLogo from './HeaderLogo'
 
-const Header = () => {
+
+
+const Header = ({logo}:{logo:string}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -87,9 +90,7 @@ const Header = () => {
         <div className={`container ${isScrolled ? "py-0" : "py-2"}   ` }>
           <div className="header_inner flex justify-between items-center relative">
             <div className="header_left">
-              <Link href="/">
-                <Image src="/images/GreenLogo.png" alt="Logo" width={120} height={150}  className={`w-auto  transition-transform duration-200 origin-left ${isScrolled ? 'scale-75' : 'scale-100'} max-w-[170px] lg:max-w-none lg:h-16 lg:w-auto`}  />
-              </Link>
+              <HeaderLogo logo={logo} isScrolled={isScrolled} />
             </div>
             
             {/* Desktop Navigation */}

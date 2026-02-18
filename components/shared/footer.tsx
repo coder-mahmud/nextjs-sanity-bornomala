@@ -10,13 +10,19 @@ const OPTIONS_QUERY = `
   query SiteOptions {
     siteOptions {
       globalOptions {
-        address
+        addressCopy
         contactTimes
         emails
         footerPhoneNumber
         footerShortDescription
         facebookLink
         youtubeLink
+        footerLogo{
+          node{
+            sourceUrl
+          }
+        }
+
       }
     }
   }
@@ -37,7 +43,7 @@ async function getSiteOpions() {
   // console.log("Options data:", json)
 
 
-  if (!json.data.siteOptions.globalOptions) {
+  if (!json.data?.siteOptions?.globalOptions) {
     return null
   }
   return json.data.siteOptions.globalOptions
@@ -87,16 +93,24 @@ const Footer = async () => {
           {/* Company Info */}
           <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="lg:col-span-1">
             <div className="flex items-center mb-4">
+            {siteOptions?.footerLogo?.node?.sourceUrl ? (
+              <Link href="/">
+              <Image src={siteOptions?.footerLogo?.node?.sourceUrl} alt="Footer Logo" width={120} height={120} className="w-auto h-12" />
+              </Link>              
+            ) : (
               <Link href="/">
                 <Image src="/images/LogoWhite.png" alt="Logo" width={120} height={120} className="w-auto h-12" />
               </Link>
+            )}
+              
             </div>
-            <p className="text-white mb-6">
+            {siteOptions?.footerShortDescription && <p className="text-white mb-6">
               {siteOptions.footerShortDescription}
-            </p>
+            </p> }
+            
             <div className="flex space-x-4">
             
-              <a href={siteOptions.facebookLink}
+              <a href={siteOptions?.facebookLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-800 hover:bg-primary p-2 rounded-full transition-colors duration-300"
@@ -104,7 +118,7 @@ const Footer = async () => {
               >
                 {<Facebook className="h-5 w-5" />}
               </a>
-              <a href={siteOptions.youtubeLink}
+              <a href={siteOptions?.youtubeLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-800 hover:bg-primary p-2 rounded-full transition-colors duration-300"
@@ -190,7 +204,7 @@ const Footer = async () => {
                         
                         <div className="text-white text-sm"
                             dangerouslySetInnerHTML={{
-                              __html: siteOptions?.address || "",
+                              __html: siteOptions?.addressCopy || "",
                             }}
                           />
 

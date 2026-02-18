@@ -153,7 +153,10 @@ html {
   }
 }
 
+.content_list ul li{
+  padding-left:25px;
+  background:url('/images/green-circle.svg') no-repeat;
+  background-size:14px;
+  background-position:left center;
 
-/* *{
-  border:1px solid red;
-} */
+}

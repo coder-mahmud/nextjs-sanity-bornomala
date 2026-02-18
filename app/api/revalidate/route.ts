@@ -89,6 +89,10 @@ export async function POST(req: NextRequest) {
       revalidatePath("/results");
       
     }
+    if(body.postType === 'teacher'){
+      revalidatePath("/about");
+      revalidateTag("courses","default")      
+    }
 
     return NextResponse.json({ revalidated: true });
 
