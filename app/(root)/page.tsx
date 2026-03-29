@@ -70,7 +70,7 @@ async function getHomeData() {
 
 
 const FAQS_QUERY = `
-  query allCourses {
+  query allFaqs {
     faqs {
       nodes {
         faqs {
