@@ -4,6 +4,7 @@ import { Phone, Facebook, Youtube, Instagram, Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeaderLogo from './HeaderLogo'
+import HeaderUser from './HeaderUser'
 
 
 
@@ -117,6 +118,9 @@ const Header = ({logo}:{logo:string}) => {
                 
                 <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/contact">Contact</Link>
+                </li>
+                <li>
+                  <HeaderUser />
                 </li>
               </ul>
             </div>

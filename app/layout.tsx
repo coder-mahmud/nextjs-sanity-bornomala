@@ -4,6 +4,10 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import AOSInit from "@/components/shared/AOSInit";
+import SessionProviders from "@/lib/SessionProvider";
+import { auth } from "@/auth";
+
+const session = await auth()
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +52,10 @@ export default function RootLayout({
         className={`font-inter antialiased`}
       >
         <ThemeProvider attribute='class' defaultTheme="light" enableSystem={false} disableTransitionOnChange>
-          {children}
+          <SessionProviders session={session}>
+            {children}
+          </SessionProviders>
+          
         </ThemeProvider>
         <AOSInit />
       </body>
