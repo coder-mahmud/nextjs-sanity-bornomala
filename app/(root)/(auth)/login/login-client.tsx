@@ -4,6 +4,8 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { signIn } from "next-auth/react"
+import { Eye, EyeClosed } from "lucide-react"
+import { getSession } from "next-auth/react"
 
 
 const schema = z.object({
@@ -21,6 +23,7 @@ export default function LoginPage() {
   })
 
   const [error, setError] = useState<string | null>(null)
+  const [showPass, setShowPass] = useState(false)
 
   function update(key: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -51,8 +54,16 @@ export default function LoginPage() {
         setError("Invalid email or password")
         return
       }
+      const session = await getSession()
+      const role = session?.user?.role
+      // console.log("Role from login form:", role)
+      if(role === 'ADMIN' || role === 'SUPERADMIN'){
+        router.push("/admin/dashboard")
+      }else{
+        router.push("/dashboard")
+      }
   
-      router.push("/dashboard")
+     
     })
 
   }
@@ -84,13 +95,24 @@ export default function LoginPage() {
             <label className="block text-sm font-medium mb-1">
               Password
             </label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => update("password", e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showPass ? 'text' : "password"}
+                value={form.password}
+                onChange={(e) => update("password", e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="••••••••"
+              />
+              <span onClick={() => setShowPass(!showPass)} className="absolute right-2 top-[35%]">
+                {showPass? (
+                  <EyeClosed className="w-4 h-4 cursor-pointer" />
+                ) : (
+                  <Eye className="w-4 h-4 cursor-pointer" />
+                )}
+                
+                
+              </span>
+            </div>
           </div>
 
           {error && (
@@ -107,13 +129,13 @@ export default function LoginPage() {
         </form>
 
 
-        <button
+        {/* <button
           type="button"
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           className="w-full py-2 mt-4 border rounded-lg text-black cursor-pointer"
         >
           Continue with Google
-        </button>
+        </button> */}
 
         <p className="text-sm text-center mt-6 text-gray-500">
           Don't have an account?{" "}

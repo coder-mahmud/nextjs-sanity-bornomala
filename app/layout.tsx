@@ -6,8 +6,9 @@ import { ThemeProvider } from "next-themes";
 import AOSInit from "@/components/shared/AOSInit";
 import SessionProviders from "@/lib/SessionProvider";
 import { auth } from "@/auth";
+import { ToastContainer } from 'react-toastify';
 
-const session = await auth()
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,11 +42,12 @@ export const metadata: Metadata = {
 
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth()
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -58,6 +60,7 @@ export default function RootLayout({
           
         </ThemeProvider>
         <AOSInit />
+        <ToastContainer />
       </body>
     </html>
   );

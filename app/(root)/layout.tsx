@@ -1,6 +1,6 @@
 import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
-import { ToastContainer, toast } from 'react-toastify';
+
 
 const OPTIONS_QUERY = `
   query SiteOptions {
@@ -56,13 +56,13 @@ export default async function RootLayout({
   // console.log("Layout SiteOptions:", siteOptions)
   const headerLogo = siteOptions?.headerLogo?.node?.sourceUrl
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header logo={headerLogo} />
       <main className="flex-1 wrapper mt-[50px] md:mt-0">
         {children}
       </main>
       <Footer />
-      <ToastContainer />
+
       
     </div>
   );

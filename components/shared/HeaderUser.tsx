@@ -59,14 +59,25 @@ export default function LogoutButton() {
       {open && (
         <div className="absolute top-[110%] right-0 w-[150px] py-2 bg-black flex flex-col items-center rounded">
 
+          {session?.user?.role === 'USER' ? (
+            <Link
+              className="text-white px-4 py-2 w-full text-center border-b border-white w-full"
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <Link
+              className="text-white px-4 py-2 w-full text-center border-b border-white w-full"
+              href="/admin/dashboard"
+              onClick={() => setOpen(false)}
+            >
+              Dashboard
+            </Link>
+          )}
 
-          <Link
-            className="text-white px-4 py-2 w-full text-center border-b border-white w-full"
-            href="/dashboard"
-            onClick={() => setOpen(false)}
-          >
-            Dashboard
-          </Link>
+
 
           <button
             onClick={() =>

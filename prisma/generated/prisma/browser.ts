@@ -42,3 +42,38 @@ export type VerificationToken = Prisma.VerificationTokenModel
  * 
  */
 export type Authenticator = Prisma.AuthenticatorModel
+/**
+ * Model Quiz
+ * 
+ */
+export type Quiz = Prisma.QuizModel
+/**
+ * Model Question
+ * 
+ */
+export type Question = Prisma.QuestionModel
+/**
+ * Model QuestionOption
+ * 
+ */
+export type QuestionOption = Prisma.QuestionOptionModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model QuizAccess
+ * 
+ */
+export type QuizAccess = Prisma.QuizAccessModel
+/**
+ * Model QuizAttempt
+ * 
+ */
+export type QuizAttempt = Prisma.QuizAttemptModel
+/**
+ * Model QuizAttemptAnswer
+ * 
+ */
+export type QuizAttemptAnswer = Prisma.QuizAttemptAnswerModel

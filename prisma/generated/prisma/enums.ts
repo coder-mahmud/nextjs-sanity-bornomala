@@ -16,3 +16,32 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const QuizStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type QuizStatus = (typeof QuizStatus)[keyof typeof QuizStatus]
+
+
+export const PaymentStatus = {
+  CREATED: 'CREATED',
+  APPROVED: 'APPROVED',
+  CAPTURED: 'CAPTURED',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const AttemptStatus = {
+  STARTED: 'STARTED',
+  SUBMITTED: 'SUBMITTED',
+  EVALUATED: 'EVALUATED'
+} as const
+
+export type AttemptStatus = (typeof AttemptStatus)[keyof typeof AttemptStatus]

@@ -4,12 +4,19 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { registerAction } from "./actions"
+import { Eye, EyeClosed } from "lucide-react"
+
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Confirm Password must be at least 6 characters"),
 })
+.refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"], 
+});
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -19,9 +26,12 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   })
 
   const [error, setError] = useState<string | null>(null)
+  const [showPass, setShowPass] = useState(false)
+  const [showConfirmPass, setConfirmShowPass] = useState(false)
 
   function update(key: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -88,13 +98,49 @@ export default function RegisterPage() {
             <label className="block text-sm font-medium mb-1">
               Password
             </label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => update("password", e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              placeholder="••••••••"
-            />
+
+            <div className="relative">
+              <input
+                type={showPass ? 'text' : "password"}
+                value={form.password}
+                onChange={(e) => update("password", e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="••••••••"
+              />
+              <span onClick={() => setShowPass(!showPass)} className="absolute right-2 top-[35%]">
+                {showPass? (
+                  <EyeClosed className="w-4 h-4 cursor-pointer" />
+                ) : (
+                  <Eye className="w-4 h-4 cursor-pointer" />
+                )}
+              </span>
+            </div>
+
+          </div>
+          
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Confirm Password
+            </label>
+
+            <div className="relative">
+              <input
+                type={showConfirmPass ? 'text' : "password"}
+                value={form.confirmPassword}
+                onChange={(e) => update("confirmPassword", e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="••••••••"
+              />
+              <span onClick={() => setConfirmShowPass(!showConfirmPass)} className="absolute right-2 top-[35%]">
+                {showConfirmPass? (
+                  <EyeClosed className="w-4 h-4 cursor-pointer" />
+                ) : (
+                  <Eye className="w-4 h-4 cursor-pointer" />
+                )}
+              </span>
+            </div>
+
           </div>
 
           {error && (
