@@ -1,31 +1,20 @@
-import Link from "next/link";
 import Image from "next/image";
-import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react'
-
-// export const dynamic = "force-dynamic";
-
+import { Calendar } from "lucide-react";
+import type { Metadata } from "next";
 
 type Blog = {
   title: string;
   content: string;
   slug: string;
-  date:string
-  featuredImage?:{
-    node:{
-      sourceUrl:string
-    }
-  }
-
-  acfCourses?: {
-    duration?: string;
-    level?: string;
-    price?: string;
+  date: string;
+  featuredImage?: {
+    node: {
+      sourceUrl: string;
+    };
   };
 };
 
-async function getBlogPost(slug:string): Promise<any | null> {
-  
-  
+async function getBlogPost(slug: string): Promise<Blog | null> {
   const res = await fetch(process.env.WP_GRAPHQL_URL!, {
     method: "POST",
     headers: {
@@ -38,84 +27,82 @@ async function getBlogPost(slug:string): Promise<any | null> {
             title
             content
             date
+            slug
             featuredImage {
               node {
                 sourceUrl
-                
               }
             }
           }
         }
-
       `,
-      variables: {
-        slug,
-      },
+      variables: { slug },
     }),
-    //next: { revalidate: 60 }, // ISR
+    // next: { revalidate: 60 },
   });
 
   if (!res.ok) {
-    throw new Error("GraphQL request failed")
+    throw new Error("GraphQL request failed");
   }
 
   const json = await res.json();
-  // console.log("Page data:", JSON.stringify(json, null, 2));
-  // console.log("getCourse data:", json);
-
-
   return json?.data?.successStoryBy ?? null;
 }
 
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string[] }> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const currentSlug = slug[0];
+  const blog = await getBlogPost(currentSlug);
 
+  const pageUrl = `https://ecolebornomala.com/success-stories/${currentSlug}`;
+  const imageUrl = blog?.featuredImage?.node?.sourceUrl || "https://ecolebornomala.com/default-og.jpg";
 
-export async function generateStaticParams() {
-  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  if (!blog) {
+    return {
+      title: "Success Story Not Found",
+      description: "This success story could not be found.",
+    };
+  }
+
+  return {
+    metadataBase: new URL("https://ecolebornomala.com"),
+    title: blog.title,
+    description: `${blog.title} - Success story from Ecole Bornomala`,
+    alternates: {
+      canonical: pageUrl,
     },
-    body: JSON.stringify({
-      query: `
-        query allPosts {
-          posts(first: 100) {
-            edges {
-              node {
-                slug
-              }
-            }
-          }
-        }
-      `,
-    }),
-  });
-
-  const json = await res.json();
-
-  // console.log("Post Json", JSON.stringify(json, null, 2));
-
-  return json.data.posts.edges.map(
-    (post: { node: { slug: string } }) => ({
-      slug: [post.node.slug],
-    })
-  );
+    openGraph: {
+      title: blog.title,
+      description: `${blog.title} - Success story from Ecole Bornomala`,
+      url: pageUrl,
+      siteName: "Ecole Bornomala",
+      type: "article",
+      publishedTime: blog.date,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: blog.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: `${blog.title} - Success story from Ecole Bornomala`,
+      images: [imageUrl],
+    },
+  };
 }
 
-  
-
-
-
-export default async function CoursePage({params}: { params: { slug: string }}) {
-  const paramList = await params
-  // console.log("paramList", paramList)
-  const blog = await getBlogPost(paramList.slug[0]);
-  // const course = null
-  // console.log("Course Data:", blog)
-
-
-
-  // console.log("thisCourseSchedules",JSON.stringify(thisCourseSchedules, null, 2))
-
+export default async function CoursePage(
+  { params }: { params: Promise<{ slug: string[] }> }
+) {
+  const { slug } = await params;
+  const blog = await getBlogPost(slug[0]);
 
   if (!blog) {
     return <h1>Blog not found</h1>;
@@ -123,59 +110,45 @@ export default async function CoursePage({params}: { params: { slug: string }}) 
 
   return (
     <>
-
-      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="blog_hero_section py-10">
-        {/* <div className="bg_image absolute z-10 top-0 left-0 w-full h-full bg-green-500 overflow-hidden">
-          
-          
-          
-        </div> */}
+      <section className="blog_hero_section py-10">
         <div className="container relative h-full">
-          
-            <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center">
+            {blog?.featuredImage?.node?.sourceUrl ? (
+              <Image
+                src={blog.featuredImage.node.sourceUrl}
+                width={500}
+                height={150}
+                alt={blog.title}
+                className="w-[400px] h-auto object-contain block mx-auto rounded-2xl"
+              />
+            ) : null}
 
-              {
-                blog?.featuredImage?.node?.sourceUrl ? (
-                  <Image src={blog.featuredImage.node.sourceUrl} width={500} height={150} alt={blog.title} className="w-[400px] h-auto object-contain block mx-auto rounded-2xl" />
-                ) : ''
-              }
+            <h1 className="text-3xl md:text-5xl mt-6 max-w-5xl mb-2 text-center">
+              {blog.title}
+            </h1>
 
-
-
-              <h1 className="text-3xl md:text-5xl mt-4 mb-2">{blog.title}</h1>
-
-              <div className="flex items-center text-gray-600 mb-2 text-xl">
-                <Calendar className="w-6 h-6 mr-1" />
-                <span>{new Date(blog.date).toLocaleString("en-US", {
+            <div className="flex items-center text-gray-600 mb-2 text-xl">
+              <Calendar className="w-6 h-6 mr-1" />
+              <span>
+                {new Date(blog.date).toLocaleString("en-US", {
                   year: "numeric",
                   month: "short",
                   day: "numeric",
-                  // hour: "2-digit",
-                  // minute: "2-digit",
-                })}</span>
-                {/* <span className="mx-2">•</span>
-                <User className="w-4 h-4 mr-1" />
-                <span>{post.author}</span> */}
-              </div> 
-
-
-
+                })}
+              </span>
             </div>
-
-          
+          </div>
         </div>
       </section>
 
-      <section data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="py-20">
+      <section className="pt-4 pb-20">
         <div className="container">
-        <div
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
-          
+          <div
+            className="wp-content"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
         </div>
       </section>
-
-
     </>
   );
 }

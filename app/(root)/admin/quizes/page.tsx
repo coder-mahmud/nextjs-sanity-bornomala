@@ -28,6 +28,21 @@ type QuizRecord = {
   };
 };
 
+function getStatusClasses(status: QuizStatus) {
+  switch (status) {
+    case "PUBLISHED":
+      return "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200";
+    case "ARCHIVED":
+      return "bg-gray-100 text-gray-700 ring-1 ring-inset ring-gray-200";
+    default:
+      return "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200";
+  }
+}
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString();
+}
+
 export default function AdminQuizListPage() {
   const [quizzes, setQuizzes] = useState<QuizRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,205 +109,114 @@ export default function AdminQuizListPage() {
   }
 
   return (
-    <div style={{ padding: 24, maxWidth: 1200, margin: "0 auto" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 16,
-          marginBottom: 20,
-        }}
-      >
-        <div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
-            Quizzes
-          </h1>
-          <p style={{ color: "#666" }}>
-            Quiz landing page with all quizzes.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="text-2xl font-bold text-gray-900">Quiz Management</h1>
+        <p className="mt-1 text-sm text-gray-600">
+          Manage, review, and organize all quizzes from one place.
+        </p>
 
-        <Link href="/admin/quizes/new" style={primaryButtonStyle}>
-          + Create New Quiz
-        </Link>
-      </div>
+        {message ? (
+          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            {message}
+          </div>
+        ) : null}
 
-      {message ? (
-        <div
-          style={{
-            background: "#ecfdf3",
-            border: "1px solid #86efac",
-            color: "#166534",
-            padding: 12,
-            borderRadius: 8,
-            marginBottom: 16,
-          }}
-        >
-          {message}
-        </div>
-      ) : null}
+        {error ? (
+          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            {error}
+          </div>
+        ) : null}
 
-      {error ? (
-        <div
-          style={{
-            background: "#fef2f2",
-            border: "1px solid #fca5a5",
-            color: "#991b1b",
-            padding: 12,
-            borderRadius: 8,
-            marginBottom: 16,
-          }}
-        >
-          {error}
-        </div>
-      ) : null}
+        <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <input
+              placeholder="Search by title or slug..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 sm:max-w-sm"
+            />
 
-      <div
-        style={{
-          border: "1px solid #e5e7eb",
-          borderRadius: 12,
-          padding: 20,
-          background: "#fff",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 12,
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-        >
-          <h2 style={{ fontSize: 20, fontWeight: 700 }}>All Quizzes</h2>
-          <button onClick={loadQuizzes} style={secondaryButtonStyle}>
-            Refresh
-          </button>
-        </div>
-
-        <input
-          placeholder="Search by title or slug"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{ ...inputStyle, marginBottom: 16 }}
-        />
-
-        {loading ? (
-          <p>Loading quizzes...</p>
-        ) : filteredQuizzes.length === 0 ? (
-          <p>No quizzes found.</p>
-        ) : (
-          <div style={{ display: "grid", gap: 12 }}>
-            {filteredQuizzes.map((quiz) => (
-              <div
-                key={quiz.id}
-                style={{
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 10,
-                  padding: 14,
-                }}
+            <div className="flex gap-2">
+              <button
+                onClick={loadQuizzes}
+                className="rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    alignItems: "start",
-                  }}
-                >
-                  <div>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
-                      {quiz.title}
-                    </h3>
-                    <p style={{ color: "#666", marginBottom: 6 }}>
-                      /{quiz.slug}
-                    </p>
-                    <p style={{ color: "#444", marginBottom: 8 }}>
-                      {quiz.description || "No description"}
-                    </p>
+                Refresh
+              </button>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: 12,
-                        flexWrap: "wrap",
-                        fontSize: 14,
-                        color: "#555",
-                      }}
+              <Link
+                href="/admin/quizes/new"
+                className="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800"
+              >
+                + Create New Quiz
+              </Link>
+            </div>
+          </div>
+
+          {loading ? (
+            <p className="text-sm text-gray-500">Loading quizzes...</p>
+          ) : filteredQuizzes.length === 0 ? (
+            <p className="text-sm text-gray-500">No quizzes found.</p>
+          ) : (
+            <div className="grid gap-4">
+              {filteredQuizzes.map((quiz) => (
+                <div
+                  key={quiz.id}
+                  className="rounded-2xl border border-gray-200 p-5"
+                >
+                  <div className="mb-3 flex items-center gap-2">
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getStatusClasses(
+                        quiz.status
+                      )}`}
                     >
-                      <span>Status: {quiz.status}</span>
-                      <span>
-                        Price: {quiz.currency} {quiz.price}
-                      </span>
-                      <span>Duration: {quiz.durationMinutes} min</span>
-                      <span>Pass: {quiz.passingScore}%</span>
-                      <span>
-                        Questions: {quiz._count?.questions ?? quiz.questions.length}
-                      </span>
-                    </div>
+                      {quiz.status}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      Created {formatDate(quiz.createdAt)}
+                    </span>
                   </div>
 
-                  <div style={{ display: "flex", gap: 8 }}>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {quiz.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">/{quiz.slug}</p>
+                  <p className="mt-3 text-sm text-gray-600">
+                    {quiz.description || "No description provided."}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-600">
+                    <span>
+                      Price: {quiz.currency} {quiz.price}
+                    </span>
+                    <span>Duration: {quiz.durationMinutes} min</span>
+                    <span>Pass Score: {quiz.passingScore}%</span>
+                    <span>
+                      Questions: {quiz._count?.questions ?? quiz.questions.length}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex gap-2">
                     <Link
                       href={`/admin/quizes/${quiz.id}`}
-                      style={secondaryButtonStyle}
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     >
                       View Details
                     </Link>
                     <button
                       onClick={() => handleDelete(quiz.id)}
-                      style={dangerButtonStyle}
+                      className="rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
                     >
                       Delete
                     </button>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: 8,
-  border: "1px solid #d1d5db",
-  marginTop: 6,
-  boxSizing: "border-box",
-};
-
-const primaryButtonStyle: React.CSSProperties = {
-  display: "inline-block",
-  textDecoration: "none",
-  padding: "10px 14px",
-  borderRadius: 8,
-  border: "1px solid #111827",
-  background: "#111827",
-  color: "#fff",
-  cursor: "pointer",
-};
-
-const secondaryButtonStyle: React.CSSProperties = {
-  display: "inline-block",
-  textDecoration: "none",
-  padding: "10px 14px",
-  borderRadius: 8,
-  border: "1px solid #d1d5db",
-  background: "#fff",
-  color: "#111827",
-  cursor: "pointer",
-};
-
-const dangerButtonStyle: React.CSSProperties = {
-  padding: "10px 14px",
-  borderRadius: 8,
-  border: "1px solid #dc2626",
-  background: "#fff",
-  color: "#dc2626",
-  cursor: "pointer",
-};

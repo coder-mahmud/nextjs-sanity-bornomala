@@ -107,6 +107,9 @@ const Header = ({logo}:{logo:string}) => {
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/courses">Courses</Link>
                 </li>
                 <li>
+                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/quizzes">Quiz</Link>
+                </li>
+                <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/blog">Blog</Link>
                 </li>
                 <li>

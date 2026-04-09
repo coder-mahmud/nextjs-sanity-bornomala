@@ -61,7 +61,7 @@ export default function LogoutButton() {
 
           {session?.user?.role === 'USER' ? (
             <Link
-              className="text-white px-4 py-2 w-full text-center border-b border-white w-full"
+              className="text-white px-4 py-2 text-center border-b border-white w-full"
               href="/dashboard"
               onClick={() => setOpen(false)}
             >
@@ -69,7 +69,7 @@ export default function LogoutButton() {
             </Link>
           ) : (
             <Link
-              className="text-white px-4 py-2 w-full text-center border-b border-white w-full"
+              className="text-white px-4 py-2 text-center border-b border-white w-full"
               href="/admin/dashboard"
               onClick={() => setOpen(false)}
             >

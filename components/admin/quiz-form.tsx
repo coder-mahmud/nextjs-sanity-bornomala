@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import {toast}  from 'react-toastify'
+import { toast } from "react-toastify";
 
 type QuizStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
@@ -74,6 +74,18 @@ function emptyForm(): QuizFormValues {
     status: "DRAFT",
     questions: [emptyQuestion(1)],
   };
+}
+
+function getStatusBadge(status: QuizStatus) {
+  switch (status) {
+    case "PUBLISHED":
+      return "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200";
+    case "ARCHIVED":
+      return "bg-gray-100 text-gray-700 ring-1 ring-inset ring-gray-200";
+    case "DRAFT":
+    default:
+      return "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200";
+  }
 }
 
 export default function QuizForm({
@@ -198,18 +210,16 @@ export default function QuizForm({
 
       const data = await res.json();
 
-      // console.log("Data at creation phase response:", data)
-
       if (!res.ok) {
-        if(data?.error){
-          toast.error(data.error)
+        if (data?.error) {
+          toast.error(data.error);
         }
-        
+
         throw new Error(data.error || "Failed to save quiz.");
       }
 
       setMessage(data.message || "Saved successfully.");
-      toast.success(data.message)
+      toast.success(data.message || "Saved successfully.");
 
       if (mode === "create") {
         router.push("/admin/quizes");
@@ -226,241 +236,243 @@ export default function QuizForm({
   }
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto", padding: 24 }}>
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
-          {mode === "create" ? "Create Quiz" : "Edit Quiz"}
-        </h1>
-        <p style={{ color: "#666" }}>
-          Single correct answer per question. Slug is auto-generated from title.
-        </p>
-      </div>
-
-      {message ? (
-        <div
-          style={{
-            background: "#ecfdf3",
-            border: "1px solid #86efac",
-            color: "#166534",
-            padding: 12,
-            borderRadius: 8,
-            marginBottom: 16,
-          }}
-        >
-          {message}
-        </div>
-      ) : null}
-
-      {error ? (
-        <div
-          style={{
-            background: "#fef2f2",
-            border: "1px solid #fca5a5",
-            color: "#991b1b",
-            padding: 12,
-            borderRadius: 8,
-            marginBottom: 16,
-          }}
-        >
-          {error}
-        </div>
-      ) : null}
-
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          border: "1px solid #e5e7eb",
-          borderRadius: 12,
-          padding: 20,
-          background: "#fff",
-        }}
-      >
-        <div style={{ display: "grid", gap: 16 }}>
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <label>Title</label>
-            <input
-              value={form.title}
-              onChange={(e) => {
-                const newTitle = e.target.value;
-                setForm((prev) => ({
-                  ...prev,
-                  title: newTitle,
-                  slug: slugTouched ? prev.slug : slugify(newTitle),
-                }));
-              }}
-              placeholder="JavaScript Fundamentals Exam"
-              style={inputStyle}
-            />
-          </div>
-
-          <div>
-            <label>Slug</label>
-            {/* <input
-              value={titlePreview}
-              onChange={(e) => {
-                setSlugTouched(true);
-                setForm((prev) => ({
-                  ...prev,
-                  slug: slugify(e.target.value),
-                }));
-              }}
-              placeholder="javascript-fundamentals-exam"
-              style={inputStyle}
-            /> */}
-            <p style={{ marginTop: 6, fontSize: 13, color: "#666" }}>
-              Final slug: <strong>{slugify(form.title)}</strong>
+            <p className="text-sm font-medium text-gray-500">Admin / Quizzes</p>
+            <h1 className="mt-1 text-3xl font-bold tracking-tight text-gray-900">
+              {mode === "create" ? "Create Quiz" : "Edit Quiz"}
+            </h1>
+            <p className="mt-2 text-sm text-gray-600">
+              Create a structured quiz with one correct answer per question.
             </p>
           </div>
 
-          <div>
-            <label>Description</label>
-            <textarea
-              value={form.description}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              placeholder="Short description..."
-              style={{ ...inputStyle, minHeight: 100 }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-              gap: 12,
-            }}
-          >
-            <div>
-              <label>Price</label>
-              <input
-                value={form.price}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, price: e.target.value }))
-                }
-                placeholder="19.99"
-                style={inputStyle}
-              />
-            </div>
-
-            <div>
-              <label>Currency</label>
-              <input
-                value={form.currency}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, currency: e.target.value }))
-                }
-                placeholder="USD"
-                style={inputStyle}
-              />
-            </div>
-
-            <div>
-              <label>Duration (minutes)</label>
-              <input
-                type="number"
-                value={form.durationMinutes}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    durationMinutes: Number(e.target.value),
-                  }))
-                }
-                style={inputStyle}
-              />
-            </div>
-
-            <div>
-              <label>Passing Score (%)</label>
-              <input
-                type="number"
-                value={form.passingScore}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    passingScore: Number(e.target.value),
-                  }))
-                }
-                style={inputStyle}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label>Status</label>
-            <select
-              value={form.status}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  status: e.target.value as QuizStatus,
-                }))
-              }
-              style={inputStyle}
+          <div className="flex items-center gap-2">
+            <span
+              className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusBadge(
+                form.status
+              )}`}
             >
-              <option value="DRAFT">DRAFT</option>
-              <option value="PUBLISHED">PUBLISHED</option>
-              <option value="ARCHIVED">ARCHIVED</option>
-            </select>
+              {form.status}
+            </span>
           </div>
+        </div>
 
-          <div style={{ marginTop: 12 }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 12,
-              }}
-            >
-              <h3 style={{ fontSize: 18, fontWeight: 700 }}>Questions</h3>
-              <button
-                type="button"
-                onClick={addQuestion}
-                style={primaryButtonStyle}
-              >
-                + Add Question
-              </button>
+        {message ? (
+          <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            {message}
+          </div>
+        ) : null}
+
+        {error ? (
+          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            {error}
+          </div>
+        ) : null}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div className="border-b border-gray-200 px-5 py-4 sm:px-6">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Quiz Information
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Basic settings and configuration for this quiz.
+              </p>
             </div>
 
-            <div style={{ display: "grid", gap: 16 }}>
+            <div className="space-y-6 p-5 sm:p-6">
+              <div className="grid gap-6">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Title
+                  </label>
+                  <input
+                    value={form.title}
+                    onChange={(e) => {
+                      const newTitle = e.target.value;
+                      setForm((prev) => ({
+                        ...prev,
+                        title: newTitle,
+                        slug: slugTouched ? prev.slug : slugify(newTitle),
+                      }));
+                    }}
+                    placeholder="JavaScript Fundamentals Exam"
+                    className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  />
+                </div>
+
+                <div className="rounded-xl bg-gray-50 px-4 py-3">
+                  <p className="text-sm font-medium text-gray-700">Slug Preview</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Final slug:{" "}
+                    <span className="font-semibold text-gray-900">
+                      {slugify(form.title) || "your-quiz-slug"}
+                    </span>
+                  </p>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Description
+                  </label>
+                  <textarea
+                    value={form.description}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
+                    placeholder="Short description..."
+                    className="min-h-[120px] w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Price
+                    </label>
+                    <input
+                      value={form.price}
+                      onChange={(e) =>
+                        setForm((prev) => ({ ...prev, price: e.target.value }))
+                      }
+                      placeholder="19.99"
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Currency
+                    </label>
+                    <input
+                      value={form.currency}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          currency: e.target.value,
+                        }))
+                      }
+                      placeholder="USD"
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Duration (minutes)
+                    </label>
+                    <input
+                      type="number"
+                      value={form.durationMinutes}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          durationMinutes: Number(e.target.value),
+                        }))
+                      }
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Passing Score (%)
+                    </label>
+                    <input
+                      type="number"
+                      value={form.passingScore}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          passingScore: Number(e.target.value),
+                        }))
+                      }
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    />
+                  </div>
+                </div>
+
+                <div className="max-w-xs">
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Status
+                  </label>
+                  <select
+                    value={form.status}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        status: e.target.value as QuizStatus,
+                      }))
+                    }
+                    className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  >
+                    <option value="DRAFT">DRAFT</option>
+                    <option value="PUBLISHED">PUBLISHED</option>
+                    <option value="ARCHIVED">ARCHIVED</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div className="border-b border-gray-200 px-5 py-4 sm:px-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Questions
+                  </h2>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Add questions and mark one correct option for each.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addQuestion}
+                  className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+                >
+                  + Add Question
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-4 p-5 sm:p-6">
               {form.questions.map((question, questionIndex) => (
                 <div
                   key={questionIndex}
-                  style={{
-                    border: "1px solid #e5e7eb",
-                    borderRadius: 10,
-                    padding: 16,
-                    background: "#fafafa",
-                  }}
+                  className="rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:p-5"
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      alignItems: "center",
-                      marginBottom: 12,
-                    }}
-                  >
-                    <h4 style={{ fontSize: 16, fontWeight: 700 }}>
-                      Question {questionIndex + 1}
-                    </h4>
+                  <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h3 className="text-base font-semibold text-gray-900">
+                        Question {questionIndex + 1}
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-500">
+                        Configure the question text, explanation, marks, and options.
+                      </p>
+                    </div>
+
                     <button
                       type="button"
                       onClick={() => removeQuestion(questionIndex)}
-                      style={dangerButtonStyle}
+                      className="inline-flex items-center justify-center rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200"
                     >
                       Remove
                     </button>
                   </div>
 
-                  <div style={{ display: "grid", gap: 12 }}>
+                  <div className="space-y-5">
                     <div>
-                      <label>Question Text</label>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        Question Text
+                      </label>
                       <textarea
                         value={question.text}
                         onChange={(e) =>
@@ -468,19 +480,16 @@ export default function QuizForm({
                             text: e.target.value,
                           })
                         }
-                        style={{ ...inputStyle, minHeight: 80 }}
+                        className="min-h-[100px] w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                        placeholder="Enter the question..."
                       />
                     </div>
 
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "160px 1fr",
-                        gap: 12,
-                      }}
-                    >
+                    <div className="grid gap-4 md:grid-cols-[180px_minmax(0,1fr)]">
                       <div>
-                        <label>Marks</label>
+                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                          Marks
+                        </label>
                         <input
                           type="number"
                           value={question.marks}
@@ -489,12 +498,14 @@ export default function QuizForm({
                               marks: Number(e.target.value),
                             })
                           }
-                          style={inputStyle}
+                          className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
                         />
                       </div>
 
                       <div>
-                        <label>Explanation</label>
+                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                          Explanation
+                        </label>
                         <input
                           value={question.explanation}
                           onChange={(e) =>
@@ -502,23 +513,26 @@ export default function QuizForm({
                               explanation: e.target.value,
                             })
                           }
-                          style={inputStyle}
+                          placeholder="Optional explanation for the correct answer"
+                          className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label>Options</label>
-                      <div style={{ display: "grid", gap: 10, marginTop: 8 }}>
+                      <label className="mb-3 block text-sm font-medium text-gray-700">
+                        Options
+                      </label>
+
+                      <div className="grid gap-3">
                         {question.options.map((option, optionIndex) => (
-                          <div
+                          <label
                             key={optionIndex}
-                            style={{
-                              display: "grid",
-                              gridTemplateColumns: "40px 1fr",
-                              gap: 10,
-                              alignItems: "center",
-                            }}
+                            className={`flex items-center gap-3 rounded-xl border bg-white px-4 py-3 transition ${
+                              option.isCorrect
+                                ? "border-emerald-300 ring-2 ring-emerald-100"
+                                : "border-gray-200 hover:border-gray-300"
+                            }`}
                           >
                             <input
                               type="radio"
@@ -526,18 +540,28 @@ export default function QuizForm({
                               onChange={() =>
                                 setCorrectOption(questionIndex, optionIndex)
                               }
+                              className="h-4 w-4"
                             />
-                            <input
-                              value={option.text}
-                              onChange={(e) =>
-                                updateOption(questionIndex, optionIndex, {
-                                  text: e.target.value,
-                                })
-                              }
-                              placeholder={`Option ${optionIndex + 1}`}
-                              style={inputStyle}
-                            />
-                          </div>
+
+                            <div className="flex-1">
+                              <input
+                                value={option.text}
+                                onChange={(e) =>
+                                  updateOption(questionIndex, optionIndex, {
+                                    text: e.target.value,
+                                  })
+                                }
+                                placeholder={`Option ${optionIndex + 1}`}
+                                className="w-full border-0 bg-transparent p-0 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-0"
+                              />
+                            </div>
+
+                            {option.isCorrect ? (
+                              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                                Correct
+                              </span>
+                            ) : null}
+                          </label>
                         ))}
                       </div>
                     </div>
@@ -547,8 +571,12 @@ export default function QuizForm({
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 12 }}>
-            <button type="submit" disabled={saving} style={primaryButtonStyle}>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
               {saving
                 ? mode === "create"
                   ? "Creating..."
@@ -561,49 +589,13 @@ export default function QuizForm({
             <button
               type="button"
               onClick={() => router.push("/admin/quizes")}
-              style={secondaryButtonStyle}
+              className="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
             >
               Back to Quizzes
             </button>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: 8,
-  border: "1px solid #d1d5db",
-  marginTop: 6,
-  boxSizing: "border-box",
-};
-
-const primaryButtonStyle: React.CSSProperties = {
-  padding: "10px 14px",
-  borderRadius: 8,
-  border: "1px solid #111827",
-  background: "#111827",
-  color: "#fff",
-  cursor: "pointer",
-};
-
-const secondaryButtonStyle: React.CSSProperties = {
-  padding: "10px 14px",
-  borderRadius: 8,
-  border: "1px solid #d1d5db",
-  background: "#fff",
-  color: "#111827",
-  cursor: "pointer",
-};
-
-const dangerButtonStyle: React.CSSProperties = {
-  padding: "10px 14px",
-  borderRadius: 8,
-  border: "1px solid #dc2626",
-  background: "#fff",
-  color: "#dc2626",
-  cursor: "pointer",
-};

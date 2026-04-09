@@ -160,3 +160,64 @@ html {
   background-position:left center;
 
 }
+
+
+/* ================= wp css styles =================  */
+
+
+
+
+
+/* app/globals.css */
+.wp-content {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.wp-content h1 { font-size: 2rem; margin: 0 0 1rem;  display:flex; align-items:center; column-gap:16px; }
+.wp-content h2 { font-size: 1.5rem; margin: 2rem 0 1rem; display:flex; align-items:center; column-gap:16px;  }
+.wp-content h3 { font-size: 1rem; margin: 1.5rem 0 0.75rem; display:flex; align-items:center; column-gap:16px;  }
+
+.wp-content p,
+.wp-content ul,
+.wp-content ol,
+.wp-content blockquote {
+  margin-bottom: 1rem;
+}
+
+.wp-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.wp-content img {
+  max-width: 100%;
+  height: auto;
+  margin:24px 0;
+}
+
+.wp-content img.aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wp-content .wp-block-image.aligncenter {
+  text-align: center;
+}
+
+.wp-content .wp-block-image.aligncenter img {
+  display: inline-block;
+}
+
+@media (max-width: 640px) {
+  .wp-content {
+    font-size: 0.95rem;
+  }
+
+  .wp-content h1 { font-size: 1.6rem; }
+  .wp-content h2 { font-size: 1.4rem; }
+  .wp-content h3 { font-size: 1.2rem; }
+}
