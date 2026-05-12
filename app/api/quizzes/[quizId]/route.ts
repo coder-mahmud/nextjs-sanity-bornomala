@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ quizId: string }> }
 ) {
   // console.log("gEt quiz route hit!")
   try {
@@ -17,9 +17,9 @@ export async function GET(
     // console.log("session:", session);
   
     const user = await requireUser();
-    const { slug } = await params;
+    const { quizId } = await params;
 
-    console.log("Quiz slug from route file:", slug)
+    console.log("Quiz quizId from route file:", quizId)
 
     const dbUser = await prisma.user.findUnique({
       where: { email: user.email! },
@@ -31,7 +31,7 @@ export async function GET(
     }
 
     const quiz = await prisma.quiz.findUnique({
-      where: { slug },
+      where: { id:quizId },
       include: {
         questions: {
           select: { id: true },

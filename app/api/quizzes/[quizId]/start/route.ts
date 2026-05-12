@@ -5,13 +5,12 @@ import { userHasQuizAccess } from "@/lib/quiz-access";
 
 export async function POST(
   req: Request,
-  { params }: { params: { quizId: string } }
+  { params }: {  params: Promise<{ quizId: string }> }
 ) {
   try {
-    // const user = await requireUser();
     const { quizId } =  await params;
 
-    console.log("quizId from /quizzes/[quizId]/start/route.ts", quizId)
+    // console.log("quizId from /quizzes/[quizId]/start/route.ts", quizId)
 
     const body = await req.json();
     const { userId } = body;

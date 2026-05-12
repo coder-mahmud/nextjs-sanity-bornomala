@@ -6,6 +6,9 @@ import { z } from "zod"
 import { signIn } from "next-auth/react"
 import { Eye, EyeClosed } from "lucide-react"
 import { getSession } from "next-auth/react"
+import { useSearchParams } from "next/navigation"
+
+
 
 
 const schema = z.object({
@@ -14,6 +17,9 @@ const schema = z.object({
 })
 
 export default function LoginPage() {
+
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl")
   const router = useRouter()
   const [pending, startTransition] = useTransition()
 
@@ -57,10 +63,15 @@ export default function LoginPage() {
       const session = await getSession()
       const role = session?.user?.role
       // console.log("Role from login form:", role)
-      if(role === 'ADMIN' || role === 'SUPERADMIN'){
-        router.push("/admin/dashboard")
-      }else{
-        router.push("/dashboard")
+      if (callbackUrl) {
+        router.push(callbackUrl)
+      } else {
+        // fallback if no callback
+        if (role === 'ADMIN' || role === 'SUPERADMIN') {
+          router.push("/admin/dashboard")
+        } else {
+          router.push("/dashboard")
+        }
       }
   
      

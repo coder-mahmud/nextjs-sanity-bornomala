@@ -147,7 +147,7 @@ export default async function Home() {
       <ScheduleSectionNew />
       <ContactSection />
       <FAQSection faqs={faqs} />
-      <BlogSection />
+      {/* <BlogSection /> */}
 
     </>
   );

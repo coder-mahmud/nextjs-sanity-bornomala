@@ -3,8 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth-user";
 
 export async function POST(
-  _req: Request,
-  { params }: { params: Promise<{ attemptId: string }> }
+  _req: Request, { params }: { params: Promise<{ attemptId: string }> }
 ) {
   try {
     // const user = await requireUser();

@@ -1,52 +1,60 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, LayoutDashboard, Users, ShoppingCart, Package, Settings, BadgeQuestionMark  } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  BadgeQuestionMark,
+  ClipboardCheck,
+  CreditCard,
+  User,
+  Settings,
+} from "lucide-react";
 import { useState } from "react";
 
 const menuItems = [
   {
     label: "Dashboard",
-    href: "/admin/dashboard",
+    href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
-    label: "Quiz",
-    href: "/admin/quizes",
-    icon: BadgeQuestionMark ,
+    label: "My Quizzes",
+    href: "/dashboard/quizzes",
+    icon: BadgeQuestionMark,
   },
   {
-    label: "Users",
-    href: "/admin/users",
-    icon: Users,
+    label: "Results",
+    href: "/dashboard/results",
+    icon: ClipboardCheck,
   },
   {
     label: "Payments",
-    href: "/admin/payments",
-    icon: ShoppingCart,
+    href: "/dashboard/payments",
+    icon: CreditCard,
   },
-  // {
-  //   label: "Products",
-  //   href: "/admin/products",
-  //   icon: Package,
-  // },
+  {
+    label: "Profile",
+    href: "/dashboard/profile",
+    icon: User,
+  },
   {
     label: "Settings",
-    href: "/admin/settings",
+    href: "/dashboard/settings",
     icon: Settings,
   },
 ];
 
-export default function AdminSidebar() {
+export default function UserSidebar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
-      {/* Mobile topbar */}
       <div className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-4 md:hidden">
-        <h2 className="text-lg font-semibold text-gray-900">Admin Panel</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Student Panel</h2>
 
         <button
           type="button"
@@ -57,7 +65,6 @@ export default function AdminSidebar() {
         </button>
       </div>
 
-      {/* Mobile overlay */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 md:hidden"
@@ -65,7 +72,6 @@ export default function AdminSidebar() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed left-0 top-0 z-50 h-full w-72 bg-gray-900 text-white transition-transform duration-300
@@ -75,8 +81,10 @@ export default function AdminSidebar() {
       >
         <div className="flex items-center justify-between border-b border-gray-800 px-5 py-5">
           <div>
-            <h2 className="text-xl font-bold">Admin Panel</h2>
-            <p className="mt-1 text-sm text-gray-400">Manage your system</p>
+            <h2 className="text-xl font-bold">Student Panel</h2>
+            <p className="mt-1 text-sm text-gray-400">
+              Track your quiz progress
+            </p>
           </div>
 
           <button
@@ -92,9 +100,10 @@ export default function AdminSidebar() {
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
+
               const isActive =
                 pathname === item.href ||
-                (item.href !== "/admin" && pathname.startsWith(item.href));
+                (item.href !== "/dashboard" && pathname.startsWith(item.href));
 
               return (
                 <li key={item.href}>

@@ -109,9 +109,9 @@ const Header = ({logo}:{logo:string}) => {
                 <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/quizzes">Quiz</Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/blog">Blog</Link>
-                </li>
+                </li> */}
                 <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/results">Result</Link>
                 </li>
@@ -170,7 +170,7 @@ const Header = ({logo}:{logo:string}) => {
                         Courses
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link 
                         className='block hover:text-primary nav-underline px-2 py-2 border-b' 
                         href="/blog" 
@@ -178,7 +178,7 @@ const Header = ({logo}:{logo:string}) => {
                       >
                         Blog
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link 
                         className='block hover:text-primary nav-underline px-2 py-2 border-b' 

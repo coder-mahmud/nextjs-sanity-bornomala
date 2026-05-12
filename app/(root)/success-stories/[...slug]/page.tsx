@@ -105,7 +105,7 @@ export default async function CoursePage(
   const blog = await getBlogPost(slug[0]);
 
   if (!blog) {
-    return <h1>Blog not found</h1>;
+    return <h1>Success story not found</h1>;
   }
 
   return (

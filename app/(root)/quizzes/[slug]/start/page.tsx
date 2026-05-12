@@ -45,16 +45,15 @@ export default async function StartQuizPage({
 }) {
 
   const session = await auth();
+  const { slug } = await params;
 
   if (!session?.user?.email) {
-    redirect("/login");
+    redirect(`/login?callbackUrl=/quizzes/${slug}/start`);
   }
 
-  // console.log("Session:",session)//working
 
 
-  const { slug } = await params;
-  // const quiz = await getQuiz(slug);
+  
   const dbUser = await prisma.user.findUnique({
     where: { email: session.user.email },
     select: { id: true },
@@ -89,7 +88,7 @@ export default async function StartQuizPage({
   }
 
   const { attemptId } = await createAttempt(quiz.id,dbUser.id );
-  console.log("attemptId", attemptId)
+  // console.log("attemptId", attemptId)
   redirect(`/quizzes/${slug}/attempt/${attemptId}`);
 
   // return(

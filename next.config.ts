@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: 'bornomala.local',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'bornomala-issue.local',
+        pathname: '/**',
+      },
     ],
     dangerouslyAllowLocalIP: true,
   },
