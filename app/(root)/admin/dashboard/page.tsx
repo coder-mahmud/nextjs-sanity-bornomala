@@ -190,7 +190,7 @@ const AdminDashboardPage = async () => {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-semibold text-gray-900">
-                        {payment.quiz.title}
+                        {payment.quiz!.title}
                       </h3>
                       <p className="mt-1 text-sm text-gray-500">
                         {payment.user.name || "No name"} — {payment.user.email}

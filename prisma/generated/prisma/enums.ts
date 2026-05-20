@@ -27,6 +27,15 @@ export const QuizStatus = {
 export type QuizStatus = (typeof QuizStatus)[keyof typeof QuizStatus]
 
 
+export const CourseStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus]
+
+
 export const PaymentStatus = {
   CREATED: 'CREATED',
   APPROVED: 'APPROVED',

@@ -122,7 +122,7 @@ const AdminPaymentsPage = async () => {
                   </td>
 
                   <td className="px-4 py-4 font-medium text-gray-900">
-                    {payment.quiz.title}
+                    {payment.quiz?.title}
                   </td>
 
                   <td className="px-4 py-4 text-gray-600">

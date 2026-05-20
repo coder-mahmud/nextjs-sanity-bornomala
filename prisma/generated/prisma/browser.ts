@@ -77,3 +77,28 @@ export type QuizAttempt = Prisma.QuizAttemptModel
  * 
  */
 export type QuizAttemptAnswer = Prisma.QuizAttemptAnswerModel
+/**
+ * Model Course
+ * 
+ */
+export type Course = Prisma.CourseModel
+/**
+ * Model CourseSection
+ * 
+ */
+export type CourseSection = Prisma.CourseSectionModel
+/**
+ * Model Lesson
+ * 
+ */
+export type Lesson = Prisma.LessonModel
+/**
+ * Model CourseAccess
+ * 
+ */
+export type CourseAccess = Prisma.CourseAccessModel
+/**
+ * Model LessonProgress
+ * 
+ */
+export type LessonProgress = Prisma.LessonProgressModel

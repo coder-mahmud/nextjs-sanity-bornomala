@@ -60,7 +60,12 @@ export const ModelName = {
   Payment: 'Payment',
   QuizAccess: 'QuizAccess',
   QuizAttempt: 'QuizAttempt',
-  QuizAttemptAnswer: 'QuizAttemptAnswer'
+  QuizAttemptAnswer: 'QuizAttemptAnswer',
+  Course: 'Course',
+  CourseSection: 'CourseSection',
+  Lesson: 'Lesson',
+  CourseAccess: 'CourseAccess',
+  LessonProgress: 'LessonProgress'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -195,7 +200,10 @@ export const PaymentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   quizId: 'quizId',
+  courseId: 'courseId',
   provider: 'provider',
+  stripeSessionId: 'stripeSessionId',
+  stripeIntentId: 'stripeIntentId',
   paypalOrderId: 'paypalOrderId',
   paypalCaptureId: 'paypalCaptureId',
   amount: 'amount',
@@ -253,6 +261,85 @@ export const QuizAttemptAnswerScalarFieldEnum = {
 } as const
 
 export type QuizAttemptAnswerScalarFieldEnum = (typeof QuizAttemptAnswerScalarFieldEnum)[keyof typeof QuizAttemptAnswerScalarFieldEnum]
+
+
+export const CourseScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  shortDescription: 'shortDescription',
+  thumbnail: 'thumbnail',
+  price: 'price',
+  currency: 'currency',
+  status: 'status',
+  level: 'level',
+  durationMinutes: 'durationMinutes',
+  instructorName: 'instructorName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const CourseSectionScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseSectionScalarFieldEnum = (typeof CourseSectionScalarFieldEnum)[keyof typeof CourseSectionScalarFieldEnum]
+
+
+export const LessonScalarFieldEnum = {
+  id: 'id',
+  sectionId: 'sectionId',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  videoUrl: 'videoUrl',
+  bunnyLibraryId: 'bunnyLibraryId',
+  bunnyVideoId: 'bunnyVideoId',
+  durationSeconds: 'durationSeconds',
+  order: 'order',
+  isPreview: 'isPreview',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const CourseAccessScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  paymentId: 'paymentId',
+  grantedAt: 'grantedAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type CourseAccessScalarFieldEnum = (typeof CourseAccessScalarFieldEnum)[keyof typeof CourseAccessScalarFieldEnum]
+
+
+export const LessonProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  watchedSeconds: 'watchedSeconds',
+  completed: 'completed',
+  completedAt: 'completedAt',
+  lastWatchedAt: 'lastWatchedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
 
 
 export const SortOrder = {

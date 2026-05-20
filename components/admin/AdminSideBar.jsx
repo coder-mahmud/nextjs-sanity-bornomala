@@ -22,6 +22,11 @@ const menuItems = [
     icon: Users,
   },
   {
+    label: "Courses",
+    href: "/admin/courses",
+    icon: ShoppingCart,
+  },
+  {
     label: "Payments",
     href: "/admin/payments",
     icon: ShoppingCart,

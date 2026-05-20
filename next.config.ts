@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         hostname: 'bornomala-issue.local',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'admin.ecolebornomala.com',
+        pathname: '/**',
+      },
     ],
     dangerouslyAllowLocalIP: true,
   },

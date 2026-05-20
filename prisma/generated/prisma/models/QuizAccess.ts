@@ -253,7 +253,7 @@ export type QuizAccessCreateInput = {
   expiresAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutQuizAccessesInput
   quiz: Prisma.QuizCreateNestedOneWithoutAccessesInput
-  payment?: Prisma.PaymentCreateNestedOneWithoutAccessInput
+  payment?: Prisma.PaymentCreateNestedOneWithoutQuizAccessInput
 }
 
 export type QuizAccessUncheckedCreateInput = {
@@ -271,7 +271,7 @@ export type QuizAccessUpdateInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutQuizAccessesNestedInput
   quiz?: Prisma.QuizUpdateOneRequiredWithoutAccessesNestedInput
-  payment?: Prisma.PaymentUpdateOneWithoutAccessNestedInput
+  payment?: Prisma.PaymentUpdateOneWithoutQuizAccessNestedInput
 }
 
 export type QuizAccessUncheckedUpdateInput = {
@@ -475,7 +475,7 @@ export type QuizAccessCreateWithoutUserInput = {
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   quiz: Prisma.QuizCreateNestedOneWithoutAccessesInput
-  payment?: Prisma.PaymentCreateNestedOneWithoutAccessInput
+  payment?: Prisma.PaymentCreateNestedOneWithoutQuizAccessInput
 }
 
 export type QuizAccessUncheckedCreateWithoutUserInput = {
@@ -529,7 +529,7 @@ export type QuizAccessCreateWithoutQuizInput = {
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutQuizAccessesInput
-  payment?: Prisma.PaymentCreateNestedOneWithoutAccessInput
+  payment?: Prisma.PaymentCreateNestedOneWithoutQuizAccessInput
 }
 
 export type QuizAccessUncheckedCreateWithoutQuizInput = {
@@ -627,7 +627,7 @@ export type QuizAccessUpdateWithoutUserInput = {
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   quiz?: Prisma.QuizUpdateOneRequiredWithoutAccessesNestedInput
-  payment?: Prisma.PaymentUpdateOneWithoutAccessNestedInput
+  payment?: Prisma.PaymentUpdateOneWithoutQuizAccessNestedInput
 }
 
 export type QuizAccessUncheckedUpdateWithoutUserInput = {
@@ -659,7 +659,7 @@ export type QuizAccessUpdateWithoutQuizInput = {
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutQuizAccessesNestedInput
-  payment?: Prisma.PaymentUpdateOneWithoutAccessNestedInput
+  payment?: Prisma.PaymentUpdateOneWithoutQuizAccessNestedInput
 }
 
 export type QuizAccessUncheckedUpdateWithoutQuizInput = {

@@ -526,6 +526,11 @@ export type QuizScalarRelationFilter = {
   isNot?: Prisma.QuizWhereInput
 }
 
+export type QuizNullableScalarRelationFilter = {
+  is?: Prisma.QuizWhereInput | null
+  isNot?: Prisma.QuizWhereInput | null
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -558,10 +563,12 @@ export type QuizCreateNestedOneWithoutPaymentsInput = {
   connect?: Prisma.QuizWhereUniqueInput
 }
 
-export type QuizUpdateOneRequiredWithoutPaymentsNestedInput = {
+export type QuizUpdateOneWithoutPaymentsNestedInput = {
   create?: Prisma.XOR<Prisma.QuizCreateWithoutPaymentsInput, Prisma.QuizUncheckedCreateWithoutPaymentsInput>
   connectOrCreate?: Prisma.QuizCreateOrConnectWithoutPaymentsInput
   upsert?: Prisma.QuizUpsertWithoutPaymentsInput
+  disconnect?: Prisma.QuizWhereInput | boolean
+  delete?: Prisma.QuizWhereInput | boolean
   connect?: Prisma.QuizWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutPaymentsInput, Prisma.QuizUpdateWithoutPaymentsInput>, Prisma.QuizUncheckedUpdateWithoutPaymentsInput>
 }
