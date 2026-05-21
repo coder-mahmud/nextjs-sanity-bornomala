@@ -1,0 +1,21 @@
+# WP_GRAPHQL_URL=http://bornomala.local/graphql
+# WP_GRAPHQL_URL=http://bornomala-issue.local/graphql
+WP_GRAPHQL_URL=https://admin.ecolebornomala.com/graphql
+# WP_GRAPHQL_URL=http://admin.ecolebornomala.com/graphql
+REVALIDATE_SECRET=
+MAILERLITE_API_KEY=
+
+MAILERLITE_GROUP_ID=
+
+
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL_INTERNAL=http://localhost:3000
+DATABASE_URL=
+NODE_ENV=development
+BYPASS_PAYMENT=true
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+BUNNY_STREAM_LIBRARY_ID=""
+# Bunny Token authentication key
+BUNNY_STREAM_TOKEN_SECURITY_KEY=""

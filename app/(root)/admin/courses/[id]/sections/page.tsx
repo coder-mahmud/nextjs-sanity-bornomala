@@ -40,9 +40,8 @@ function formatDuration(seconds: number | null) {
   return `${minutes}m ${remainingSeconds}s`;
 }
 
-const ManageCourseContentPage = async ({
-  params,
-}: ManageCourseContentPageProps) => {
+const ManageCourseContentPage = async ({params}: ManageCourseContentPageProps) => {
+  
   const { id } = await params;
 
   const session = await auth();
@@ -263,9 +262,7 @@ const ManageCourseContentPage = async ({
 
                   <div className="space-y-8 p-6">
                     <div className="rounded-2xl border border-gray-200 p-5">
-                      <h3 className="text-base font-semibold text-gray-900">
-                        Edit Section
-                      </h3>
+                      
 
                       {/* <form
                         action={updateSectionWithIds}

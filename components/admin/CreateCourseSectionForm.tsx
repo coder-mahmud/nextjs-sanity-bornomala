@@ -18,6 +18,7 @@ type CreateCourseSectionFormProps = {
 const CreateCourseSectionForm = ({
   action,
 }: CreateCourseSectionFormProps) => {
+
   const [state, formAction, isPending] = useActionState(action, null);
 
   useEffect(() => {

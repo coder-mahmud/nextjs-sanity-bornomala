@@ -263,43 +263,7 @@ export async function createCourseSection(
   }
 }
 
-// export async function updateCourseSection(
-//   courseId: string,
-//   sectionId: string,
-//   formData: FormData,
-// ) {
-//   await requireAdmin();
 
-//   const title = getString(formData, "title");
-//   const description = getNullableString(formData, "description");
-
-//   if (!title) {
-//     throw new Error("Section title is required");
-//   }
-
-//   const section = await prisma.courseSection.findUnique({
-//     where: {
-//       id: sectionId,
-//     },
-//   });
-
-//   if (!section || section.courseId !== courseId) {
-//     throw new Error("Section not found");
-//   }
-
-//   await prisma.courseSection.update({
-//     where: {
-//       id: sectionId,
-//     },
-//     data: {
-//       title,
-//       description,
-//     },
-//   });
-
-//   revalidatePath("/admin/courses");
-//   revalidatePath(`/admin/courses/${courseId}/sections`);
-// }
 
 export async function updateCourseSection(
   courseId: string,
