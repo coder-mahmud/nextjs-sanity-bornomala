@@ -2,7 +2,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { userHasQuizAccess } from "@/lib/quiz-access";
-import { redirect } from "next/navigation";
+import BuyQuizButton from "@/components/quiz/BuyQuizButton";
 
 export default async function QuizDetailsPage({
   params,
@@ -10,20 +10,7 @@ export default async function QuizDetailsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  // const session = await auth();
-
-  // if (!session?.user?.email) {
-  //   redirect("/login");
-  // }
-
-  // const dbUser = await prisma.user.findUnique({
-  //   where: { email: session.user.email },
-  //   select: { id: true },
-  // });
-
-  // if (!dbUser) {
-  //   throw new Error("User not found");
-  // }
+  const session = await auth();
 
   const quiz = await prisma.quiz.findUnique({
     where: { slug },
@@ -66,11 +53,18 @@ export default async function QuizDetailsPage({
     );
   }
 
-  // const hasAccess = await userHasQuizAccess(dbUser.id, quiz.id);
+  let hasAccess = false;
 
-  // if (!hasAccess) {
-  //   redirect(`/quizzes/${slug}`);
-  // }
+  if (session?.user?.email) {
+    const dbUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    });
+
+    if (dbUser) {
+      hasAccess = await userHasQuizAccess(dbUser.id, quiz.id);
+    }
+  }
 
   return (
     <main className="bg-linear-to-b from-slate-50 via-white to-slate-100">
@@ -82,9 +76,16 @@ export default async function QuizDetailsPage({
                 <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
                   Published Quiz
                 </span>
+
                 <span className="inline-flex rounded-full bg-slate-100 px-4 py-1 text-sm font-medium text-slate-600">
                   {quiz.questions.length} Questions
                 </span>
+
+                {hasAccess && (
+                  <span className="inline-flex rounded-full bg-emerald-100 px-4 py-1 text-sm font-medium text-emerald-700">
+                    Access Granted
+                  </span>
+                )}
               </div>
 
               <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
@@ -123,33 +124,35 @@ export default async function QuizDetailsPage({
                   </p>
                 </div>
 
-                {/* <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                    Access
+                    Price
                   </p>
-                  <p className="mt-2 text-lg font-semibold text-emerald-600">
-                    Granted
+                  <p className="mt-2 text-lg font-semibold text-slate-900">
+                    {quiz.price.toString()} {quiz.currency}
                   </p>
-                </div> */}
-
-
+                </div>
               </div>
 
               <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
                 <h2 className="text-lg font-semibold text-slate-900">
                   Before you begin
                 </h2>
+
                 <div className="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
                   <div className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
                     Make sure you have enough uninterrupted time to complete the
                     quiz.
                   </div>
+
                   <div className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
                     Read each question carefully before selecting your answer.
                   </div>
+
                   <div className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
                     You need at least {quiz.passingScore}% to pass successfully.
                   </div>
+
                   <div className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
                     The full quiz contains {quiz.questions.length} questions.
                   </div>
@@ -159,12 +162,13 @@ export default async function QuizDetailsPage({
 
             <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <h2 className="text-2xl font-bold text-slate-900">
-                Ready to start?
+                {hasAccess ? "Ready to start?" : "Unlock this quiz"}
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                You currently have access to this quiz. Start now and complete
-                it at your best pace within the allowed duration.
+                {hasAccess
+                  ? "You currently have access to this quiz. Start now and complete it at your best pace within the allowed duration."
+                  : "Purchase this quiz to unlock access and start your attempt."}
               </p>
 
               <div className="mt-6 space-y-4 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
@@ -195,17 +199,33 @@ export default async function QuizDetailsPage({
                     {quiz.passingScore}%
                   </span>
                 </div>
+
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Price</span>
+                  <span className="font-medium text-slate-800">
+                    {quiz.price.toString()} {quiz.currency}
+                  </span>
+                </div>
               </div>
 
               <div className="mt-8 flex flex-col gap-3">
-                
-                  <Link 
+                {hasAccess ? (
+                  <Link
                     href={`/quizzes/${quiz.slug}/start`}
                     className="w-full text-center bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Start Quiz
                   </Link>
-                
+                ) : session?.user?.email ? (
+                  <BuyQuizButton quizId={quiz.id} />
+                ) : (
+                  <Link
+                    href={`/login?callbackUrl=/quizzes/${quiz.slug}`}
+                    className="w-full text-center bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    Login to Buy
+                  </Link>
+                )}
 
                 <Link
                   href="/quizzes"

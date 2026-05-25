@@ -86,12 +86,13 @@ const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
         <h2 className="text-lg font-semibold text-gray-900">
           This lesson is locked
         </h2>
+
         <p className="mt-2 text-sm text-gray-500">
           Please purchase or enroll in this course to watch the video.
         </p>
 
         <Link
-          href={`/courses/${course.slug}`}
+          href={`/video-courses/${course.slug}`}
           className="mt-5 inline-flex rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700"
         >
           View Course
@@ -103,7 +104,7 @@ const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
   const embedUrl = getBunnyStreamEmbedUrl({
     libraryId: lesson.bunnyLibraryId,
     videoId: lesson.bunnyVideoId,
-    expiresInSeconds: 300,
+    expiresInSeconds: 3600,
   });
 
   return (
@@ -112,7 +113,7 @@ const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
         src={embedUrl}
         loading="lazy"
         className="absolute left-0 top-0 h-full w-full border-0"
-        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
       />
     </div>

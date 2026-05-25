@@ -15,6 +15,7 @@ const UserPaymentsPage = async () => {
       payments: {
         include: {
           quiz: true,
+          course: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -32,7 +33,7 @@ const UserPaymentsPage = async () => {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Payments</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Your quiz payment history.
+          Your payment history.
         </p>
       </div>
 
@@ -47,7 +48,8 @@ const UserPaymentsPage = async () => {
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-50 text-gray-600">
               <tr>
-                <th className="px-4 py-3 font-medium">Quiz</th>
+                <th className="px-4 py-3 font-medium">Item</th>
+                <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Amount</th>
                 <th className="px-4 py-3 font-medium">Provider</th>
                 <th className="px-4 py-3 font-medium">Status</th>
@@ -56,31 +58,58 @@ const UserPaymentsPage = async () => {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {user.payments.map((payment) => (
-                <tr key={payment.id}>
-                  <td className="px-4 py-3 font-medium text-gray-900">
-                    {payment.quiz.title}
-                  </td>
+              {user.payments.map((payment) => {
+                const itemTitle =
+                  payment.quiz?.title ||
+                  payment.course?.title ||
+                  "Unknown item";
 
-                  <td className="px-4 py-3 text-gray-600">
-                    {payment.amount.toString()} {payment.currency}
-                  </td>
+                const itemType = payment.course
+                  ? "Course"
+                  : payment.quiz
+                    ? "Quiz"
+                    : "Payment";
 
-                  <td className="px-4 py-3 text-gray-600">
-                    {payment.provider}
-                  </td>
+                return (
+                  <tr key={payment.id}>
+                    <td className="px-4 py-3 font-medium text-gray-900">
+                      {itemTitle}
+                    </td>
 
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-                      {payment.status}
-                    </span>
-                  </td>
+                    <td className="px-4 py-3 text-gray-600">
+                      {itemType}
+                    </td>
 
-                  <td className="px-4 py-3 text-gray-600">
-                    {new Date(payment.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
+                    <td className="px-4 py-3 text-gray-600">
+                      {payment.amount.toString()} {payment.currency}
+                    </td>
+
+                    <td className="px-4 py-3 text-gray-600">
+                      {payment.provider}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${
+                          payment.status === "CAPTURED"
+                            ? "bg-green-100 text-green-700"
+                            : payment.status === "FAILED"
+                              ? "bg-red-100 text-red-700"
+                              : payment.status === "REFUNDED"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {payment.status}
+                      </span>
+                    </td>
+
+                    <td className="px-4 py-3 text-gray-600">
+                      {new Date(payment.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

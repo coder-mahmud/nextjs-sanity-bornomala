@@ -13,7 +13,7 @@ async function getQuiz(slug: string) {
   // console.log("api res msg:", res)
   const data = await res.json();
 
-  console.log("Response msg:",data.message);
+  // console.log("Response msg:",data.message);
 
   if (!res.ok) throw new Error("Failed to load quiz");
   return res.json();
@@ -32,7 +32,7 @@ async function createAttempt(quizId: string, userId:string) {
   });
 
   const data = await res.json();
-  console.log("start api data:",data)
+  // console.log("start api data:",data)
 
   if (!res.ok) throw new Error("Failed to start attempt");
   return data;
@@ -85,6 +85,7 @@ export default async function StartQuizPage({
 
   if (!hasAccess) {
     redirect(`/quizzes/${slug}`);
+
   }
 
   const { attemptId } = await createAttempt(quiz.id,dbUser.id );

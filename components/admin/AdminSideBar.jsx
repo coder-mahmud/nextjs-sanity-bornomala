@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, LayoutDashboard, Users, ShoppingCart, Package, Settings, BadgeQuestionMark  } from "lucide-react";
+import { Menu, X, LayoutDashboard, Users, ShoppingCart, Package, Settings, BadgeQuestionMark, Video  } from "lucide-react";
 import { useState } from "react";
 
 const menuItems = [
@@ -24,7 +24,7 @@ const menuItems = [
   {
     label: "Courses",
     href: "/admin/courses",
-    icon: ShoppingCart,
+    icon: Video,
   },
   {
     label: "Payments",

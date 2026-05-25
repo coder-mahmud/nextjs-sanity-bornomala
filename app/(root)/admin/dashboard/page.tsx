@@ -19,6 +19,9 @@ const AdminDashboardPage = async () => {
     totalQuizzes,
     publishedQuizzes,
     draftQuizzes,
+    totalCourses,
+    publishedCourses,
+    draftCourses,
     totalAttempts,
     passedAttempts,
     totalPayments,
@@ -39,6 +42,17 @@ const AdminDashboardPage = async () => {
       },
     }),
     prisma.quiz.count({
+      where: {
+        status: "DRAFT",
+      },
+    }),
+    prisma.course.count(),
+    prisma.course.count({
+      where: {
+        status: "PUBLISHED",
+      },
+    }),
+    prisma.course.count({
       where: {
         status: "DRAFT",
       },
@@ -83,6 +97,7 @@ const AdminDashboardPage = async () => {
     include: {
       user: true,
       quiz: true,
+      course: true,
     },
   });
 
@@ -93,7 +108,7 @@ const AdminDashboardPage = async () => {
           Admin Dashboard
         </h1>
         <p className="mt-1 text-sm text-gray-500">
-          Overview of users, quizzes, attempts, and payments.
+          Overview of users, quizzes, courses, attempts, and payments.
         </p>
       </div>
 
@@ -101,14 +116,21 @@ const AdminDashboardPage = async () => {
         <StatsCard title="Total Users" value={totalUsers.toString()} />
         <StatsCard title="Admins" value={totalAdmins.toString()} />
         <StatsCard title="Total Quizzes" value={totalQuizzes.toString()} />
-        <StatsCard title="Total Revenue" value={`$${totalRevenue.toFixed(2)}`} />
+        <StatsCard title="Total Courses" value={totalCourses.toString()} />
       </div>
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatsCard title="Published Quizzes" value={publishedQuizzes.toString()} />
         <StatsCard title="Draft Quizzes" value={draftQuizzes.toString()} />
+        <StatsCard title="Published Courses" value={publishedCourses.toString()} />
+        <StatsCard title="Draft Courses" value={draftCourses.toString()} />
+      </div>
+
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatsCard title="Total Attempts" value={totalAttempts.toString()} />
         <StatsCard title="Passed Attempts" value={passedAttempts.toString()} />
+        <StatsCard title="Total Payments" value={totalPayments.toString()} />
+        <StatsCard title="Total Revenue" value={`$${totalRevenue.toFixed(2)}`} />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
@@ -182,47 +204,63 @@ const AdminDashboardPage = async () => {
             <EmptyState message="No payments found." />
           ) : (
             <div className="space-y-4">
-              {recentPayments.map((payment) => (
-                <div
-                  key={payment.id}
-                  className="rounded-xl border border-gray-100 p-4"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">
-                        {payment.quiz!.title}
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        {payment.user.name || "No name"} — {payment.user.email}
-                      </p>
+              {recentPayments.map((payment) => {
+                const itemTitle =
+                  payment.quiz?.title ||
+                  payment.course?.title ||
+                  "Unknown item";
+
+                const itemType = payment.course
+                  ? "Course Payment"
+                  : payment.quiz
+                    ? "Quiz Payment"
+                    : "Payment";
+
+                return (
+                  <div
+                    key={payment.id}
+                    className="rounded-xl border border-gray-100 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          {itemTitle}
+                        </h3>
+                        <p className="mt-1 text-xs text-gray-400">
+                          {itemType}
+                        </p>
+                        <p className="mt-1 text-sm text-gray-500">
+                          {payment.user.name || "No name"} — {payment.user.email}
+                        </p>
+                      </div>
+
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${
+                          payment.status === "CAPTURED"
+                            ? "bg-green-100 text-green-700"
+                            : payment.status === "FAILED"
+                              ? "bg-red-100 text-red-700"
+                              : payment.status === "REFUNDED"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {payment.status}
+                      </span>
                     </div>
 
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
-                        payment.status === "CAPTURED"
-                          ? "bg-green-100 text-green-700"
-                          : payment.status === "FAILED"
-                            ? "bg-red-100 text-red-700"
-                            : payment.status === "REFUNDED"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {payment.status}
-                    </span>
+                    <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-600">
+                      <span>
+                        Amount: {payment.amount.toString()} {payment.currency}
+                      </span>
+                      <span>Provider: {payment.provider}</span>
+                      <span>
+                        Date: {new Date(payment.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-
-                  <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-600">
-                    <span>
-                      Amount: {payment.amount.toString()} {payment.currency}
-                    </span>
-                    <span>Provider: {payment.provider}</span>
-                    <span>
-                      Date: {new Date(payment.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

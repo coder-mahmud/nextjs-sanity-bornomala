@@ -107,6 +107,9 @@ const Header = ({logo}:{logo:string}) => {
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/courses">Courses</Link>
                 </li>
                 <li>
+                  <Link className='hover:text-primary nav-underline px-2 py-1' href="/video-courses">Video Courses</Link>
+                </li>
+                <li>
                   <Link className='hover:text-primary nav-underline px-2 py-1' href="/quizzes">Quiz</Link>
                 </li>
                 {/* <li>
@@ -168,6 +171,15 @@ const Header = ({logo}:{logo:string}) => {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Courses
+                      </Link>
+                    </li>
+                    <li>
+                      <Link 
+                        className='block hover:text-primary nav-underline px-2 py-2 border-b' 
+                        href="/video-courses" 
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Video Courses
                       </Link>
                     </li>
                     {/* <li>

@@ -11,6 +11,7 @@ import {
   CreditCard,
   User,
   Settings,
+  Video,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -29,6 +30,11 @@ const menuItems = [
     label: "Results",
     href: "/dashboard/results",
     icon: ClipboardCheck,
+  },
+  {
+    label: "My Courses",
+    href: "/dashboard/courses",
+    icon: Video,
   },
   {
     label: "Payments",
