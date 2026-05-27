@@ -406,7 +406,8 @@ export const ModelName = {
   CourseSection: 'CourseSection',
   Lesson: 'Lesson',
   CourseAccess: 'CourseAccess',
-  LessonProgress: 'LessonProgress'
+  LessonProgress: 'LessonProgress',
+  CourseCertificate: 'CourseCertificate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "quiz" | "question" | "questionOption" | "payment" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "course" | "courseSection" | "lesson" | "courseAccess" | "lessonProgress"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "quiz" | "question" | "questionOption" | "payment" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "course" | "courseSection" | "lesson" | "courseAccess" | "lessonProgress" | "courseCertificate"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1684,6 +1685,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CourseCertificate: {
+      payload: Prisma.$CourseCertificatePayload<ExtArgs>
+      fields: Prisma.CourseCertificateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CourseCertificateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CourseCertificateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>
+        }
+        findFirst: {
+          args: Prisma.CourseCertificateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CourseCertificateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>
+        }
+        findMany: {
+          args: Prisma.CourseCertificateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>[]
+        }
+        create: {
+          args: Prisma.CourseCertificateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>
+        }
+        createMany: {
+          args: Prisma.CourseCertificateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CourseCertificateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>[]
+        }
+        delete: {
+          args: Prisma.CourseCertificateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>
+        }
+        update: {
+          args: Prisma.CourseCertificateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>
+        }
+        deleteMany: {
+          args: Prisma.CourseCertificateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CourseCertificateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CourseCertificateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>[]
+        }
+        upsert: {
+          args: Prisma.CourseCertificateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCertificatePayload>
+        }
+        aggregate: {
+          args: Prisma.CourseCertificateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCourseCertificate>
+        }
+        groupBy: {
+          args: Prisma.CourseCertificateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseCertificateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CourseCertificateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseCertificateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1979,6 +2054,17 @@ export const LessonProgressScalarFieldEnum = {
 } as const
 
 export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
+
+
+export const CourseCertificateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  certificateNo: 'certificateNo',
+  issuedAt: 'issuedAt'
+} as const
+
+export type CourseCertificateScalarFieldEnum = (typeof CourseCertificateScalarFieldEnum)[keyof typeof CourseCertificateScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2292,6 +2378,7 @@ export type GlobalOmitConfig = {
   lesson?: Prisma.LessonOmit
   courseAccess?: Prisma.CourseAccessOmit
   lessonProgress?: Prisma.LessonProgressOmit
+  courseCertificate?: Prisma.CourseCertificateOmit
 }
 
 /* Types for Logging */

@@ -16,6 +16,7 @@
     "@prisma/extension-accelerate": "^3.0.1",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
+    "@react-pdf/renderer": "^4.5.1",
     "@stripe/stripe-js": "^9.6.0",
     "aos": "^2.3.4",
     "bcryptjs": "^3.0.3",

@@ -222,6 +222,7 @@ export type UserWhereInput = {
   quizAttempts?: Prisma.QuizAttemptListRelationFilter
   courseAccesses?: Prisma.CourseAccessListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
+  courseCertificates?: Prisma.CourseCertificateListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -242,6 +243,7 @@ export type UserOrderByWithRelationInput = {
   quizAttempts?: Prisma.QuizAttemptOrderByRelationAggregateInput
   courseAccesses?: Prisma.CourseAccessOrderByRelationAggregateInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
+  courseCertificates?: Prisma.CourseCertificateOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +267,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   quizAttempts?: Prisma.QuizAttemptListRelationFilter
   courseAccesses?: Prisma.CourseAccessListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
+  courseCertificates?: Prisma.CourseCertificateListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -315,6 +318,7 @@ export type UserCreateInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -335,6 +339,7 @@ export type UserUncheckedCreateInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -355,6 +360,7 @@ export type UserUpdateInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -375,6 +381,7 @@ export type UserUncheckedUpdateInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -586,6 +593,20 @@ export type UserUpdateOneRequiredWithoutLessonProgressNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLessonProgressInput, Prisma.UserUpdateWithoutLessonProgressInput>, Prisma.UserUncheckedUpdateWithoutLessonProgressInput>
 }
 
+export type UserCreateNestedOneWithoutCourseCertificatesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCourseCertificatesInput, Prisma.UserUncheckedCreateWithoutCourseCertificatesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCourseCertificatesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCourseCertificatesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCourseCertificatesInput, Prisma.UserUncheckedCreateWithoutCourseCertificatesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCourseCertificatesInput
+  upsert?: Prisma.UserUpsertWithoutCourseCertificatesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCourseCertificatesInput, Prisma.UserUpdateWithoutCourseCertificatesInput>, Prisma.UserUncheckedUpdateWithoutCourseCertificatesInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -603,6 +624,7 @@ export type UserCreateWithoutAccountsInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -622,6 +644,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -657,6 +680,7 @@ export type UserUpdateWithoutAccountsInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -676,6 +700,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -695,6 +720,7 @@ export type UserCreateWithoutSessionsInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -714,6 +740,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -749,6 +776,7 @@ export type UserUpdateWithoutSessionsInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -768,6 +796,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuthenticatorsInput = {
@@ -787,6 +816,7 @@ export type UserCreateWithoutAuthenticatorsInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthenticatorsInput = {
@@ -806,6 +836,7 @@ export type UserUncheckedCreateWithoutAuthenticatorsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthenticatorsInput = {
@@ -841,6 +872,7 @@ export type UserUpdateWithoutAuthenticatorsInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthenticatorsInput = {
@@ -860,6 +892,7 @@ export type UserUncheckedUpdateWithoutAuthenticatorsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -879,6 +912,7 @@ export type UserCreateWithoutPaymentsInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -898,6 +932,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -933,6 +968,7 @@ export type UserUpdateWithoutPaymentsInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -952,6 +988,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuizAccessesInput = {
@@ -971,6 +1008,7 @@ export type UserCreateWithoutQuizAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuizAccessesInput = {
@@ -990,6 +1028,7 @@ export type UserUncheckedCreateWithoutQuizAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuizAccessesInput = {
@@ -1025,6 +1064,7 @@ export type UserUpdateWithoutQuizAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuizAccessesInput = {
@@ -1044,6 +1084,7 @@ export type UserUncheckedUpdateWithoutQuizAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuizAttemptsInput = {
@@ -1063,6 +1104,7 @@ export type UserCreateWithoutQuizAttemptsInput = {
   quizAccesses?: Prisma.QuizAccessCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuizAttemptsInput = {
@@ -1082,6 +1124,7 @@ export type UserUncheckedCreateWithoutQuizAttemptsInput = {
   quizAccesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuizAttemptsInput = {
@@ -1117,6 +1160,7 @@ export type UserUpdateWithoutQuizAttemptsInput = {
   quizAccesses?: Prisma.QuizAccessUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuizAttemptsInput = {
@@ -1136,6 +1180,7 @@ export type UserUncheckedUpdateWithoutQuizAttemptsInput = {
   quizAccesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCourseAccessesInput = {
@@ -1155,6 +1200,7 @@ export type UserCreateWithoutCourseAccessesInput = {
   quizAccesses?: Prisma.QuizAccessCreateNestedManyWithoutUserInput
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCourseAccessesInput = {
@@ -1174,6 +1220,7 @@ export type UserUncheckedCreateWithoutCourseAccessesInput = {
   quizAccesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutUserInput
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCourseAccessesInput = {
@@ -1209,6 +1256,7 @@ export type UserUpdateWithoutCourseAccessesInput = {
   quizAccesses?: Prisma.QuizAccessUpdateManyWithoutUserNestedInput
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseAccessesInput = {
@@ -1228,6 +1276,7 @@ export type UserUncheckedUpdateWithoutCourseAccessesInput = {
   quizAccesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutUserNestedInput
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLessonProgressInput = {
@@ -1247,6 +1296,7 @@ export type UserCreateWithoutLessonProgressInput = {
   quizAccesses?: Prisma.QuizAccessCreateNestedManyWithoutUserInput
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLessonProgressInput = {
@@ -1266,6 +1316,7 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   quizAccesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutUserInput
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLessonProgressInput = {
@@ -1301,6 +1352,7 @@ export type UserUpdateWithoutLessonProgressInput = {
   quizAccesses?: Prisma.QuizAccessUpdateManyWithoutUserNestedInput
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonProgressInput = {
@@ -1320,6 +1372,103 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   quizAccesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutUserNestedInput
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCourseCertificatesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  quizAccesses?: Prisma.QuizAccessCreateNestedManyWithoutUserInput
+  quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
+  courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCourseCertificatesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  quizAccesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutUserInput
+  quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
+  courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCourseCertificatesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCourseCertificatesInput, Prisma.UserUncheckedCreateWithoutCourseCertificatesInput>
+}
+
+export type UserUpsertWithoutCourseCertificatesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCourseCertificatesInput, Prisma.UserUncheckedUpdateWithoutCourseCertificatesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCourseCertificatesInput, Prisma.UserUncheckedCreateWithoutCourseCertificatesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCourseCertificatesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCourseCertificatesInput, Prisma.UserUncheckedUpdateWithoutCourseCertificatesInput>
+}
+
+export type UserUpdateWithoutCourseCertificatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  quizAccesses?: Prisma.QuizAccessUpdateManyWithoutUserNestedInput
+  quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
+  courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCourseCertificatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  quizAccesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutUserNestedInput
+  quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
+  courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1336,6 +1485,7 @@ export type UserCountOutputType = {
   quizAttempts: number
   courseAccesses: number
   lessonProgress: number
+  courseCertificates: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1347,6 +1497,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   quizAttempts?: boolean | UserCountOutputTypeCountQuizAttemptsArgs
   courseAccesses?: boolean | UserCountOutputTypeCountCourseAccessesArgs
   lessonProgress?: boolean | UserCountOutputTypeCountLessonProgressArgs
+  courseCertificates?: boolean | UserCountOutputTypeCountCourseCertificatesArgs
 }
 
 /**
@@ -1415,6 +1566,13 @@ export type UserCountOutputTypeCountLessonProgressArgs<ExtArgs extends runtime.T
   where?: Prisma.LessonProgressWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCourseCertificatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseCertificateWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1434,6 +1592,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   quizAttempts?: boolean | Prisma.User$quizAttemptsArgs<ExtArgs>
   courseAccesses?: boolean | Prisma.User$courseAccessesArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
+  courseCertificates?: boolean | Prisma.User$courseCertificatesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1483,6 +1642,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   quizAttempts?: boolean | Prisma.User$quizAttemptsArgs<ExtArgs>
   courseAccesses?: boolean | Prisma.User$courseAccessesArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
+  courseCertificates?: boolean | Prisma.User$courseCertificatesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1499,6 +1659,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     quizAttempts: Prisma.$QuizAttemptPayload<ExtArgs>[]
     courseAccesses: Prisma.$CourseAccessPayload<ExtArgs>[]
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
+    courseCertificates: Prisma.$CourseCertificatePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1912,6 +2073,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   quizAttempts<T extends Prisma.User$quizAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$quizAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   courseAccesses<T extends Prisma.User$courseAccessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseAccessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonProgress<T extends Prisma.User$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  courseCertificates<T extends Prisma.User$courseCertificatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseCertificatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2527,6 +2689,30 @@ export type User$lessonProgressArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.LessonProgressScalarFieldEnum | Prisma.LessonProgressScalarFieldEnum[]
+}
+
+/**
+ * User.courseCertificates
+ */
+export type User$courseCertificatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseCertificate
+   */
+  select?: Prisma.CourseCertificateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseCertificate
+   */
+  omit?: Prisma.CourseCertificateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseCertificateInclude<ExtArgs> | null
+  where?: Prisma.CourseCertificateWhereInput
+  orderBy?: Prisma.CourseCertificateOrderByWithRelationInput | Prisma.CourseCertificateOrderByWithRelationInput[]
+  cursor?: Prisma.CourseCertificateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseCertificateScalarFieldEnum | Prisma.CourseCertificateScalarFieldEnum[]
 }
 
 /**

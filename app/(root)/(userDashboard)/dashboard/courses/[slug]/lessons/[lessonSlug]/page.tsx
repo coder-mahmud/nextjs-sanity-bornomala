@@ -13,6 +13,57 @@ interface LessonPageProps {
   }>;
 }
 
+async function markLessonCompleted(formData: FormData) {
+  "use server";
+
+  const lessonId = formData.get("lessonId") as string;
+  const courseSlug = formData.get("courseSlug") as string;
+  const lessonSlug = formData.get("lessonSlug") as string;
+
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  await prisma.lessonProgress.upsert({
+    where: {
+      userId_lessonId: {
+        userId: user.id,
+        lessonId,
+      },
+    },
+    update: {
+      completed: true,
+      completedAt: new Date(),
+      lastWatchedAt: new Date(),
+    },
+    create: {
+      userId: user.id,
+      lessonId,
+      watchedSeconds: 0,
+      completed: true,
+      completedAt: new Date(),
+      lastWatchedAt: new Date(),
+    },
+  });
+
+  redirect(`/dashboard/courses/${courseSlug}/lessons/${lessonSlug}`);
+}
+
 export default async function LessonPage({ params }: LessonPageProps) {
   const { slug, lessonSlug } = await params;
 
@@ -37,6 +88,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
       slug: lessonSlug,
     },
     include: {
+      progressRecords: {
+        where: {
+          userId: user.id,
+        },
+      },
       section: {
         include: {
           course: true,
@@ -108,6 +164,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
     },
   });
 
+  const progress = lesson.progressRecords[0];
+  const isCompleted = progress?.completed === true;
+
   const lessonIndex = lesson.section.lessons.findIndex(
     (item) => item.id === lesson.id
   );
@@ -125,13 +184,36 @@ export default async function LessonPage({ params }: LessonPageProps) {
           ← Back to course
         </Link>
 
-        <h1 className="mt-3 text-2xl font-bold text-gray-900">
-          {lesson.title}
-        </h1>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {lesson.title}
+            </h1>
 
-        {lesson.description && (
-          <p className="mt-2 text-gray-500">{lesson.description}</p>
-        )}
+            {lesson.description && (
+              <p className="mt-2 text-gray-500">{lesson.description}</p>
+            )}
+          </div>
+
+          {isCompleted ? (
+            <span className="inline-flex rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+              Completed
+            </span>
+          ) : (
+            <form action={markLessonCompleted}>
+              <input type="hidden" name="lessonId" value={lesson.id} />
+              <input type="hidden" name="courseSlug" value={course.slug} />
+              <input type="hidden" name="lessonSlug" value={lesson.slug} />
+
+              <button
+                type="submit"
+                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+              >
+                Mark as Completed
+              </button>
+            </form>
+          )}
+        </div>
       </div>
 
       {lesson.bunnyVideoId ? (

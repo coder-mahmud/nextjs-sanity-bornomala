@@ -129,3 +129,8 @@ export type CourseAccess = Prisma.CourseAccessModel
  * 
  */
 export type LessonProgress = Prisma.LessonProgressModel
+/**
+ * Model CourseCertificate
+ * 
+ */
+export type CourseCertificate = Prisma.CourseCertificateModel

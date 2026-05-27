@@ -44,27 +44,29 @@ enum AttemptStatus {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  name           String?
-  email          String          @unique
-  emailVerified  DateTime?
-  image          String?
-  password       String?
-  role           Role            @default(USER)
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
 
   accounts       Account[]
   sessions       Session[]
   authenticators Authenticator[]
 
-  payments       Payment[]
-  quizAccesses   QuizAccess[]
-  quizAttempts   QuizAttempt[]
+  payments     Payment[]
+  quizAccesses QuizAccess[]
+  quizAttempts QuizAttempt[]
 
-  courseAccesses CourseAccess[]
-  lessonProgress LessonProgress[]
+  courseAccesses     CourseAccess[]
+  lessonProgress     LessonProgress[]
+  courseCertificates CourseCertificate[]
+  couponUsages       CouponUsage[]
 
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -80,10 +82,10 @@ model Account {
   id_token          String?
   session_state     String?
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -93,10 +95,10 @@ model Session {
   userId       String
   expires      DateTime
 
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -118,128 +120,125 @@ model Authenticator {
   credentialBackedUp   Boolean
   transports           String?
 
-  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
 
 model Quiz {
-  id              String          @id @default(cuid())
+  id              String     @id @default(cuid())
   title           String
-  slug            String          @unique
+  slug            String     @unique
   description     String?
-  price           Decimal         @db.Decimal(10, 2)
-  currency        String          @default("USD")
+  price           Decimal    @db.Decimal(10, 2)
+  currency        String     @default("USD")
   durationMinutes Int
   passingScore    Int
-  status          QuizStatus      @default(DRAFT)
+  status          QuizStatus @default(DRAFT)
 
-  questions       Question[]
-  payments        Payment[]
-  accesses        QuizAccess[]
-  attempts        QuizAttempt[]
+  questions Question[]
+  payments  Payment[]
+  accesses  QuizAccess[]
+  attempts  QuizAttempt[]
 
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Question {
-  id            String              @id @default(cuid())
-  quizId        String
-  text          String
-  explanation   String?
-  order         Int
-  marks         Int                 @default(1)
+  id          String  @id @default(cuid())
+  quizId      String
+  text        String
+  explanation String?
+  order       Int
+  marks       Int     @default(1)
 
-  quiz          Quiz                @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  options       QuestionOption[]
-  answers       QuizAttemptAnswer[]
+  quiz    Quiz                @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options QuestionOption[]
+  answers QuizAttemptAnswer[]
 
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([quizId, order])
   @@index([quizId])
 }
 
 model QuestionOption {
-  id            String              @id @default(cuid())
-  questionId    String
-  text          String
-  isCorrect     Boolean             @default(false)
-  order         Int
+  id         String  @id @default(cuid())
+  questionId String
+  text       String
+  isCorrect  Boolean @default(false)
+  order      Int
 
-  question      Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  selectedIn    QuizAttemptAnswer[]
+  question   Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedIn QuizAttemptAnswer[]
 
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([questionId, order])
   @@index([questionId])
 }
-/*
-model Payment {
-  id              String         @id @default(cuid())
-  userId          String
-  quizId          String
 
-  provider        String         @default("stripe")
-  paypalOrderId   String?        @unique
-  paypalCaptureId String?        @unique
-
-  amount          Decimal        @db.Decimal(10, 2)
-  currency        String         @default("USD")
-  status          PaymentStatus  @default(CREATED)
-  paidAt          DateTime?
-  rawResponse     Json?
-
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz            Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  access          QuizAccess?
-
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-
-  @@index([userId])
-  @@index([quizId])
-  @@index([userId, quizId])
-}
-*/
+/**
+ * model Payment {
+ * id              String         @id @default(cuid())
+ * userId          String
+ * quizId          String
+ * provider        String         @default("stripe")
+ * paypalOrderId   String?        @unique
+ * paypalCaptureId String?        @unique
+ * amount          Decimal        @db.Decimal(10, 2)
+ * currency        String         @default("USD")
+ * status          PaymentStatus  @default(CREATED)
+ * paidAt          DateTime?
+ * rawResponse     Json?
+ * user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+ * quiz            Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+ * access          QuizAccess?
+ * createdAt       DateTime       @default(now())
+ * updatedAt       DateTime       @updatedAt
+ * @@index([userId])
+ * @@index([quizId])
+ * @@index([userId, quizId])
+ * }
+ */
 
 model Payment {
-  id              String         @id @default(cuid())
-  userId          String
+  id     String @id @default(cuid())
+  userId String
 
   // Payment can belong to either a quiz OR a course
-  quizId          String?
-  courseId        String?
+  quizId   String?
+  courseId String?
 
-  provider        String         @default("stripe")
+  provider String @default("stripe")
 
   // Stripe fields
-  stripeSessionId String?        @unique
-  stripeIntentId  String?        @unique
+  stripeSessionId String? @unique
+  stripeIntentId  String? @unique
 
   // Legacy PayPal fields (optional if you still want them)
-  paypalOrderId   String?        @unique
-  paypalCaptureId String?        @unique
+  paypalOrderId   String? @unique
+  paypalCaptureId String? @unique
 
-  amount          Decimal        @db.Decimal(10, 2)
-  currency        String         @default("USD")
-  status          PaymentStatus  @default(CREATED)
-  paidAt          DateTime?
-  rawResponse     Json?
+  amount      Decimal       @db.Decimal(10, 2)
+  currency    String        @default("USD")
+  status      PaymentStatus @default(CREATED)
+  paidAt      DateTime?
+  rawResponse Json?
 
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz            Quiz?          @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  course          Course?        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz   Quiz?   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  course Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  quizAccess      QuizAccess?
-  courseAccess    CourseAccess?
+  quizAccess   QuizAccess?
+  courseAccess CourseAccess?
 
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  couponUsages CouponUsage[]
 
   @@index([userId])
   @@index([quizId])
@@ -248,19 +247,17 @@ model Payment {
   @@index([userId, courseId])
 }
 
-
-
 model QuizAccess {
-  id          String    @id @default(cuid())
-  userId      String
-  quizId      String
-  paymentId   String?   @unique
-  grantedAt   DateTime  @default(now())
-  expiresAt   DateTime?
+  id        String    @id @default(cuid())
+  userId    String
+  quizId    String
+  paymentId String?   @unique
+  grantedAt DateTime  @default(now())
+  expiresAt DateTime?
 
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  payment     Payment?  @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
 
   @@unique([userId, quizId])
   @@index([userId])
@@ -268,26 +265,26 @@ model QuizAccess {
 }
 
 model QuizAttempt {
-  id              String            @id @default(cuid())
-  userId          String
-  quizId          String
+  id     String @id @default(cuid())
+  userId String
+  quizId String
 
-  status          AttemptStatus     @default(STARTED)
-  startedAt       DateTime          @default(now())
-  submittedAt     DateTime?
+  status      AttemptStatus @default(STARTED)
+  startedAt   DateTime      @default(now())
+  submittedAt DateTime?
 
   score           Int?
   totalMarks      Int?
   percentage      Float?
   passed          Boolean?
-  resultPublished Boolean           @default(true)
+  resultPublished Boolean  @default(true)
 
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz            Quiz              @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  answers         QuizAttemptAnswer[]
+  user    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz    Quiz                @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers QuizAttemptAnswer[]
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([quizId])
@@ -295,106 +292,106 @@ model QuizAttempt {
 }
 
 model QuizAttemptAnswer {
-  id               String          @id @default(cuid())
+  id               String  @id @default(cuid())
   attemptId        String
   questionId       String
   selectedOptionId String?
 
-  isCorrect        Boolean?
-  awardedMarks     Int?
+  isCorrect    Boolean?
+  awardedMarks Int?
 
-  attempt          QuizAttempt     @relation(fields: [attemptId], references: [id], onDelete: Cascade)
-  question         Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  selectedOption   QuestionOption? @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
+  attempt        QuizAttempt     @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question       Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedOption QuestionOption? @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
 
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([attemptId, questionId])
   @@index([attemptId])
   @@index([questionId])
 }
 
-
 model Course {
-  id               String           @id @default(cuid())
+  id               String       @id @default(cuid())
   title            String
-  slug             String           @unique
+  slug             String       @unique
   description      String?
   shortDescription String?
   thumbnail        String?
-  price            Decimal          @db.Decimal(10, 2)
-  currency         String           @default("USD")
-  status           CourseStatus     @default(DRAFT)
+  price            Decimal      @db.Decimal(10, 2)
+  currency         String       @default("USD")
+  status           CourseStatus @default(DRAFT)
 
   // Optional metadata
-  level            String?          // Beginner, Intermediate, Advanced
-  durationMinutes  Int?             // Total course duration
-  instructorName   String?
+  level           String? // Beginner, Intermediate, Advanced
+  durationMinutes Int? // Total course duration
+  instructorName  String?
 
   // Relations
-  sections         CourseSection[]
-  accesses         CourseAccess[]
-  payments         Payment[]
+  sections CourseSection[]
+  accesses CourseAccess[]
+  payments Payment[]
 
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  courseCertificates CourseCertificate[]
 
   @@index([status])
 }
 
 model CourseSection {
-  id          String      @id @default(cuid())
+  id          String  @id @default(cuid())
   courseId    String
   title       String
   description String?
   order       Int
 
-  course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons     Lesson[]
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons Lesson[]
 
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([courseId, order])
   @@index([courseId])
 }
 
 model Lesson {
-  id              String           @id @default(cuid())
-  sectionId       String
-  title           String
-  slug            String           @unique
-  description     String?
-  videoUrl        String?
-  bunnyLibraryId  String?
-  bunnyVideoId    String?
+  id             String  @id @default(cuid())
+  sectionId      String
+  title          String
+  slug           String  @unique
+  description    String?
+  videoUrl       String?
+  bunnyLibraryId String?
+  bunnyVideoId   String?
 
   durationSeconds Int?
   order           Int
-  isPreview       Boolean          @default(false)
+  isPreview       Boolean @default(false)
 
   section         CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   progressRecords LessonProgress[]
 
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([sectionId, order])
   @@index([sectionId])
 }
 
 model CourseAccess {
-  id          String      @id @default(cuid())
-  userId      String
-  courseId    String
-  paymentId   String?     @unique
-  grantedAt   DateTime    @default(now())
-  expiresAt   DateTime?
+  id        String    @id @default(cuid())
+  userId    String
+  courseId  String
+  paymentId String?   @unique
+  grantedAt DateTime  @default(now())
+  expiresAt DateTime?
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  payment     Payment?    @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
 
   @@unique([userId, courseId])
   @@index([userId])
@@ -402,24 +399,80 @@ model CourseAccess {
 }
 
 model LessonProgress {
-  id             String    @id @default(cuid())
-  userId         String
-  lessonId       String
+  id       String @id @default(cuid())
+  userId   String
+  lessonId String
 
   watchedSeconds Int       @default(0)
   completed      Boolean   @default(false)
   completedAt    DateTime?
   lastWatchedAt  DateTime?
 
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson         Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, lessonId])
   @@index([userId])
   @@index([lessonId])
 }
 
+model CourseCertificate {
+  id       String @id @default(cuid())
+  userId   String
+  courseId String
 
+  certificateNo String @unique
+
+  issuedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+enum CouponType {
+  PERCENT
+  FIXED
+}
+
+model Coupon {
+  id    String     @id @default(cuid())
+  code  String     @unique
+  type  CouponType
+  value Decimal    @db.Decimal(10, 2)
+
+  active    Boolean @default(true)
+  maxUses   Int?
+  usedCount Int     @default(0)
+
+  startsAt  DateTime?
+  expiresAt DateTime?
+
+  courseId String?
+  quizId   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usages CouponUsage[]
+}
+
+model CouponUsage {
+  id        String  @id @default(cuid())
+  couponId  String
+  userId    String
+  paymentId String?
+
+  usedAt DateTime @default(now())
+
+  coupon  Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([couponId])
+  @@index([userId])
+}

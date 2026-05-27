@@ -46,6 +46,13 @@ export default async function CourseDetailPage({
             orderBy: {
               order: "asc",
             },
+            include: {
+              progressRecords: {
+                where: {
+                  userId: user.id,
+                },
+              },
+            },
           },
         },
       },
@@ -71,6 +78,18 @@ export default async function CourseDetailPage({
 
   const hasAccess = !!access;
 
+  const allLessons = course.sections.flatMap((section) => section.lessons);
+  const totalLessons = allLessons.length;
+
+  const completedLessons = allLessons.filter((lesson) =>
+    lesson.progressRecords.some((progress) => progress.completed)
+  ).length;
+
+  const progressPercentage =
+    totalLessons === 0
+      ? 0
+      : Math.round((completedLessons / totalLessons) * 100);
+
   return (
     <section className="py-8">
       <div className="mb-8">
@@ -81,10 +100,44 @@ export default async function CourseDetailPage({
         )}
 
         {hasAccess && (
-          <p className="mt-3 inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-            You have access to this course
-          </p>
+          <div className="mt-5 rounded-2xl border border-green-200 bg-green-50 p-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+                You have access to this course
+              </p>
+
+              <p className="text-sm font-medium text-green-700">
+                {completedLessons} of {totalLessons} lessons completed
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <div className="mb-2 flex justify-between text-sm text-green-800">
+                <span>Course Progress</span>
+                <span>{progressPercentage}%</span>
+              </div>
+
+              <div className="h-3 w-full rounded-full bg-green-100">
+                <div
+                  className="h-3 rounded-full bg-green-600 transition-all"
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
+            </div>
+          </div>
         )}
+
+
+        {hasAccess && progressPercentage === 100 && (
+          <Link
+            href={`/api/certificates/course/${course.id}`}
+            className="mt-4 inline-flex rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+          >
+            Download Certificate
+          </Link>
+        )}
+
+
       </div>
 
       {course.sections.length === 0 ? (
@@ -114,30 +167,49 @@ export default async function CourseDetailPage({
                 <ul className="mt-4 space-y-3">
                   {section.lessons.map((lesson) => {
                     const canViewLesson = hasAccess || lesson.isPreview;
+                    const isCompleted = lesson.progressRecords.some(
+                      (progress) => progress.completed
+                    );
 
                     return (
                       <li
                         key={lesson.id}
-                        className="flex items-center justify-between rounded-xl border border-gray-100 p-4"
+                        className={`flex items-center justify-between rounded-xl border p-4 ${
+                          isCompleted
+                            ? "border-green-200 bg-green-50"
+                            : "border-gray-100 bg-white"
+                        }`}
                       >
                         <div>
-                          <p className="font-medium text-gray-900">
-                            {lesson.title}
-                          </p>
-
-                          {lesson.isPreview && (
-                            <p className="mt-1 text-xs text-blue-600">
-                              Preview lesson
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="font-medium text-gray-900">
+                              {lesson.title}
                             </p>
-                          )}
+
+                            {isCompleted && (
+                              <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                                Completed
+                              </span>
+                            )}
+
+                            {lesson.isPreview && (
+                              <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+                                Preview
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         {canViewLesson ? (
                           <Link
                             href={`/dashboard/courses/${course.slug}/lessons/${lesson.slug}`}
-                            className="rounded-lg bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+                            className={`rounded-lg px-4 py-2 text-sm text-white ${
+                              isCompleted
+                                ? "bg-green-600 hover:bg-green-700"
+                                : "bg-black hover:bg-gray-800"
+                            }`}
                           >
-                            Watch
+                            {isCompleted ? "Review" : "Watch"}
                           </Link>
                         ) : (
                           <span className="rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-400">
