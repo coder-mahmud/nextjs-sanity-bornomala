@@ -107,3 +107,13 @@ export type LessonProgress = Prisma.LessonProgressModel
  * 
  */
 export type CourseCertificate = Prisma.CourseCertificateModel
+/**
+ * Model Coupon
+ * 
+ */
+export type Coupon = Prisma.CouponModel
+/**
+ * Model CouponUsage
+ * 
+ */
+export type CouponUsage = Prisma.CouponUsageModel

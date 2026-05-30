@@ -54,3 +54,11 @@ export const AttemptStatus = {
 } as const
 
 export type AttemptStatus = (typeof AttemptStatus)[keyof typeof AttemptStatus]
+
+
+export const CouponType = {
+  PERCENT: 'PERCENT',
+  FIXED: 'FIXED'
+} as const
+
+export type CouponType = (typeof CouponType)[keyof typeof CouponType]

@@ -31,6 +31,11 @@ const menuItems = [
     href: "/admin/payments",
     icon: ShoppingCart,
   },
+  {
+    label: "Coupons",
+    href: "/admin/coupons",
+    icon: ShoppingCart,
+  },
   // {
   //   label: "Products",
   //   href: "/admin/products",

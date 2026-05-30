@@ -9,6 +9,105 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-04-22.dahlia",
 });
 
+type CouponResult = {
+  couponId: string | null;
+  couponCode: string | null;
+  originalAmount: number;
+  finalAmount: number;
+  discountAmount: number;
+};
+
+function calculateFinalAmount({
+  originalAmount,
+  couponType,
+  couponValue,
+}: {
+  originalAmount: number;
+  couponType: "PERCENT" | "FIXED";
+  couponValue: number;
+}) {
+  if (couponType === "PERCENT") {
+    const discount = originalAmount * (couponValue / 100);
+    return Math.max(0, originalAmount - discount);
+  }
+
+  return Math.max(0, originalAmount - couponValue);
+}
+
+async function applyCoupon({
+  couponCode,
+  originalAmount,
+  courseId,
+  quizId,
+}: {
+  couponCode?: string;
+  originalAmount: number;
+  courseId?: string;
+  quizId?: string;
+}): Promise<CouponResult> {
+  if (!couponCode || couponCode.trim() === "") {
+    return {
+      couponId: null,
+      couponCode: null,
+      originalAmount,
+      finalAmount: originalAmount,
+      discountAmount: 0,
+    };
+  }
+
+  const normalizedCode = couponCode.trim().toUpperCase();
+
+  const coupon = await prisma.coupon.findUnique({
+    where: {
+      code: normalizedCode,
+    },
+  });
+
+  if (!coupon) {
+    throw new Error("Invalid coupon code");
+  }
+
+  if (!coupon.active) {
+    throw new Error("This coupon is not active");
+  }
+
+  const now = new Date();
+
+  if (coupon.startsAt && coupon.startsAt > now) {
+    throw new Error("This coupon is not active yet");
+  }
+
+  if (coupon.expiresAt && coupon.expiresAt < now) {
+    throw new Error("This coupon has expired");
+  }
+
+  if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
+    throw new Error("This coupon has reached its usage limit");
+  }
+
+  if (coupon.courseId && coupon.courseId !== courseId) {
+    throw new Error("This coupon is not valid for this course");
+  }
+
+  if (coupon.quizId && coupon.quizId !== quizId) {
+    throw new Error("This coupon is not valid for this quiz");
+  }
+
+  const finalAmount = calculateFinalAmount({
+    originalAmount,
+    couponType: coupon.type,
+    couponValue: Number(coupon.value),
+  });
+
+  return {
+    couponId: coupon.id,
+    couponCode: coupon.code,
+    originalAmount,
+    finalAmount,
+    discountAmount: originalAmount - finalAmount,
+  };
+}
+
 export async function POST(req: Request) {
   try {
     const session = await auth();
@@ -28,7 +127,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { courseId, quizId } = body;
+    const { courseId, quizId, couponCode } = body;
 
     if (!courseId && !quizId) {
       return NextResponse.json(
@@ -68,6 +167,19 @@ export async function POST(req: Request) {
         });
       }
 
+      const couponResult = await applyCoupon({
+        couponCode,
+        originalAmount: Number(course.price),
+        courseId: course.id,
+      });
+
+      if (couponResult.finalAmount <= 0) {
+        return NextResponse.json(
+          { error: "100% discount coupons are not supported yet" },
+          { status: 400 }
+        );
+      }
+
       const checkoutSession = await stripe.checkout.sessions.create({
         mode: "payment",
         customer_email: user.email,
@@ -78,7 +190,7 @@ export async function POST(req: Request) {
               product_data: {
                 name: course.title,
               },
-              unit_amount: Math.round(Number(course.price) * 100),
+              unit_amount: Math.round(couponResult.finalAmount * 100),
             },
             quantity: 1,
           },
@@ -88,6 +200,11 @@ export async function POST(req: Request) {
         metadata: {
           type: "course",
           courseId: course.id,
+          couponId: couponResult.couponId || "",
+          couponCode: couponResult.couponCode || "",
+          originalAmount: couponResult.originalAmount.toString(),
+          finalAmount: couponResult.finalAmount.toString(),
+          discountAmount: couponResult.discountAmount.toString(),
         },
       });
 
@@ -123,6 +240,19 @@ export async function POST(req: Request) {
         });
       }
 
+      const couponResult = await applyCoupon({
+        couponCode,
+        originalAmount: Number(quiz.price),
+        quizId: quiz.id,
+      });
+
+      if (couponResult.finalAmount <= 0) {
+        return NextResponse.json(
+          { error: "100% discount coupons are not supported yet" },
+          { status: 400 }
+        );
+      }
+
       const checkoutSession = await stripe.checkout.sessions.create({
         mode: "payment",
         customer_email: user.email,
@@ -133,16 +263,21 @@ export async function POST(req: Request) {
               product_data: {
                 name: quiz.title,
               },
-              unit_amount: Math.round(Number(quiz.price) * 100),
+              unit_amount: Math.round(couponResult.finalAmount * 100),
             },
             quantity: 1,
           },
         ],
-        success_url: `${baseUrl}/payment/success?course=${quiz.slug}`,
+        success_url: `${baseUrl}/payment/success?quiz=${quiz.slug}`,
         cancel_url: `${baseUrl}/payment/failed?cancel=1`,
         metadata: {
           type: "quiz",
           quizId: quiz.id,
+          couponId: couponResult.couponId || "",
+          couponCode: couponResult.couponCode || "",
+          originalAmount: couponResult.originalAmount.toString(),
+          finalAmount: couponResult.finalAmount.toString(),
+          discountAmount: couponResult.discountAmount.toString(),
         },
       });
 

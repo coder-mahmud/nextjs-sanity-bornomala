@@ -26,7 +26,17 @@ export default async function CoursesPage() {
     return (
       <section className="py-8">
         <h1 className="text-2xl font-bold mb-4">My Courses</h1>
-        <p className="text-gray-500">You have not enrolled in any courses yet.</p>
+        <div className="rounded-2xl border border-dashed border-gray-200 p-8 text-center">
+          <p className="text-sm text-gray-500">
+            You do not have access to any courses yet.
+          </p>
+          <Link
+            href="/video-courses"
+            className="mt-4 inline-block rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+          >
+            Browse Courses
+          </Link>
+        </div>
       </section>
     );
   }

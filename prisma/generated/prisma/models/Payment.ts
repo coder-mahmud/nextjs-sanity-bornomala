@@ -305,6 +305,7 @@ export type PaymentWhereInput = {
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
   quizAccess?: Prisma.XOR<Prisma.QuizAccessNullableScalarRelationFilter, Prisma.QuizAccessWhereInput> | null
   courseAccess?: Prisma.XOR<Prisma.CourseAccessNullableScalarRelationFilter, Prisma.CourseAccessWhereInput> | null
+  couponUsages?: Prisma.CouponUsageListRelationFilter
 }
 
 export type PaymentOrderByWithRelationInput = {
@@ -329,6 +330,7 @@ export type PaymentOrderByWithRelationInput = {
   course?: Prisma.CourseOrderByWithRelationInput
   quizAccess?: Prisma.QuizAccessOrderByWithRelationInput
   courseAccess?: Prisma.CourseAccessOrderByWithRelationInput
+  couponUsages?: Prisma.CouponUsageOrderByRelationAggregateInput
 }
 
 export type PaymentWhereUniqueInput = Prisma.AtLeast<{
@@ -356,6 +358,7 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
   quizAccess?: Prisma.XOR<Prisma.QuizAccessNullableScalarRelationFilter, Prisma.QuizAccessWhereInput> | null
   courseAccess?: Prisma.XOR<Prisma.CourseAccessNullableScalarRelationFilter, Prisma.CourseAccessWhereInput> | null
+  couponUsages?: Prisma.CouponUsageListRelationFilter
 }, "id" | "stripeSessionId" | "stripeIntentId" | "paypalOrderId" | "paypalCaptureId">
 
 export type PaymentOrderByWithAggregationInput = {
@@ -423,6 +426,7 @@ export type PaymentCreateInput = {
   course?: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   quizAccess?: Prisma.QuizAccessCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateInput = {
@@ -444,6 +448,7 @@ export type PaymentUncheckedCreateInput = {
   updatedAt?: Date | string
   quizAccess?: Prisma.QuizAccessUncheckedCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessUncheckedCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUpdateInput = {
@@ -465,6 +470,7 @@ export type PaymentUpdateInput = {
   course?: Prisma.CourseUpdateOneWithoutPaymentsNestedInput
   quizAccess?: Prisma.QuizAccessUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateInput = {
@@ -486,6 +492,7 @@ export type PaymentUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   quizAccess?: Prisma.QuizAccessUncheckedUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentCreateManyInput = {
@@ -782,6 +789,22 @@ export type PaymentUpdateOneWithoutCourseAccessNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentUpdateToOneWithWhereWithoutCourseAccessInput, Prisma.PaymentUpdateWithoutCourseAccessInput>, Prisma.PaymentUncheckedUpdateWithoutCourseAccessInput>
 }
 
+export type PaymentCreateNestedOneWithoutCouponUsagesInput = {
+  create?: Prisma.XOR<Prisma.PaymentCreateWithoutCouponUsagesInput, Prisma.PaymentUncheckedCreateWithoutCouponUsagesInput>
+  connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutCouponUsagesInput
+  connect?: Prisma.PaymentWhereUniqueInput
+}
+
+export type PaymentUpdateOneWithoutCouponUsagesNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentCreateWithoutCouponUsagesInput, Prisma.PaymentUncheckedCreateWithoutCouponUsagesInput>
+  connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutCouponUsagesInput
+  upsert?: Prisma.PaymentUpsertWithoutCouponUsagesInput
+  disconnect?: Prisma.PaymentWhereInput | boolean
+  delete?: Prisma.PaymentWhereInput | boolean
+  connect?: Prisma.PaymentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentUpdateToOneWithWhereWithoutCouponUsagesInput, Prisma.PaymentUpdateWithoutCouponUsagesInput>, Prisma.PaymentUncheckedUpdateWithoutCouponUsagesInput>
+}
+
 export type PaymentCreateWithoutUserInput = {
   id?: string
   provider?: string
@@ -800,6 +823,7 @@ export type PaymentCreateWithoutUserInput = {
   course?: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   quizAccess?: Prisma.QuizAccessCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutUserInput = {
@@ -820,6 +844,7 @@ export type PaymentUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   quizAccess?: Prisma.QuizAccessUncheckedCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessUncheckedCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutUserInput = {
@@ -888,6 +913,7 @@ export type PaymentCreateWithoutQuizInput = {
   course?: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   quizAccess?: Prisma.QuizAccessCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutQuizInput = {
@@ -908,6 +934,7 @@ export type PaymentUncheckedCreateWithoutQuizInput = {
   updatedAt?: Date | string
   quizAccess?: Prisma.QuizAccessUncheckedCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessUncheckedCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutQuizInput = {
@@ -954,6 +981,7 @@ export type PaymentCreateWithoutQuizAccessInput = {
   quiz?: Prisma.QuizCreateNestedOneWithoutPaymentsInput
   course?: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   courseAccess?: Prisma.CourseAccessCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutQuizAccessInput = {
@@ -974,6 +1002,7 @@ export type PaymentUncheckedCreateWithoutQuizAccessInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   courseAccess?: Prisma.CourseAccessUncheckedCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutQuizAccessInput = {
@@ -1010,6 +1039,7 @@ export type PaymentUpdateWithoutQuizAccessInput = {
   quiz?: Prisma.QuizUpdateOneWithoutPaymentsNestedInput
   course?: Prisma.CourseUpdateOneWithoutPaymentsNestedInput
   courseAccess?: Prisma.CourseAccessUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutQuizAccessInput = {
@@ -1030,6 +1060,7 @@ export type PaymentUncheckedUpdateWithoutQuizAccessInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   courseAccess?: Prisma.CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentCreateWithoutCourseInput = {
@@ -1050,6 +1081,7 @@ export type PaymentCreateWithoutCourseInput = {
   quiz?: Prisma.QuizCreateNestedOneWithoutPaymentsInput
   quizAccess?: Prisma.QuizAccessCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutCourseInput = {
@@ -1070,6 +1102,7 @@ export type PaymentUncheckedCreateWithoutCourseInput = {
   updatedAt?: Date | string
   quizAccess?: Prisma.QuizAccessUncheckedCreateNestedOneWithoutPaymentInput
   courseAccess?: Prisma.CourseAccessUncheckedCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutCourseInput = {
@@ -1116,6 +1149,7 @@ export type PaymentCreateWithoutCourseAccessInput = {
   quiz?: Prisma.QuizCreateNestedOneWithoutPaymentsInput
   course?: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   quizAccess?: Prisma.QuizAccessCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutCourseAccessInput = {
@@ -1136,6 +1170,7 @@ export type PaymentUncheckedCreateWithoutCourseAccessInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   quizAccess?: Prisma.QuizAccessUncheckedCreateNestedOneWithoutPaymentInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutCourseAccessInput = {
@@ -1172,6 +1207,7 @@ export type PaymentUpdateWithoutCourseAccessInput = {
   quiz?: Prisma.QuizUpdateOneWithoutPaymentsNestedInput
   course?: Prisma.CourseUpdateOneWithoutPaymentsNestedInput
   quizAccess?: Prisma.QuizAccessUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutCourseAccessInput = {
@@ -1192,6 +1228,107 @@ export type PaymentUncheckedUpdateWithoutCourseAccessInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   quizAccess?: Prisma.QuizAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutPaymentNestedInput
+}
+
+export type PaymentCreateWithoutCouponUsagesInput = {
+  id?: string
+  provider?: string
+  stripeSessionId?: string | null
+  stripeIntentId?: string | null
+  paypalOrderId?: string | null
+  paypalCaptureId?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutPaymentsInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutPaymentsInput
+  course?: Prisma.CourseCreateNestedOneWithoutPaymentsInput
+  quizAccess?: Prisma.QuizAccessCreateNestedOneWithoutPaymentInput
+  courseAccess?: Prisma.CourseAccessCreateNestedOneWithoutPaymentInput
+}
+
+export type PaymentUncheckedCreateWithoutCouponUsagesInput = {
+  id?: string
+  userId: string
+  quizId?: string | null
+  courseId?: string | null
+  provider?: string
+  stripeSessionId?: string | null
+  stripeIntentId?: string | null
+  paypalOrderId?: string | null
+  paypalCaptureId?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  quizAccess?: Prisma.QuizAccessUncheckedCreateNestedOneWithoutPaymentInput
+  courseAccess?: Prisma.CourseAccessUncheckedCreateNestedOneWithoutPaymentInput
+}
+
+export type PaymentCreateOrConnectWithoutCouponUsagesInput = {
+  where: Prisma.PaymentWhereUniqueInput
+  create: Prisma.XOR<Prisma.PaymentCreateWithoutCouponUsagesInput, Prisma.PaymentUncheckedCreateWithoutCouponUsagesInput>
+}
+
+export type PaymentUpsertWithoutCouponUsagesInput = {
+  update: Prisma.XOR<Prisma.PaymentUpdateWithoutCouponUsagesInput, Prisma.PaymentUncheckedUpdateWithoutCouponUsagesInput>
+  create: Prisma.XOR<Prisma.PaymentCreateWithoutCouponUsagesInput, Prisma.PaymentUncheckedCreateWithoutCouponUsagesInput>
+  where?: Prisma.PaymentWhereInput
+}
+
+export type PaymentUpdateToOneWithWhereWithoutCouponUsagesInput = {
+  where?: Prisma.PaymentWhereInput
+  data: Prisma.XOR<Prisma.PaymentUpdateWithoutCouponUsagesInput, Prisma.PaymentUncheckedUpdateWithoutCouponUsagesInput>
+}
+
+export type PaymentUpdateWithoutCouponUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeIntentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paypalOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paypalCaptureId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutPaymentsNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutPaymentsNestedInput
+  course?: Prisma.CourseUpdateOneWithoutPaymentsNestedInput
+  quizAccess?: Prisma.QuizAccessUpdateOneWithoutPaymentNestedInput
+  courseAccess?: Prisma.CourseAccessUpdateOneWithoutPaymentNestedInput
+}
+
+export type PaymentUncheckedUpdateWithoutCouponUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeIntentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paypalOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paypalCaptureId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizAccess?: Prisma.QuizAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  courseAccess?: Prisma.CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput
 }
 
 export type PaymentCreateManyUserInput = {
@@ -1230,6 +1367,7 @@ export type PaymentUpdateWithoutUserInput = {
   course?: Prisma.CourseUpdateOneWithoutPaymentsNestedInput
   quizAccess?: Prisma.QuizAccessUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutUserInput = {
@@ -1250,6 +1388,7 @@ export type PaymentUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   quizAccess?: Prisma.QuizAccessUncheckedUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutUserInput = {
@@ -1306,6 +1445,7 @@ export type PaymentUpdateWithoutQuizInput = {
   course?: Prisma.CourseUpdateOneWithoutPaymentsNestedInput
   quizAccess?: Prisma.QuizAccessUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutQuizInput = {
@@ -1326,6 +1466,7 @@ export type PaymentUncheckedUpdateWithoutQuizInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   quizAccess?: Prisma.QuizAccessUncheckedUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutQuizInput = {
@@ -1382,6 +1523,7 @@ export type PaymentUpdateWithoutCourseInput = {
   quiz?: Prisma.QuizUpdateOneWithoutPaymentsNestedInput
   quizAccess?: Prisma.QuizAccessUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutCourseInput = {
@@ -1402,6 +1544,7 @@ export type PaymentUncheckedUpdateWithoutCourseInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   quizAccess?: Prisma.QuizAccessUncheckedUpdateOneWithoutPaymentNestedInput
   courseAccess?: Prisma.CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutCourseInput = {
@@ -1422,6 +1565,35 @@ export type PaymentUncheckedUpdateManyWithoutCourseInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type PaymentCountOutputType
+ */
+
+export type PaymentCountOutputType = {
+  couponUsages: number
+}
+
+export type PaymentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  couponUsages?: boolean | PaymentCountOutputTypeCountCouponUsagesArgs
+}
+
+/**
+ * PaymentCountOutputType without action
+ */
+export type PaymentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentCountOutputType
+   */
+  select?: Prisma.PaymentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PaymentCountOutputType without action
+ */
+export type PaymentCountOutputTypeCountCouponUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CouponUsageWhereInput
+}
 
 
 export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1446,6 +1618,8 @@ export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   course?: boolean | Prisma.Payment$courseArgs<ExtArgs>
   quizAccess?: boolean | Prisma.Payment$quizAccessArgs<ExtArgs>
   courseAccess?: boolean | Prisma.Payment$courseAccessArgs<ExtArgs>
+  couponUsages?: boolean | Prisma.Payment$couponUsagesArgs<ExtArgs>
+  _count?: boolean | Prisma.PaymentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["payment"]>
 
 export type PaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1518,6 +1692,8 @@ export type PaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   course?: boolean | Prisma.Payment$courseArgs<ExtArgs>
   quizAccess?: boolean | Prisma.Payment$quizAccessArgs<ExtArgs>
   courseAccess?: boolean | Prisma.Payment$courseAccessArgs<ExtArgs>
+  couponUsages?: boolean | Prisma.Payment$couponUsagesArgs<ExtArgs>
+  _count?: boolean | Prisma.PaymentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PaymentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1538,6 +1714,7 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     course: Prisma.$CoursePayload<ExtArgs> | null
     quizAccess: Prisma.$QuizAccessPayload<ExtArgs> | null
     courseAccess: Prisma.$CourseAccessPayload<ExtArgs> | null
+    couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1955,6 +2132,7 @@ export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.
   course<T extends Prisma.Payment$courseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$courseArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   quizAccess<T extends Prisma.Payment$quizAccessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$quizAccessArgs<ExtArgs>>): Prisma.Prisma__QuizAccessClient<runtime.Types.Result.GetResult<Prisma.$QuizAccessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   courseAccess<T extends Prisma.Payment$courseAccessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$courseAccessArgs<ExtArgs>>): Prisma.Prisma__CourseAccessClient<runtime.Types.Result.GetResult<Prisma.$CourseAccessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  couponUsages<T extends Prisma.Payment$couponUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2469,6 +2647,30 @@ export type Payment$courseAccessArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.CourseAccessInclude<ExtArgs> | null
   where?: Prisma.CourseAccessWhereInput
+}
+
+/**
+ * Payment.couponUsages
+ */
+export type Payment$couponUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CouponUsage
+   */
+  select?: Prisma.CouponUsageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CouponUsage
+   */
+  omit?: Prisma.CouponUsageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponUsageInclude<ExtArgs> | null
+  where?: Prisma.CouponUsageWhereInput
+  orderBy?: Prisma.CouponUsageOrderByWithRelationInput | Prisma.CouponUsageOrderByWithRelationInput[]
+  cursor?: Prisma.CouponUsageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CouponUsageScalarFieldEnum | Prisma.CouponUsageScalarFieldEnum[]
 }
 
 /**

@@ -223,6 +223,7 @@ export type UserWhereInput = {
   courseAccesses?: Prisma.CourseAccessListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   courseCertificates?: Prisma.CourseCertificateListRelationFilter
+  couponUsages?: Prisma.CouponUsageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -244,6 +245,7 @@ export type UserOrderByWithRelationInput = {
   courseAccesses?: Prisma.CourseAccessOrderByRelationAggregateInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
   courseCertificates?: Prisma.CourseCertificateOrderByRelationAggregateInput
+  couponUsages?: Prisma.CouponUsageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -268,6 +270,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   courseAccesses?: Prisma.CourseAccessListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   courseCertificates?: Prisma.CourseCertificateListRelationFilter
+  couponUsages?: Prisma.CouponUsageListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -319,6 +322,7 @@ export type UserCreateInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -340,6 +344,7 @@ export type UserUncheckedCreateInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -361,6 +366,7 @@ export type UserUpdateInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -382,6 +388,7 @@ export type UserUncheckedUpdateInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -607,6 +614,20 @@ export type UserUpdateOneRequiredWithoutCourseCertificatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCourseCertificatesInput, Prisma.UserUpdateWithoutCourseCertificatesInput>, Prisma.UserUncheckedUpdateWithoutCourseCertificatesInput>
 }
 
+export type UserCreateNestedOneWithoutCouponUsagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponUsagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCouponUsagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponUsagesInput
+  upsert?: Prisma.UserUpsertWithoutCouponUsagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCouponUsagesInput, Prisma.UserUpdateWithoutCouponUsagesInput>, Prisma.UserUncheckedUpdateWithoutCouponUsagesInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -625,6 +646,7 @@ export type UserCreateWithoutAccountsInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -645,6 +667,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -681,6 +704,7 @@ export type UserUpdateWithoutAccountsInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -701,6 +725,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -721,6 +746,7 @@ export type UserCreateWithoutSessionsInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -741,6 +767,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -777,6 +804,7 @@ export type UserUpdateWithoutSessionsInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -797,6 +825,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuthenticatorsInput = {
@@ -817,6 +846,7 @@ export type UserCreateWithoutAuthenticatorsInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthenticatorsInput = {
@@ -837,6 +867,7 @@ export type UserUncheckedCreateWithoutAuthenticatorsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthenticatorsInput = {
@@ -873,6 +904,7 @@ export type UserUpdateWithoutAuthenticatorsInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthenticatorsInput = {
@@ -893,6 +925,7 @@ export type UserUncheckedUpdateWithoutAuthenticatorsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -913,6 +946,7 @@ export type UserCreateWithoutPaymentsInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -933,6 +967,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -969,6 +1004,7 @@ export type UserUpdateWithoutPaymentsInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -989,6 +1025,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuizAccessesInput = {
@@ -1009,6 +1046,7 @@ export type UserCreateWithoutQuizAccessesInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuizAccessesInput = {
@@ -1029,6 +1067,7 @@ export type UserUncheckedCreateWithoutQuizAccessesInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuizAccessesInput = {
@@ -1065,6 +1104,7 @@ export type UserUpdateWithoutQuizAccessesInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuizAccessesInput = {
@@ -1085,6 +1125,7 @@ export type UserUncheckedUpdateWithoutQuizAccessesInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuizAttemptsInput = {
@@ -1105,6 +1146,7 @@ export type UserCreateWithoutQuizAttemptsInput = {
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuizAttemptsInput = {
@@ -1125,6 +1167,7 @@ export type UserUncheckedCreateWithoutQuizAttemptsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuizAttemptsInput = {
@@ -1161,6 +1204,7 @@ export type UserUpdateWithoutQuizAttemptsInput = {
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuizAttemptsInput = {
@@ -1181,6 +1225,7 @@ export type UserUncheckedUpdateWithoutQuizAttemptsInput = {
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCourseAccessesInput = {
@@ -1201,6 +1246,7 @@ export type UserCreateWithoutCourseAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCourseAccessesInput = {
@@ -1221,6 +1267,7 @@ export type UserUncheckedCreateWithoutCourseAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCourseAccessesInput = {
@@ -1257,6 +1304,7 @@ export type UserUpdateWithoutCourseAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseAccessesInput = {
@@ -1277,6 +1325,7 @@ export type UserUncheckedUpdateWithoutCourseAccessesInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLessonProgressInput = {
@@ -1297,6 +1346,7 @@ export type UserCreateWithoutLessonProgressInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLessonProgressInput = {
@@ -1317,6 +1367,7 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLessonProgressInput = {
@@ -1353,6 +1404,7 @@ export type UserUpdateWithoutLessonProgressInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonProgressInput = {
@@ -1373,6 +1425,7 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCourseCertificatesInput = {
@@ -1393,6 +1446,7 @@ export type UserCreateWithoutCourseCertificatesInput = {
   quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCourseCertificatesInput = {
@@ -1413,6 +1467,7 @@ export type UserUncheckedCreateWithoutCourseCertificatesInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
   courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCourseCertificatesInput = {
@@ -1449,6 +1504,7 @@ export type UserUpdateWithoutCourseCertificatesInput = {
   quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseCertificatesInput = {
@@ -1469,6 +1525,107 @@ export type UserUncheckedUpdateWithoutCourseCertificatesInput = {
   quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
   courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCouponUsagesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  quizAccesses?: Prisma.QuizAccessCreateNestedManyWithoutUserInput
+  quizAttempts?: Prisma.QuizAttemptCreateNestedManyWithoutUserInput
+  courseAccesses?: Prisma.CourseAccessCreateNestedManyWithoutUserInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCouponUsagesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  quizAccesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutUserInput
+  quizAttempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutUserInput
+  courseAccesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutUserInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCouponUsagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+}
+
+export type UserUpsertWithoutCouponUsagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCouponUsagesInput, Prisma.UserUncheckedUpdateWithoutCouponUsagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCouponUsagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCouponUsagesInput, Prisma.UserUncheckedUpdateWithoutCouponUsagesInput>
+}
+
+export type UserUpdateWithoutCouponUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  quizAccesses?: Prisma.QuizAccessUpdateManyWithoutUserNestedInput
+  quizAttempts?: Prisma.QuizAttemptUpdateManyWithoutUserNestedInput
+  courseAccesses?: Prisma.CourseAccessUpdateManyWithoutUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCouponUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  quizAccesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutUserNestedInput
+  quizAttempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutUserNestedInput
+  courseAccesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1486,6 +1643,7 @@ export type UserCountOutputType = {
   courseAccesses: number
   lessonProgress: number
   courseCertificates: number
+  couponUsages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1498,6 +1656,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   courseAccesses?: boolean | UserCountOutputTypeCountCourseAccessesArgs
   lessonProgress?: boolean | UserCountOutputTypeCountLessonProgressArgs
   courseCertificates?: boolean | UserCountOutputTypeCountCourseCertificatesArgs
+  couponUsages?: boolean | UserCountOutputTypeCountCouponUsagesArgs
 }
 
 /**
@@ -1573,6 +1732,13 @@ export type UserCountOutputTypeCountCourseCertificatesArgs<ExtArgs extends runti
   where?: Prisma.CourseCertificateWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCouponUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CouponUsageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1593,6 +1759,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   courseAccesses?: boolean | Prisma.User$courseAccessesArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
   courseCertificates?: boolean | Prisma.User$courseCertificatesArgs<ExtArgs>
+  couponUsages?: boolean | Prisma.User$couponUsagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1643,6 +1810,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   courseAccesses?: boolean | Prisma.User$courseAccessesArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
   courseCertificates?: boolean | Prisma.User$courseCertificatesArgs<ExtArgs>
+  couponUsages?: boolean | Prisma.User$couponUsagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1660,6 +1828,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     courseAccesses: Prisma.$CourseAccessPayload<ExtArgs>[]
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
     courseCertificates: Prisma.$CourseCertificatePayload<ExtArgs>[]
+    couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2074,6 +2243,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   courseAccesses<T extends Prisma.User$courseAccessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseAccessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonProgress<T extends Prisma.User$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   courseCertificates<T extends Prisma.User$courseCertificatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseCertificatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  couponUsages<T extends Prisma.User$couponUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2713,6 +2883,30 @@ export type User$courseCertificatesArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.CourseCertificateScalarFieldEnum | Prisma.CourseCertificateScalarFieldEnum[]
+}
+
+/**
+ * User.couponUsages
+ */
+export type User$couponUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CouponUsage
+   */
+  select?: Prisma.CouponUsageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CouponUsage
+   */
+  omit?: Prisma.CouponUsageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponUsageInclude<ExtArgs> | null
+  where?: Prisma.CouponUsageWhereInput
+  orderBy?: Prisma.CouponUsageOrderByWithRelationInput | Prisma.CouponUsageOrderByWithRelationInput[]
+  cursor?: Prisma.CouponUsageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CouponUsageScalarFieldEnum | Prisma.CouponUsageScalarFieldEnum[]
 }
 
 /**

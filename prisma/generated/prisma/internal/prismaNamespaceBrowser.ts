@@ -66,7 +66,9 @@ export const ModelName = {
   Lesson: 'Lesson',
   CourseAccess: 'CourseAccess',
   LessonProgress: 'LessonProgress',
-  CourseCertificate: 'CourseCertificate'
+  CourseCertificate: 'CourseCertificate',
+  Coupon: 'Coupon',
+  CouponUsage: 'CouponUsage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -352,6 +354,36 @@ export const CourseCertificateScalarFieldEnum = {
 } as const
 
 export type CourseCertificateScalarFieldEnum = (typeof CourseCertificateScalarFieldEnum)[keyof typeof CourseCertificateScalarFieldEnum]
+
+
+export const CouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  type: 'type',
+  value: 'value',
+  active: 'active',
+  maxUses: 'maxUses',
+  usedCount: 'usedCount',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  courseId: 'courseId',
+  quizId: 'quizId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof CouponScalarFieldEnum]
+
+
+export const CouponUsageScalarFieldEnum = {
+  id: 'id',
+  couponId: 'couponId',
+  userId: 'userId',
+  paymentId: 'paymentId',
+  usedAt: 'usedAt'
+} as const
+
+export type CouponUsageScalarFieldEnum = (typeof CouponUsageScalarFieldEnum)[keyof typeof CouponUsageScalarFieldEnum]
 
 
 export const SortOrder = {
