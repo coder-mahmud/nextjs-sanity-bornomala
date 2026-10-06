@@ -288,8 +288,8 @@ export type QuizAttemptWhereInput = {
   resultPublished?: Prisma.BoolFilter<"QuizAttempt"> | boolean
   createdAt?: Prisma.DateTimeFilter<"QuizAttempt"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"QuizAttempt"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   quiz?: Prisma.XOR<Prisma.QuizScalarRelationFilter, Prisma.QuizWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   answers?: Prisma.QuizAttemptAnswerListRelationFilter
 }
 
@@ -307,8 +307,8 @@ export type QuizAttemptOrderByWithRelationInput = {
   resultPublished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   quiz?: Prisma.QuizOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   answers?: Prisma.QuizAttemptAnswerOrderByRelationAggregateInput
 }
 
@@ -329,8 +329,8 @@ export type QuizAttemptWhereUniqueInput = Prisma.AtLeast<{
   resultPublished?: Prisma.BoolFilter<"QuizAttempt"> | boolean
   createdAt?: Prisma.DateTimeFilter<"QuizAttempt"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"QuizAttempt"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   quiz?: Prisma.XOR<Prisma.QuizScalarRelationFilter, Prisma.QuizWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   answers?: Prisma.QuizAttemptAnswerListRelationFilter
 }, "id">
 
@@ -386,8 +386,8 @@ export type QuizAttemptCreateInput = {
   resultPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutQuizAttemptsInput
   quiz: Prisma.QuizCreateNestedOneWithoutAttemptsInput
+  user: Prisma.UserCreateNestedOneWithoutQuizAttemptsInput
   answers?: Prisma.QuizAttemptAnswerCreateNestedManyWithoutAttemptInput
 }
 
@@ -420,8 +420,8 @@ export type QuizAttemptUpdateInput = {
   resultPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutQuizAttemptsNestedInput
   quiz?: Prisma.QuizUpdateOneRequiredWithoutAttemptsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutQuizAttemptsNestedInput
   answers?: Prisma.QuizAttemptAnswerUpdateManyWithoutAttemptNestedInput
 }
 
@@ -824,8 +824,8 @@ export type QuizAttemptCreateWithoutAnswersInput = {
   resultPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutQuizAttemptsInput
   quiz: Prisma.QuizCreateNestedOneWithoutAttemptsInput
+  user: Prisma.UserCreateNestedOneWithoutQuizAttemptsInput
 }
 
 export type QuizAttemptUncheckedCreateWithoutAnswersInput = {
@@ -872,8 +872,8 @@ export type QuizAttemptUpdateWithoutAnswersInput = {
   resultPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutQuizAttemptsNestedInput
   quiz?: Prisma.QuizUpdateOneRequiredWithoutAttemptsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutQuizAttemptsNestedInput
 }
 
 export type QuizAttemptUncheckedUpdateWithoutAnswersInput = {
@@ -1061,8 +1061,8 @@ export type QuizAttemptSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   resultPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   answers?: boolean | Prisma.QuizAttempt$answersArgs<ExtArgs>
   _count?: boolean | Prisma.QuizAttemptCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quizAttempt"]>
@@ -1081,8 +1081,8 @@ export type QuizAttemptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   resultPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quizAttempt"]>
 
 export type QuizAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1099,8 +1099,8 @@ export type QuizAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   resultPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quizAttempt"]>
 
 export type QuizAttemptSelectScalar = {
@@ -1121,25 +1121,25 @@ export type QuizAttemptSelectScalar = {
 
 export type QuizAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "quizId" | "status" | "startedAt" | "submittedAt" | "score" | "totalMarks" | "percentage" | "passed" | "resultPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["quizAttempt"]>
 export type QuizAttemptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   answers?: boolean | Prisma.QuizAttempt$answersArgs<ExtArgs>
   _count?: boolean | Prisma.QuizAttemptCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type QuizAttemptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type QuizAttemptIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $QuizAttemptPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "QuizAttempt"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     quiz: Prisma.$QuizPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
     answers: Prisma.$QuizAttemptAnswerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1550,8 +1550,8 @@ readonly fields: QuizAttemptFieldRefs;
  */
 export interface Prisma__QuizAttemptClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   quiz<T extends Prisma.QuizDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QuizDefaultArgs<ExtArgs>>): Prisma.Prisma__QuizClient<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   answers<T extends Prisma.QuizAttempt$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QuizAttempt$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizAttemptAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

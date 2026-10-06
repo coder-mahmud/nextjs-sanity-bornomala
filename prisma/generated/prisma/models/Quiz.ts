@@ -272,8 +272,8 @@ export type QuizWhereInput = {
   status?: Prisma.EnumQuizStatusFilter<"Quiz"> | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
-  questions?: Prisma.QuestionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  questions?: Prisma.QuestionListRelationFilter
   accesses?: Prisma.QuizAccessListRelationFilter
   attempts?: Prisma.QuizAttemptListRelationFilter
 }
@@ -290,8 +290,8 @@ export type QuizOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  questions?: Prisma.QuestionOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
+  questions?: Prisma.QuestionOrderByRelationAggregateInput
   accesses?: Prisma.QuizAccessOrderByRelationAggregateInput
   attempts?: Prisma.QuizAttemptOrderByRelationAggregateInput
 }
@@ -311,8 +311,8 @@ export type QuizWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumQuizStatusFilter<"Quiz"> | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
-  questions?: Prisma.QuestionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  questions?: Prisma.QuestionListRelationFilter
   accesses?: Prisma.QuizAccessListRelationFilter
   attempts?: Prisma.QuizAttemptListRelationFilter
 }, "id" | "slug">
@@ -365,8 +365,8 @@ export type QuizCreateInput = {
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptCreateNestedManyWithoutQuizInput
 }
@@ -383,8 +383,8 @@ export type QuizUncheckedCreateInput = {
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutQuizInput
 }
@@ -401,8 +401,8 @@ export type QuizUpdateInput = {
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUpdateManyWithoutQuizNestedInput
 }
@@ -419,8 +419,8 @@ export type QuizUncheckedUpdateInput = {
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutQuizNestedInput
 }
@@ -781,8 +781,8 @@ export type QuizCreateWithoutAccessesInput = {
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptCreateNestedManyWithoutQuizInput
 }
 
@@ -798,8 +798,8 @@ export type QuizUncheckedCreateWithoutAccessesInput = {
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutQuizInput
 }
 
@@ -831,8 +831,8 @@ export type QuizUpdateWithoutAccessesInput = {
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUpdateManyWithoutQuizNestedInput
 }
 
@@ -848,8 +848,8 @@ export type QuizUncheckedUpdateWithoutAccessesInput = {
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutQuizNestedInput
 }
 
@@ -865,8 +865,8 @@ export type QuizCreateWithoutAttemptsInput = {
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
 }
 
@@ -882,8 +882,8 @@ export type QuizUncheckedCreateWithoutAttemptsInput = {
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutQuizInput
 }
 
@@ -915,8 +915,8 @@ export type QuizUpdateWithoutAttemptsInput = {
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
 }
 
@@ -932,8 +932,8 @@ export type QuizUncheckedUpdateWithoutAttemptsInput = {
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutQuizNestedInput
 }
 
@@ -943,15 +943,15 @@ export type QuizUncheckedUpdateWithoutAttemptsInput = {
  */
 
 export type QuizCountOutputType = {
-  questions: number
   payments: number
+  questions: number
   accesses: number
   attempts: number
 }
 
 export type QuizCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  questions?: boolean | QuizCountOutputTypeCountQuestionsArgs
   payments?: boolean | QuizCountOutputTypeCountPaymentsArgs
+  questions?: boolean | QuizCountOutputTypeCountQuestionsArgs
   accesses?: boolean | QuizCountOutputTypeCountAccessesArgs
   attempts?: boolean | QuizCountOutputTypeCountAttemptsArgs
 }
@@ -969,15 +969,15 @@ export type QuizCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * QuizCountOutputType without action
  */
-export type QuizCountOutputTypeCountQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.QuestionWhereInput
+export type QuizCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
 }
 
 /**
  * QuizCountOutputType without action
  */
-export type QuizCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentWhereInput
+export type QuizCountOutputTypeCountQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuestionWhereInput
 }
 
 /**
@@ -1007,8 +1007,8 @@ export type QuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  questions?: boolean | Prisma.Quiz$questionsArgs<ExtArgs>
   payments?: boolean | Prisma.Quiz$paymentsArgs<ExtArgs>
+  questions?: boolean | Prisma.Quiz$questionsArgs<ExtArgs>
   accesses?: boolean | Prisma.Quiz$accessesArgs<ExtArgs>
   attempts?: boolean | Prisma.Quiz$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.QuizCountOutputTypeDefaultArgs<ExtArgs>
@@ -1058,8 +1058,8 @@ export type QuizSelectScalar = {
 
 export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "price" | "currency" | "durationMinutes" | "passingScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["quiz"]>
 export type QuizInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  questions?: boolean | Prisma.Quiz$questionsArgs<ExtArgs>
   payments?: boolean | Prisma.Quiz$paymentsArgs<ExtArgs>
+  questions?: boolean | Prisma.Quiz$questionsArgs<ExtArgs>
   accesses?: boolean | Prisma.Quiz$accessesArgs<ExtArgs>
   attempts?: boolean | Prisma.Quiz$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.QuizCountOutputTypeDefaultArgs<ExtArgs>
@@ -1070,8 +1070,8 @@ export type QuizIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $QuizPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Quiz"
   objects: {
-    questions: Prisma.$QuestionPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
+    questions: Prisma.$QuestionPayload<ExtArgs>[]
     accesses: Prisma.$QuizAccessPayload<ExtArgs>[]
     attempts: Prisma.$QuizAttemptPayload<ExtArgs>[]
   }
@@ -1481,8 +1481,8 @@ readonly fields: QuizFieldRefs;
  */
 export interface Prisma__QuizClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  questions<T extends Prisma.Quiz$questionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Quiz$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  questions<T extends Prisma.Quiz$questionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accesses<T extends Prisma.Quiz$accessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$accessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attempts<T extends Prisma.Quiz$attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1913,30 +1913,6 @@ export type QuizDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Quiz.questions
- */
-export type Quiz$questionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Question
-   */
-  select?: Prisma.QuestionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Question
-   */
-  omit?: Prisma.QuestionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.QuestionInclude<ExtArgs> | null
-  where?: Prisma.QuestionWhereInput
-  orderBy?: Prisma.QuestionOrderByWithRelationInput | Prisma.QuestionOrderByWithRelationInput[]
-  cursor?: Prisma.QuestionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.QuestionScalarFieldEnum | Prisma.QuestionScalarFieldEnum[]
-}
-
-/**
  * Quiz.payments
  */
 export type Quiz$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1958,6 +1934,30 @@ export type Quiz$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
+}
+
+/**
+ * Quiz.questions
+ */
+export type Quiz$questionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Question
+   */
+  select?: Prisma.QuestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Question
+   */
+  omit?: Prisma.QuestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuestionInclude<ExtArgs> | null
+  where?: Prisma.QuestionWhereInput
+  orderBy?: Prisma.QuestionOrderByWithRelationInput | Prisma.QuestionOrderByWithRelationInput[]
+  cursor?: Prisma.QuestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuestionScalarFieldEnum | Prisma.QuestionScalarFieldEnum[]
 }
 
 /**

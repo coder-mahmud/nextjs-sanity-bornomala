@@ -93,10 +93,10 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  password: 'password',
-  role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  password: 'password',
+  role: 'role'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -203,10 +203,7 @@ export const PaymentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   quizId: 'quizId',
-  courseId: 'courseId',
   provider: 'provider',
-  stripeSessionId: 'stripeSessionId',
-  stripeIntentId: 'stripeIntentId',
   paypalOrderId: 'paypalOrderId',
   paypalCaptureId: 'paypalCaptureId',
   amount: 'amount',
@@ -215,7 +212,10 @@ export const PaymentScalarFieldEnum = {
   paidAt: 'paidAt',
   rawResponse: 'rawResponse',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  courseId: 'courseId',
+  stripeIntentId: 'stripeIntentId',
+  stripeSessionId: 'stripeSessionId'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
@@ -272,12 +272,15 @@ export const CourseScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   shortDescription: 'shortDescription',
+  level: 'level',
   thumbnail: 'thumbnail',
   price: 'price',
   currency: 'currency',
   status: 'status',
-  level: 'level',
+  characteristics: 'characteristics',
   durationMinutes: 'durationMinutes',
+  numberOfStudents: 'numberOfStudents',
+  testField: 'testField',
   instructorName: 'instructorName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -306,13 +309,13 @@ export const LessonScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   videoUrl: 'videoUrl',
-  bunnyLibraryId: 'bunnyLibraryId',
-  bunnyVideoId: 'bunnyVideoId',
   durationSeconds: 'durationSeconds',
   order: 'order',
   isPreview: 'isPreview',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  bunnyLibraryId: 'bunnyLibraryId',
+  bunnyVideoId: 'bunnyVideoId'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
@@ -322,9 +325,9 @@ export const CourseAccessScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   courseId: 'courseId',
-  paymentId: 'paymentId',
   grantedAt: 'grantedAt',
-  expiresAt: 'expiresAt'
+  expiresAt: 'expiresAt',
+  paymentId: 'paymentId'
 } as const
 
 export type CourseAccessScalarFieldEnum = (typeof CourseAccessScalarFieldEnum)[keyof typeof CourseAccessScalarFieldEnum]

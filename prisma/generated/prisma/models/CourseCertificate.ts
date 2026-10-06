@@ -182,8 +182,8 @@ export type CourseCertificateWhereInput = {
   courseId?: Prisma.StringFilter<"CourseCertificate"> | string
   certificateNo?: Prisma.StringFilter<"CourseCertificate"> | string
   issuedAt?: Prisma.DateTimeFilter<"CourseCertificate"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type CourseCertificateOrderByWithRelationInput = {
@@ -192,8 +192,8 @@ export type CourseCertificateOrderByWithRelationInput = {
   courseId?: Prisma.SortOrder
   certificateNo?: Prisma.SortOrder
   issuedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   course?: Prisma.CourseOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type CourseCertificateWhereUniqueInput = Prisma.AtLeast<{
@@ -206,8 +206,8 @@ export type CourseCertificateWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"CourseCertificate"> | string
   courseId?: Prisma.StringFilter<"CourseCertificate"> | string
   issuedAt?: Prisma.DateTimeFilter<"CourseCertificate"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "certificateNo" | "userId_courseId">
 
 export type CourseCertificateOrderByWithAggregationInput = {
@@ -236,8 +236,8 @@ export type CourseCertificateCreateInput = {
   id?: string
   certificateNo: string
   issuedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutCourseCertificatesInput
   course: Prisma.CourseCreateNestedOneWithoutCourseCertificatesInput
+  user: Prisma.UserCreateNestedOneWithoutCourseCertificatesInput
 }
 
 export type CourseCertificateUncheckedCreateInput = {
@@ -252,8 +252,8 @@ export type CourseCertificateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   certificateNo?: Prisma.StringFieldUpdateOperationsInput | string
   issuedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutCourseCertificatesNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutCourseCertificatesNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCourseCertificatesNestedInput
 }
 
 export type CourseCertificateUncheckedUpdateInput = {
@@ -564,8 +564,8 @@ export type CourseCertificateSelect<ExtArgs extends runtime.Types.Extensions.Int
   courseId?: boolean
   certificateNo?: boolean
   issuedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseCertificate"]>
 
 export type CourseCertificateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -574,8 +574,8 @@ export type CourseCertificateSelectCreateManyAndReturn<ExtArgs extends runtime.T
   courseId?: boolean
   certificateNo?: boolean
   issuedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseCertificate"]>
 
 export type CourseCertificateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -584,8 +584,8 @@ export type CourseCertificateSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   courseId?: boolean
   certificateNo?: boolean
   issuedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseCertificate"]>
 
 export type CourseCertificateSelectScalar = {
@@ -598,23 +598,23 @@ export type CourseCertificateSelectScalar = {
 
 export type CourseCertificateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "courseId" | "certificateNo" | "issuedAt", ExtArgs["result"]["courseCertificate"]>
 export type CourseCertificateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CourseCertificateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CourseCertificateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $CourseCertificatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CourseCertificate"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     course: Prisma.$CoursePayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1016,8 +1016,8 @@ readonly fields: CourseCertificateFieldRefs;
  */
 export interface Prisma__CourseCertificateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

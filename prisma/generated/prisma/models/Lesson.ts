@@ -43,13 +43,13 @@ export type LessonMinAggregateOutputType = {
   slug: string | null
   description: string | null
   videoUrl: string | null
-  bunnyLibraryId: string | null
-  bunnyVideoId: string | null
   durationSeconds: number | null
   order: number | null
   isPreview: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  bunnyLibraryId: string | null
+  bunnyVideoId: string | null
 }
 
 export type LessonMaxAggregateOutputType = {
@@ -59,13 +59,13 @@ export type LessonMaxAggregateOutputType = {
   slug: string | null
   description: string | null
   videoUrl: string | null
-  bunnyLibraryId: string | null
-  bunnyVideoId: string | null
   durationSeconds: number | null
   order: number | null
   isPreview: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  bunnyLibraryId: string | null
+  bunnyVideoId: string | null
 }
 
 export type LessonCountAggregateOutputType = {
@@ -75,13 +75,13 @@ export type LessonCountAggregateOutputType = {
   slug: number
   description: number
   videoUrl: number
-  bunnyLibraryId: number
-  bunnyVideoId: number
   durationSeconds: number
   order: number
   isPreview: number
   createdAt: number
   updatedAt: number
+  bunnyLibraryId: number
+  bunnyVideoId: number
   _all: number
 }
 
@@ -103,13 +103,13 @@ export type LessonMinAggregateInputType = {
   slug?: true
   description?: true
   videoUrl?: true
-  bunnyLibraryId?: true
-  bunnyVideoId?: true
   durationSeconds?: true
   order?: true
   isPreview?: true
   createdAt?: true
   updatedAt?: true
+  bunnyLibraryId?: true
+  bunnyVideoId?: true
 }
 
 export type LessonMaxAggregateInputType = {
@@ -119,13 +119,13 @@ export type LessonMaxAggregateInputType = {
   slug?: true
   description?: true
   videoUrl?: true
-  bunnyLibraryId?: true
-  bunnyVideoId?: true
   durationSeconds?: true
   order?: true
   isPreview?: true
   createdAt?: true
   updatedAt?: true
+  bunnyLibraryId?: true
+  bunnyVideoId?: true
 }
 
 export type LessonCountAggregateInputType = {
@@ -135,13 +135,13 @@ export type LessonCountAggregateInputType = {
   slug?: true
   description?: true
   videoUrl?: true
-  bunnyLibraryId?: true
-  bunnyVideoId?: true
   durationSeconds?: true
   order?: true
   isPreview?: true
   createdAt?: true
   updatedAt?: true
+  bunnyLibraryId?: true
+  bunnyVideoId?: true
   _all?: true
 }
 
@@ -238,13 +238,13 @@ export type LessonGroupByOutputType = {
   slug: string
   description: string | null
   videoUrl: string | null
-  bunnyLibraryId: string | null
-  bunnyVideoId: string | null
   durationSeconds: number | null
   order: number
   isPreview: boolean
   createdAt: Date
   updatedAt: Date
+  bunnyLibraryId: string | null
+  bunnyVideoId: string | null
   _count: LessonCountAggregateOutputType | null
   _avg: LessonAvgAggregateOutputType | null
   _sum: LessonSumAggregateOutputType | null
@@ -277,13 +277,13 @@ export type LessonWhereInput = {
   slug?: Prisma.StringFilter<"Lesson"> | string
   description?: Prisma.StringNullableFilter<"Lesson"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"Lesson"> | string | null
-  bunnyLibraryId?: Prisma.StringNullableFilter<"Lesson"> | string | null
-  bunnyVideoId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   durationSeconds?: Prisma.IntNullableFilter<"Lesson"> | number | null
   order?: Prisma.IntFilter<"Lesson"> | number
   isPreview?: Prisma.BoolFilter<"Lesson"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
+  bunnyLibraryId?: Prisma.StringNullableFilter<"Lesson"> | string | null
+  bunnyVideoId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   section?: Prisma.XOR<Prisma.CourseSectionScalarRelationFilter, Prisma.CourseSectionWhereInput>
   progressRecords?: Prisma.LessonProgressListRelationFilter
 }
@@ -295,13 +295,13 @@ export type LessonOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  bunnyLibraryId?: Prisma.SortOrderInput | Prisma.SortOrder
-  bunnyVideoId?: Prisma.SortOrderInput | Prisma.SortOrder
   durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   isPreview?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bunnyLibraryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  bunnyVideoId?: Prisma.SortOrderInput | Prisma.SortOrder
   section?: Prisma.CourseSectionOrderByWithRelationInput
   progressRecords?: Prisma.LessonProgressOrderByRelationAggregateInput
 }
@@ -317,13 +317,13 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Lesson"> | string
   description?: Prisma.StringNullableFilter<"Lesson"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"Lesson"> | string | null
-  bunnyLibraryId?: Prisma.StringNullableFilter<"Lesson"> | string | null
-  bunnyVideoId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   durationSeconds?: Prisma.IntNullableFilter<"Lesson"> | number | null
   order?: Prisma.IntFilter<"Lesson"> | number
   isPreview?: Prisma.BoolFilter<"Lesson"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
+  bunnyLibraryId?: Prisma.StringNullableFilter<"Lesson"> | string | null
+  bunnyVideoId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   section?: Prisma.XOR<Prisma.CourseSectionScalarRelationFilter, Prisma.CourseSectionWhereInput>
   progressRecords?: Prisma.LessonProgressListRelationFilter
 }, "id" | "slug" | "sectionId_order">
@@ -335,13 +335,13 @@ export type LessonOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  bunnyLibraryId?: Prisma.SortOrderInput | Prisma.SortOrder
-  bunnyVideoId?: Prisma.SortOrderInput | Prisma.SortOrder
   durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   isPreview?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bunnyLibraryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  bunnyVideoId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.LessonCountOrderByAggregateInput
   _avg?: Prisma.LessonAvgOrderByAggregateInput
   _max?: Prisma.LessonMaxOrderByAggregateInput
@@ -359,13 +359,13 @@ export type LessonScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
   videoUrl?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
-  bunnyLibraryId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
-  bunnyVideoId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
   durationSeconds?: Prisma.IntNullableWithAggregatesFilter<"Lesson"> | number | null
   order?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   isPreview?: Prisma.BoolWithAggregatesFilter<"Lesson"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
+  bunnyLibraryId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
+  bunnyVideoId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
 }
 
 export type LessonCreateInput = {
@@ -374,13 +374,13 @@ export type LessonCreateInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
   section: Prisma.CourseSectionCreateNestedOneWithoutLessonsInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
 }
@@ -392,13 +392,13 @@ export type LessonUncheckedCreateInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
 }
 
@@ -408,13 +408,13 @@ export type LessonUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   section?: Prisma.CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
 }
@@ -426,13 +426,13 @@ export type LessonUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
 }
 
@@ -443,13 +443,13 @@ export type LessonCreateManyInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
 }
 
 export type LessonUpdateManyMutationInput = {
@@ -458,13 +458,13 @@ export type LessonUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LessonUncheckedUpdateManyInput = {
@@ -474,13 +474,13 @@ export type LessonUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LessonListRelationFilter = {
@@ -505,13 +505,13 @@ export type LessonCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
-  bunnyLibraryId?: Prisma.SortOrder
-  bunnyVideoId?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
   order?: Prisma.SortOrder
   isPreview?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bunnyLibraryId?: Prisma.SortOrder
+  bunnyVideoId?: Prisma.SortOrder
 }
 
 export type LessonAvgOrderByAggregateInput = {
@@ -526,13 +526,13 @@ export type LessonMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
-  bunnyLibraryId?: Prisma.SortOrder
-  bunnyVideoId?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
   order?: Prisma.SortOrder
   isPreview?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bunnyLibraryId?: Prisma.SortOrder
+  bunnyVideoId?: Prisma.SortOrder
 }
 
 export type LessonMinOrderByAggregateInput = {
@@ -542,13 +542,13 @@ export type LessonMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
-  bunnyLibraryId?: Prisma.SortOrder
-  bunnyVideoId?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
   order?: Prisma.SortOrder
   isPreview?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bunnyLibraryId?: Prisma.SortOrder
+  bunnyVideoId?: Prisma.SortOrder
 }
 
 export type LessonSumOrderByAggregateInput = {
@@ -623,13 +623,13 @@ export type LessonCreateWithoutSectionInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
 }
 
@@ -639,13 +639,13 @@ export type LessonUncheckedCreateWithoutSectionInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
 }
 
@@ -685,13 +685,13 @@ export type LessonScalarWhereInput = {
   slug?: Prisma.StringFilter<"Lesson"> | string
   description?: Prisma.StringNullableFilter<"Lesson"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"Lesson"> | string | null
-  bunnyLibraryId?: Prisma.StringNullableFilter<"Lesson"> | string | null
-  bunnyVideoId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   durationSeconds?: Prisma.IntNullableFilter<"Lesson"> | number | null
   order?: Prisma.IntFilter<"Lesson"> | number
   isPreview?: Prisma.BoolFilter<"Lesson"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
+  bunnyLibraryId?: Prisma.StringNullableFilter<"Lesson"> | string | null
+  bunnyVideoId?: Prisma.StringNullableFilter<"Lesson"> | string | null
 }
 
 export type LessonCreateWithoutProgressRecordsInput = {
@@ -700,13 +700,13 @@ export type LessonCreateWithoutProgressRecordsInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
   section: Prisma.CourseSectionCreateNestedOneWithoutLessonsInput
 }
 
@@ -717,13 +717,13 @@ export type LessonUncheckedCreateWithoutProgressRecordsInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
 }
 
 export type LessonCreateOrConnectWithoutProgressRecordsInput = {
@@ -748,13 +748,13 @@ export type LessonUpdateWithoutProgressRecordsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   section?: Prisma.CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
 }
 
@@ -765,13 +765,13 @@ export type LessonUncheckedUpdateWithoutProgressRecordsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LessonCreateManySectionInput = {
@@ -780,13 +780,13 @@ export type LessonCreateManySectionInput = {
   slug: string
   description?: string | null
   videoUrl?: string | null
-  bunnyLibraryId?: string | null
-  bunnyVideoId?: string | null
   durationSeconds?: number | null
   order: number
   isPreview?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
 }
 
 export type LessonUpdateWithoutSectionInput = {
@@ -795,13 +795,13 @@ export type LessonUpdateWithoutSectionInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
 }
 
@@ -811,13 +811,13 @@ export type LessonUncheckedUpdateWithoutSectionInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
 }
 
@@ -827,13 +827,13 @@ export type LessonUncheckedUpdateManyWithoutSectionInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -874,13 +874,13 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   slug?: boolean
   description?: boolean
   videoUrl?: boolean
-  bunnyLibraryId?: boolean
-  bunnyVideoId?: boolean
   durationSeconds?: boolean
   order?: boolean
   isPreview?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bunnyLibraryId?: boolean
+  bunnyVideoId?: boolean
   section?: boolean | Prisma.CourseSectionDefaultArgs<ExtArgs>
   progressRecords?: boolean | Prisma.Lesson$progressRecordsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
@@ -893,13 +893,13 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   description?: boolean
   videoUrl?: boolean
-  bunnyLibraryId?: boolean
-  bunnyVideoId?: boolean
   durationSeconds?: boolean
   order?: boolean
   isPreview?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bunnyLibraryId?: boolean
+  bunnyVideoId?: boolean
   section?: boolean | Prisma.CourseSectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -910,13 +910,13 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   description?: boolean
   videoUrl?: boolean
-  bunnyLibraryId?: boolean
-  bunnyVideoId?: boolean
   durationSeconds?: boolean
   order?: boolean
   isPreview?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bunnyLibraryId?: boolean
+  bunnyVideoId?: boolean
   section?: boolean | Prisma.CourseSectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -927,16 +927,16 @@ export type LessonSelectScalar = {
   slug?: boolean
   description?: boolean
   videoUrl?: boolean
-  bunnyLibraryId?: boolean
-  bunnyVideoId?: boolean
   durationSeconds?: boolean
   order?: boolean
   isPreview?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bunnyLibraryId?: boolean
+  bunnyVideoId?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "slug" | "description" | "videoUrl" | "bunnyLibraryId" | "bunnyVideoId" | "durationSeconds" | "order" | "isPreview" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "slug" | "description" | "videoUrl" | "durationSeconds" | "order" | "isPreview" | "createdAt" | "updatedAt" | "bunnyLibraryId" | "bunnyVideoId", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   section?: boolean | Prisma.CourseSectionDefaultArgs<ExtArgs>
   progressRecords?: boolean | Prisma.Lesson$progressRecordsArgs<ExtArgs>
@@ -962,13 +962,13 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     slug: string
     description: string | null
     videoUrl: string | null
-    bunnyLibraryId: string | null
-    bunnyVideoId: string | null
     durationSeconds: number | null
     order: number
     isPreview: boolean
     createdAt: Date
     updatedAt: Date
+    bunnyLibraryId: string | null
+    bunnyVideoId: string | null
   }, ExtArgs["result"]["lesson"]>
   composites: {}
 }
@@ -1400,13 +1400,13 @@ export interface LessonFieldRefs {
   readonly slug: Prisma.FieldRef<"Lesson", 'String'>
   readonly description: Prisma.FieldRef<"Lesson", 'String'>
   readonly videoUrl: Prisma.FieldRef<"Lesson", 'String'>
-  readonly bunnyLibraryId: Prisma.FieldRef<"Lesson", 'String'>
-  readonly bunnyVideoId: Prisma.FieldRef<"Lesson", 'String'>
   readonly durationSeconds: Prisma.FieldRef<"Lesson", 'Int'>
   readonly order: Prisma.FieldRef<"Lesson", 'Int'>
   readonly isPreview: Prisma.FieldRef<"Lesson", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Lesson", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Lesson", 'DateTime'>
+  readonly bunnyLibraryId: Prisma.FieldRef<"Lesson", 'String'>
+  readonly bunnyVideoId: Prisma.FieldRef<"Lesson", 'String'>
 }
     
 

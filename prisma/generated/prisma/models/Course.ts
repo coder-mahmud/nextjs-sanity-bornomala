@@ -42,12 +42,14 @@ export type CourseMinAggregateOutputType = {
   slug: string | null
   description: string | null
   shortDescription: string | null
+  level: string | null
   thumbnail: string | null
   price: runtime.Decimal | null
   currency: string | null
   status: $Enums.CourseStatus | null
-  level: string | null
   durationMinutes: number | null
+  numberOfStudents: string | null
+  testField: string | null
   instructorName: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,12 +61,14 @@ export type CourseMaxAggregateOutputType = {
   slug: string | null
   description: string | null
   shortDescription: string | null
+  level: string | null
   thumbnail: string | null
   price: runtime.Decimal | null
   currency: string | null
   status: $Enums.CourseStatus | null
-  level: string | null
   durationMinutes: number | null
+  numberOfStudents: string | null
+  testField: string | null
   instructorName: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -76,12 +80,15 @@ export type CourseCountAggregateOutputType = {
   slug: number
   description: number
   shortDescription: number
+  level: number
   thumbnail: number
   price: number
   currency: number
   status: number
-  level: number
+  characteristics: number
   durationMinutes: number
+  numberOfStudents: number
+  testField: number
   instructorName: number
   createdAt: number
   updatedAt: number
@@ -105,12 +112,14 @@ export type CourseMinAggregateInputType = {
   slug?: true
   description?: true
   shortDescription?: true
+  level?: true
   thumbnail?: true
   price?: true
   currency?: true
   status?: true
-  level?: true
   durationMinutes?: true
+  numberOfStudents?: true
+  testField?: true
   instructorName?: true
   createdAt?: true
   updatedAt?: true
@@ -122,12 +131,14 @@ export type CourseMaxAggregateInputType = {
   slug?: true
   description?: true
   shortDescription?: true
+  level?: true
   thumbnail?: true
   price?: true
   currency?: true
   status?: true
-  level?: true
   durationMinutes?: true
+  numberOfStudents?: true
+  testField?: true
   instructorName?: true
   createdAt?: true
   updatedAt?: true
@@ -139,12 +150,15 @@ export type CourseCountAggregateInputType = {
   slug?: true
   description?: true
   shortDescription?: true
+  level?: true
   thumbnail?: true
   price?: true
   currency?: true
   status?: true
-  level?: true
+  characteristics?: true
   durationMinutes?: true
+  numberOfStudents?: true
+  testField?: true
   instructorName?: true
   createdAt?: true
   updatedAt?: true
@@ -243,12 +257,15 @@ export type CourseGroupByOutputType = {
   slug: string
   description: string | null
   shortDescription: string | null
+  level: string | null
   thumbnail: string | null
   price: runtime.Decimal
   currency: string
   status: $Enums.CourseStatus
-  level: string | null
+  characteristics: runtime.JsonValue | null
   durationMinutes: number | null
+  numberOfStudents: string | null
+  testField: string | null
   instructorName: string | null
   createdAt: Date
   updatedAt: Date
@@ -283,19 +300,22 @@ export type CourseWhereInput = {
   slug?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   shortDescription?: Prisma.StringNullableFilter<"Course"> | string | null
+  level?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnail?: Prisma.StringNullableFilter<"Course"> | string | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
-  level?: Prisma.StringNullableFilter<"Course"> | string | null
+  characteristics?: Prisma.JsonNullableFilter<"Course">
   durationMinutes?: Prisma.IntNullableFilter<"Course"> | number | null
+  numberOfStudents?: Prisma.StringNullableFilter<"Course"> | string | null
+  testField?: Prisma.StringNullableFilter<"Course"> | string | null
   instructorName?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
-  sections?: Prisma.CourseSectionListRelationFilter
   accesses?: Prisma.CourseAccessListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
   courseCertificates?: Prisma.CourseCertificateListRelationFilter
+  sections?: Prisma.CourseSectionListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type CourseOrderByWithRelationInput = {
@@ -304,19 +324,22 @@ export type CourseOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  level?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  level?: Prisma.SortOrderInput | Prisma.SortOrder
+  characteristics?: Prisma.SortOrderInput | Prisma.SortOrder
   durationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  numberOfStudents?: Prisma.SortOrderInput | Prisma.SortOrder
+  testField?: Prisma.SortOrderInput | Prisma.SortOrder
   instructorName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  sections?: Prisma.CourseSectionOrderByRelationAggregateInput
   accesses?: Prisma.CourseAccessOrderByRelationAggregateInput
-  payments?: Prisma.PaymentOrderByRelationAggregateInput
   courseCertificates?: Prisma.CourseCertificateOrderByRelationAggregateInput
+  sections?: Prisma.CourseSectionOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -328,19 +351,22 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   shortDescription?: Prisma.StringNullableFilter<"Course"> | string | null
+  level?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnail?: Prisma.StringNullableFilter<"Course"> | string | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
-  level?: Prisma.StringNullableFilter<"Course"> | string | null
+  characteristics?: Prisma.JsonNullableFilter<"Course">
   durationMinutes?: Prisma.IntNullableFilter<"Course"> | number | null
+  numberOfStudents?: Prisma.StringNullableFilter<"Course"> | string | null
+  testField?: Prisma.StringNullableFilter<"Course"> | string | null
   instructorName?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
-  sections?: Prisma.CourseSectionListRelationFilter
   accesses?: Prisma.CourseAccessListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
   courseCertificates?: Prisma.CourseCertificateListRelationFilter
+  sections?: Prisma.CourseSectionListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "slug">
 
 export type CourseOrderByWithAggregationInput = {
@@ -349,12 +375,15 @@ export type CourseOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  level?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  level?: Prisma.SortOrderInput | Prisma.SortOrder
+  characteristics?: Prisma.SortOrderInput | Prisma.SortOrder
   durationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  numberOfStudents?: Prisma.SortOrderInput | Prisma.SortOrder
+  testField?: Prisma.SortOrderInput | Prisma.SortOrder
   instructorName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -374,12 +403,15 @@ export type CourseScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Course"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   shortDescription?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  level?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   thumbnail?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   price?: Prisma.DecimalWithAggregatesFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
-  level?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  characteristics?: Prisma.JsonNullableWithAggregatesFilter<"Course">
   durationMinutes?: Prisma.IntNullableWithAggregatesFilter<"Course"> | number | null
+  numberOfStudents?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  testField?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   instructorName?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
@@ -391,19 +423,22 @@ export type CourseCreateInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateInput = {
@@ -412,19 +447,22 @@ export type CourseUncheckedCreateInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUpdateInput = {
@@ -433,19 +471,22 @@ export type CourseUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateInput = {
@@ -454,19 +495,22 @@ export type CourseUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyInput = {
@@ -475,12 +519,15 @@ export type CourseCreateManyInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -492,12 +539,15 @@ export type CourseUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -509,12 +559,15 @@ export type CourseUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -531,12 +584,15 @@ export type CourseCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  level?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  level?: Prisma.SortOrder
+  characteristics?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  numberOfStudents?: Prisma.SortOrder
+  testField?: Prisma.SortOrder
   instructorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -553,12 +609,14 @@ export type CourseMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  level?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  numberOfStudents?: Prisma.SortOrder
+  testField?: Prisma.SortOrder
   instructorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -570,12 +628,14 @@ export type CourseMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  level?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  numberOfStudents?: Prisma.SortOrder
+  testField?: Prisma.SortOrder
   instructorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -659,18 +719,21 @@ export type CourseCreateWithoutPaymentsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutPaymentsInput = {
@@ -679,18 +742,21 @@ export type CourseUncheckedCreateWithoutPaymentsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutPaymentsInput = {
@@ -715,18 +781,21 @@ export type CourseUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutPaymentsInput = {
@@ -735,18 +804,21 @@ export type CourseUncheckedUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutSectionsInput = {
@@ -755,18 +827,21 @@ export type CourseCreateWithoutSectionsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutSectionsInput = {
@@ -775,18 +850,21 @@ export type CourseUncheckedCreateWithoutSectionsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutSectionsInput = {
@@ -811,18 +889,21 @@ export type CourseUpdateWithoutSectionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutSectionsInput = {
@@ -831,18 +912,21 @@ export type CourseUncheckedUpdateWithoutSectionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutAccessesInput = {
@@ -851,18 +935,21 @@ export type CourseCreateWithoutAccessesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
-  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutAccessesInput = {
@@ -871,18 +958,21 @@ export type CourseUncheckedCreateWithoutAccessesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
-  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutAccessesInput = {
@@ -907,18 +997,21 @@ export type CourseUpdateWithoutAccessesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
-  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutAccessesInput = {
@@ -927,18 +1020,21 @@ export type CourseUncheckedUpdateWithoutAccessesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
-  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutCourseCertificatesInput = {
@@ -947,17 +1043,20 @@ export type CourseCreateWithoutCourseCertificatesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
 }
 
@@ -967,17 +1066,20 @@ export type CourseUncheckedCreateWithoutCourseCertificatesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  level?: string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: number | null
+  numberOfStudents?: string | null
+  testField?: string | null
   instructorName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -1003,17 +1105,20 @@ export type CourseUpdateWithoutCourseCertificatesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
 }
 
@@ -1023,17 +1128,20 @@ export type CourseUncheckedUpdateWithoutCourseCertificatesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -1043,17 +1151,17 @@ export type CourseUncheckedUpdateWithoutCourseCertificatesInput = {
  */
 
 export type CourseCountOutputType = {
-  sections: number
   accesses: number
-  payments: number
   courseCertificates: number
+  sections: number
+  payments: number
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  sections?: boolean | CourseCountOutputTypeCountSectionsArgs
   accesses?: boolean | CourseCountOutputTypeCountAccessesArgs
-  payments?: boolean | CourseCountOutputTypeCountPaymentsArgs
   courseCertificates?: boolean | CourseCountOutputTypeCountCourseCertificatesArgs
+  sections?: boolean | CourseCountOutputTypeCountSectionsArgs
+  payments?: boolean | CourseCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -1069,22 +1177,8 @@ export type CourseCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * CourseCountOutputType without action
  */
-export type CourseCountOutputTypeCountSectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CourseSectionWhereInput
-}
-
-/**
- * CourseCountOutputType without action
- */
 export type CourseCountOutputTypeCountAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CourseAccessWhereInput
-}
-
-/**
- * CourseCountOutputType without action
- */
-export type CourseCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentWhereInput
 }
 
 /**
@@ -1094,6 +1188,20 @@ export type CourseCountOutputTypeCountCourseCertificatesArgs<ExtArgs extends run
   where?: Prisma.CourseCertificateWhereInput
 }
 
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountSectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseSectionWhereInput
+}
+
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1101,19 +1209,22 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
-  level?: boolean
+  characteristics?: boolean
   durationMinutes?: boolean
+  numberOfStudents?: boolean
+  testField?: boolean
   instructorName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  sections?: boolean | Prisma.Course$sectionsArgs<ExtArgs>
   accesses?: boolean | Prisma.Course$accessesArgs<ExtArgs>
-  payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   courseCertificates?: boolean | Prisma.Course$courseCertificatesArgs<ExtArgs>
+  sections?: boolean | Prisma.Course$sectionsArgs<ExtArgs>
+  payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
@@ -1123,12 +1234,15 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
-  level?: boolean
+  characteristics?: boolean
   durationMinutes?: boolean
+  numberOfStudents?: boolean
+  testField?: boolean
   instructorName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1140,12 +1254,15 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
-  level?: boolean
+  characteristics?: boolean
   durationMinutes?: boolean
+  numberOfStudents?: boolean
+  testField?: boolean
   instructorName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1157,23 +1274,26 @@ export type CourseSelectScalar = {
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
-  level?: boolean
+  characteristics?: boolean
   durationMinutes?: boolean
+  numberOfStudents?: boolean
+  testField?: boolean
   instructorName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "thumbnail" | "price" | "currency" | "status" | "level" | "durationMinutes" | "instructorName" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "level" | "thumbnail" | "price" | "currency" | "status" | "characteristics" | "durationMinutes" | "numberOfStudents" | "testField" | "instructorName" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  sections?: boolean | Prisma.Course$sectionsArgs<ExtArgs>
   accesses?: boolean | Prisma.Course$accessesArgs<ExtArgs>
-  payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   courseCertificates?: boolean | Prisma.Course$courseCertificatesArgs<ExtArgs>
+  sections?: boolean | Prisma.Course$sectionsArgs<ExtArgs>
+  payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1182,10 +1302,10 @@ export type CourseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Course"
   objects: {
-    sections: Prisma.$CourseSectionPayload<ExtArgs>[]
     accesses: Prisma.$CourseAccessPayload<ExtArgs>[]
-    payments: Prisma.$PaymentPayload<ExtArgs>[]
     courseCertificates: Prisma.$CourseCertificatePayload<ExtArgs>[]
+    sections: Prisma.$CourseSectionPayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1193,12 +1313,15 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     slug: string
     description: string | null
     shortDescription: string | null
+    level: string | null
     thumbnail: string | null
     price: runtime.Decimal
     currency: string
     status: $Enums.CourseStatus
-    level: string | null
+    characteristics: runtime.JsonValue | null
     durationMinutes: number | null
+    numberOfStudents: string | null
+    testField: string | null
     instructorName: string | null
     createdAt: Date
     updatedAt: Date
@@ -1596,10 +1719,10 @@ readonly fields: CourseFieldRefs;
  */
 export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  sections<T extends Prisma.Course$sectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accesses<T extends Prisma.Course$accessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$accessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  payments<T extends Prisma.Course$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   courseCertificates<T extends Prisma.Course$courseCertificatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$courseCertificatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sections<T extends Prisma.Course$sectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Course$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1634,12 +1757,15 @@ export interface CourseFieldRefs {
   readonly slug: Prisma.FieldRef<"Course", 'String'>
   readonly description: Prisma.FieldRef<"Course", 'String'>
   readonly shortDescription: Prisma.FieldRef<"Course", 'String'>
+  readonly level: Prisma.FieldRef<"Course", 'String'>
   readonly thumbnail: Prisma.FieldRef<"Course", 'String'>
   readonly price: Prisma.FieldRef<"Course", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Course", 'String'>
   readonly status: Prisma.FieldRef<"Course", 'CourseStatus'>
-  readonly level: Prisma.FieldRef<"Course", 'String'>
+  readonly characteristics: Prisma.FieldRef<"Course", 'Json'>
   readonly durationMinutes: Prisma.FieldRef<"Course", 'Int'>
+  readonly numberOfStudents: Prisma.FieldRef<"Course", 'String'>
+  readonly testField: Prisma.FieldRef<"Course", 'String'>
   readonly instructorName: Prisma.FieldRef<"Course", 'String'>
   readonly createdAt: Prisma.FieldRef<"Course", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Course", 'DateTime'>
@@ -2031,30 +2157,6 @@ export type CourseDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Course.sections
- */
-export type Course$sectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CourseSection
-   */
-  select?: Prisma.CourseSectionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CourseSection
-   */
-  omit?: Prisma.CourseSectionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CourseSectionInclude<ExtArgs> | null
-  where?: Prisma.CourseSectionWhereInput
-  orderBy?: Prisma.CourseSectionOrderByWithRelationInput | Prisma.CourseSectionOrderByWithRelationInput[]
-  cursor?: Prisma.CourseSectionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CourseSectionScalarFieldEnum | Prisma.CourseSectionScalarFieldEnum[]
-}
-
-/**
  * Course.accesses
  */
 export type Course$accessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2079,30 +2181,6 @@ export type Course$accessesArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Course.payments
- */
-export type Course$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Payment
-   */
-  select?: Prisma.PaymentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Payment
-   */
-  omit?: Prisma.PaymentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentInclude<ExtArgs> | null
-  where?: Prisma.PaymentWhereInput
-  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
-  cursor?: Prisma.PaymentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
-}
-
-/**
  * Course.courseCertificates
  */
 export type Course$courseCertificatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2124,6 +2202,54 @@ export type Course$courseCertificatesArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.CourseCertificateScalarFieldEnum | Prisma.CourseCertificateScalarFieldEnum[]
+}
+
+/**
+ * Course.sections
+ */
+export type Course$sectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseSection
+   */
+  select?: Prisma.CourseSectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseSection
+   */
+  omit?: Prisma.CourseSectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseSectionInclude<ExtArgs> | null
+  where?: Prisma.CourseSectionWhereInput
+  orderBy?: Prisma.CourseSectionOrderByWithRelationInput | Prisma.CourseSectionOrderByWithRelationInput[]
+  cursor?: Prisma.CourseSectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseSectionScalarFieldEnum | Prisma.CourseSectionScalarFieldEnum[]
+}
+
+/**
+ * Course.payments
+ */
+export type Course$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

@@ -46,10 +46,10 @@ export default async function CoursesPage() {
                 )}
               </CardHeader>
 
-              <CardContent className="flex-grow">
+              <CardContent className="grow">
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-4 h-4 mr-2 text-primary" /> <span>সময়কাল: {course.durationMinutes || "N/A"} min</span>
+                    <Clock className="w-4 h-4 mr-2 text-primary" /> <span>সময়কাল: {course?.durationMinutes || "N/A"} </span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
                     <Users className="w-4 h-4 mr-2 text-primary" /> <span>শিক্ষার্থী: 0</span>
