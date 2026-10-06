@@ -148,3 +148,33 @@ export type Coupon = Prisma.CouponModel
  * 
  */
 export type CouponUsage = Prisma.CouponUsageModel
+/**
+ * Model Branch
+ * 
+ */
+export type Branch = Prisma.BranchModel
+/**
+ * Model Schedule
+ * 
+ */
+export type Schedule = Prisma.ScheduleModel
+/**
+ * Model ScheduleEntry
+ * 
+ */
+export type ScheduleEntry = Prisma.ScheduleEntryModel
+/**
+ * Model FAQ
+ * 
+ */
+export type FAQ = Prisma.FAQModel
+/**
+ * Model CourseCard
+ * 
+ */
+export type CourseCard = Prisma.CourseCardModel
+/**
+ * Model Instructor
+ * 
+ */
+export type Instructor = Prisma.InstructorModel

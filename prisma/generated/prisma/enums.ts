@@ -10,6 +10,7 @@
 */
 
 export const Role = {
+  STUDENT: 'STUDENT',
   USER: 'USER',
   ADMIN: 'ADMIN',
   SUPERADMIN: 'SUPERADMIN'
@@ -62,3 +63,16 @@ export const CouponType = {
 } as const
 
 export type CouponType = (typeof CouponType)[keyof typeof CouponType]
+
+
+export const WeekDay = {
+  SUNDAY: 'SUNDAY',
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY'
+} as const
+
+export type WeekDay = (typeof WeekDay)[keyof typeof WeekDay]

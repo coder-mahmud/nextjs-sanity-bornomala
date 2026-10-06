@@ -28,12 +28,10 @@ export type AggregateCourse = {
 
 export type CourseAvgAggregateOutputType = {
   price: runtime.Decimal | null
-  durationMinutes: number | null
 }
 
 export type CourseSumAggregateOutputType = {
   price: runtime.Decimal | null
-  durationMinutes: number | null
 }
 
 export type CourseMinAggregateOutputType = {
@@ -42,15 +40,16 @@ export type CourseMinAggregateOutputType = {
   slug: string | null
   description: string | null
   shortDescription: string | null
+  tagLine: string | null
   level: string | null
   thumbnail: string | null
   price: runtime.Decimal | null
   currency: string | null
   status: $Enums.CourseStatus | null
-  durationMinutes: number | null
+  instructorId: string | null
+  duration: string | null
   numberOfStudents: string | null
-  testField: string | null
-  instructorName: string | null
+  rating: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,15 +60,16 @@ export type CourseMaxAggregateOutputType = {
   slug: string | null
   description: string | null
   shortDescription: string | null
+  tagLine: string | null
   level: string | null
   thumbnail: string | null
   price: runtime.Decimal | null
   currency: string | null
   status: $Enums.CourseStatus | null
-  durationMinutes: number | null
+  instructorId: string | null
+  duration: string | null
   numberOfStudents: string | null
-  testField: string | null
-  instructorName: string | null
+  rating: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,16 +80,18 @@ export type CourseCountAggregateOutputType = {
   slug: number
   description: number
   shortDescription: number
+  tagLine: number
   level: number
   thumbnail: number
   price: number
   currency: number
   status: number
   characteristics: number
-  durationMinutes: number
+  instructorId: number
+  targetAudience: number
+  duration: number
   numberOfStudents: number
-  testField: number
-  instructorName: number
+  rating: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -98,12 +100,10 @@ export type CourseCountAggregateOutputType = {
 
 export type CourseAvgAggregateInputType = {
   price?: true
-  durationMinutes?: true
 }
 
 export type CourseSumAggregateInputType = {
   price?: true
-  durationMinutes?: true
 }
 
 export type CourseMinAggregateInputType = {
@@ -112,15 +112,16 @@ export type CourseMinAggregateInputType = {
   slug?: true
   description?: true
   shortDescription?: true
+  tagLine?: true
   level?: true
   thumbnail?: true
   price?: true
   currency?: true
   status?: true
-  durationMinutes?: true
+  instructorId?: true
+  duration?: true
   numberOfStudents?: true
-  testField?: true
-  instructorName?: true
+  rating?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -131,15 +132,16 @@ export type CourseMaxAggregateInputType = {
   slug?: true
   description?: true
   shortDescription?: true
+  tagLine?: true
   level?: true
   thumbnail?: true
   price?: true
   currency?: true
   status?: true
-  durationMinutes?: true
+  instructorId?: true
+  duration?: true
   numberOfStudents?: true
-  testField?: true
-  instructorName?: true
+  rating?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -150,16 +152,18 @@ export type CourseCountAggregateInputType = {
   slug?: true
   description?: true
   shortDescription?: true
+  tagLine?: true
   level?: true
   thumbnail?: true
   price?: true
   currency?: true
   status?: true
   characteristics?: true
-  durationMinutes?: true
+  instructorId?: true
+  targetAudience?: true
+  duration?: true
   numberOfStudents?: true
-  testField?: true
-  instructorName?: true
+  rating?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -257,16 +261,18 @@ export type CourseGroupByOutputType = {
   slug: string
   description: string | null
   shortDescription: string | null
+  tagLine: string | null
   level: string | null
   thumbnail: string | null
   price: runtime.Decimal
   currency: string
   status: $Enums.CourseStatus
-  characteristics: runtime.JsonValue | null
-  durationMinutes: number | null
+  characteristics: string[]
+  instructorId: string | null
+  targetAudience: string[]
+  duration: string | null
   numberOfStudents: string | null
-  testField: string | null
-  instructorName: string | null
+  rating: string | null
   createdAt: Date
   updatedAt: Date
   _count: CourseCountAggregateOutputType | null
@@ -300,18 +306,24 @@ export type CourseWhereInput = {
   slug?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   shortDescription?: Prisma.StringNullableFilter<"Course"> | string | null
+  tagLine?: Prisma.StringNullableFilter<"Course"> | string | null
   level?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnail?: Prisma.StringNullableFilter<"Course"> | string | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
-  characteristics?: Prisma.JsonNullableFilter<"Course">
-  durationMinutes?: Prisma.IntNullableFilter<"Course"> | number | null
+  characteristics?: Prisma.StringNullableListFilter<"Course">
+  instructorId?: Prisma.StringNullableFilter<"Course"> | string | null
+  targetAudience?: Prisma.StringNullableListFilter<"Course">
+  duration?: Prisma.StringNullableFilter<"Course"> | string | null
   numberOfStudents?: Prisma.StringNullableFilter<"Course"> | string | null
-  testField?: Prisma.StringNullableFilter<"Course"> | string | null
-  instructorName?: Prisma.StringNullableFilter<"Course"> | string | null
+  rating?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
+  instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
+  schedules?: Prisma.ScheduleListRelationFilter
+  faqs?: Prisma.FAQListRelationFilter
+  cards?: Prisma.CourseCardListRelationFilter
   accesses?: Prisma.CourseAccessListRelationFilter
   courseCertificates?: Prisma.CourseCertificateListRelationFilter
   sections?: Prisma.CourseSectionListRelationFilter
@@ -324,18 +336,24 @@ export type CourseOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  tagLine?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  characteristics?: Prisma.SortOrderInput | Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  characteristics?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetAudience?: Prisma.SortOrder
+  duration?: Prisma.SortOrderInput | Prisma.SortOrder
   numberOfStudents?: Prisma.SortOrderInput | Prisma.SortOrder
-  testField?: Prisma.SortOrderInput | Prisma.SortOrder
-  instructorName?: Prisma.SortOrderInput | Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  instructor?: Prisma.InstructorOrderByWithRelationInput
+  schedules?: Prisma.ScheduleOrderByRelationAggregateInput
+  faqs?: Prisma.FAQOrderByRelationAggregateInput
+  cards?: Prisma.CourseCardOrderByRelationAggregateInput
   accesses?: Prisma.CourseAccessOrderByRelationAggregateInput
   courseCertificates?: Prisma.CourseCertificateOrderByRelationAggregateInput
   sections?: Prisma.CourseSectionOrderByRelationAggregateInput
@@ -351,18 +369,24 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   shortDescription?: Prisma.StringNullableFilter<"Course"> | string | null
+  tagLine?: Prisma.StringNullableFilter<"Course"> | string | null
   level?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnail?: Prisma.StringNullableFilter<"Course"> | string | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
-  characteristics?: Prisma.JsonNullableFilter<"Course">
-  durationMinutes?: Prisma.IntNullableFilter<"Course"> | number | null
+  characteristics?: Prisma.StringNullableListFilter<"Course">
+  instructorId?: Prisma.StringNullableFilter<"Course"> | string | null
+  targetAudience?: Prisma.StringNullableListFilter<"Course">
+  duration?: Prisma.StringNullableFilter<"Course"> | string | null
   numberOfStudents?: Prisma.StringNullableFilter<"Course"> | string | null
-  testField?: Prisma.StringNullableFilter<"Course"> | string | null
-  instructorName?: Prisma.StringNullableFilter<"Course"> | string | null
+  rating?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
+  instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
+  schedules?: Prisma.ScheduleListRelationFilter
+  faqs?: Prisma.FAQListRelationFilter
+  cards?: Prisma.CourseCardListRelationFilter
   accesses?: Prisma.CourseAccessListRelationFilter
   courseCertificates?: Prisma.CourseCertificateListRelationFilter
   sections?: Prisma.CourseSectionListRelationFilter
@@ -375,16 +399,18 @@ export type CourseOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  tagLine?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  characteristics?: Prisma.SortOrderInput | Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  characteristics?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetAudience?: Prisma.SortOrder
+  duration?: Prisma.SortOrderInput | Prisma.SortOrder
   numberOfStudents?: Prisma.SortOrderInput | Prisma.SortOrder
-  testField?: Prisma.SortOrderInput | Prisma.SortOrder
-  instructorName?: Prisma.SortOrderInput | Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CourseCountOrderByAggregateInput
@@ -403,16 +429,18 @@ export type CourseScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Course"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   shortDescription?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  tagLine?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   level?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   thumbnail?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   price?: Prisma.DecimalWithAggregatesFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
-  characteristics?: Prisma.JsonNullableWithAggregatesFilter<"Course">
-  durationMinutes?: Prisma.IntNullableWithAggregatesFilter<"Course"> | number | null
+  characteristics?: Prisma.StringNullableListFilter<"Course">
+  instructorId?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  targetAudience?: Prisma.StringNullableListFilter<"Course">
+  duration?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   numberOfStudents?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
-  testField?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
-  instructorName?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  rating?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
 }
@@ -423,18 +451,23 @@ export type CourseCreateInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
@@ -447,18 +480,23 @@ export type CourseUncheckedCreateInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -471,18 +509,23 @@ export type CourseUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
@@ -495,18 +538,23 @@ export type CourseUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -519,16 +567,18 @@ export type CourseCreateManyInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -539,16 +589,17 @@ export type CourseUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -559,16 +610,18 @@ export type CourseUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -578,29 +631,38 @@ export type CourseNullableScalarRelationFilter = {
   isNot?: Prisma.CourseWhereInput | null
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type CourseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  tagLine?: Prisma.SortOrder
   level?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   characteristics?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrder
+  targetAudience?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   numberOfStudents?: Prisma.SortOrder
-  testField?: Prisma.SortOrder
-  instructorName?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CourseAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
 }
 
 export type CourseMaxOrderByAggregateInput = {
@@ -609,15 +671,16 @@ export type CourseMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  tagLine?: Prisma.SortOrder
   level?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   numberOfStudents?: Prisma.SortOrder
-  testField?: Prisma.SortOrder
-  instructorName?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -628,27 +691,37 @@ export type CourseMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  tagLine?: Prisma.SortOrder
   level?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   numberOfStudents?: Prisma.SortOrder
-  testField?: Prisma.SortOrder
-  instructorName?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CourseSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
 }
 
 export type CourseScalarRelationFilter = {
   is?: Prisma.CourseWhereInput
   isNot?: Prisma.CourseWhereInput
+}
+
+export type CourseListRelationFilter = {
+  every?: Prisma.CourseWhereInput
+  some?: Prisma.CourseWhereInput
+  none?: Prisma.CourseWhereInput
+}
+
+export type CourseOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type CourseCreateNestedOneWithoutPaymentsInput = {
@@ -667,8 +740,26 @@ export type CourseUpdateOneWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutPaymentsInput, Prisma.CourseUpdateWithoutPaymentsInput>, Prisma.CourseUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type CourseCreatecharacteristicsInput = {
+  set: string[]
+}
+
+export type CourseCreatetargetAudienceInput = {
+  set: string[]
+}
+
 export type EnumCourseStatusFieldUpdateOperationsInput = {
   set?: $Enums.CourseStatus
+}
+
+export type CourseUpdatecharacteristicsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type CourseUpdatetargetAudienceInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type CourseCreateNestedOneWithoutSectionsInput = {
@@ -713,24 +804,113 @@ export type CourseUpdateOneRequiredWithoutCourseCertificatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutCourseCertificatesInput, Prisma.CourseUpdateWithoutCourseCertificatesInput>, Prisma.CourseUncheckedUpdateWithoutCourseCertificatesInput>
 }
 
+export type CourseCreateNestedOneWithoutSchedulesInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutSchedulesInput, Prisma.CourseUncheckedCreateWithoutSchedulesInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutSchedulesInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutSchedulesNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutSchedulesInput, Prisma.CourseUncheckedCreateWithoutSchedulesInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutSchedulesInput
+  upsert?: Prisma.CourseUpsertWithoutSchedulesInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutSchedulesInput, Prisma.CourseUpdateWithoutSchedulesInput>, Prisma.CourseUncheckedUpdateWithoutSchedulesInput>
+}
+
+export type CourseCreateNestedOneWithoutFaqsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutFaqsInput, Prisma.CourseUncheckedCreateWithoutFaqsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutFaqsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutFaqsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutFaqsInput, Prisma.CourseUncheckedCreateWithoutFaqsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutFaqsInput
+  upsert?: Prisma.CourseUpsertWithoutFaqsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutFaqsInput, Prisma.CourseUpdateWithoutFaqsInput>, Prisma.CourseUncheckedUpdateWithoutFaqsInput>
+}
+
+export type CourseCreateNestedOneWithoutCardsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutCardsInput, Prisma.CourseUncheckedCreateWithoutCardsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutCardsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutCardsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutCardsInput, Prisma.CourseUncheckedCreateWithoutCardsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutCardsInput
+  upsert?: Prisma.CourseUpsertWithoutCardsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutCardsInput, Prisma.CourseUpdateWithoutCardsInput>, Prisma.CourseUncheckedUpdateWithoutCardsInput>
+}
+
+export type CourseCreateNestedManyWithoutInstructorInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutInstructorInput, Prisma.CourseUncheckedCreateWithoutInstructorInput> | Prisma.CourseCreateWithoutInstructorInput[] | Prisma.CourseUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutInstructorInput | Prisma.CourseCreateOrConnectWithoutInstructorInput[]
+  createMany?: Prisma.CourseCreateManyInstructorInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseUncheckedCreateNestedManyWithoutInstructorInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutInstructorInput, Prisma.CourseUncheckedCreateWithoutInstructorInput> | Prisma.CourseCreateWithoutInstructorInput[] | Prisma.CourseUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutInstructorInput | Prisma.CourseCreateOrConnectWithoutInstructorInput[]
+  createMany?: Prisma.CourseCreateManyInstructorInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseUpdateManyWithoutInstructorNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutInstructorInput, Prisma.CourseUncheckedCreateWithoutInstructorInput> | Prisma.CourseCreateWithoutInstructorInput[] | Prisma.CourseUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutInstructorInput | Prisma.CourseCreateOrConnectWithoutInstructorInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutInstructorInput | Prisma.CourseUpsertWithWhereUniqueWithoutInstructorInput[]
+  createMany?: Prisma.CourseCreateManyInstructorInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutInstructorInput | Prisma.CourseUpdateWithWhereUniqueWithoutInstructorInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutInstructorInput | Prisma.CourseUpdateManyWithWhereWithoutInstructorInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
+export type CourseUncheckedUpdateManyWithoutInstructorNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutInstructorInput, Prisma.CourseUncheckedCreateWithoutInstructorInput> | Prisma.CourseCreateWithoutInstructorInput[] | Prisma.CourseUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutInstructorInput | Prisma.CourseCreateOrConnectWithoutInstructorInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutInstructorInput | Prisma.CourseUpsertWithWhereUniqueWithoutInstructorInput[]
+  createMany?: Prisma.CourseCreateManyInstructorInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutInstructorInput | Prisma.CourseUpdateWithWhereUniqueWithoutInstructorInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutInstructorInput | Prisma.CourseUpdateManyWithWhereWithoutInstructorInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
 export type CourseCreateWithoutPaymentsInput = {
   id?: string
   title: string
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
@@ -742,18 +922,23 @@ export type CourseUncheckedCreateWithoutPaymentsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -781,18 +966,23 @@ export type CourseUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
@@ -804,18 +994,23 @@ export type CourseUncheckedUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -827,18 +1022,23 @@ export type CourseCreateWithoutSectionsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -850,18 +1050,23 @@ export type CourseUncheckedCreateWithoutSectionsInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -889,18 +1094,23 @@ export type CourseUpdateWithoutSectionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -912,18 +1122,23 @@ export type CourseUncheckedUpdateWithoutSectionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -935,18 +1150,23 @@ export type CourseCreateWithoutAccessesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -958,18 +1178,23 @@ export type CourseUncheckedCreateWithoutAccessesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
   courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -997,18 +1222,23 @@ export type CourseUpdateWithoutAccessesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -1020,18 +1250,23 @@ export type CourseUncheckedUpdateWithoutAccessesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
   courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -1043,18 +1278,23 @@ export type CourseCreateWithoutCourseCertificatesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -1066,18 +1306,23 @@ export type CourseUncheckedCreateWithoutCourseCertificatesInput = {
   slug: string
   description?: string | null
   shortDescription?: string | null
+  tagLine?: string | null
   level?: string | null
   thumbnail?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: number | null
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
   numberOfStudents?: string | null
-  testField?: string | null
-  instructorName?: string | null
+  rating?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
   accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
   sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -1105,18 +1350,23 @@ export type CourseUpdateWithoutCourseCertificatesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -1128,21 +1378,615 @@ export type CourseUncheckedUpdateWithoutCourseCertificatesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
-  characteristics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  testField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instructorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
   accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
   sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutSchedulesInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutSchedulesInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutSchedulesInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutSchedulesInput, Prisma.CourseUncheckedCreateWithoutSchedulesInput>
+}
+
+export type CourseUpsertWithoutSchedulesInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutSchedulesInput, Prisma.CourseUncheckedUpdateWithoutSchedulesInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutSchedulesInput, Prisma.CourseUncheckedCreateWithoutSchedulesInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutSchedulesInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutSchedulesInput, Prisma.CourseUncheckedUpdateWithoutSchedulesInput>
+}
+
+export type CourseUpdateWithoutSchedulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutSchedulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutFaqsInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutFaqsInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutFaqsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutFaqsInput, Prisma.CourseUncheckedCreateWithoutFaqsInput>
+}
+
+export type CourseUpsertWithoutFaqsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutFaqsInput, Prisma.CourseUncheckedUpdateWithoutFaqsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutFaqsInput, Prisma.CourseUncheckedCreateWithoutFaqsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutFaqsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutFaqsInput, Prisma.CourseUncheckedUpdateWithoutFaqsInput>
+}
+
+export type CourseUpdateWithoutFaqsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutFaqsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutCardsInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  instructor?: Prisma.InstructorCreateNestedOneWithoutCoursesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutCardsInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  instructorId?: string | null
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutCardsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutCardsInput, Prisma.CourseUncheckedCreateWithoutCardsInput>
+}
+
+export type CourseUpsertWithoutCardsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutCardsInput, Prisma.CourseUncheckedUpdateWithoutCardsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutCardsInput, Prisma.CourseUncheckedCreateWithoutCardsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutCardsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutCardsInput, Prisma.CourseUncheckedUpdateWithoutCardsInput>
+}
+
+export type CourseUpdateWithoutCardsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  instructor?: Prisma.InstructorUpdateOneWithoutCoursesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutCardsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutInstructorInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutInstructorInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutCourseInput
+  faqs?: Prisma.FAQUncheckedCreateNestedManyWithoutCourseInput
+  cards?: Prisma.CourseCardUncheckedCreateNestedManyWithoutCourseInput
+  accesses?: Prisma.CourseAccessUncheckedCreateNestedManyWithoutCourseInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedCreateNestedManyWithoutCourseInput
+  sections?: Prisma.CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutInstructorInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutInstructorInput, Prisma.CourseUncheckedCreateWithoutInstructorInput>
+}
+
+export type CourseCreateManyInstructorInputEnvelope = {
+  data: Prisma.CourseCreateManyInstructorInput | Prisma.CourseCreateManyInstructorInput[]
+  skipDuplicates?: boolean
+}
+
+export type CourseUpsertWithWhereUniqueWithoutInstructorInput = {
+  where: Prisma.CourseWhereUniqueInput
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutInstructorInput, Prisma.CourseUncheckedUpdateWithoutInstructorInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutInstructorInput, Prisma.CourseUncheckedCreateWithoutInstructorInput>
+}
+
+export type CourseUpdateWithWhereUniqueWithoutInstructorInput = {
+  where: Prisma.CourseWhereUniqueInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutInstructorInput, Prisma.CourseUncheckedUpdateWithoutInstructorInput>
+}
+
+export type CourseUpdateManyWithWhereWithoutInstructorInput = {
+  where: Prisma.CourseScalarWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateManyMutationInput, Prisma.CourseUncheckedUpdateManyWithoutInstructorInput>
+}
+
+export type CourseScalarWhereInput = {
+  AND?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+  OR?: Prisma.CourseScalarWhereInput[]
+  NOT?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+  id?: Prisma.StringFilter<"Course"> | string
+  title?: Prisma.StringFilter<"Course"> | string
+  slug?: Prisma.StringFilter<"Course"> | string
+  description?: Prisma.StringNullableFilter<"Course"> | string | null
+  shortDescription?: Prisma.StringNullableFilter<"Course"> | string | null
+  tagLine?: Prisma.StringNullableFilter<"Course"> | string | null
+  level?: Prisma.StringNullableFilter<"Course"> | string | null
+  thumbnail?: Prisma.StringNullableFilter<"Course"> | string | null
+  price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFilter<"Course"> | string
+  status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
+  characteristics?: Prisma.StringNullableListFilter<"Course">
+  instructorId?: Prisma.StringNullableFilter<"Course"> | string | null
+  targetAudience?: Prisma.StringNullableListFilter<"Course">
+  duration?: Prisma.StringNullableFilter<"Course"> | string | null
+  numberOfStudents?: Prisma.StringNullableFilter<"Course"> | string | null
+  rating?: Prisma.StringNullableFilter<"Course"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
+}
+
+export type CourseCreateManyInstructorInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  shortDescription?: string | null
+  tagLine?: string | null
+  level?: string | null
+  thumbnail?: string | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  characteristics?: Prisma.CourseCreatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseCreatetargetAudienceInput | string[]
+  duration?: string | null
+  numberOfStudents?: string | null
+  rating?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CourseUpdateWithoutInstructorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutInstructorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutCourseNestedInput
+  faqs?: Prisma.FAQUncheckedUpdateManyWithoutCourseNestedInput
+  cards?: Prisma.CourseCardUncheckedUpdateManyWithoutCourseNestedInput
+  accesses?: Prisma.CourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+  courseCertificates?: Prisma.CourseCertificateUncheckedUpdateManyWithoutCourseNestedInput
+  sections?: Prisma.CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateManyWithoutInstructorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagLine?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  characteristics?: Prisma.CourseUpdatecharacteristicsInput | string[]
+  targetAudience?: Prisma.CourseUpdatetargetAudienceInput | string[]
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  numberOfStudents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1151,6 +1995,9 @@ export type CourseUncheckedUpdateWithoutCourseCertificatesInput = {
  */
 
 export type CourseCountOutputType = {
+  schedules: number
+  faqs: number
+  cards: number
   accesses: number
   courseCertificates: number
   sections: number
@@ -1158,6 +2005,9 @@ export type CourseCountOutputType = {
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  schedules?: boolean | CourseCountOutputTypeCountSchedulesArgs
+  faqs?: boolean | CourseCountOutputTypeCountFaqsArgs
+  cards?: boolean | CourseCountOutputTypeCountCardsArgs
   accesses?: boolean | CourseCountOutputTypeCountAccessesArgs
   courseCertificates?: boolean | CourseCountOutputTypeCountCourseCertificatesArgs
   sections?: boolean | CourseCountOutputTypeCountSectionsArgs
@@ -1172,6 +2022,27 @@ export type CourseCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
    * Select specific fields to fetch from the CourseCountOutputType
    */
   select?: Prisma.CourseCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ScheduleWhereInput
+}
+
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountFaqsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FAQWhereInput
+}
+
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountCardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseCardWhereInput
 }
 
 /**
@@ -1209,18 +2080,24 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  tagLine?: boolean
   level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   characteristics?: boolean
-  durationMinutes?: boolean
+  instructorId?: boolean
+  targetAudience?: boolean
+  duration?: boolean
   numberOfStudents?: boolean
-  testField?: boolean
-  instructorName?: boolean
+  rating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  instructor?: boolean | Prisma.Course$instructorArgs<ExtArgs>
+  schedules?: boolean | Prisma.Course$schedulesArgs<ExtArgs>
+  faqs?: boolean | Prisma.Course$faqsArgs<ExtArgs>
+  cards?: boolean | Prisma.Course$cardsArgs<ExtArgs>
   accesses?: boolean | Prisma.Course$accessesArgs<ExtArgs>
   courseCertificates?: boolean | Prisma.Course$courseCertificatesArgs<ExtArgs>
   sections?: boolean | Prisma.Course$sectionsArgs<ExtArgs>
@@ -1234,18 +2111,21 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  tagLine?: boolean
   level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   characteristics?: boolean
-  durationMinutes?: boolean
+  instructorId?: boolean
+  targetAudience?: boolean
+  duration?: boolean
   numberOfStudents?: boolean
-  testField?: boolean
-  instructorName?: boolean
+  rating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  instructor?: boolean | Prisma.Course$instructorArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
 export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1254,18 +2134,21 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  tagLine?: boolean
   level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   characteristics?: boolean
-  durationMinutes?: boolean
+  instructorId?: boolean
+  targetAudience?: boolean
+  duration?: boolean
   numberOfStudents?: boolean
-  testField?: boolean
-  instructorName?: boolean
+  rating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  instructor?: boolean | Prisma.Course$instructorArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
 export type CourseSelectScalar = {
@@ -1274,34 +2157,48 @@ export type CourseSelectScalar = {
   slug?: boolean
   description?: boolean
   shortDescription?: boolean
+  tagLine?: boolean
   level?: boolean
   thumbnail?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   characteristics?: boolean
-  durationMinutes?: boolean
+  instructorId?: boolean
+  targetAudience?: boolean
+  duration?: boolean
   numberOfStudents?: boolean
-  testField?: boolean
-  instructorName?: boolean
+  rating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "level" | "thumbnail" | "price" | "currency" | "status" | "characteristics" | "durationMinutes" | "numberOfStudents" | "testField" | "instructorName" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "tagLine" | "level" | "thumbnail" | "price" | "currency" | "status" | "characteristics" | "instructorId" | "targetAudience" | "duration" | "numberOfStudents" | "rating" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  instructor?: boolean | Prisma.Course$instructorArgs<ExtArgs>
+  schedules?: boolean | Prisma.Course$schedulesArgs<ExtArgs>
+  faqs?: boolean | Prisma.Course$faqsArgs<ExtArgs>
+  cards?: boolean | Prisma.Course$cardsArgs<ExtArgs>
   accesses?: boolean | Prisma.Course$accessesArgs<ExtArgs>
   courseCertificates?: boolean | Prisma.Course$courseCertificatesArgs<ExtArgs>
   sections?: boolean | Prisma.Course$sectionsArgs<ExtArgs>
   payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type CourseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  instructor?: boolean | Prisma.Course$instructorArgs<ExtArgs>
+}
+export type CourseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  instructor?: boolean | Prisma.Course$instructorArgs<ExtArgs>
+}
 
 export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Course"
   objects: {
+    instructor: Prisma.$InstructorPayload<ExtArgs> | null
+    schedules: Prisma.$SchedulePayload<ExtArgs>[]
+    faqs: Prisma.$FAQPayload<ExtArgs>[]
+    cards: Prisma.$CourseCardPayload<ExtArgs>[]
     accesses: Prisma.$CourseAccessPayload<ExtArgs>[]
     courseCertificates: Prisma.$CourseCertificatePayload<ExtArgs>[]
     sections: Prisma.$CourseSectionPayload<ExtArgs>[]
@@ -1313,16 +2210,18 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     slug: string
     description: string | null
     shortDescription: string | null
+    tagLine: string | null
     level: string | null
     thumbnail: string | null
     price: runtime.Decimal
     currency: string
     status: $Enums.CourseStatus
-    characteristics: runtime.JsonValue | null
-    durationMinutes: number | null
+    characteristics: string[]
+    instructorId: string | null
+    targetAudience: string[]
+    duration: string | null
     numberOfStudents: string | null
-    testField: string | null
-    instructorName: string | null
+    rating: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["course"]>
@@ -1719,6 +2618,10 @@ readonly fields: CourseFieldRefs;
  */
 export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  instructor<T extends Prisma.Course$instructorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$instructorArgs<ExtArgs>>): Prisma.Prisma__InstructorClient<runtime.Types.Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  schedules<T extends Prisma.Course$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  faqs<T extends Prisma.Course$faqsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$faqsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cards<T extends Prisma.Course$cardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$cardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accesses<T extends Prisma.Course$accessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$accessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   courseCertificates<T extends Prisma.Course$courseCertificatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$courseCertificatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sections<T extends Prisma.Course$sectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1757,16 +2660,18 @@ export interface CourseFieldRefs {
   readonly slug: Prisma.FieldRef<"Course", 'String'>
   readonly description: Prisma.FieldRef<"Course", 'String'>
   readonly shortDescription: Prisma.FieldRef<"Course", 'String'>
+  readonly tagLine: Prisma.FieldRef<"Course", 'String'>
   readonly level: Prisma.FieldRef<"Course", 'String'>
   readonly thumbnail: Prisma.FieldRef<"Course", 'String'>
   readonly price: Prisma.FieldRef<"Course", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Course", 'String'>
   readonly status: Prisma.FieldRef<"Course", 'CourseStatus'>
-  readonly characteristics: Prisma.FieldRef<"Course", 'Json'>
-  readonly durationMinutes: Prisma.FieldRef<"Course", 'Int'>
+  readonly characteristics: Prisma.FieldRef<"Course", 'String[]'>
+  readonly instructorId: Prisma.FieldRef<"Course", 'String'>
+  readonly targetAudience: Prisma.FieldRef<"Course", 'String[]'>
+  readonly duration: Prisma.FieldRef<"Course", 'String'>
   readonly numberOfStudents: Prisma.FieldRef<"Course", 'String'>
-  readonly testField: Prisma.FieldRef<"Course", 'String'>
-  readonly instructorName: Prisma.FieldRef<"Course", 'String'>
+  readonly rating: Prisma.FieldRef<"Course", 'String'>
   readonly createdAt: Prisma.FieldRef<"Course", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Course", 'DateTime'>
 }
@@ -2018,6 +2923,10 @@ export type CourseCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    */
   data: Prisma.CourseCreateManyInput | Prisma.CourseCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2088,6 +2997,10 @@ export type CourseUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Courses to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2154,6 +3067,97 @@ export type CourseDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Courses to delete.
    */
   limit?: number
+}
+
+/**
+ * Course.instructor
+ */
+export type Course$instructorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Instructor
+   */
+  select?: Prisma.InstructorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Instructor
+   */
+  omit?: Prisma.InstructorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InstructorInclude<ExtArgs> | null
+  where?: Prisma.InstructorWhereInput
+}
+
+/**
+ * Course.schedules
+ */
+export type Course$schedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Schedule
+   */
+  select?: Prisma.ScheduleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Schedule
+   */
+  omit?: Prisma.ScheduleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ScheduleInclude<ExtArgs> | null
+  where?: Prisma.ScheduleWhereInput
+  orderBy?: Prisma.ScheduleOrderByWithRelationInput | Prisma.ScheduleOrderByWithRelationInput[]
+  cursor?: Prisma.ScheduleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ScheduleScalarFieldEnum | Prisma.ScheduleScalarFieldEnum[]
+}
+
+/**
+ * Course.faqs
+ */
+export type Course$faqsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FAQ
+   */
+  select?: Prisma.FAQSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FAQ
+   */
+  omit?: Prisma.FAQOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FAQInclude<ExtArgs> | null
+  where?: Prisma.FAQWhereInput
+  orderBy?: Prisma.FAQOrderByWithRelationInput | Prisma.FAQOrderByWithRelationInput[]
+  cursor?: Prisma.FAQWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FAQScalarFieldEnum | Prisma.FAQScalarFieldEnum[]
+}
+
+/**
+ * Course.cards
+ */
+export type Course$cardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseCard
+   */
+  select?: Prisma.CourseCardSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseCard
+   */
+  omit?: Prisma.CourseCardOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseCardInclude<ExtArgs> | null
+  where?: Prisma.CourseCardWhereInput
+  orderBy?: Prisma.CourseCardOrderByWithRelationInput | Prisma.CourseCardOrderByWithRelationInput[]
+  cursor?: Prisma.CourseCardWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseCardScalarFieldEnum | Prisma.CourseCardScalarFieldEnum[]
 }
 
 /**

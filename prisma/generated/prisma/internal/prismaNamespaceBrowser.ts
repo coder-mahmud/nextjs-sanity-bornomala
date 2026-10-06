@@ -68,7 +68,13 @@ export const ModelName = {
   LessonProgress: 'LessonProgress',
   CourseCertificate: 'CourseCertificate',
   Coupon: 'Coupon',
-  CouponUsage: 'CouponUsage'
+  CouponUsage: 'CouponUsage',
+  Branch: 'Branch',
+  Schedule: 'Schedule',
+  ScheduleEntry: 'ScheduleEntry',
+  FAQ: 'FAQ',
+  CourseCard: 'CourseCard',
+  Instructor: 'Instructor'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -272,16 +278,18 @@ export const CourseScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   shortDescription: 'shortDescription',
+  tagLine: 'tagLine',
   level: 'level',
   thumbnail: 'thumbnail',
   price: 'price',
   currency: 'currency',
   status: 'status',
   characteristics: 'characteristics',
-  durationMinutes: 'durationMinutes',
+  instructorId: 'instructorId',
+  targetAudience: 'targetAudience',
+  duration: 'duration',
   numberOfStudents: 'numberOfStudents',
-  testField: 'testField',
-  instructorName: 'instructorName',
+  rating: 'rating',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -387,6 +395,91 @@ export const CouponUsageScalarFieldEnum = {
 } as const
 
 export type CouponUsageScalarFieldEnum = (typeof CouponUsageScalarFieldEnum)[keyof typeof CouponUsageScalarFieldEnum]
+
+
+export const BranchScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
+
+
+export const ScheduleScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  branchId: 'branchId',
+  level: 'level',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
+
+
+export const ScheduleEntryScalarFieldEnum = {
+  id: 'id',
+  scheduleId: 'scheduleId',
+  day: 'day',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ScheduleEntryScalarFieldEnum = (typeof ScheduleEntryScalarFieldEnum)[keyof typeof ScheduleEntryScalarFieldEnum]
+
+
+export const FAQScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  question: 'question',
+  answer: 'answer',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FAQScalarFieldEnum = (typeof FAQScalarFieldEnum)[keyof typeof FAQScalarFieldEnum]
+
+
+export const CourseCardScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  image: 'image',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseCardScalarFieldEnum = (typeof CourseCardScalarFieldEnum)[keyof typeof CourseCardScalarFieldEnum]
+
+
+export const InstructorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  title: 'title',
+  designation: 'designation',
+  experience: 'experience',
+  studentCount: 'studentCount',
+  courseCount: 'courseCount',
+  rating: 'rating',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  imagePublicId: 'imagePublicId',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstructorScalarFieldEnum = (typeof InstructorScalarFieldEnum)[keyof typeof InstructorScalarFieldEnum]
 
 
 export const SortOrder = {

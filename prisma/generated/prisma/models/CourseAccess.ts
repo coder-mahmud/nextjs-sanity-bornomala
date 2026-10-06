@@ -210,7 +210,6 @@ export type CourseAccessOrderByWithRelationInput = {
 export type CourseAccessWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   paymentId?: string
-  userId_courseId?: Prisma.CourseAccessUserIdCourseIdCompoundUniqueInput
   AND?: Prisma.CourseAccessWhereInput | Prisma.CourseAccessWhereInput[]
   OR?: Prisma.CourseAccessWhereInput[]
   NOT?: Prisma.CourseAccessWhereInput | Prisma.CourseAccessWhereInput[]
@@ -221,7 +220,7 @@ export type CourseAccessWhereUniqueInput = Prisma.AtLeast<{
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "paymentId" | "userId_courseId">
+}, "id" | "paymentId">
 
 export type CourseAccessOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -320,11 +319,6 @@ export type CourseAccessOrderByRelationAggregateInput = {
 export type CourseAccessNullableScalarRelationFilter = {
   is?: Prisma.CourseAccessWhereInput | null
   isNot?: Prisma.CourseAccessWhereInput | null
-}
-
-export type CourseAccessUserIdCourseIdCompoundUniqueInput = {
-  userId: string
-  courseId: string
 }
 
 export type CourseAccessCountOrderByAggregateInput = {

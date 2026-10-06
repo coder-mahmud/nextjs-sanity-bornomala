@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../prisma/generated/prisma"
+  provider      = "prisma-client"
+  output        = "../prisma/generated/prisma"
   binaryTargets = ["native", "rhel-openssl-1.1.x"]
 }
 
@@ -222,21 +222,31 @@ model QuizAttemptAnswer {
 }
 
 model Course {
-  id                 String              @id @default(cuid())
-  title              String
-  slug               String              @unique
-  description        String?
-  shortDescription   String?
-  level              String?
-  thumbnail          String?
-  price              Decimal             @db.Decimal(10, 2)
-  currency           String              @default("USD")
-  status             CourseStatus        @default(DRAFT)
-  characteristics    Json?
-  durationMinutes           Int?
-  numberOfStudents   String?
-  testField   String?
-  instructorName     String?
+  id               String       @id @default(cuid())
+  title            String
+  slug             String       @unique
+  description      String?
+  shortDescription String?
+  tagLine          String?
+  level            String?
+  thumbnail        String?
+  price            Decimal      @db.Decimal(10, 2)
+  currency         String       @default("USD")
+  status           CourseStatus @default(DRAFT)
+  characteristics  String[]
+
+  instructorId String?
+instructor   Instructor? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+
+  schedules    Schedule[]
+  faqs         FAQ[]
+  cards        CourseCard[]
+
+  targetAudience   String[]
+  duration         String?
+  numberOfStudents String?
+  rating           String?
+
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   accesses           CourseAccess[]
@@ -294,7 +304,7 @@ model CourseAccess {
   payment   Payment?  @relation(fields: [paymentId], references: [id])
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, courseId])
+  // @@unique([userId, courseId])
   @@index([userId])
   @@index([courseId])
 }
@@ -360,7 +370,119 @@ model CouponUsage {
   @@index([userId])
 }
 
+model Branch {
+  id      String  @id @default(cuid())
+  name    String
+  address String?
+
+  schedules Schedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Schedule {
+  id String @id @default(cuid())
+
+  courseId String
+  branchId String
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  level       String?
+  description String?
+
+  entries ScheduleEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([branchId])
+}
+
+model ScheduleEntry {
+  id String @id @default(cuid())
+
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  day       WeekDay
+  date      DateTime
+  startTime String
+  endTime   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([scheduleId])
+  @@index([date])
+}
+
+model FAQ {
+  id String @id @default(cuid())
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  question String
+  answer   String
+
+  order Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, order])
+  @@index([courseId])
+}
+
+model CourseCard {
+  id String @id @default(cuid())
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  image       String?
+  title       String
+  description String?
+  order       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, order])
+  @@index([courseId])
+}
+
+model Instructor {
+  id String @id @default(cuid())
+
+  name        String
+  title       String?
+  designation String?
+  experience  String?
+
+  studentCount Int      @default(0)
+  courseCount  Int      @default(0)
+  rating       Decimal? @db.Decimal(3, 2)
+
+  description String?
+
+  imageUrl      String?
+  imagePublicId String?
+
+  tags String[]
+
+  courses Course[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Role {
+  STUDENT
   USER
   ADMIN
   SUPERADMIN
@@ -395,4 +517,14 @@ enum AttemptStatus {
 enum CouponType {
   PERCENT
   FIXED
+}
+
+enum WeekDay {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
 }
