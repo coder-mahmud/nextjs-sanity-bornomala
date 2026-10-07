@@ -290,6 +290,7 @@ export const CourseScalarFieldEnum = {
   duration: 'duration',
   numberOfStudents: 'numberOfStudents',
   rating: 'rating',
+  order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

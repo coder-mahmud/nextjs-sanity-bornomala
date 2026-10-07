@@ -17,7 +17,6 @@ function slugify(text: string) {
 
 function getBunnyLibraryId(formData: FormData) {
   const libraryId = getString(formData, "bunnyLibraryId");
-
   return libraryId || process.env.BUNNY_STREAM_LIBRARY_ID || "";
 }
 
@@ -26,8 +25,7 @@ async function requireAdmin() {
 
   if (
     !session ||
-    (session.user?.role !== "ADMIN" &&
-      session.user?.role !== "SUPERADMIN")
+    (session.user?.role !== "ADMIN" && session.user?.role !== "SUPERADMIN")
   ) {
     throw new Error("Unauthorized");
   }
@@ -53,8 +51,16 @@ function getNullableNumber(formData: FormData, key: string) {
   }
 
   const numberValue = Number(value);
-
   return Number.isFinite(numberValue) ? numberValue : null;
+}
+
+function getStringArray(formData: FormData, key: string): string[] {
+  const raw = formData.get(key);
+  if (typeof raw !== "string") return [];
+  return raw
+    .split("\n")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
 }
 
 async function createUniqueLessonSlug(title: string) {
@@ -75,16 +81,30 @@ export async function createCourse(formData: FormData) {
   await requireAdmin();
 
   const title = getString(formData, "title");
-  const shortDescription = getString(formData, "shortDescription");
-  const description = getString(formData, "description");
-  const thumbnail = getString(formData, "thumbnail");
+  const tagLine = getNullableString(formData, "tagLine");
+  const shortDescription = getNullableString(formData, "shortDescription");
+  const description = getNullableString(formData, "description");
+  const thumbnail = getNullableString(formData, "thumbnail");
   const price = Number(formData.get("price") || 0);
-  const currency = getString(formData, "currency") || "USD";
-  const level = getString(formData, "level");
-  const durationMinutes = getNullableNumber(formData, "durationMinutes");
-  const instructorName = getString(formData, "instructorName");
+
+  // Default currency to EUR since field was removed from form
+  const currency = getString(formData, "currency") || "EUR";
+
+  const level = getNullableString(formData, "level");
+  const duration = getNullableString(formData, "duration");
+  const numberOfStudents = getNullableString(formData, "numberOfStudents");
+  const rating = getNullableString(formData, "rating");
+
+  // Pass undefined instead of null so Prisma omits relation error when unselected
+  const instructorId =
+    getNullableString(formData, "instructorId") || undefined;
+
+  const order = getNullableNumber(formData, "order") || 0;
   const status =
     ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+
+  const characteristics = getStringArray(formData, "characteristics");
+  const targetAudience = getStringArray(formData, "targetAudience");
 
   if (!title) {
     throw new Error("Title is required");
@@ -99,40 +119,54 @@ export async function createCourse(formData: FormData) {
     counter++;
   }
 
-  await prisma.course.create({
+  const course = await prisma.course.create({
     data: {
       title,
       slug,
-      shortDescription: shortDescription || null,
-      description: description || null,
-      thumbnail: thumbnail || null,
+      tagLine,
+      shortDescription,
+      description,
+      thumbnail,
       price,
       currency,
-      level: level || null,
-      durationMinutes,
-      instructorName: instructorName || null,
+      level,
+      duration,
+      numberOfStudents,
+      rating,
+      instructorId,
+      order,
       status,
+      characteristics,
+      targetAudience,
     },
   });
 
   revalidatePath("/admin/courses");
-  redirect("/admin/courses");
+  return { success: true, courseId: course.id };
 }
 
 export async function updateCourse(courseId: string, formData: FormData) {
   await requireAdmin();
 
   const title = getString(formData, "title");
-  const shortDescription = getString(formData, "shortDescription");
-  const description = getString(formData, "description");
-  const thumbnail = getString(formData, "thumbnail");
+  const tagLine = getNullableString(formData, "tagLine");
+  const shortDescription = getNullableString(formData, "shortDescription");
+  const description = getNullableString(formData, "description");
+  const thumbnail = getNullableString(formData, "thumbnail");
   const price = Number(formData.get("price") || 0);
-  const currency = getString(formData, "currency") || "USD";
-  const level = getString(formData, "level");
-  const durationMinutes = getNullableNumber(formData, "durationMinutes");
-  const instructorName = getString(formData, "instructorName");
+  const currency = getString(formData, "currency") || "EUR";
+  const level = getNullableString(formData, "level");
+  const duration = getNullableString(formData, "duration");
+  const numberOfStudents = getNullableString(formData, "numberOfStudents");
+  const rating = getNullableString(formData, "rating");
+  const instructorId =
+    getNullableString(formData, "instructorId") || undefined;
+  const order = getNullableNumber(formData, "order");
   const status =
     ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+
+  const characteristics = getStringArray(formData, "characteristics");
+  const targetAudience = getStringArray(formData, "targetAudience");
 
   if (!title) {
     throw new Error("Title is required");
@@ -144,15 +178,21 @@ export async function updateCourse(courseId: string, formData: FormData) {
     },
     data: {
       title,
-      shortDescription: shortDescription || null,
-      description: description || null,
-      thumbnail: thumbnail || null,
+      tagLine,
+      shortDescription,
+      description,
+      thumbnail,
       price,
       currency,
-      level: level || null,
-      durationMinutes,
-      instructorName: instructorName || null,
+      level,
+      duration,
+      numberOfStudents,
+      rating,
+      instructorId,
+      order,
       status,
+      characteristics,
+      targetAudience,
     },
   });
 
@@ -162,43 +202,6 @@ export async function updateCourse(courseId: string, formData: FormData) {
 
   redirect("/admin/courses");
 }
-
-// export async function createCourseSection(
-//   courseId: string,
-//   formData: FormData,
-// ) {
-//   await requireAdmin();
-
-//   const title = getString(formData, "title");
-//   const description = getNullableString(formData, "description");
-
-//   if (!title) {
-//     throw new Error("Section title is required");
-//   }
-
-//   const maxOrder = await prisma.courseSection.aggregate({
-//     where: {
-//       courseId,
-//     },
-//     _max: {
-//       order: true,
-//     },
-//   });
-
-//   const nextOrder = (maxOrder._max.order ?? 0) + 1;
-
-//   await prisma.courseSection.create({
-//     data: {
-//       courseId,
-//       title,
-//       description,
-//       order: nextOrder,
-//     },
-//   });
-
-//   revalidatePath("/admin/courses");
-//   revalidatePath(`/admin/courses/${courseId}/sections`);
-// }
 
 export async function createCourseSection(
   courseId: string,
@@ -262,8 +265,6 @@ export async function createCourseSection(
     };
   }
 }
-
-
 
 export async function updateCourseSection(
   courseId: string,
@@ -353,8 +354,6 @@ export async function deleteCourseSection(
   revalidatePath("/admin/courses");
   revalidatePath(`/admin/courses/${courseId}/sections`);
 }
-
-
 
 export async function createLesson(
   courseId: string,
@@ -546,7 +545,6 @@ export async function updateLesson(
     };
   }
 }
-
 
 export async function deleteLesson(courseId: string, lessonId: string) {
   await requireAdmin();

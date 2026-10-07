@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Course" ALTER COLUMN "currency" DROP NOT NULL,
+ALTER COLUMN "currency" SET DEFAULT 'EUR';

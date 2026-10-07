@@ -187,7 +187,8 @@ export async function POST(req: Request) {
         line_items: [
           {
             price_data: {
-              currency: course.currency,
+              // currency: course.currency,
+              currency: (course.currency || "eur").toLowerCase(),
               product_data: {
                 name: course.title,
               },
