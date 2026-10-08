@@ -398,8 +398,8 @@ export const ModelName = {
   Course: 'Course',
   Batch: 'Batch',
   Lesson: 'Lesson',
-  LessonProgress: 'LessonProgress',
   Quiz: 'Quiz',
+  LessonProgress: 'LessonProgress',
   Question: 'Question',
   QuestionOption: 'QuestionOption',
   Payment: 'Payment',
@@ -431,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "course" | "batch" | "lesson" | "lessonProgress" | "quiz" | "question" | "questionOption" | "payment" | "courseAccess" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "courseCertificate" | "coupon" | "couponUsage" | "branch" | "schedule" | "scheduleEntry" | "fAQ" | "courseCard" | "instructor"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "course" | "batch" | "lesson" | "quiz" | "lessonProgress" | "question" | "questionOption" | "payment" | "courseAccess" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "courseCertificate" | "coupon" | "couponUsage" | "branch" | "schedule" | "scheduleEntry" | "fAQ" | "courseCard" | "instructor"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1027,80 +1027,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    LessonProgress: {
-      payload: Prisma.$LessonProgressPayload<ExtArgs>
-      fields: Prisma.LessonProgressFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.LessonProgressFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.LessonProgressFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
-        }
-        findFirst: {
-          args: Prisma.LessonProgressFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.LessonProgressFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
-        }
-        findMany: {
-          args: Prisma.LessonProgressFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>[]
-        }
-        create: {
-          args: Prisma.LessonProgressCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
-        }
-        createMany: {
-          args: Prisma.LessonProgressCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.LessonProgressCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>[]
-        }
-        delete: {
-          args: Prisma.LessonProgressDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
-        }
-        update: {
-          args: Prisma.LessonProgressUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
-        }
-        deleteMany: {
-          args: Prisma.LessonProgressDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.LessonProgressUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.LessonProgressUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>[]
-        }
-        upsert: {
-          args: Prisma.LessonProgressUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
-        }
-        aggregate: {
-          args: Prisma.LessonProgressAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonProgress>
-        }
-        groupBy: {
-          args: Prisma.LessonProgressGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.LessonProgressGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.LessonProgressCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.LessonProgressCountAggregateOutputType> | number
-        }
-      }
-    }
     Quiz: {
       payload: Prisma.$QuizPayload<ExtArgs>
       fields: Prisma.QuizFieldRefs
@@ -1172,6 +1098,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.QuizCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.QuizCountAggregateOutputType> | number
+        }
+      }
+    }
+    LessonProgress: {
+      payload: Prisma.$LessonProgressPayload<ExtArgs>
+      fields: Prisma.LessonProgressFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LessonProgressFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LessonProgressFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
+        }
+        findFirst: {
+          args: Prisma.LessonProgressFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LessonProgressFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
+        }
+        findMany: {
+          args: Prisma.LessonProgressFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>[]
+        }
+        create: {
+          args: Prisma.LessonProgressCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
+        }
+        createMany: {
+          args: Prisma.LessonProgressCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LessonProgressCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>[]
+        }
+        delete: {
+          args: Prisma.LessonProgressDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
+        }
+        update: {
+          args: Prisma.LessonProgressUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
+        }
+        deleteMany: {
+          args: Prisma.LessonProgressDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LessonProgressUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LessonProgressUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>[]
+        }
+        upsert: {
+          args: Prisma.LessonProgressUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonProgressPayload>
+        }
+        aggregate: {
+          args: Prisma.LessonProgressAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonProgress>
+        }
+        groupBy: {
+          args: Prisma.LessonProgressGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonProgressGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LessonProgressCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonProgressCountAggregateOutputType> | number
         }
       }
     }
@@ -2518,9 +2518,10 @@ export const LessonScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   videoUrl: 'videoUrl',
-  durationSeconds: 'durationSeconds',
   order: 'order',
   isPreview: 'isPreview',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
   bunnyLibraryId: 'bunnyLibraryId',
   bunnyVideoId: 'bunnyVideoId',
   attachments: 'attachments',
@@ -2530,6 +2531,25 @@ export const LessonScalarFieldEnum = {
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const QuizScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  price: 'price',
+  currency: 'currency',
+  durationMinutes: 'durationMinutes',
+  maxAttempts: 'maxAttempts',
+  passingScore: 'passingScore',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
 
 
 export const LessonProgressScalarFieldEnum = {
@@ -2543,27 +2563,6 @@ export const LessonProgressScalarFieldEnum = {
 } as const
 
 export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
-
-
-export const QuizScalarFieldEnum = {
-  id: 'id',
-  lessonId: 'lessonId',
-  title: 'title',
-  slug: 'slug',
-  description: 'description',
-  price: 'price',
-  currency: 'currency',
-  durationMinutes: 'durationMinutes',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  maxAttempts: 'maxAttempts',
-  passingScore: 'passingScore',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
 
 
 export const QuestionScalarFieldEnum = {
@@ -3144,8 +3143,8 @@ export type GlobalOmitConfig = {
   course?: Prisma.CourseOmit
   batch?: Prisma.BatchOmit
   lesson?: Prisma.LessonOmit
-  lessonProgress?: Prisma.LessonProgressOmit
   quiz?: Prisma.QuizOmit
+  lessonProgress?: Prisma.LessonProgressOmit
   question?: Prisma.QuestionOmit
   questionOption?: Prisma.QuestionOptionOmit
   payment?: Prisma.PaymentOmit

@@ -57,8 +57,8 @@ export const ModelName = {
   Course: 'Course',
   Batch: 'Batch',
   Lesson: 'Lesson',
-  LessonProgress: 'LessonProgress',
   Quiz: 'Quiz',
+  LessonProgress: 'LessonProgress',
   Question: 'Question',
   QuestionOption: 'QuestionOption',
   Payment: 'Payment',
@@ -213,9 +213,10 @@ export const LessonScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   videoUrl: 'videoUrl',
-  durationSeconds: 'durationSeconds',
   order: 'order',
   isPreview: 'isPreview',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
   bunnyLibraryId: 'bunnyLibraryId',
   bunnyVideoId: 'bunnyVideoId',
   attachments: 'attachments',
@@ -225,6 +226,25 @@ export const LessonScalarFieldEnum = {
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const QuizScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  price: 'price',
+  currency: 'currency',
+  durationMinutes: 'durationMinutes',
+  maxAttempts: 'maxAttempts',
+  passingScore: 'passingScore',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
 
 
 export const LessonProgressScalarFieldEnum = {
@@ -238,27 +258,6 @@ export const LessonProgressScalarFieldEnum = {
 } as const
 
 export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
-
-
-export const QuizScalarFieldEnum = {
-  id: 'id',
-  lessonId: 'lessonId',
-  title: 'title',
-  slug: 'slug',
-  description: 'description',
-  price: 'price',
-  currency: 'currency',
-  durationMinutes: 'durationMinutes',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  maxAttempts: 'maxAttempts',
-  passingScore: 'passingScore',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
 
 
 export const QuestionScalarFieldEnum = {

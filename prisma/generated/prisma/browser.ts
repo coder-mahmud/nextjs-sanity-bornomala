@@ -58,15 +58,15 @@ export type Batch = Prisma.BatchModel
  */
 export type Lesson = Prisma.LessonModel
 /**
- * Model LessonProgress
- * 
- */
-export type LessonProgress = Prisma.LessonProgressModel
-/**
  * Model Quiz
  * 
  */
 export type Quiz = Prisma.QuizModel
+/**
+ * Model LessonProgress
+ * 
+ */
+export type LessonProgress = Prisma.LessonProgressModel
 /**
  * Model Question
  * 

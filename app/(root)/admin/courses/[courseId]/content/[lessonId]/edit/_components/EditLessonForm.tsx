@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { updateLesson } from "@/app/(root)/admin/courses/actions";
 import { deleteCloudinaryImage } from "@/actions/cloudinary";
 import { Paperclip, Trash2, Loader2 } from "lucide-react";
+import { toast } from "react-toastify";
 
 interface EditLessonFormProps {
   lesson: any;
@@ -21,7 +23,6 @@ export default function EditLessonForm({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const formatDateForInput = (dateString?: string | Date | null) => {
     if (!dateString) return "";
@@ -54,38 +55,50 @@ export default function EditLessonForm({
     if (!file) return;
 
     setUploading(true);
-    setUploadError(null);
 
-    try {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", uploadPreset);
-      data.append("folder", "lesson_attachments");
+    const uploadPromise = new Promise(async (resolve, reject) => {
+      try {
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", uploadPreset);
+        data.append("folder", "lesson_attachments");
 
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-        {
-          method: "POST",
-          body: data,
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+          {
+            method: "POST",
+            body: data,
+          }
+        );
+
+        const result = await res.json();
+
+        if (res.ok && result.secure_url) {
+          setFormData((prev) => ({
+            ...prev,
+            attachments: [...prev.attachments, result.secure_url],
+          }));
+          resolve(result);
+        } else {
+          reject(new Error(result.error?.message || "Failed to upload file to Cloudinary"));
         }
-      );
-
-      const result = await res.json();
-
-      if (res.ok && result.secure_url) {
-        setFormData((prev) => ({
-          ...prev,
-          attachments: [...prev.attachments, result.secure_url],
-        }));
-      } else {
-        throw new Error(result.error?.message || "Failed to upload file to Cloudinary");
+      } catch (err) {
+        reject(err);
+      } finally {
+        setUploading(false);
+        e.target.value = "";
       }
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload error");
-    } finally {
-      setUploading(false);
-      e.target.value = "";
-    }
+    });
+
+    toast.promise(uploadPromise, {
+      pending: "Uploading attachment...",
+      success: "Attachment uploaded successfully!",
+      error: {
+        render({ data }: any) {
+          return data?.message || "Failed to upload attachment.";
+        },
+      },
+    });
   };
 
   const removeAttachment = async (urlToRemove: string) => {
@@ -98,6 +111,7 @@ export default function EditLessonForm({
         ...prev,
         attachments: prev.attachments.filter((url) => url !== urlToRemove),
       }));
+      toast.info("Attachment removed.");
     }
   };
 
@@ -105,33 +119,49 @@ export default function EditLessonForm({
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const res = await fetch(`/api/admin/lessons/${lesson.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          order: Number(formData.order),
-          batchId: formData.batchId || null,
-          quizId: formData.quizId || null,
-          startsAt: formData.startsAt ? new Date(formData.startsAt).toISOString() : null,
-          endsAt: formData.endsAt ? new Date(formData.endsAt).toISOString() : null,
-        }),
-      });
+    const saveLessonPromise = new Promise(async (resolve, reject) => {
+      try {
+        const data = new FormData();
+        data.append("title", formData.title);
+        data.append("slug", formData.slug);
+        data.append("description", formData.description);
+        data.append("batchId", formData.batchId);
+        data.append("quizId", formData.quizId);
+        data.append("order", String(formData.order));
+        if (formData.isPreview) data.append("isPreview", "on");
+        data.append("startsAt", formData.startsAt);
+        data.append("endsAt", formData.endsAt);
+        data.append("videoUrl", formData.videoUrl);
+        data.append("bunnyLibraryId", formData.bunnyLibraryId);
+        data.append("bunnyVideoId", formData.bunnyVideoId);
+        data.append("notes", formData.notes);
+        data.append("attachments", JSON.stringify(formData.attachments));
 
-      if (res.ok) {
-        router.push(`/admin/courses/${courseId}/content`);
-        router.refresh();
-      } else {
-        const error = await res.json();
-        alert(error.message || "Failed to update lesson.");
+        const res = await updateLesson(lesson.id, null, data);
+
+        if (res.status === "success") {
+          resolve(res);
+          router.push(`/admin/courses/${courseId}/content`);
+          router.refresh();
+        } else {
+          reject(new Error(res.message || "Failed to update lesson."));
+        }
+      } catch (err) {
+        reject(err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      alert("Error saving lesson.");
-    } finally {
-      setLoading(false);
-    }
+    });
+
+    toast.promise(saveLessonPromise, {
+      pending: "Updating lesson...",
+      success: "Lesson updated successfully! 👌",
+      error: {
+        render({ data }: any) {
+          return data?.message || "Error updating lesson.";
+        },
+      },
+    });
   };
 
   return (
@@ -223,7 +253,7 @@ export default function EditLessonForm({
         </div>
       </div>
 
-      {/* Schedule Windows (Lesson/Quiz Timing) */}
+      {/* Schedule Windows */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-xl bg-blue-50/50 p-3 border border-blue-100">
         <div>
           <label className="block text-xs font-semibold text-blue-900">Starts At (Schedule Window)</label>
@@ -314,8 +344,6 @@ export default function EditLessonForm({
             />
           </label>
         </div>
-
-        {uploadError && <p className="text-xs text-rose-600 mb-2">{uploadError}</p>}
 
         {formData.attachments.length > 0 && (
           <ul className="space-y-2 border rounded-xl p-3 bg-gray-50/50">

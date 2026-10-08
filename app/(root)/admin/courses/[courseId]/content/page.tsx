@@ -24,16 +24,15 @@ export default async function CourseContentPage({ params }: CourseContentPagePro
 
   const { courseId } = await params;
 
-
-  const [course, quizzes, lessons] = await Promise.all([
+  // Fetch course, batches, quizzes, and lessons
+  const [course, batches, quizzes, lessons] = await Promise.all([
     prisma.course.findUnique({
       where: { id: courseId },
-      include: {
-        batches: {
-          orderBy: { createdAt: "desc" },
-          select: { id: true, title: true, status: true },
-        },
-      },
+    }),
+    prisma.batch.findMany({
+      where: { courseId: courseId },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, title: true, status: true },
     }),
     prisma.quiz.findMany({
       select: { id: true, title: true, lessonId: true },
@@ -53,6 +52,7 @@ export default async function CourseContentPage({ params }: CourseContentPagePro
       orderBy: { order: "asc" },
     }),
   ]);
+
   if (!course) {
     notFound();
   }
@@ -82,7 +82,7 @@ export default async function CourseContentPage({ params }: CourseContentPagePro
 
         <CreateLessonModalButton
           courseId={course.id}
-          batches={course.batches}
+          batches={batches}
           quizzes={quizzes}
         />
       </div>
@@ -92,7 +92,7 @@ export default async function CourseContentPage({ params }: CourseContentPagePro
         <h2 className="text-sm font-bold text-gray-900 mb-4">Course Lessons</h2>
         <LessonList
           lessons={lessons}
-          batches={course.batches}
+          batches={batches}
           courseId={course.id}
         />
       </div>

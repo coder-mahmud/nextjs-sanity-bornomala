@@ -49,8 +49,6 @@ export type QuizMinAggregateOutputType = {
   price: runtime.Decimal | null
   currency: string | null
   durationMinutes: number | null
-  startsAt: Date | null
-  endsAt: Date | null
   maxAttempts: number | null
   passingScore: number | null
   status: $Enums.QuizStatus | null
@@ -67,8 +65,6 @@ export type QuizMaxAggregateOutputType = {
   price: runtime.Decimal | null
   currency: string | null
   durationMinutes: number | null
-  startsAt: Date | null
-  endsAt: Date | null
   maxAttempts: number | null
   passingScore: number | null
   status: $Enums.QuizStatus | null
@@ -85,8 +81,6 @@ export type QuizCountAggregateOutputType = {
   price: number
   currency: number
   durationMinutes: number
-  startsAt: number
-  endsAt: number
   maxAttempts: number
   passingScore: number
   status: number
@@ -119,8 +113,6 @@ export type QuizMinAggregateInputType = {
   price?: true
   currency?: true
   durationMinutes?: true
-  startsAt?: true
-  endsAt?: true
   maxAttempts?: true
   passingScore?: true
   status?: true
@@ -137,8 +129,6 @@ export type QuizMaxAggregateInputType = {
   price?: true
   currency?: true
   durationMinutes?: true
-  startsAt?: true
-  endsAt?: true
   maxAttempts?: true
   passingScore?: true
   status?: true
@@ -155,8 +145,6 @@ export type QuizCountAggregateInputType = {
   price?: true
   currency?: true
   durationMinutes?: true
-  startsAt?: true
-  endsAt?: true
   maxAttempts?: true
   passingScore?: true
   status?: true
@@ -260,8 +248,6 @@ export type QuizGroupByOutputType = {
   price: runtime.Decimal
   currency: string
   durationMinutes: number
-  startsAt: Date | null
-  endsAt: Date | null
   maxAttempts: number
   passingScore: number
   status: $Enums.QuizStatus
@@ -301,8 +287,6 @@ export type QuizWhereInput = {
   price?: Prisma.DecimalFilter<"Quiz"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Quiz"> | string
   durationMinutes?: Prisma.IntFilter<"Quiz"> | number
-  startsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
-  endsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
   maxAttempts?: Prisma.IntFilter<"Quiz"> | number
   passingScore?: Prisma.IntFilter<"Quiz"> | number
   status?: Prisma.EnumQuizStatusFilter<"Quiz"> | $Enums.QuizStatus
@@ -324,8 +308,6 @@ export type QuizOrderByWithRelationInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
-  startsAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
   maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -350,8 +332,6 @@ export type QuizWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.DecimalFilter<"Quiz"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Quiz"> | string
   durationMinutes?: Prisma.IntFilter<"Quiz"> | number
-  startsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
-  endsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
   maxAttempts?: Prisma.IntFilter<"Quiz"> | number
   passingScore?: Prisma.IntFilter<"Quiz"> | number
   status?: Prisma.EnumQuizStatusFilter<"Quiz"> | $Enums.QuizStatus
@@ -373,8 +353,6 @@ export type QuizOrderByWithAggregationInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
-  startsAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
   maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -399,8 +377,6 @@ export type QuizScalarWhereWithAggregatesInput = {
   price?: Prisma.DecimalWithAggregatesFilter<"Quiz"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
   durationMinutes?: Prisma.IntWithAggregatesFilter<"Quiz"> | number
-  startsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Quiz"> | Date | string | null
-  endsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Quiz"> | Date | string | null
   maxAttempts?: Prisma.IntWithAggregatesFilter<"Quiz"> | number
   passingScore?: Prisma.IntWithAggregatesFilter<"Quiz"> | number
   status?: Prisma.EnumQuizStatusWithAggregatesFilter<"Quiz"> | $Enums.QuizStatus
@@ -416,8 +392,6 @@ export type QuizCreateInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -439,8 +413,6 @@ export type QuizUncheckedCreateInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -460,8 +432,6 @@ export type QuizUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -483,8 +453,6 @@ export type QuizUncheckedUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -505,8 +473,6 @@ export type QuizCreateManyInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -522,8 +488,6 @@ export type QuizUpdateManyMutationInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -540,8 +504,6 @@ export type QuizUncheckedUpdateManyInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -563,8 +525,6 @@ export type QuizCountOrderByAggregateInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
-  startsAt?: Prisma.SortOrder
-  endsAt?: Prisma.SortOrder
   maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -588,8 +548,6 @@ export type QuizMaxOrderByAggregateInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
-  startsAt?: Prisma.SortOrder
-  endsAt?: Prisma.SortOrder
   maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -606,8 +564,6 @@ export type QuizMinOrderByAggregateInput = {
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
-  startsAt?: Prisma.SortOrder
-  endsAt?: Prisma.SortOrder
   maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -729,8 +685,6 @@ export type QuizCreateWithoutLessonInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -750,8 +704,6 @@ export type QuizUncheckedCreateWithoutLessonInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -787,8 +739,6 @@ export type QuizUpdateWithoutLessonInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -808,8 +758,6 @@ export type QuizUncheckedUpdateWithoutLessonInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -829,8 +777,6 @@ export type QuizCreateWithoutQuestionsInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -851,8 +797,6 @@ export type QuizUncheckedCreateWithoutQuestionsInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -887,8 +831,6 @@ export type QuizUpdateWithoutQuestionsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -909,8 +851,6 @@ export type QuizUncheckedUpdateWithoutQuestionsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -929,8 +869,6 @@ export type QuizCreateWithoutPaymentsInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -951,8 +889,6 @@ export type QuizUncheckedCreateWithoutPaymentsInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -987,8 +923,6 @@ export type QuizUpdateWithoutPaymentsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -1009,8 +943,6 @@ export type QuizUncheckedUpdateWithoutPaymentsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -1029,8 +961,6 @@ export type QuizCreateWithoutAccessesInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -1051,8 +981,6 @@ export type QuizUncheckedCreateWithoutAccessesInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -1087,8 +1015,6 @@ export type QuizUpdateWithoutAccessesInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -1109,8 +1035,6 @@ export type QuizUncheckedUpdateWithoutAccessesInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -1129,8 +1053,6 @@ export type QuizCreateWithoutAttemptsInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -1151,8 +1073,6 @@ export type QuizUncheckedCreateWithoutAttemptsInput = {
   price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  startsAt?: Date | string | null
-  endsAt?: Date | string | null
   maxAttempts?: number
   passingScore?: number
   status?: $Enums.QuizStatus
@@ -1187,8 +1107,6 @@ export type QuizUpdateWithoutAttemptsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -1209,8 +1127,6 @@ export type QuizUncheckedUpdateWithoutAttemptsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
-  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
@@ -1288,8 +1204,6 @@ export type QuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
-  startsAt?: boolean
-  endsAt?: boolean
   maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
@@ -1312,8 +1226,6 @@ export type QuizSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
-  startsAt?: boolean
-  endsAt?: boolean
   maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
@@ -1331,8 +1243,6 @@ export type QuizSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
-  startsAt?: boolean
-  endsAt?: boolean
   maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
@@ -1350,8 +1260,6 @@ export type QuizSelectScalar = {
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
-  startsAt?: boolean
-  endsAt?: boolean
   maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
@@ -1359,7 +1267,7 @@ export type QuizSelectScalar = {
   updatedAt?: boolean
 }
 
-export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "title" | "slug" | "description" | "price" | "currency" | "durationMinutes" | "startsAt" | "endsAt" | "maxAttempts" | "passingScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["quiz"]>
+export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "title" | "slug" | "description" | "price" | "currency" | "durationMinutes" | "maxAttempts" | "passingScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["quiz"]>
 export type QuizInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
   payments?: boolean | Prisma.Quiz$paymentsArgs<ExtArgs>
@@ -1393,8 +1301,6 @@ export type $QuizPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     price: runtime.Decimal
     currency: string
     durationMinutes: number
-    startsAt: Date | null
-    endsAt: Date | null
     maxAttempts: number
     passingScore: number
     status: $Enums.QuizStatus
@@ -1836,8 +1742,6 @@ export interface QuizFieldRefs {
   readonly price: Prisma.FieldRef<"Quiz", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Quiz", 'String'>
   readonly durationMinutes: Prisma.FieldRef<"Quiz", 'Int'>
-  readonly startsAt: Prisma.FieldRef<"Quiz", 'DateTime'>
-  readonly endsAt: Prisma.FieldRef<"Quiz", 'DateTime'>
   readonly maxAttempts: Prisma.FieldRef<"Quiz", 'Int'>
   readonly passingScore: Prisma.FieldRef<"Quiz", 'Int'>
   readonly status: Prisma.FieldRef<"Quiz", 'QuizStatus'>
