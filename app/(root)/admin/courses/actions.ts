@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { CourseStatus } from "@/prisma/generated/prisma/enums";
 
@@ -77,6 +76,10 @@ async function createUniqueLessonSlug(title: string) {
   return slug;
 }
 
+/* ==========================================
+   COURSE ACTIONS
+   ========================================== */
+
 export async function createCourse(formData: FormData) {
   await requireAdmin();
 
@@ -86,20 +89,14 @@ export async function createCourse(formData: FormData) {
   const description = getNullableString(formData, "description");
   const thumbnail = getNullableString(formData, "thumbnail");
   const price = Number(formData.get("price") || 0);
-
-  // Default currency to EUR since field was removed from form
   const currency = getString(formData, "currency") || "EUR";
-
   const level = getNullableString(formData, "level");
   const duration = getNullableString(formData, "duration");
   const numberOfStudents = getNullableString(formData, "numberOfStudents");
   const rating = getNullableString(formData, "rating");
-
-  // Pass undefined instead of null so Prisma omits relation error when unselected
   const instructorId =
     getNullableString(formData, "instructorId") || undefined;
-
-  const order = getNullableNumber(formData, "order") || 0;
+  const order = getNullableNumber(formData, "order");
   const status =
     ((formData.get("status") as string) || "DRAFT") as CourseStatus;
 
@@ -173,9 +170,7 @@ export async function updateCourse(courseId: string, formData: FormData) {
   }
 
   await prisma.course.update({
-    where: {
-      id: courseId,
-    },
+    where: { id: courseId },
     data: {
       title,
       tagLine,
@@ -197,224 +192,77 @@ export async function updateCourse(courseId: string, formData: FormData) {
   });
 
   revalidatePath("/admin/courses");
+  revalidatePath(`/admin/courses/${courseId}`);
   revalidatePath(`/admin/courses/${courseId}/edit`);
-  revalidatePath(`/admin/courses/${courseId}/sections`);
 
-  redirect("/admin/courses");
+  return { success: true };
 }
 
-export async function createCourseSection(
-  courseId: string,
-  _previousState: {
-    status: "success" | "error";
-    message: string;
-  } | null,
-  formData: FormData,
-) {
+export async function deleteCourse(courseId: string) {
   try {
     await requireAdmin();
 
-    const title = getString(formData, "title");
-    const description = getNullableString(formData, "description");
-
-    if (!title) {
-      return {
-        status: "error" as const,
-        message: "Section title is required",
-      };
-    }
-
-    const maxOrder = await prisma.courseSection.aggregate({
-      where: {
-        courseId,
-      },
-      _max: {
-        order: true,
-      },
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
     });
 
-    const nextOrder = (maxOrder._max.order ?? 0) + 1;
+    if (!course) {
+      return { success: false, message: "Course not found" };
+    }
 
-    await prisma.courseSection.create({
-      data: {
-        course: {
-          connect: {
-            id: courseId,
-          },
-        },
-        title,
-        description,
-        order: nextOrder,
-      },
+    await prisma.course.delete({
+      where: { id: courseId },
     });
 
     revalidatePath("/admin/courses");
-    revalidatePath(`/admin/courses/${courseId}/sections`);
-
-    return {
-      status: "success" as const,
-      message: "Course section added",
-    };
+    return { success: true };
   } catch (error) {
+    console.error("Error deleting course:", error);
     return {
-      status: "error" as const,
+      success: false,
       message:
-        error instanceof Error
-          ? error.message
-          : "Failed to add course section",
+        error instanceof Error ? error.message : "Failed to delete course",
     };
   }
 }
 
-export async function updateCourseSection(
-  courseId: string,
-  sectionId: string,
-  _previousState: {
-    status: "success" | "error";
-    message: string;
-  } | null,
-  formData: FormData,
-) {
-  try {
-    await requireAdmin();
-
-    const title = getString(formData, "title");
-    const description = getNullableString(formData, "description");
-
-    if (!title) {
-      return {
-        status: "error" as const,
-        message: "Section title is required",
-      };
-    }
-
-    const section = await prisma.courseSection.findUnique({
-      where: {
-        id: sectionId,
-      },
-    });
-
-    if (!section || section.courseId !== courseId) {
-      return {
-        status: "error" as const,
-        message: "Section not found",
-      };
-    }
-
-    await prisma.courseSection.update({
-      where: {
-        id: sectionId,
-      },
-      data: {
-        title,
-        description,
-      },
-    });
-
-    revalidatePath("/admin/courses");
-    revalidatePath(`/admin/courses/${courseId}/sections`);
-
-    return {
-      status: "success" as const,
-      message: "Course section updated",
-    };
-  } catch (error) {
-    return {
-      status: "error" as const,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Failed to update course section",
-    };
-  }
-}
-
-export async function deleteCourseSection(
-  courseId: string,
-  sectionId: string,
-) {
-  await requireAdmin();
-
-  const section = await prisma.courseSection.findUnique({
-    where: {
-      id: sectionId,
-    },
-  });
-
-  if (!section || section.courseId !== courseId) {
-    throw new Error("Section not found");
-  }
-
-  await prisma.courseSection.delete({
-    where: {
-      id: sectionId,
-    },
-  });
-
-  revalidatePath("/admin/courses");
-  revalidatePath(`/admin/courses/${courseId}/sections`);
-}
+/* ==========================================
+   LESSON ACTIONS (LINKED TO BATCH)
+   ========================================== */
 
 export async function createLesson(
-  courseId: string,
-  sectionId: string,
+  batchId: string,
   _previousState: {
     status: "success" | "error";
     message: string;
   } | null,
-  formData: FormData,
+  formData: FormData
 ) {
   try {
     await requireAdmin();
 
     const title = getString(formData, "title");
     const description = getNullableString(formData, "description");
+    const notes = getNullableString(formData, "notes");
     const bunnyLibraryId = getBunnyLibraryId(formData);
     const bunnyVideoId = getString(formData, "bunnyVideoId");
-    const durationSeconds = getNullableNumber(formData, "durationSeconds");
     const isPreview = formData.get("isPreview") === "on";
 
     if (!title) {
-      return {
-        status: "error" as const,
-        message: "Lesson title is required",
-      };
+      return { status: "error" as const, message: "Lesson title is required" };
     }
 
-    if (!bunnyLibraryId) {
-      return {
-        status: "error" as const,
-        message: "Bunny library ID is required",
-      };
-    }
-
-    if (!bunnyVideoId) {
-      return {
-        status: "error" as const,
-        message: "Bunny video ID is required",
-      };
-    }
-
-    const section = await prisma.courseSection.findUnique({
-      where: {
-        id: sectionId,
-      },
+    const batch = await prisma.batch.findUnique({
+      where: { id: batchId },
     });
 
-    if (!section || section.courseId !== courseId) {
-      return {
-        status: "error" as const,
-        message: "Section not found",
-      };
+    if (!batch) {
+      return { status: "error" as const, message: "Batch not found" };
     }
 
     const maxOrder = await prisma.lesson.aggregate({
-      where: {
-        sectionId,
-      },
-      _max: {
-        order: true,
-      },
+      where: { batchId },
+      _max: { order: true },
     });
 
     const nextOrder = (maxOrder._max.order ?? 0) + 1;
@@ -422,152 +270,99 @@ export async function createLesson(
 
     await prisma.lesson.create({
       data: {
-        section: {
-          connect: {
-            id: sectionId,
-          },
-        },
+        batch: { connect: { id: batchId } },
         title,
         slug,
         description,
-        videoUrl: null,
+        notes,
         bunnyLibraryId,
         bunnyVideoId,
-        durationSeconds,
         order: nextOrder,
         isPreview,
       },
     });
 
     revalidatePath("/admin/courses");
-    revalidatePath(`/admin/courses/${courseId}/sections`);
+    revalidatePath(`/admin/batches/${batchId}`);
 
-    return {
-      status: "success" as const,
-      message: "Lesson added",
-    };
+    return { status: "success" as const, message: "Lesson added successfully" };
   } catch (error) {
     return {
       status: "error" as const,
       message:
-        error instanceof Error
-          ? error.message
-          : "Failed to add lesson",
+        error instanceof Error ? error.message : "Failed to add lesson",
     };
   }
 }
 
 export async function updateLesson(
-  courseId: string,
   lessonId: string,
   _previousState: {
     status: "success" | "error";
     message: string;
   } | null,
-  formData: FormData,
+  formData: FormData
 ) {
   try {
     await requireAdmin();
 
     const title = getString(formData, "title");
     const description = getNullableString(formData, "description");
+    const notes = getNullableString(formData, "notes");
     const bunnyLibraryId = getBunnyLibraryId(formData);
     const bunnyVideoId = getString(formData, "bunnyVideoId");
-    const durationSeconds = getNullableNumber(formData, "durationSeconds");
     const isPreview = formData.get("isPreview") === "on";
 
     if (!title) {
-      return {
-        status: "error" as const,
-        message: "Lesson title is required",
-      };
-    }
-
-    if (!bunnyLibraryId) {
-      return {
-        status: "error" as const,
-        message: "Bunny library ID is required",
-      };
-    }
-
-    if (!bunnyVideoId) {
-      return {
-        status: "error" as const,
-        message: "Bunny video ID is required",
-      };
+      return { status: "error" as const, message: "Lesson title is required" };
     }
 
     const lesson = await prisma.lesson.findUnique({
-      where: {
-        id: lessonId,
-      },
-      include: {
-        section: true,
-      },
+      where: { id: lessonId },
     });
 
-    if (!lesson || lesson.section.courseId !== courseId) {
-      return {
-        status: "error" as const,
-        message: "Lesson not found",
-      };
+    if (!lesson) {
+      return { status: "error" as const, message: "Lesson not found" };
     }
 
     await prisma.lesson.update({
-      where: {
-        id: lessonId,
-      },
+      where: { id: lessonId },
       data: {
         title,
         description,
-        videoUrl: null,
+        notes,
         bunnyLibraryId,
         bunnyVideoId,
-        durationSeconds,
         isPreview,
       },
     });
 
     revalidatePath("/admin/courses");
-    revalidatePath(`/admin/courses/${courseId}/sections`);
 
-    return {
-      status: "success" as const,
-      message: "Lesson updated",
-    };
+    return { status: "success" as const, message: "Lesson updated successfully" };
   } catch (error) {
     return {
       status: "error" as const,
       message:
-        error instanceof Error
-          ? error.message
-          : "Failed to update lesson",
+        error instanceof Error ? error.message : "Failed to update lesson",
     };
   }
 }
 
-export async function deleteLesson(courseId: string, lessonId: string) {
+export async function deleteLesson(lessonId: string) {
   await requireAdmin();
 
   const lesson = await prisma.lesson.findUnique({
-    where: {
-      id: lessonId,
-    },
-    include: {
-      section: true,
-    },
+    where: { id: lessonId },
   });
 
-  if (!lesson || lesson.section.courseId !== courseId) {
+  if (!lesson) {
     throw new Error("Lesson not found");
   }
 
   await prisma.lesson.delete({
-    where: {
-      id: lessonId,
-    },
+    where: { id: lessonId },
   });
 
   revalidatePath("/admin/courses");
-  revalidatePath(`/admin/courses/${courseId}/sections`);
 }

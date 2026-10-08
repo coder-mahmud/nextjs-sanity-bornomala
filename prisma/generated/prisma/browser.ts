@@ -43,6 +43,26 @@ export type VerificationToken = Prisma.VerificationTokenModel
  */
 export type Authenticator = Prisma.AuthenticatorModel
 /**
+ * Model Course
+ * 
+ */
+export type Course = Prisma.CourseModel
+/**
+ * Model Batch
+ * 
+ */
+export type Batch = Prisma.BatchModel
+/**
+ * Model Lesson
+ * 
+ */
+export type Lesson = Prisma.LessonModel
+/**
+ * Model LessonProgress
+ * 
+ */
+export type LessonProgress = Prisma.LessonProgressModel
+/**
  * Model Quiz
  * 
  */
@@ -63,6 +83,11 @@ export type QuestionOption = Prisma.QuestionOptionModel
  */
 export type Payment = Prisma.PaymentModel
 /**
+ * Model CourseAccess
+ * 
+ */
+export type CourseAccess = Prisma.CourseAccessModel
+/**
  * Model QuizAccess
  * 
  */
@@ -77,31 +102,6 @@ export type QuizAttempt = Prisma.QuizAttemptModel
  * 
  */
 export type QuizAttemptAnswer = Prisma.QuizAttemptAnswerModel
-/**
- * Model Course
- * 
- */
-export type Course = Prisma.CourseModel
-/**
- * Model CourseSection
- * 
- */
-export type CourseSection = Prisma.CourseSectionModel
-/**
- * Model Lesson
- * 
- */
-export type Lesson = Prisma.LessonModel
-/**
- * Model CourseAccess
- * 
- */
-export type CourseAccess = Prisma.CourseAccessModel
-/**
- * Model LessonProgress
- * 
- */
-export type LessonProgress = Prisma.LessonProgressModel
 /**
  * Model CourseCertificate
  * 

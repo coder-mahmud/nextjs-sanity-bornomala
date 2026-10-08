@@ -19,6 +19,16 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const BatchStatus = {
+  UPCOMING: 'UPCOMING',
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
+
+
 export const QuizStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',

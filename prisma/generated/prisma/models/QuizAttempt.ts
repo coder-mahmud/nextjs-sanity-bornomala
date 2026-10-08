@@ -314,6 +314,7 @@ export type QuizAttemptOrderByWithRelationInput = {
 
 export type QuizAttemptWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId_quizId?: Prisma.QuizAttemptUserIdQuizIdCompoundUniqueInput
   AND?: Prisma.QuizAttemptWhereInput | Prisma.QuizAttemptWhereInput[]
   OR?: Prisma.QuizAttemptWhereInput[]
   NOT?: Prisma.QuizAttemptWhereInput | Prisma.QuizAttemptWhereInput[]
@@ -332,7 +333,7 @@ export type QuizAttemptWhereUniqueInput = Prisma.AtLeast<{
   quiz?: Prisma.XOR<Prisma.QuizScalarRelationFilter, Prisma.QuizWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   answers?: Prisma.QuizAttemptAnswerListRelationFilter
-}, "id">
+}, "id" | "userId_quizId">
 
 export type QuizAttemptOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -496,6 +497,11 @@ export type QuizAttemptListRelationFilter = {
 
 export type QuizAttemptOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type QuizAttemptUserIdQuizIdCompoundUniqueInput = {
+  userId: string
+  quizId: string
 }
 
 export type QuizAttemptCountOrderByAggregateInput = {

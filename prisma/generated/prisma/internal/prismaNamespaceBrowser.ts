@@ -54,18 +54,18 @@ export const ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Authenticator: 'Authenticator',
+  Course: 'Course',
+  Batch: 'Batch',
+  Lesson: 'Lesson',
+  LessonProgress: 'LessonProgress',
   Quiz: 'Quiz',
   Question: 'Question',
   QuestionOption: 'QuestionOption',
   Payment: 'Payment',
+  CourseAccess: 'CourseAccess',
   QuizAccess: 'QuizAccess',
   QuizAttempt: 'QuizAttempt',
   QuizAttemptAnswer: 'QuizAttemptAnswer',
-  Course: 'Course',
-  CourseSection: 'CourseSection',
-  Lesson: 'Lesson',
-  CourseAccess: 'CourseAccess',
-  LessonProgress: 'LessonProgress',
   CourseCertificate: 'CourseCertificate',
   Coupon: 'Coupon',
   CouponUsage: 'CouponUsage',
@@ -161,14 +161,97 @@ export const AuthenticatorScalarFieldEnum = {
 export type AuthenticatorScalarFieldEnum = (typeof AuthenticatorScalarFieldEnum)[keyof typeof AuthenticatorScalarFieldEnum]
 
 
+export const CourseScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  shortDescription: 'shortDescription',
+  tagLine: 'tagLine',
+  level: 'level',
+  thumbnail: 'thumbnail',
+  price: 'price',
+  currency: 'currency',
+  status: 'status',
+  characteristics: 'characteristics',
+  targetAudience: 'targetAudience',
+  duration: 'duration',
+  numberOfStudents: 'numberOfStudents',
+  rating: 'rating',
+  order: 'order',
+  instructorId: 'instructorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const BatchScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  title: 'title',
+  slug: 'slug',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  meetingPlatform: 'meetingPlatform',
+  meetingLink: 'meetingLink',
+  meetingPassword: 'meetingPassword',
+  maxStudents: 'maxStudents',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
+
+
+export const LessonScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  videoUrl: 'videoUrl',
+  durationSeconds: 'durationSeconds',
+  order: 'order',
+  isPreview: 'isPreview',
+  bunnyLibraryId: 'bunnyLibraryId',
+  bunnyVideoId: 'bunnyVideoId',
+  attachments: 'attachments',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const LessonProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
+
+
 export const QuizScalarFieldEnum = {
   id: 'id',
+  lessonId: 'lessonId',
   title: 'title',
   slug: 'slug',
   description: 'description',
   price: 'price',
   currency: 'currency',
   durationMinutes: 'durationMinutes',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  maxAttempts: 'maxAttempts',
   passingScore: 'passingScore',
   status: 'status',
   createdAt: 'createdAt',
@@ -208,23 +291,37 @@ export type QuestionOptionScalarFieldEnum = (typeof QuestionOptionScalarFieldEnu
 export const PaymentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  courseId: 'courseId',
+  batchId: 'batchId',
   quizId: 'quizId',
   provider: 'provider',
   paypalOrderId: 'paypalOrderId',
   paypalCaptureId: 'paypalCaptureId',
+  stripeIntentId: 'stripeIntentId',
+  stripeSessionId: 'stripeSessionId',
   amount: 'amount',
   currency: 'currency',
   status: 'status',
   paidAt: 'paidAt',
   rawResponse: 'rawResponse',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  courseId: 'courseId',
-  stripeIntentId: 'stripeIntentId',
-  stripeSessionId: 'stripeSessionId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const CourseAccessScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  batchId: 'batchId',
+  grantedAt: 'grantedAt',
+  expiresAt: 'expiresAt',
+  paymentId: 'paymentId'
+} as const
+
+export type CourseAccessScalarFieldEnum = (typeof CourseAccessScalarFieldEnum)[keyof typeof CourseAccessScalarFieldEnum]
 
 
 export const QuizAccessScalarFieldEnum = {
@@ -270,91 +367,6 @@ export const QuizAttemptAnswerScalarFieldEnum = {
 } as const
 
 export type QuizAttemptAnswerScalarFieldEnum = (typeof QuizAttemptAnswerScalarFieldEnum)[keyof typeof QuizAttemptAnswerScalarFieldEnum]
-
-
-export const CourseScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  slug: 'slug',
-  description: 'description',
-  shortDescription: 'shortDescription',
-  tagLine: 'tagLine',
-  level: 'level',
-  thumbnail: 'thumbnail',
-  price: 'price',
-  currency: 'currency',
-  status: 'status',
-  characteristics: 'characteristics',
-  instructorId: 'instructorId',
-  targetAudience: 'targetAudience',
-  duration: 'duration',
-  numberOfStudents: 'numberOfStudents',
-  rating: 'rating',
-  order: 'order',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
-
-
-export const CourseSectionScalarFieldEnum = {
-  id: 'id',
-  courseId: 'courseId',
-  title: 'title',
-  description: 'description',
-  order: 'order',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CourseSectionScalarFieldEnum = (typeof CourseSectionScalarFieldEnum)[keyof typeof CourseSectionScalarFieldEnum]
-
-
-export const LessonScalarFieldEnum = {
-  id: 'id',
-  sectionId: 'sectionId',
-  title: 'title',
-  slug: 'slug',
-  description: 'description',
-  videoUrl: 'videoUrl',
-  durationSeconds: 'durationSeconds',
-  order: 'order',
-  isPreview: 'isPreview',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  bunnyLibraryId: 'bunnyLibraryId',
-  bunnyVideoId: 'bunnyVideoId'
-} as const
-
-export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
-
-
-export const CourseAccessScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  courseId: 'courseId',
-  grantedAt: 'grantedAt',
-  expiresAt: 'expiresAt',
-  paymentId: 'paymentId'
-} as const
-
-export type CourseAccessScalarFieldEnum = (typeof CourseAccessScalarFieldEnum)[keyof typeof CourseAccessScalarFieldEnum]
-
-
-export const LessonProgressScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  lessonId: 'lessonId',
-  watchedSeconds: 'watchedSeconds',
-  completed: 'completed',
-  completedAt: 'completedAt',
-  lastWatchedAt: 'lastWatchedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
 
 
 export const CourseCertificateScalarFieldEnum = {

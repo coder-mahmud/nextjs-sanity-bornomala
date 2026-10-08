@@ -28,6 +28,7 @@ export type CourseAccessMinAggregateOutputType = {
   id: string | null
   userId: string | null
   courseId: string | null
+  batchId: string | null
   grantedAt: Date | null
   expiresAt: Date | null
   paymentId: string | null
@@ -37,6 +38,7 @@ export type CourseAccessMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   courseId: string | null
+  batchId: string | null
   grantedAt: Date | null
   expiresAt: Date | null
   paymentId: string | null
@@ -46,6 +48,7 @@ export type CourseAccessCountAggregateOutputType = {
   id: number
   userId: number
   courseId: number
+  batchId: number
   grantedAt: number
   expiresAt: number
   paymentId: number
@@ -57,6 +60,7 @@ export type CourseAccessMinAggregateInputType = {
   id?: true
   userId?: true
   courseId?: true
+  batchId?: true
   grantedAt?: true
   expiresAt?: true
   paymentId?: true
@@ -66,6 +70,7 @@ export type CourseAccessMaxAggregateInputType = {
   id?: true
   userId?: true
   courseId?: true
+  batchId?: true
   grantedAt?: true
   expiresAt?: true
   paymentId?: true
@@ -75,6 +80,7 @@ export type CourseAccessCountAggregateInputType = {
   id?: true
   userId?: true
   courseId?: true
+  batchId?: true
   grantedAt?: true
   expiresAt?: true
   paymentId?: true
@@ -157,6 +163,7 @@ export type CourseAccessGroupByOutputType = {
   id: string
   userId: string
   courseId: string
+  batchId: string | null
   grantedAt: Date
   expiresAt: Date | null
   paymentId: string | null
@@ -187,10 +194,12 @@ export type CourseAccessWhereInput = {
   id?: Prisma.StringFilter<"CourseAccess"> | string
   userId?: Prisma.StringFilter<"CourseAccess"> | string
   courseId?: Prisma.StringFilter<"CourseAccess"> | string
+  batchId?: Prisma.StringNullableFilter<"CourseAccess"> | string | null
   grantedAt?: Prisma.DateTimeFilter<"CourseAccess"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"CourseAccess"> | Date | string | null
   paymentId?: Prisma.StringNullableFilter<"CourseAccess"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  batch?: Prisma.XOR<Prisma.BatchNullableScalarRelationFilter, Prisma.BatchWhereInput> | null
   payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -199,10 +208,12 @@ export type CourseAccessOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  batchId?: Prisma.SortOrderInput | Prisma.SortOrder
   grantedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
+  batch?: Prisma.BatchOrderByWithRelationInput
   payment?: Prisma.PaymentOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -215,9 +226,11 @@ export type CourseAccessWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CourseAccessWhereInput | Prisma.CourseAccessWhereInput[]
   userId?: Prisma.StringFilter<"CourseAccess"> | string
   courseId?: Prisma.StringFilter<"CourseAccess"> | string
+  batchId?: Prisma.StringNullableFilter<"CourseAccess"> | string | null
   grantedAt?: Prisma.DateTimeFilter<"CourseAccess"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"CourseAccess"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  batch?: Prisma.XOR<Prisma.BatchNullableScalarRelationFilter, Prisma.BatchWhereInput> | null
   payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "paymentId">
@@ -226,6 +239,7 @@ export type CourseAccessOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  batchId?: Prisma.SortOrderInput | Prisma.SortOrder
   grantedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -241,6 +255,7 @@ export type CourseAccessScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"CourseAccess"> | string
   userId?: Prisma.StringWithAggregatesFilter<"CourseAccess"> | string
   courseId?: Prisma.StringWithAggregatesFilter<"CourseAccess"> | string
+  batchId?: Prisma.StringNullableWithAggregatesFilter<"CourseAccess"> | string | null
   grantedAt?: Prisma.DateTimeWithAggregatesFilter<"CourseAccess"> | Date | string
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CourseAccess"> | Date | string | null
   paymentId?: Prisma.StringNullableWithAggregatesFilter<"CourseAccess"> | string | null
@@ -251,6 +266,7 @@ export type CourseAccessCreateInput = {
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutAccessesInput
+  batch?: Prisma.BatchCreateNestedOneWithoutAccessesInput
   payment?: Prisma.PaymentCreateNestedOneWithoutCourseAccessInput
   user: Prisma.UserCreateNestedOneWithoutCourseAccessesInput
 }
@@ -259,6 +275,7 @@ export type CourseAccessUncheckedCreateInput = {
   id?: string
   userId: string
   courseId: string
+  batchId?: string | null
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   paymentId?: string | null
@@ -269,6 +286,7 @@ export type CourseAccessUpdateInput = {
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutAccessesNestedInput
+  batch?: Prisma.BatchUpdateOneWithoutAccessesNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutCourseAccessNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCourseAccessesNestedInput
 }
@@ -277,6 +295,7 @@ export type CourseAccessUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -286,6 +305,7 @@ export type CourseAccessCreateManyInput = {
   id?: string
   userId: string
   courseId: string
+  batchId?: string | null
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   paymentId?: string | null
@@ -301,6 +321,7 @@ export type CourseAccessUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -325,6 +346,7 @@ export type CourseAccessCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   grantedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
@@ -334,6 +356,7 @@ export type CourseAccessMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   grantedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
@@ -343,6 +366,7 @@ export type CourseAccessMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   grantedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
@@ -390,38 +414,6 @@ export type CourseAccessUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.CourseAccessScalarWhereInput | Prisma.CourseAccessScalarWhereInput[]
 }
 
-export type CourseAccessCreateNestedOneWithoutPaymentInput = {
-  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
-  connect?: Prisma.CourseAccessWhereUniqueInput
-}
-
-export type CourseAccessUncheckedCreateNestedOneWithoutPaymentInput = {
-  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
-  connect?: Prisma.CourseAccessWhereUniqueInput
-}
-
-export type CourseAccessUpdateOneWithoutPaymentNestedInput = {
-  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
-  upsert?: Prisma.CourseAccessUpsertWithoutPaymentInput
-  disconnect?: Prisma.CourseAccessWhereInput | boolean
-  delete?: Prisma.CourseAccessWhereInput | boolean
-  connect?: Prisma.CourseAccessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseAccessUpdateToOneWithWhereWithoutPaymentInput, Prisma.CourseAccessUpdateWithoutPaymentInput>, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
-}
-
-export type CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput = {
-  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
-  upsert?: Prisma.CourseAccessUpsertWithoutPaymentInput
-  disconnect?: Prisma.CourseAccessWhereInput | boolean
-  delete?: Prisma.CourseAccessWhereInput | boolean
-  connect?: Prisma.CourseAccessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseAccessUpdateToOneWithWhereWithoutPaymentInput, Prisma.CourseAccessUpdateWithoutPaymentInput>, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
-}
-
 export type CourseAccessCreateNestedManyWithoutCourseInput = {
   create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutCourseInput, Prisma.CourseAccessUncheckedCreateWithoutCourseInput> | Prisma.CourseAccessCreateWithoutCourseInput[] | Prisma.CourseAccessUncheckedCreateWithoutCourseInput[]
   connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutCourseInput | Prisma.CourseAccessCreateOrConnectWithoutCourseInput[]
@@ -464,17 +456,93 @@ export type CourseAccessUncheckedUpdateManyWithoutCourseNestedInput = {
   deleteMany?: Prisma.CourseAccessScalarWhereInput | Prisma.CourseAccessScalarWhereInput[]
 }
 
+export type CourseAccessCreateNestedManyWithoutBatchInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutBatchInput, Prisma.CourseAccessUncheckedCreateWithoutBatchInput> | Prisma.CourseAccessCreateWithoutBatchInput[] | Prisma.CourseAccessUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutBatchInput | Prisma.CourseAccessCreateOrConnectWithoutBatchInput[]
+  createMany?: Prisma.CourseAccessCreateManyBatchInputEnvelope
+  connect?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+}
+
+export type CourseAccessUncheckedCreateNestedManyWithoutBatchInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutBatchInput, Prisma.CourseAccessUncheckedCreateWithoutBatchInput> | Prisma.CourseAccessCreateWithoutBatchInput[] | Prisma.CourseAccessUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutBatchInput | Prisma.CourseAccessCreateOrConnectWithoutBatchInput[]
+  createMany?: Prisma.CourseAccessCreateManyBatchInputEnvelope
+  connect?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+}
+
+export type CourseAccessUpdateManyWithoutBatchNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutBatchInput, Prisma.CourseAccessUncheckedCreateWithoutBatchInput> | Prisma.CourseAccessCreateWithoutBatchInput[] | Prisma.CourseAccessUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutBatchInput | Prisma.CourseAccessCreateOrConnectWithoutBatchInput[]
+  upsert?: Prisma.CourseAccessUpsertWithWhereUniqueWithoutBatchInput | Prisma.CourseAccessUpsertWithWhereUniqueWithoutBatchInput[]
+  createMany?: Prisma.CourseAccessCreateManyBatchInputEnvelope
+  set?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  disconnect?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  delete?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  connect?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  update?: Prisma.CourseAccessUpdateWithWhereUniqueWithoutBatchInput | Prisma.CourseAccessUpdateWithWhereUniqueWithoutBatchInput[]
+  updateMany?: Prisma.CourseAccessUpdateManyWithWhereWithoutBatchInput | Prisma.CourseAccessUpdateManyWithWhereWithoutBatchInput[]
+  deleteMany?: Prisma.CourseAccessScalarWhereInput | Prisma.CourseAccessScalarWhereInput[]
+}
+
+export type CourseAccessUncheckedUpdateManyWithoutBatchNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutBatchInput, Prisma.CourseAccessUncheckedCreateWithoutBatchInput> | Prisma.CourseAccessCreateWithoutBatchInput[] | Prisma.CourseAccessUncheckedCreateWithoutBatchInput[]
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutBatchInput | Prisma.CourseAccessCreateOrConnectWithoutBatchInput[]
+  upsert?: Prisma.CourseAccessUpsertWithWhereUniqueWithoutBatchInput | Prisma.CourseAccessUpsertWithWhereUniqueWithoutBatchInput[]
+  createMany?: Prisma.CourseAccessCreateManyBatchInputEnvelope
+  set?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  disconnect?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  delete?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  connect?: Prisma.CourseAccessWhereUniqueInput | Prisma.CourseAccessWhereUniqueInput[]
+  update?: Prisma.CourseAccessUpdateWithWhereUniqueWithoutBatchInput | Prisma.CourseAccessUpdateWithWhereUniqueWithoutBatchInput[]
+  updateMany?: Prisma.CourseAccessUpdateManyWithWhereWithoutBatchInput | Prisma.CourseAccessUpdateManyWithWhereWithoutBatchInput[]
+  deleteMany?: Prisma.CourseAccessScalarWhereInput | Prisma.CourseAccessScalarWhereInput[]
+}
+
+export type CourseAccessCreateNestedOneWithoutPaymentInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
+  connect?: Prisma.CourseAccessWhereUniqueInput
+}
+
+export type CourseAccessUncheckedCreateNestedOneWithoutPaymentInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
+  connect?: Prisma.CourseAccessWhereUniqueInput
+}
+
+export type CourseAccessUpdateOneWithoutPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
+  upsert?: Prisma.CourseAccessUpsertWithoutPaymentInput
+  disconnect?: Prisma.CourseAccessWhereInput | boolean
+  delete?: Prisma.CourseAccessWhereInput | boolean
+  connect?: Prisma.CourseAccessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseAccessUpdateToOneWithWhereWithoutPaymentInput, Prisma.CourseAccessUpdateWithoutPaymentInput>, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
+}
+
+export type CourseAccessUncheckedUpdateOneWithoutPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.CourseAccessCreateOrConnectWithoutPaymentInput
+  upsert?: Prisma.CourseAccessUpsertWithoutPaymentInput
+  disconnect?: Prisma.CourseAccessWhereInput | boolean
+  delete?: Prisma.CourseAccessWhereInput | boolean
+  connect?: Prisma.CourseAccessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseAccessUpdateToOneWithWhereWithoutPaymentInput, Prisma.CourseAccessUpdateWithoutPaymentInput>, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
+}
+
 export type CourseAccessCreateWithoutUserInput = {
   id?: string
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutAccessesInput
+  batch?: Prisma.BatchCreateNestedOneWithoutAccessesInput
   payment?: Prisma.PaymentCreateNestedOneWithoutCourseAccessInput
 }
 
 export type CourseAccessUncheckedCreateWithoutUserInput = {
   id?: string
   courseId: string
+  batchId?: string | null
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   paymentId?: string | null
@@ -513,63 +581,17 @@ export type CourseAccessScalarWhereInput = {
   id?: Prisma.StringFilter<"CourseAccess"> | string
   userId?: Prisma.StringFilter<"CourseAccess"> | string
   courseId?: Prisma.StringFilter<"CourseAccess"> | string
+  batchId?: Prisma.StringNullableFilter<"CourseAccess"> | string | null
   grantedAt?: Prisma.DateTimeFilter<"CourseAccess"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"CourseAccess"> | Date | string | null
   paymentId?: Prisma.StringNullableFilter<"CourseAccess"> | string | null
-}
-
-export type CourseAccessCreateWithoutPaymentInput = {
-  id?: string
-  grantedAt?: Date | string
-  expiresAt?: Date | string | null
-  course: Prisma.CourseCreateNestedOneWithoutAccessesInput
-  user: Prisma.UserCreateNestedOneWithoutCourseAccessesInput
-}
-
-export type CourseAccessUncheckedCreateWithoutPaymentInput = {
-  id?: string
-  userId: string
-  courseId: string
-  grantedAt?: Date | string
-  expiresAt?: Date | string | null
-}
-
-export type CourseAccessCreateOrConnectWithoutPaymentInput = {
-  where: Prisma.CourseAccessWhereUniqueInput
-  create: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
-}
-
-export type CourseAccessUpsertWithoutPaymentInput = {
-  update: Prisma.XOR<Prisma.CourseAccessUpdateWithoutPaymentInput, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
-  create: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
-  where?: Prisma.CourseAccessWhereInput
-}
-
-export type CourseAccessUpdateToOneWithWhereWithoutPaymentInput = {
-  where?: Prisma.CourseAccessWhereInput
-  data: Prisma.XOR<Prisma.CourseAccessUpdateWithoutPaymentInput, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
-}
-
-export type CourseAccessUpdateWithoutPaymentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  course?: Prisma.CourseUpdateOneRequiredWithoutAccessesNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutCourseAccessesNestedInput
-}
-
-export type CourseAccessUncheckedUpdateWithoutPaymentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  courseId?: Prisma.StringFieldUpdateOperationsInput | string
-  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CourseAccessCreateWithoutCourseInput = {
   id?: string
   grantedAt?: Date | string
   expiresAt?: Date | string | null
+  batch?: Prisma.BatchCreateNestedOneWithoutAccessesInput
   payment?: Prisma.PaymentCreateNestedOneWithoutCourseAccessInput
   user: Prisma.UserCreateNestedOneWithoutCourseAccessesInput
 }
@@ -577,6 +599,7 @@ export type CourseAccessCreateWithoutCourseInput = {
 export type CourseAccessUncheckedCreateWithoutCourseInput = {
   id?: string
   userId: string
+  batchId?: string | null
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   paymentId?: string | null
@@ -608,9 +631,106 @@ export type CourseAccessUpdateManyWithWhereWithoutCourseInput = {
   data: Prisma.XOR<Prisma.CourseAccessUpdateManyMutationInput, Prisma.CourseAccessUncheckedUpdateManyWithoutCourseInput>
 }
 
+export type CourseAccessCreateWithoutBatchInput = {
+  id?: string
+  grantedAt?: Date | string
+  expiresAt?: Date | string | null
+  course: Prisma.CourseCreateNestedOneWithoutAccessesInput
+  payment?: Prisma.PaymentCreateNestedOneWithoutCourseAccessInput
+  user: Prisma.UserCreateNestedOneWithoutCourseAccessesInput
+}
+
+export type CourseAccessUncheckedCreateWithoutBatchInput = {
+  id?: string
+  userId: string
+  courseId: string
+  grantedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentId?: string | null
+}
+
+export type CourseAccessCreateOrConnectWithoutBatchInput = {
+  where: Prisma.CourseAccessWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseAccessCreateWithoutBatchInput, Prisma.CourseAccessUncheckedCreateWithoutBatchInput>
+}
+
+export type CourseAccessCreateManyBatchInputEnvelope = {
+  data: Prisma.CourseAccessCreateManyBatchInput | Prisma.CourseAccessCreateManyBatchInput[]
+  skipDuplicates?: boolean
+}
+
+export type CourseAccessUpsertWithWhereUniqueWithoutBatchInput = {
+  where: Prisma.CourseAccessWhereUniqueInput
+  update: Prisma.XOR<Prisma.CourseAccessUpdateWithoutBatchInput, Prisma.CourseAccessUncheckedUpdateWithoutBatchInput>
+  create: Prisma.XOR<Prisma.CourseAccessCreateWithoutBatchInput, Prisma.CourseAccessUncheckedCreateWithoutBatchInput>
+}
+
+export type CourseAccessUpdateWithWhereUniqueWithoutBatchInput = {
+  where: Prisma.CourseAccessWhereUniqueInput
+  data: Prisma.XOR<Prisma.CourseAccessUpdateWithoutBatchInput, Prisma.CourseAccessUncheckedUpdateWithoutBatchInput>
+}
+
+export type CourseAccessUpdateManyWithWhereWithoutBatchInput = {
+  where: Prisma.CourseAccessScalarWhereInput
+  data: Prisma.XOR<Prisma.CourseAccessUpdateManyMutationInput, Prisma.CourseAccessUncheckedUpdateManyWithoutBatchInput>
+}
+
+export type CourseAccessCreateWithoutPaymentInput = {
+  id?: string
+  grantedAt?: Date | string
+  expiresAt?: Date | string | null
+  course: Prisma.CourseCreateNestedOneWithoutAccessesInput
+  batch?: Prisma.BatchCreateNestedOneWithoutAccessesInput
+  user: Prisma.UserCreateNestedOneWithoutCourseAccessesInput
+}
+
+export type CourseAccessUncheckedCreateWithoutPaymentInput = {
+  id?: string
+  userId: string
+  courseId: string
+  batchId?: string | null
+  grantedAt?: Date | string
+  expiresAt?: Date | string | null
+}
+
+export type CourseAccessCreateOrConnectWithoutPaymentInput = {
+  where: Prisma.CourseAccessWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
+}
+
+export type CourseAccessUpsertWithoutPaymentInput = {
+  update: Prisma.XOR<Prisma.CourseAccessUpdateWithoutPaymentInput, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
+  create: Prisma.XOR<Prisma.CourseAccessCreateWithoutPaymentInput, Prisma.CourseAccessUncheckedCreateWithoutPaymentInput>
+  where?: Prisma.CourseAccessWhereInput
+}
+
+export type CourseAccessUpdateToOneWithWhereWithoutPaymentInput = {
+  where?: Prisma.CourseAccessWhereInput
+  data: Prisma.XOR<Prisma.CourseAccessUpdateWithoutPaymentInput, Prisma.CourseAccessUncheckedUpdateWithoutPaymentInput>
+}
+
+export type CourseAccessUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  course?: Prisma.CourseUpdateOneRequiredWithoutAccessesNestedInput
+  batch?: Prisma.BatchUpdateOneWithoutAccessesNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCourseAccessesNestedInput
+}
+
+export type CourseAccessUncheckedUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type CourseAccessCreateManyUserInput = {
   id?: string
   courseId: string
+  batchId?: string | null
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   paymentId?: string | null
@@ -621,12 +741,14 @@ export type CourseAccessUpdateWithoutUserInput = {
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutAccessesNestedInput
+  batch?: Prisma.BatchUpdateOneWithoutAccessesNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutCourseAccessNestedInput
 }
 
 export type CourseAccessUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -635,6 +757,7 @@ export type CourseAccessUncheckedUpdateWithoutUserInput = {
 export type CourseAccessUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -643,6 +766,7 @@ export type CourseAccessUncheckedUpdateManyWithoutUserInput = {
 export type CourseAccessCreateManyCourseInput = {
   id?: string
   userId: string
+  batchId?: string | null
   grantedAt?: Date | string
   expiresAt?: Date | string | null
   paymentId?: string | null
@@ -652,6 +776,7 @@ export type CourseAccessUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  batch?: Prisma.BatchUpdateOneWithoutAccessesNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutCourseAccessNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCourseAccessesNestedInput
 }
@@ -659,6 +784,7 @@ export type CourseAccessUpdateWithoutCourseInput = {
 export type CourseAccessUncheckedUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -667,6 +793,43 @@ export type CourseAccessUncheckedUpdateWithoutCourseInput = {
 export type CourseAccessUncheckedUpdateManyWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type CourseAccessCreateManyBatchInput = {
+  id?: string
+  userId: string
+  courseId: string
+  grantedAt?: Date | string
+  expiresAt?: Date | string | null
+  paymentId?: string | null
+}
+
+export type CourseAccessUpdateWithoutBatchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  course?: Prisma.CourseUpdateOneRequiredWithoutAccessesNestedInput
+  payment?: Prisma.PaymentUpdateOneWithoutCourseAccessNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCourseAccessesNestedInput
+}
+
+export type CourseAccessUncheckedUpdateWithoutBatchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type CourseAccessUncheckedUpdateManyWithoutBatchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   grantedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -678,10 +841,12 @@ export type CourseAccessSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   userId?: boolean
   courseId?: boolean
+  batchId?: boolean
   grantedAt?: boolean
   expiresAt?: boolean
   paymentId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.CourseAccess$batchArgs<ExtArgs>
   payment?: boolean | Prisma.CourseAccess$paymentArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseAccess"]>
@@ -690,10 +855,12 @@ export type CourseAccessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   userId?: boolean
   courseId?: boolean
+  batchId?: boolean
   grantedAt?: boolean
   expiresAt?: boolean
   paymentId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.CourseAccess$batchArgs<ExtArgs>
   payment?: boolean | Prisma.CourseAccess$paymentArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseAccess"]>
@@ -702,10 +869,12 @@ export type CourseAccessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   userId?: boolean
   courseId?: boolean
+  batchId?: boolean
   grantedAt?: boolean
   expiresAt?: boolean
   paymentId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.CourseAccess$batchArgs<ExtArgs>
   payment?: boolean | Prisma.CourseAccess$paymentArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseAccess"]>
@@ -714,24 +883,28 @@ export type CourseAccessSelectScalar = {
   id?: boolean
   userId?: boolean
   courseId?: boolean
+  batchId?: boolean
   grantedAt?: boolean
   expiresAt?: boolean
   paymentId?: boolean
 }
 
-export type CourseAccessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "courseId" | "grantedAt" | "expiresAt" | "paymentId", ExtArgs["result"]["courseAccess"]>
+export type CourseAccessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "courseId" | "batchId" | "grantedAt" | "expiresAt" | "paymentId", ExtArgs["result"]["courseAccess"]>
 export type CourseAccessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.CourseAccess$batchArgs<ExtArgs>
   payment?: boolean | Prisma.CourseAccess$paymentArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CourseAccessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.CourseAccess$batchArgs<ExtArgs>
   payment?: boolean | Prisma.CourseAccess$paymentArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CourseAccessIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  batch?: boolean | Prisma.CourseAccess$batchArgs<ExtArgs>
   payment?: boolean | Prisma.CourseAccess$paymentArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -740,6 +913,7 @@ export type $CourseAccessPayload<ExtArgs extends runtime.Types.Extensions.Intern
   name: "CourseAccess"
   objects: {
     course: Prisma.$CoursePayload<ExtArgs>
+    batch: Prisma.$BatchPayload<ExtArgs> | null
     payment: Prisma.$PaymentPayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs>
   }
@@ -747,6 +921,7 @@ export type $CourseAccessPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     userId: string
     courseId: string
+    batchId: string | null
     grantedAt: Date
     expiresAt: Date | null
     paymentId: string | null
@@ -1145,6 +1320,7 @@ readonly fields: CourseAccessFieldRefs;
 export interface Prisma__CourseAccessClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  batch<T extends Prisma.CourseAccess$batchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseAccess$batchArgs<ExtArgs>>): Prisma.Prisma__BatchClient<runtime.Types.Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   payment<T extends Prisma.CourseAccess$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseAccess$paymentArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1179,6 +1355,7 @@ export interface CourseAccessFieldRefs {
   readonly id: Prisma.FieldRef<"CourseAccess", 'String'>
   readonly userId: Prisma.FieldRef<"CourseAccess", 'String'>
   readonly courseId: Prisma.FieldRef<"CourseAccess", 'String'>
+  readonly batchId: Prisma.FieldRef<"CourseAccess", 'String'>
   readonly grantedAt: Prisma.FieldRef<"CourseAccess", 'DateTime'>
   readonly expiresAt: Prisma.FieldRef<"CourseAccess", 'DateTime'>
   readonly paymentId: Prisma.FieldRef<"CourseAccess", 'String'>
@@ -1575,6 +1752,25 @@ export type CourseAccessDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many CourseAccesses to delete.
    */
   limit?: number
+}
+
+/**
+ * CourseAccess.batch
+ */
+export type CourseAccess$batchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Batch
+   */
+  select?: Prisma.BatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Batch
+   */
+  omit?: Prisma.BatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BatchInclude<ExtArgs> | null
+  where?: Prisma.BatchWhereInput
 }
 
 /**

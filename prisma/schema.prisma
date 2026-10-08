@@ -7,8 +7,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
-  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
@@ -20,7 +18,7 @@ model User {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   password           String?
-  role               Role                @default(USER)
+  role               Role                @default(STUDENT)
   accounts           Account[]
   authenticators     Authenticator[]
   couponUsages       CouponUsage[]
@@ -83,23 +81,148 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model Course {
+  id               String       @id @default(cuid())
+  title            String
+  slug             String       @unique
+  description      String?
+  shortDescription String?
+  tagLine          String?
+  level            String?
+  thumbnail        String?
+  price            Decimal      @db.Decimal(10, 2)
+  currency         String?      @default("EUR")
+  status           CourseStatus @default(DRAFT)
+  characteristics  String[]
+  targetAudience   String[]
+  duration         String?
+  numberOfStudents String?
+  rating           String?
+  order            Int?
+
+  instructorId String?
+  instructor   Instructor? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+
+  schedules Schedule[]
+  faqs      FAQ[]
+  cards     CourseCard[]
+  batches   Batch[]
+
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  accesses           CourseAccess[]
+  courseCertificates CourseCertificate[]
+  payments           Payment[]
+
+  @@index([status])
+}
+
+model Batch {
+  id              String      @id @default(cuid())
+  courseId        String
+  title           String      // e.g. "Batch 01 - Spring 2026"
+  slug            String      @unique
+  startDate       DateTime?
+  endDate         DateTime?   // Batch access expiry threshold
+  
+  // Fixed Batch Meeting Details
+  meetingPlatform String?     // e.g. "ZOOM", "GOOGLE_MEET"
+  meetingLink     String?     // Fixed class URL
+  meetingPassword String?     // Passcode
+
+  maxStudents     Int?
+  status          BatchStatus @default(UPCOMING)
+
+  course          Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons         Lesson[]
+  accesses        CourseAccess[]
+  payments        Payment[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([courseId])
+  @@index([status])
+}
+
+model Lesson {
+  id              String           @id @default(cuid())
+  batchId         String?          
+  title           String
+  slug            String           @unique
+  description     String?
+  videoUrl        String?
+  order           Int
+  isPreview       Boolean          @default(false)
+  
+  // Lesson Schedule Window (e.g. for live/gated content or quiz timing per batch)
+  startsAt        DateTime?
+  endsAt          DateTime?
+
+  // Bunny Stream Integration
+  bunnyLibraryId  String?
+  bunnyVideoId    String?
+
+  // Materials & Lecture Content
+  attachments     String[]         // PDF, DOCX, ZIP URLs
+  notes           String?          // Rich text / markdown notes
+
+  batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  quiz            Quiz?            // One Quiz per lesson
+  progressRecords LessonProgress[]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([batchId, order])
+  @@index([batchId])
+}
+
 model Quiz {
   id              String        @id @default(cuid())
+  lessonId        String?       @unique // Linked directly to a lesson
   title           String
   slug            String        @unique
   description     String?
-  price           Decimal       @db.Decimal(10, 2)
-  currency        String        @default("USD")
-  durationMinutes Int
-  passingScore    Int
+  price           Decimal       @default(0) @db.Decimal(10, 2)
+  currency        String        @default("EUR")
+  
+  // Time & Attempt Constraints
+  durationMinutes Int           // Fixed test duration (e.g. 30 mins once started)
+  maxAttempts     Int           @default(1) // Allows exactly 1 attempt per student
+
+  passingScore    Int           @default(50)
   status          QuizStatus    @default(DRAFT)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  
+  lesson          Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   payments        Payment[]
   questions       Question[]
   accesses        QuizAccess[]
   attempts        QuizAttempt[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  isCompleted Boolean  @default(false)
+  completedAt DateTime?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+
 
 model Question {
   id          String              @id @default(cuid())
@@ -136,32 +259,54 @@ model QuestionOption {
 model Payment {
   id              String        @id @default(cuid())
   userId          String
+  courseId        String?
+  batchId         String?
   quizId          String?
   provider        String        @default("stripe")
   paypalOrderId   String?       @unique
   paypalCaptureId String?       @unique
+  stripeIntentId  String?       @unique
+  stripeSessionId String?       @unique
   amount          Decimal       @db.Decimal(10, 2)
-  currency        String        @default("USD")
+  currency        String        @default("EUR")
   status          PaymentStatus @default(CREATED)
   paidAt          DateTime?
   rawResponse     Json?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  courseId        String?
-  stripeIntentId  String?       @unique
-  stripeSessionId String?       @unique
+  
   couponUsages    CouponUsage[]
   courseAccess    CourseAccess?
   course          Course?       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  batch           Batch?        @relation(fields: [batchId], references: [id], onDelete: SetNull)
   quiz            Quiz?         @relation(fields: [quizId], references: [id], onDelete: Cascade)
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   quizAccess      QuizAccess?
 
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
   @@index([userId])
   @@index([quizId])
   @@index([courseId])
-  @@index([userId, quizId])
-  @@index([userId, courseId])
+  @@index([batchId])
+}
+
+model CourseAccess {
+  id        String    @id @default(cuid())
+  userId    String
+  courseId  String
+  batchId   String?
+  grantedAt DateTime  @default(now())
+  expiresAt DateTime? // Set matching batch.endDate
+  paymentId String?   @unique
+  
+  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  batch     Batch?    @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  payment   Payment?  @relation(fields: [paymentId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([batchId])
 }
 
 model QuizAccess {
@@ -192,15 +337,18 @@ model QuizAttempt {
   percentage      Float?
   passed          Boolean?
   resultPublished Boolean             @default(true)
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
+  
   quiz            Quiz                @relation(fields: [quizId], references: [id], onDelete: Cascade)
   user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   answers         QuizAttemptAnswer[]
 
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  // Strict constraint: One attempt per student per quiz
+  @@unique([userId, quizId])
   @@index([userId])
   @@index([quizId])
-  @@index([userId, quizId])
 }
 
 model QuizAttemptAnswer {
@@ -219,113 +367,6 @@ model QuizAttemptAnswer {
   @@unique([attemptId, questionId])
   @@index([attemptId])
   @@index([questionId])
-}
-
-model Course {
-  id               String       @id @default(cuid())
-  title            String
-  slug             String       @unique
-  description      String?
-  shortDescription String?
-  tagLine          String?
-  level            String?
-  thumbnail        String?
-  price            Decimal      @db.Decimal(10, 2)
-  currency         String?       @default("EUR")
-  status           CourseStatus @default(DRAFT)
-  characteristics  String[]
-
-  instructorId String?
-  instructor   Instructor? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
-
-  schedules Schedule[]
-  faqs      FAQ[]
-  cards     CourseCard[]
-
-  targetAudience   String[]
-  duration         String?
-  numberOfStudents String?
-  rating           String?
-  order            Int?
-
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  accesses           CourseAccess[]
-  courseCertificates CourseCertificate[]
-  sections           CourseSection[]
-  payments           Payment[]
-
-  @@index([status])
-}
-
-model CourseSection {
-  id          String   @id @default(cuid())
-  courseId    String
-  title       String
-  description String?
-  order       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons     Lesson[]
-
-  @@unique([courseId, order])
-  @@index([courseId])
-}
-
-model Lesson {
-  id              String           @id @default(cuid())
-  sectionId       String
-  title           String
-  slug            String           @unique
-  description     String?
-  videoUrl        String?
-  durationSeconds Int?
-  order           Int
-  isPreview       Boolean          @default(false)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  bunnyLibraryId  String?
-  bunnyVideoId    String?
-  section         CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  progressRecords LessonProgress[]
-
-  @@unique([sectionId, order])
-  @@index([sectionId])
-}
-
-model CourseAccess {
-  id        String    @id @default(cuid())
-  userId    String
-  courseId  String
-  grantedAt DateTime  @default(now())
-  expiresAt DateTime?
-  paymentId String?   @unique
-  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  payment   Payment?  @relation(fields: [paymentId], references: [id])
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // @@unique([userId, courseId])
-  @@index([userId])
-  @@index([courseId])
-}
-
-model LessonProgress {
-  id             String    @id @default(cuid())
-  userId         String
-  lessonId       String
-  watchedSeconds Int       @default(0)
-  completed      Boolean   @default(false)
-  completedAt    DateTime?
-  lastWatchedAt  DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  lesson         Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, lessonId])
-  @@index([userId])
-  @@index([lessonId])
 }
 
 model CourseCertificate {
@@ -487,6 +528,13 @@ enum Role {
   USER
   ADMIN
   SUPERADMIN
+}
+
+enum BatchStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
 }
 
 enum QuizStatus {

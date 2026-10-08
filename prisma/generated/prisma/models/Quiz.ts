@@ -29,23 +29,29 @@ export type AggregateQuiz = {
 export type QuizAvgAggregateOutputType = {
   price: runtime.Decimal | null
   durationMinutes: number | null
+  maxAttempts: number | null
   passingScore: number | null
 }
 
 export type QuizSumAggregateOutputType = {
   price: runtime.Decimal | null
   durationMinutes: number | null
+  maxAttempts: number | null
   passingScore: number | null
 }
 
 export type QuizMinAggregateOutputType = {
   id: string | null
+  lessonId: string | null
   title: string | null
   slug: string | null
   description: string | null
   price: runtime.Decimal | null
   currency: string | null
   durationMinutes: number | null
+  startsAt: Date | null
+  endsAt: Date | null
+  maxAttempts: number | null
   passingScore: number | null
   status: $Enums.QuizStatus | null
   createdAt: Date | null
@@ -54,12 +60,16 @@ export type QuizMinAggregateOutputType = {
 
 export type QuizMaxAggregateOutputType = {
   id: string | null
+  lessonId: string | null
   title: string | null
   slug: string | null
   description: string | null
   price: runtime.Decimal | null
   currency: string | null
   durationMinutes: number | null
+  startsAt: Date | null
+  endsAt: Date | null
+  maxAttempts: number | null
   passingScore: number | null
   status: $Enums.QuizStatus | null
   createdAt: Date | null
@@ -68,12 +78,16 @@ export type QuizMaxAggregateOutputType = {
 
 export type QuizCountAggregateOutputType = {
   id: number
+  lessonId: number
   title: number
   slug: number
   description: number
   price: number
   currency: number
   durationMinutes: number
+  startsAt: number
+  endsAt: number
+  maxAttempts: number
   passingScore: number
   status: number
   createdAt: number
@@ -85,23 +99,29 @@ export type QuizCountAggregateOutputType = {
 export type QuizAvgAggregateInputType = {
   price?: true
   durationMinutes?: true
+  maxAttempts?: true
   passingScore?: true
 }
 
 export type QuizSumAggregateInputType = {
   price?: true
   durationMinutes?: true
+  maxAttempts?: true
   passingScore?: true
 }
 
 export type QuizMinAggregateInputType = {
   id?: true
+  lessonId?: true
   title?: true
   slug?: true
   description?: true
   price?: true
   currency?: true
   durationMinutes?: true
+  startsAt?: true
+  endsAt?: true
+  maxAttempts?: true
   passingScore?: true
   status?: true
   createdAt?: true
@@ -110,12 +130,16 @@ export type QuizMinAggregateInputType = {
 
 export type QuizMaxAggregateInputType = {
   id?: true
+  lessonId?: true
   title?: true
   slug?: true
   description?: true
   price?: true
   currency?: true
   durationMinutes?: true
+  startsAt?: true
+  endsAt?: true
+  maxAttempts?: true
   passingScore?: true
   status?: true
   createdAt?: true
@@ -124,12 +148,16 @@ export type QuizMaxAggregateInputType = {
 
 export type QuizCountAggregateInputType = {
   id?: true
+  lessonId?: true
   title?: true
   slug?: true
   description?: true
   price?: true
   currency?: true
   durationMinutes?: true
+  startsAt?: true
+  endsAt?: true
+  maxAttempts?: true
   passingScore?: true
   status?: true
   createdAt?: true
@@ -225,12 +253,16 @@ export type QuizGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type QuizGroupByOutputType = {
   id: string
+  lessonId: string | null
   title: string
   slug: string
   description: string | null
   price: runtime.Decimal
   currency: string
   durationMinutes: number
+  startsAt: Date | null
+  endsAt: Date | null
+  maxAttempts: number
   passingScore: number
   status: $Enums.QuizStatus
   createdAt: Date
@@ -262,16 +294,21 @@ export type QuizWhereInput = {
   OR?: Prisma.QuizWhereInput[]
   NOT?: Prisma.QuizWhereInput | Prisma.QuizWhereInput[]
   id?: Prisma.StringFilter<"Quiz"> | string
+  lessonId?: Prisma.StringNullableFilter<"Quiz"> | string | null
   title?: Prisma.StringFilter<"Quiz"> | string
   slug?: Prisma.StringFilter<"Quiz"> | string
   description?: Prisma.StringNullableFilter<"Quiz"> | string | null
   price?: Prisma.DecimalFilter<"Quiz"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Quiz"> | string
   durationMinutes?: Prisma.IntFilter<"Quiz"> | number
+  startsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
+  endsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
+  maxAttempts?: Prisma.IntFilter<"Quiz"> | number
   passingScore?: Prisma.IntFilter<"Quiz"> | number
   status?: Prisma.EnumQuizStatusFilter<"Quiz"> | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
+  lesson?: Prisma.XOR<Prisma.LessonNullableScalarRelationFilter, Prisma.LessonWhereInput> | null
   payments?: Prisma.PaymentListRelationFilter
   questions?: Prisma.QuestionListRelationFilter
   accesses?: Prisma.QuizAccessListRelationFilter
@@ -280,16 +317,21 @@ export type QuizWhereInput = {
 
 export type QuizOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  lessonId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lesson?: Prisma.LessonOrderByWithRelationInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   questions?: Prisma.QuestionOrderByRelationAggregateInput
   accesses?: Prisma.QuizAccessOrderByRelationAggregateInput
@@ -298,6 +340,7 @@ export type QuizOrderByWithRelationInput = {
 
 export type QuizWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  lessonId?: string
   slug?: string
   AND?: Prisma.QuizWhereInput | Prisma.QuizWhereInput[]
   OR?: Prisma.QuizWhereInput[]
@@ -307,24 +350,32 @@ export type QuizWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.DecimalFilter<"Quiz"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Quiz"> | string
   durationMinutes?: Prisma.IntFilter<"Quiz"> | number
+  startsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
+  endsAt?: Prisma.DateTimeNullableFilter<"Quiz"> | Date | string | null
+  maxAttempts?: Prisma.IntFilter<"Quiz"> | number
   passingScore?: Prisma.IntFilter<"Quiz"> | number
   status?: Prisma.EnumQuizStatusFilter<"Quiz"> | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Quiz"> | Date | string
+  lesson?: Prisma.XOR<Prisma.LessonNullableScalarRelationFilter, Prisma.LessonWhereInput> | null
   payments?: Prisma.PaymentListRelationFilter
   questions?: Prisma.QuestionListRelationFilter
   accesses?: Prisma.QuizAccessListRelationFilter
   attempts?: Prisma.QuizAttemptListRelationFilter
-}, "id" | "slug">
+}, "id" | "lessonId" | "slug">
 
 export type QuizOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  lessonId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -341,12 +392,16 @@ export type QuizScalarWhereWithAggregatesInput = {
   OR?: Prisma.QuizScalarWhereWithAggregatesInput[]
   NOT?: Prisma.QuizScalarWhereWithAggregatesInput | Prisma.QuizScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
+  lessonId?: Prisma.StringNullableWithAggregatesFilter<"Quiz"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Quiz"> | string | null
   price?: Prisma.DecimalWithAggregatesFilter<"Quiz"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
   durationMinutes?: Prisma.IntWithAggregatesFilter<"Quiz"> | number
+  startsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Quiz"> | Date | string | null
+  endsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Quiz"> | Date | string | null
+  maxAttempts?: Prisma.IntWithAggregatesFilter<"Quiz"> | number
   passingScore?: Prisma.IntWithAggregatesFilter<"Quiz"> | number
   status?: Prisma.EnumQuizStatusWithAggregatesFilter<"Quiz"> | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Quiz"> | Date | string
@@ -358,13 +413,17 @@ export type QuizCreateInput = {
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  lesson?: Prisma.LessonCreateNestedOneWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
   questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
@@ -373,13 +432,17 @@ export type QuizCreateInput = {
 
 export type QuizUncheckedCreateInput = {
   id?: string
+  lessonId?: string | null
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -397,10 +460,14 @@ export type QuizUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
@@ -409,12 +476,16 @@ export type QuizUpdateInput = {
 
 export type QuizUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -427,13 +498,17 @@ export type QuizUncheckedUpdateInput = {
 
 export type QuizCreateManyInput = {
   id?: string
+  lessonId?: string | null
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -447,6 +522,9 @@ export type QuizUpdateManyMutationInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -455,26 +533,39 @@ export type QuizUpdateManyMutationInput = {
 
 export type QuizUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type QuizNullableScalarRelationFilter = {
+  is?: Prisma.QuizWhereInput | null
+  isNot?: Prisma.QuizWhereInput | null
+}
+
 export type QuizCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  lessonId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -484,17 +575,22 @@ export type QuizCountOrderByAggregateInput = {
 export type QuizAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
 }
 
 export type QuizMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  lessonId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -503,12 +599,16 @@ export type QuizMaxOrderByAggregateInput = {
 
 export type QuizMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  lessonId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -518,6 +618,7 @@ export type QuizMinOrderByAggregateInput = {
 export type QuizSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   passingScore?: Prisma.SortOrder
 }
 
@@ -526,17 +627,36 @@ export type QuizScalarRelationFilter = {
   isNot?: Prisma.QuizWhereInput
 }
 
-export type QuizNullableScalarRelationFilter = {
-  is?: Prisma.QuizWhereInput | null
-  isNot?: Prisma.QuizWhereInput | null
+export type QuizCreateNestedOneWithoutLessonInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutLessonInput, Prisma.QuizUncheckedCreateWithoutLessonInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutLessonInput
+  connect?: Prisma.QuizWhereUniqueInput
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type QuizUncheckedCreateNestedOneWithoutLessonInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutLessonInput, Prisma.QuizUncheckedCreateWithoutLessonInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutLessonInput
+  connect?: Prisma.QuizWhereUniqueInput
+}
+
+export type QuizUpdateOneWithoutLessonNestedInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutLessonInput, Prisma.QuizUncheckedCreateWithoutLessonInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutLessonInput
+  upsert?: Prisma.QuizUpsertWithoutLessonInput
+  disconnect?: Prisma.QuizWhereInput | boolean
+  delete?: Prisma.QuizWhereInput | boolean
+  connect?: Prisma.QuizWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutLessonInput, Prisma.QuizUpdateWithoutLessonInput>, Prisma.QuizUncheckedUpdateWithoutLessonInput>
+}
+
+export type QuizUncheckedUpdateOneWithoutLessonNestedInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutLessonInput, Prisma.QuizUncheckedCreateWithoutLessonInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutLessonInput
+  upsert?: Prisma.QuizUpsertWithoutLessonInput
+  disconnect?: Prisma.QuizWhereInput | boolean
+  delete?: Prisma.QuizWhereInput | boolean
+  connect?: Prisma.QuizWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutLessonInput, Prisma.QuizUpdateWithoutLessonInput>, Prisma.QuizUncheckedUpdateWithoutLessonInput>
 }
 
 export type EnumQuizStatusFieldUpdateOperationsInput = {
@@ -601,18 +721,122 @@ export type QuizUpdateOneRequiredWithoutAttemptsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutAttemptsInput, Prisma.QuizUpdateWithoutAttemptsInput>, Prisma.QuizUncheckedUpdateWithoutAttemptsInput>
 }
 
+export type QuizCreateWithoutLessonInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  durationMinutes: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
+  status?: $Enums.QuizStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
+  accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
+  attempts?: Prisma.QuizAttemptCreateNestedManyWithoutQuizInput
+}
+
+export type QuizUncheckedCreateWithoutLessonInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  durationMinutes: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
+  status?: $Enums.QuizStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutQuizInput
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutQuizInput
+  accesses?: Prisma.QuizAccessUncheckedCreateNestedManyWithoutQuizInput
+  attempts?: Prisma.QuizAttemptUncheckedCreateNestedManyWithoutQuizInput
+}
+
+export type QuizCreateOrConnectWithoutLessonInput = {
+  where: Prisma.QuizWhereUniqueInput
+  create: Prisma.XOR<Prisma.QuizCreateWithoutLessonInput, Prisma.QuizUncheckedCreateWithoutLessonInput>
+}
+
+export type QuizUpsertWithoutLessonInput = {
+  update: Prisma.XOR<Prisma.QuizUpdateWithoutLessonInput, Prisma.QuizUncheckedUpdateWithoutLessonInput>
+  create: Prisma.XOR<Prisma.QuizCreateWithoutLessonInput, Prisma.QuizUncheckedCreateWithoutLessonInput>
+  where?: Prisma.QuizWhereInput
+}
+
+export type QuizUpdateToOneWithWhereWithoutLessonInput = {
+  where?: Prisma.QuizWhereInput
+  data: Prisma.XOR<Prisma.QuizUpdateWithoutLessonInput, Prisma.QuizUncheckedUpdateWithoutLessonInput>
+}
+
+export type QuizUpdateWithoutLessonInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  passingScore?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
+  accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
+  attempts?: Prisma.QuizAttemptUpdateManyWithoutQuizNestedInput
+}
+
+export type QuizUncheckedUpdateWithoutLessonInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  passingScore?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutQuizNestedInput
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutQuizNestedInput
+  accesses?: Prisma.QuizAccessUncheckedUpdateManyWithoutQuizNestedInput
+  attempts?: Prisma.QuizAttemptUncheckedUpdateManyWithoutQuizNestedInput
+}
+
 export type QuizCreateWithoutQuestionsInput = {
   id?: string
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  lesson?: Prisma.LessonCreateNestedOneWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptCreateNestedManyWithoutQuizInput
@@ -620,13 +844,17 @@ export type QuizCreateWithoutQuestionsInput = {
 
 export type QuizUncheckedCreateWithoutQuestionsInput = {
   id?: string
+  lessonId?: string | null
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -659,10 +887,14 @@ export type QuizUpdateWithoutQuestionsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUpdateManyWithoutQuizNestedInput
@@ -670,12 +902,16 @@ export type QuizUpdateWithoutQuestionsInput = {
 
 export type QuizUncheckedUpdateWithoutQuestionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -690,13 +926,17 @@ export type QuizCreateWithoutPaymentsInput = {
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  lesson?: Prisma.LessonCreateNestedOneWithoutQuizInput
   questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptCreateNestedManyWithoutQuizInput
@@ -704,13 +944,17 @@ export type QuizCreateWithoutPaymentsInput = {
 
 export type QuizUncheckedCreateWithoutPaymentsInput = {
   id?: string
+  lessonId?: string | null
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -743,10 +987,14 @@ export type QuizUpdateWithoutPaymentsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneWithoutQuizNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUpdateManyWithoutQuizNestedInput
@@ -754,12 +1002,16 @@ export type QuizUpdateWithoutPaymentsInput = {
 
 export type QuizUncheckedUpdateWithoutPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -774,13 +1026,17 @@ export type QuizCreateWithoutAccessesInput = {
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  lesson?: Prisma.LessonCreateNestedOneWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
   questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   attempts?: Prisma.QuizAttemptCreateNestedManyWithoutQuizInput
@@ -788,13 +1044,17 @@ export type QuizCreateWithoutAccessesInput = {
 
 export type QuizUncheckedCreateWithoutAccessesInput = {
   id?: string
+  lessonId?: string | null
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -827,10 +1087,14 @@ export type QuizUpdateWithoutAccessesInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   attempts?: Prisma.QuizAttemptUpdateManyWithoutQuizNestedInput
@@ -838,12 +1102,16 @@ export type QuizUpdateWithoutAccessesInput = {
 
 export type QuizUncheckedUpdateWithoutAccessesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -858,13 +1126,17 @@ export type QuizCreateWithoutAttemptsInput = {
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  lesson?: Prisma.LessonCreateNestedOneWithoutQuizInput
   payments?: Prisma.PaymentCreateNestedManyWithoutQuizInput
   questions?: Prisma.QuestionCreateNestedManyWithoutQuizInput
   accesses?: Prisma.QuizAccessCreateNestedManyWithoutQuizInput
@@ -872,13 +1144,17 @@ export type QuizCreateWithoutAttemptsInput = {
 
 export type QuizUncheckedCreateWithoutAttemptsInput = {
   id?: string
+  lessonId?: string | null
   title: string
   slug: string
   description?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   durationMinutes: number
-  passingScore: number
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  maxAttempts?: number
+  passingScore?: number
   status?: $Enums.QuizStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -911,10 +1187,14 @@ export type QuizUpdateWithoutAttemptsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneWithoutQuizNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutQuizNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutQuizNestedInput
   accesses?: Prisma.QuizAccessUpdateManyWithoutQuizNestedInput
@@ -922,12 +1202,16 @@ export type QuizUpdateWithoutAttemptsInput = {
 
 export type QuizUncheckedUpdateWithoutAttemptsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   passingScore?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumQuizStatusFieldUpdateOperationsInput | $Enums.QuizStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -997,16 +1281,21 @@ export type QuizCountOutputTypeCountAttemptsArgs<ExtArgs extends runtime.Types.E
 
 export type QuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  lessonId?: boolean
   title?: boolean
   slug?: boolean
   description?: boolean
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
   payments?: boolean | Prisma.Quiz$paymentsArgs<ExtArgs>
   questions?: boolean | Prisma.Quiz$questionsArgs<ExtArgs>
   accesses?: boolean | Prisma.Quiz$accessesArgs<ExtArgs>
@@ -1016,60 +1305,80 @@ export type QuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type QuizSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  lessonId?: boolean
   title?: boolean
   slug?: boolean
   description?: boolean
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
 }, ExtArgs["result"]["quiz"]>
 
 export type QuizSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  lessonId?: boolean
   title?: boolean
   slug?: boolean
   description?: boolean
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
 }, ExtArgs["result"]["quiz"]>
 
 export type QuizSelectScalar = {
   id?: boolean
+  lessonId?: boolean
   title?: boolean
   slug?: boolean
   description?: boolean
   price?: boolean
   currency?: boolean
   durationMinutes?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  maxAttempts?: boolean
   passingScore?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "price" | "currency" | "durationMinutes" | "passingScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["quiz"]>
+export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "title" | "slug" | "description" | "price" | "currency" | "durationMinutes" | "startsAt" | "endsAt" | "maxAttempts" | "passingScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["quiz"]>
 export type QuizInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
   payments?: boolean | Prisma.Quiz$paymentsArgs<ExtArgs>
   questions?: boolean | Prisma.Quiz$questionsArgs<ExtArgs>
   accesses?: boolean | Prisma.Quiz$accessesArgs<ExtArgs>
   attempts?: boolean | Prisma.Quiz$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.QuizCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type QuizIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type QuizIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type QuizIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
+}
+export type QuizIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lesson?: boolean | Prisma.Quiz$lessonArgs<ExtArgs>
+}
 
 export type $QuizPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Quiz"
   objects: {
+    lesson: Prisma.$LessonPayload<ExtArgs> | null
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     questions: Prisma.$QuestionPayload<ExtArgs>[]
     accesses: Prisma.$QuizAccessPayload<ExtArgs>[]
@@ -1077,12 +1386,16 @@ export type $QuizPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    lessonId: string | null
     title: string
     slug: string
     description: string | null
     price: runtime.Decimal
     currency: string
     durationMinutes: number
+    startsAt: Date | null
+    endsAt: Date | null
+    maxAttempts: number
     passingScore: number
     status: $Enums.QuizStatus
     createdAt: Date
@@ -1481,6 +1794,7 @@ readonly fields: QuizFieldRefs;
  */
 export interface Prisma__QuizClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  lesson<T extends Prisma.Quiz$lessonArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$lessonArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   payments<T extends Prisma.Quiz$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   questions<T extends Prisma.Quiz$questionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accesses<T extends Prisma.Quiz$accessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$accessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1515,12 +1829,16 @@ export interface Prisma__QuizClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface QuizFieldRefs {
   readonly id: Prisma.FieldRef<"Quiz", 'String'>
+  readonly lessonId: Prisma.FieldRef<"Quiz", 'String'>
   readonly title: Prisma.FieldRef<"Quiz", 'String'>
   readonly slug: Prisma.FieldRef<"Quiz", 'String'>
   readonly description: Prisma.FieldRef<"Quiz", 'String'>
   readonly price: Prisma.FieldRef<"Quiz", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Quiz", 'String'>
   readonly durationMinutes: Prisma.FieldRef<"Quiz", 'Int'>
+  readonly startsAt: Prisma.FieldRef<"Quiz", 'DateTime'>
+  readonly endsAt: Prisma.FieldRef<"Quiz", 'DateTime'>
+  readonly maxAttempts: Prisma.FieldRef<"Quiz", 'Int'>
   readonly passingScore: Prisma.FieldRef<"Quiz", 'Int'>
   readonly status: Prisma.FieldRef<"Quiz", 'QuizStatus'>
   readonly createdAt: Prisma.FieldRef<"Quiz", 'DateTime'>
@@ -1774,6 +2092,10 @@ export type QuizCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.QuizCreateManyInput | Prisma.QuizCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1844,6 +2166,10 @@ export type QuizUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Quizzes to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1910,6 +2236,25 @@ export type QuizDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Quizzes to delete.
    */
   limit?: number
+}
+
+/**
+ * Quiz.lesson
+ */
+export type Quiz$lessonArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lesson
+   */
+  select?: Prisma.LessonSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lesson
+   */
+  omit?: Prisma.LessonOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonInclude<ExtArgs> | null
+  where?: Prisma.LessonWhereInput
 }
 
 /**
