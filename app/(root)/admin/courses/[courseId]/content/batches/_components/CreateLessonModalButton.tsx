@@ -10,7 +10,7 @@ import { deleteCloudinaryImage } from "@/actions/cloudinary";
 interface CreateLessonModalButtonProps {
   courseId: string;
   batches: { id: string; title: string }[];
-  quizzes: { id: string; title: string; lessonId: string | null }[];
+  quizzes: { id: string; title: string }[];
 }
 
 export default function CreateLessonModalButton({
@@ -43,7 +43,6 @@ export default function CreateLessonModalButton({
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
-  // Auto-generate slug from title
   const handleTitleChange = (title: string) => {
     const slug = title
       .toLowerCase()
@@ -127,48 +126,64 @@ export default function CreateLessonModalButton({
 
     setLoading(true);
 
-    const createLessonPromise = new Promise(async (resolve, reject) => {
-      try {
-        const data = new FormData();
-        data.append("title", formData.title);
-        data.append("slug", formData.slug);
-        data.append("description", formData.description);
-        data.append("batchId", formData.batchId);
-        data.append("quizId", formData.quizId);
-        data.append("order", String(formData.order));
-        if (formData.isPreview) data.append("isPreview", "on");
-        data.append("startsAt", formData.quizId ? formData.startsAt : "");
-        data.append("endsAt", formData.quizId ? formData.endsAt : "");
-        data.append("videoUrl", formData.videoUrl);
-        data.append("bunnyLibraryId", formData.bunnyLibraryId);
-        data.append("bunnyVideoId", formData.bunnyVideoId);
-        data.append("notes", formData.notes);
-        data.append("attachments", JSON.stringify(formData.attachments));
+    const createLessonPromise = (async () => {
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("slug", formData.slug);
+      data.append("description", formData.description);
+      data.append("batchId", formData.batchId);
+      data.append("quizId", formData.quizId);
+      data.append("order", String(formData.order));
+      if (formData.isPreview) data.append("isPreview", "on");
+      data.append("startsAt", formData.startsAt);
+      data.append("endsAt", formData.endsAt);
+      data.append("videoUrl", formData.videoUrl);
+      data.append("bunnyLibraryId", formData.bunnyLibraryId);
+      data.append("bunnyVideoId", formData.bunnyVideoId);
+      data.append("notes", formData.notes);
+      data.append("attachments", JSON.stringify(formData.attachments));
 
-        const res = await createLesson(null, data);
+      const res = await createLesson(null, data);
 
-        if (res.status === "success") {
-          resolve(res);
-          setIsOpen(false);
-          router.refresh();
-        } else {
-          reject(new Error(res.message || "Failed to create lesson."));
-        }
-      } catch (err) {
-        reject(err);
-      } finally {
-        setLoading(false);
+      if (res.status === "error") {
+        throw new Error(res.message || "Failed to create lesson.");
       }
-    });
 
-    toast.promise(createLessonPromise, {
-      pending: "Creating lesson...",
-      success: "Lesson created successfully! 🎉",
-      error: {
-        render({ data }: any) {
-          return data?.message || "Error creating lesson.";
+      setIsOpen(false);
+      setFormData({
+        title: "",
+        slug: "",
+        description: "",
+        batchId: batches.length > 0 ? batches[0].id : "",
+        quizId: "",
+        order: 1,
+        isPreview: false,
+        startsAt: "",
+        endsAt: "",
+        videoUrl: "",
+        bunnyLibraryId: "",
+        bunnyVideoId: "",
+        notes: "",
+        attachments: [],
+      });
+      router.refresh();
+
+      return res;
+    })();
+
+    toast.promise(
+      createLessonPromise,
+      {
+        pending: "Creating lesson...",
+        success: "Lesson created successfully! 🎉",
+        error: {
+          render({ data }: any) {
+            return data?.message || "Error creating lesson.";
+          },
         },
-      },
+      }
+    ).finally(() => {
+      setLoading(false);
     });
   };
 
@@ -239,8 +254,8 @@ export default function CreateLessonModalButton({
                   >
                     <option value="">No Quiz Linked</option>
                     {quizzes.map((q) => (
-                      <option key={q.id} value={q.id} disabled={Boolean(q.lessonId)}>
-                        {q.title} {q.lessonId ? "(Already Linked)" : ""}
+                      <option key={q.id} value={q.id}>
+                        {q.title}
                       </option>
                     ))}
                   </select>
@@ -294,39 +309,37 @@ export default function CreateLessonModalButton({
                 />
               </div>
 
-              {/* Conditional Quiz Schedule (StartsAt & EndsAt) */}
-              {formData.quizId && (
-                <div className="rounded-xl bg-purple-50/60 p-4 border border-purple-100 space-y-3">
-                  <div className="flex items-center gap-2 text-purple-700 font-semibold text-xs">
-                    <CalendarClock className="w-4 h-4" />
-                    Quiz Schedule Window
+              {/* Lesson Schedule (StartsAt & EndsAt) */}
+              <div className="rounded-xl bg-purple-50/60 p-4 border border-purple-100 space-y-3">
+                <div className="flex items-center gap-2 text-purple-700 font-semibold text-xs">
+                  <CalendarClock className="w-4 h-4" />
+                  Lesson Schedule Window
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700">Starts At</label>
+                    <input
+                      type="datetime-local"
+                      value={formData.startsAt}
+                      onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
+                      className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
+                    />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700">Quiz Start Time</label>
-                      <input
-                        type="datetime-local"
-                        value={formData.startsAt}
-                        onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
-                        className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700">Quiz End Time</label>
-                      <input
-                        type="datetime-local"
-                        value={formData.endsAt}
-                        onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
-                        className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700">Ends At</label>
+                    <input
+                      type="datetime-local"
+                      value={formData.endsAt}
+                      onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
+                      className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
+                    />
                   </div>
                 </div>
-              )}
+              </div>
 
-              {/* Video Streaming (External URL or Bunny Stream) */}
+              {/* Video Streaming */}
               <div className="space-y-3 border-t pt-3">
                 <div className="flex items-center gap-2 text-xs font-semibold text-gray-700">
                   <Video className="w-4 h-4 text-blue-600" />

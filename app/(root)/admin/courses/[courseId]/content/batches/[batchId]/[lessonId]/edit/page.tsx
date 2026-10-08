@@ -9,6 +9,7 @@ interface EditLessonPageProps {
   params: Promise<{
     courseId: string;
     lessonId: string;
+    batchId:string;
   }>;
 }
 
@@ -22,7 +23,7 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
     redirect("/dashboard");
   }
 
-  const { courseId, lessonId } = await params;
+  const { courseId, lessonId, batchId } = await params;
 
   const [lesson, course, quizzes] = await Promise.all([
     prisma.lesson.findUnique({
@@ -40,7 +41,7 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
       },
     }),
     prisma.quiz.findMany({
-      select: { id: true, title: true, lessonId: true },
+      select: { id: true, title: true,},
       orderBy: { createdAt: "desc" },
     }),
   ]);
@@ -52,11 +53,11 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
   return (
     <section className="p-6 max-w-4xl mx-auto space-y-6">
       <Link
-        href={`/admin/courses/${courseId}/content`}
+        href={`/admin/courses/${courseId}/content/batches/${[batchId]}/${[lessonId]}`}
         className="inline-flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-gray-900 transition"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Course Content
+        Back to Lesson
       </Link>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -66,10 +67,11 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
         </h1>
 
         <EditLessonForm
-          lesson={lesson}
+          lesson={JSON.parse(JSON.stringify(lesson))}
           courseId={courseId}
           batches={course.batches}
           quizzes={quizzes}
+          batchId={batchId}
         />
       </div>
     </section>

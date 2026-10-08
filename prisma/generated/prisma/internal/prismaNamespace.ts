@@ -2514,6 +2514,7 @@ export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof Ba
 export const LessonScalarFieldEnum = {
   id: 'id',
   batchId: 'batchId',
+  quizId: 'quizId',
   title: 'title',
   slug: 'slug',
   description: 'description',
@@ -2535,7 +2536,6 @@ export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof 
 
 export const QuizScalarFieldEnum = {
   id: 'id',
-  lessonId: 'lessonId',
   title: 'title',
   slug: 'slug',
   description: 'description',

@@ -227,94 +227,117 @@ export async function deleteCourse(courseId: string) {
 }
 
 /* ==========================================
-   LESSON ACTIONS (LINKED TO BATCH)
+   LESSON ACTIONS (LINKED TO BATCH & QUIZ)
    ========================================== */
 
-   export async function createLesson(
-    _previousState: {
-      status: "success" | "error";
-      message: string;
-    } | null,
-    formData: FormData
-  ) {
-    try {
-      await requireAdmin();
-  
-      const title = getString(formData, "title");
-      const slug = getString(formData, "slug");
-      const description = getNullableString(formData, "description");
-      const notes = getNullableString(formData, "notes");
-      const videoUrl = getNullableString(formData, "videoUrl");
-      const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
-      const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
-      const batchId = getNullableString(formData, "batchId");
-      const quizId = getNullableString(formData, "quizId");
-      const order = getNullableNumber(formData, "order") ?? 1;
-      const isPreview = formData.get("isPreview") === "on";
-  
-      // Safe Date Parsing
-      const parseValidDate = (dateStr: string | null) => {
-        if (!dateStr || dateStr.trim() === "") return null;
-        const parsed = new Date(dateStr);
-        return isNaN(parsed.getTime()) ? null : parsed;
-      };
-  
-      const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
-      const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
-  
-      // Safe Attachments Array Parsing
-      const attachmentsRaw = formData.get("attachments");
-      let attachments: string[] = [];
-      if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
-        try {
-          attachments = JSON.parse(attachmentsRaw);
-        } catch (e) {
-          attachments = [];
-        }
-      }
-  
-      if (!title || !slug) {
-        return { status: "error" as const, message: "Title and slug are required" };
-      }
-  
-      // Create Lesson in Prisma
-      const newLesson = await prisma.lesson.create({
+export async function createLesson(
+  _previousState: {
+    status: "success" | "error";
+    message: string;
+  } | null,
+  formData: FormData
+) {
+  try {
+    await requireAdmin();
+
+    const title = getString(formData, "title");
+    const rawSlug = getString(formData, "slug");
+    const description = getNullableString(formData, "description");
+    const notes = getNullableString(formData, "notes");
+    const videoUrl = getNullableString(formData, "videoUrl");
+    const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
+    const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
+    const batchId = getNullableString(formData, "batchId");
+    const quizId = getNullableString(formData, "quizId");
+    const isPreview = formData.get("isPreview") === "on";
+
+    if (!title) {
+      return { status: "error" as const, message: "Lesson title is required" };
+    }
+
+    if (!batchId) {
+      return { status: "error" as const, message: "A batch must be assigned" };
+    }
+
+    // Generate unique slug
+    const slug = await createUniqueLessonSlug(rawSlug || title);
+
+    // Resolve order collisions: shift existing items or auto-increment
+    let requestedOrder = getNullableNumber(formData, "order");
+
+    if (requestedOrder === null) {
+      const maxLesson = await prisma.lesson.findFirst({
+        where: { batchId },
+        orderBy: { order: "desc" },
+        select: { order: true },
+      });
+      requestedOrder = (maxLesson?.order ?? 0) + 1;
+    } else {
+      // Shift existing lessons at or after this order to make space
+      await prisma.lesson.updateMany({
+        where: {
+          batchId,
+          order: { gte: requestedOrder },
+        },
         data: {
-          title,
-          slug,
-          description,
-          notes,
-          videoUrl,
-          bunnyLibraryId,
-          bunnyVideoId,
-          order,
-          isPreview,
-          startsAt,
-          endsAt,
-          attachments,
-          batch: batchId ? { connect: { id: batchId } } : undefined,
+          order: { increment: 1 },
         },
       });
-  
-      // Link Quiz if provided
-      if (quizId) {
-        await prisma.quiz.update({
-          where: { id: quizId },
-          data: { lessonId: newLesson.id },
-        });
-      }
-  
-      revalidatePath("/admin/courses");
-  
-      return { status: "success" as const, message: "Lesson created successfully" };
-    } catch (error) {
-      console.error("Create lesson error:", error);
-      return {
-        status: "error" as const,
-        message: error instanceof Error ? error.message : "Failed to create lesson",
-      };
     }
+
+    // Safe Date Parsing
+    const parseValidDate = (dateStr: string | null) => {
+      if (!dateStr || dateStr.trim() === "") return null;
+      const parsed = new Date(dateStr);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
+    const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
+
+    // Safe Attachments Array Parsing
+    const attachmentsRaw = formData.get("attachments");
+    let attachments: string[] = [];
+    if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
+      try {
+        attachments = JSON.parse(attachmentsRaw);
+      } catch (e) {
+        attachments = [];
+      }
+    }
+
+    // Create Lesson in Prisma
+    await prisma.lesson.create({
+      data: {
+        title,
+        slug,
+        description,
+        notes,
+        videoUrl,
+        bunnyLibraryId,
+        bunnyVideoId,
+        order: requestedOrder,
+        isPreview,
+        startsAt,
+        endsAt,
+        attachments,
+        batch: { connect: { id: batchId } },
+        quiz: quizId ? { connect: { id: quizId } } : undefined,
+      },
+    });
+
+    revalidatePath("/admin/courses");
+
+    return { status: "success" as const, message: "Lesson created successfully" };
+  } catch (error) {
+    console.error("Create lesson error:", error);
+    return {
+      status: "error" as const,
+      message: error instanceof Error ? error.message : "Failed to create lesson",
+    };
   }
+}
+
 export async function updateLesson(
   lessonId: string,
   _previousState: {
@@ -371,7 +394,7 @@ export async function updateLesson(
       return { status: "error" as const, message: "Lesson not found" };
     }
 
-    // Update lesson model
+    // Update lesson model directly with quiz relation
     await prisma.lesson.update({
       where: { id: lessonId },
       data: {
@@ -390,25 +413,11 @@ export async function updateLesson(
         batch: batchId
           ? { connect: { id: batchId } }
           : { disconnect: true },
+        quiz: quizId
+          ? { connect: { id: quizId } }
+          : { disconnect: true },
       },
     });
-
-    // Handle Quiz Relation update
-    if (quizId) {
-      await prisma.quiz.updateMany({
-        where: { lessonId: lessonId, NOT: { id: quizId } },
-        data: { lessonId: null },
-      });
-      await prisma.quiz.update({
-        where: { id: quizId },
-        data: { lessonId: lessonId },
-      });
-    } else {
-      await prisma.quiz.updateMany({
-        where: { lessonId: lessonId },
-        data: { lessonId: null },
-      });
-    }
 
     revalidatePath("/admin/courses");
 

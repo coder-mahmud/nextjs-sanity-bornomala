@@ -2,24 +2,25 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2, Edit, FileText } from "lucide-react";
+import { Trash2, Edit, Eye } from "lucide-react";
 import Link from "next/link";
 import DeleteLessonModal from "./DeleteLessonModal";
 
 interface LessonListProps {
   lessons: any[];
-  batches: any[];
   courseId: string;
+  batchId: string;
+  batches?: any[];
 }
 
-export default function LessonList({ lessons, courseId }: LessonListProps) {
+export default function LessonList({ lessons, courseId, batchId }: LessonListProps) {
   const router = useRouter();
   const [selectedLesson, setSelectedLesson] = useState<{ id: string; title: string } | null>(null);
 
   if (lessons.length === 0) {
     return (
-      <div className="text-center py-8 text-xs text-gray-500 border border-dashed rounded-xl">
-        No lessons found for this course yet.
+      <div className="text-center py-8 text-xs text-gray-500 border border-dashed rounded-xl bg-white">
+        No lessons found for this batch yet.
       </div>
     );
   }
@@ -55,16 +56,18 @@ export default function LessonList({ lessons, courseId }: LessonListProps) {
 
             <div className="flex items-center gap-2">
               <Link
-                href={`/admin/courses/${courseId}/content/${lesson.id}/edit`}
+                href={`/admin/courses/${courseId}/content/batches/${batchId}/${lesson.id}`}
                 className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                title="View Lesson"
               >
-                <Edit className="w-4 h-4" />
+                <Eye className="w-4 h-4" />
               </Link>
 
               <button
                 type="button"
                 onClick={() => setSelectedLesson({ id: lesson.id, title: lesson.title })}
                 className="p-2 text-gray-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                title="Delete Lesson"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

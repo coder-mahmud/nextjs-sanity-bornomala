@@ -144,7 +144,7 @@ model Batch {
   @@index([courseId])
   @@index([status])
 }
-
+/*
 model Lesson {
   id              String           @id @default(cuid())
   batchId         String?          
@@ -203,6 +203,68 @@ model Quiz {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 }
+*/
+
+model Lesson {
+  id              String           @id @default(cuid())
+  batchId         String?          
+  quizId          String?          // Foreign key for Quiz
+  title           String
+  slug            String           @unique
+  description     String?
+  videoUrl        String?
+  order           Int
+  isPreview       Boolean          @default(false)
+  
+  startsAt        DateTime?
+  endsAt          DateTime?
+
+  bunnyLibraryId  String?
+  bunnyVideoId    String?
+
+  attachments     String[]         
+  notes           String?          
+
+  // 1. Keeps connection to Batch model
+  batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
+
+  // 2. Many-to-one connection to Quiz model
+  quiz            Quiz?            @relation(fields: [quizId], references: [id], onDelete: SetNull)
+
+  progressRecords LessonProgress[]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([batchId, order])
+  @@index([batchId])
+  @@index([quizId])
+}
+
+model Quiz {
+  id              String        @id @default(cuid())
+  // 2. Remove lessonId from Quiz and change lesson to lessons (array)
+  title           String
+  slug            String        @unique
+  description     String?
+  price           Decimal       @default(0) @db.Decimal(10, 2)
+  currency        String        @default("EUR")
+  durationMinutes Int           
+  maxAttempts     Int           @default(1)
+  passingScore    Int           @default(50)
+  status          QuizStatus    @default(DRAFT)
+  
+  lessons         Lesson[]      // Replaces single lesson: Lesson?
+  payments        Payment[]
+  questions       Question[]
+  accesses        QuizAccess[]
+  attempts        QuizAttempt[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+
 
 model LessonProgress {
   id          String   @id @default(cuid())

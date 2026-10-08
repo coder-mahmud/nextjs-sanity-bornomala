@@ -10,8 +10,9 @@ import { toast } from "react-toastify";
 interface EditLessonFormProps {
   lesson: any;
   courseId: string;
+  batchId?: string;
   batches: { id: string; title: string }[];
-  quizzes: { id: string; title: string; lessonId: string | null }[];
+  quizzes: { id: string; title: string }[];
 }
 
 export default function EditLessonForm({
@@ -19,6 +20,7 @@ export default function EditLessonForm({
   courseId,
   batches,
   quizzes,
+  batchId,
 }: EditLessonFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -27,24 +29,24 @@ export default function EditLessonForm({
   const formatDateForInput = (dateString?: string | Date | null) => {
     if (!dateString) return "";
     const d = new Date(dateString);
-    return d.toISOString().slice(0, 16);
+    return isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 16);
   };
 
   const [formData, setFormData] = useState({
-    title: lesson.title || "",
-    slug: lesson.slug || "",
-    description: lesson.description || "",
-    batchId: lesson.batchId || "",
-    quizId: lesson.quiz?.id || "",
-    order: lesson.order || 1,
-    isPreview: lesson.isPreview || false,
-    startsAt: formatDateForInput(lesson.startsAt),
-    endsAt: formatDateForInput(lesson.endsAt),
-    videoUrl: lesson.videoUrl || "",
-    bunnyLibraryId: lesson.bunnyLibraryId || "",
-    bunnyVideoId: lesson.bunnyVideoId || "",
-    notes: lesson.notes || "",
-    attachments: (lesson.attachments as string[]) || [],
+    title: lesson?.title || "",
+    slug: lesson?.slug || "",
+    description: lesson?.description || "",
+    batchId: lesson?.batchId || batchId || "",
+    quizId: lesson?.quizId || lesson?.quiz?.id || "",
+    order: lesson?.order || 1,
+    isPreview: lesson?.isPreview || false,
+    startsAt: formatDateForInput(lesson?.startsAt),
+    endsAt: formatDateForInput(lesson?.endsAt),
+    videoUrl: lesson?.videoUrl || "",
+    bunnyLibraryId: lesson?.bunnyLibraryId || "",
+    bunnyVideoId: lesson?.bunnyVideoId || "",
+    notes: lesson?.notes || "",
+    attachments: Array.isArray(lesson?.attachments) ? lesson.attachments : [],
   });
 
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
@@ -109,7 +111,7 @@ export default function EditLessonForm({
     } finally {
       setFormData((prev) => ({
         ...prev,
-        attachments: prev.attachments.filter((url) => url !== urlToRemove),
+        attachments: prev.attachments.filter((url: string) => url !== urlToRemove),
       }));
       toast.info("Attachment removed.");
     }
@@ -141,7 +143,11 @@ export default function EditLessonForm({
 
         if (res.status === "success") {
           resolve(res);
-          router.push(`/admin/courses/${courseId}/content`);
+          if (batchId) {
+            router.push(`/admin/courses/${courseId}/content/batches/${batchId}/`);
+          } else {
+            router.push(`/admin/courses/${courseId}/content`);
+          }
           router.refresh();
         } else {
           reject(new Error(res.message || "Failed to update lesson."));
@@ -230,12 +236,8 @@ export default function EditLessonForm({
           >
             <option value="">No Quiz Linked</option>
             {quizzes.map((q) => (
-              <option
-                key={q.id}
-                value={q.id}
-                disabled={Boolean(q.lessonId && q.lessonId !== lesson.id)}
-              >
-                {q.title} {q.lessonId && q.lessonId !== lesson.id ? "(Already Linked)" : ""}
+              <option key={q.id} value={q.id}>
+                {q.title}
               </option>
             ))}
           </select>
@@ -347,7 +349,7 @@ export default function EditLessonForm({
 
         {formData.attachments.length > 0 && (
           <ul className="space-y-2 border rounded-xl p-3 bg-gray-50/50">
-            {formData.attachments.map((url, idx) => (
+            {formData.attachments.map((url: string, idx: number) => (
               <li
                 key={idx}
                 className="flex items-center justify-between text-xs text-gray-600 bg-white p-2 rounded-lg border"
