@@ -1,110 +1,103 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { MoreVertical, Edit3, Layers, BookOpen, Trash2, Eye, Loader2 } from "lucide-react";
+import { MoreVertical, Edit, Trash2, Eye, BookOpen } from "lucide-react";
 import { deleteCourse } from "./actions";
+import DeleteConfirmationModal from "./_components/DeleteConfirmationModal";
+import { toast } from "react-toastify";
 
-interface CourseActionsDropdownProps {
-  courseId: string;
-}
-
-export default function CourseActionsDropdown({ courseId }: CourseActionsDropdownProps) {
-  const [open, setOpen] = useState(false);
+export default function CourseActionsDropdown({ courseId }: { courseId: string }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this course? This action cannot be undone.")) {
-      return;
-    }
-
     setIsDeleting(true);
+    const res = await deleteCourse(courseId);
+    setIsDeleting(false);
 
-    try {
-      const res = await deleteCourse(courseId);
-
-      if (res?.success) {
-        setOpen(false);
-        router.refresh();
-      } else {
-        alert(res?.message || "Failed to delete course.");
-      }
-    } catch (error) {
-      console.error("Deletion error:", error);
-      alert("Something went wrong while deleting.");
-    } finally {
-      setIsDeleting(false);
+    if (res?.success) {
+      toast.success("Course deleted successfully!");
+      setShowDeleteModal(false);
+    } else {
+      toast.error(res?.message || "Failed to delete course");
     }
   };
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition focus:outline-none"
-      >
-        <MoreVertical className="w-5 h-5" />
-      </button>
+    <>
+      <div className="relative inline-block text-left">
+        <button
+          type="button"
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition"
+        >
+          <MoreVertical className="h-4 w-4" />
+        </button>
 
-      {open && (
-        <div className="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-xl bg-white p-1.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <Link
-            href={`/admin/courses/${courseId}`}
-            className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-gray-700 rounded-lg hover:bg-gray-50 transition"
-            onClick={() => setOpen(false)}
-          >
-            <Eye className="w-4 h-4 text-blue-600" />
-            Show Details
-          </Link>
+        {dropdownOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-10"
+              onClick={() => setDropdownOpen(false)}
+            />
+            <div className="absolute right-0 z-20 mt-2 w-44 rounded-xl border border-gray-100 bg-white p-1.5 shadow-lg">
+              {/* Show Details */}
+              <Link
+                href={`/admin/courses/${courseId}`}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition"
+                onClick={() => setDropdownOpen(false)}
+              >
+                <Eye className="h-3.5 w-3.5 text-blue-500" />
+                <span>Show Details</span>
+              </Link>
 
+              {/* Course Content */}
+              <Link
+                href={`/admin/courses/${courseId}/content`}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition"
+                onClick={() => setDropdownOpen(false)}
+              >
+                <BookOpen className="h-3.5 w-3.5 text-purple-500" />
+                <span>Course Content</span>
+              </Link>
 
-          <Link
-            href={`/admin/courses/${courseId}/content`}
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
-          >
-            <BookOpen className="w-4 h-4 text-purple-500" />
-            Course Content
-          </Link>
+              {/* Edit Details */}
+              <Link
+                href={`/admin/courses/${courseId}/edit`}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition"
+                onClick={() => setDropdownOpen(false)}
+              >
+                <Edit className="h-3.5 w-3.5 text-gray-500" />
+                <span>Edit Details</span>
+              </Link>
 
-          <Link
-            href={`/admin/courses/${courseId}/edit`}
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100 transition"
-          >
-            <Edit3 className="w-4 h-4 text-gray-500" />
-            Edit Details
-          </Link>
+              <div className="my-1 border-t border-gray-100" />
 
-          <div className="my-1 border-t border-gray-100" />
+              {/* Delete Course */}
+              <button
+                type="button"
+                onClick={() => {
+                  setDropdownOpen(false);
+                  setShowDeleteModal(true);
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition cursor-pointer"
+              >
+                <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                <span>Delete Course</span>
+              </button>
+            </div>
+          </>
+        )}
+      </div>
 
-          <button
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 transition disabled:opacity-50"
-          >
-            {isDeleting ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Trash2 className="w-4 h-4" />
-            )}
-            {isDeleting ? "Deleting..." : "Delete Course"}
-          </button>
-        </div>
-      )}
-    </div>
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        loading={isDeleting}
+      />
+    </>
   );
 }

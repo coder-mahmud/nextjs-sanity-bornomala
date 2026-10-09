@@ -1,35 +1,56 @@
 "use client";
 
 import { useState } from "react";
-import { Trash2, Loader2 } from "lucide-react";
-import { deleteSchedule } from "./actions";
+import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "./_components/ConfirmDeleteModal";
+import { deleteSchedule } from "./actions";
 
 export default function DeleteScheduleButton({ scheduleId }: { scheduleId: string }) {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this schedule?")) return;
-
     setLoading(true);
-    const res = await deleteSchedule(scheduleId);
-    setLoading(false);
 
-    if (res.success) {
-      toast.success("Schedule deleted successfully!");
-    } else {
-      toast.error(res.message || "Failed to delete schedule");
+    try {
+      const res = await deleteSchedule(scheduleId);
+      if (res?.success) {
+        toast.success("Schedule deleted successfully!");
+        setIsOpen(false);
+        router.refresh();
+      } else {
+        toast.error(res?.message || "Failed to delete schedule.");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("An error occurred while deleting.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleDelete}
-      disabled={loading}
-      className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
-    >
-      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+        title="Delete Schedule"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+
+      <ConfirmDeleteModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onConfirm={handleDelete}
+        loading={loading}
+        title="Delete Schedule"
+        description="Are you sure you want to delete this schedule entry? All attached time slots will be permanently removed."
+      />
+    </>
   );
 }

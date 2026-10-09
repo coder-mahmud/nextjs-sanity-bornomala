@@ -18,60 +18,39 @@ async function requireAdmin() {
   return session;
 }
 
+// actions.ts
 export async function createSchedule(formData: FormData) {
   try {
-    await requireAdmin();
-
     const branchId = formData.get("branchId") as string;
-    const level = formData.get("level") as string | null;
-    const description = formData.get("description") as string | null;
-    const rawEntries = formData.get("entries") as string;
+    const level = formData.get("level") as string;
+    const description = formData.get("description") as string;
+    const entriesRaw = formData.get("entries") as string;
 
-    if (!branchId) {
-      return { success: false, message: "Branch selection is required." };
-    }
+    const entries = JSON.parse(entriesRaw) as {
+      day: string;
+      time: string;
+      startingDate: string;
+    }[];
 
-    let entries: Array<{
-      day: WeekDay;
-      startDate: string;
-      date: string;
-      startTime: string;
-      endTime: string;
-    }> = [];
-
-    if (rawEntries) {
-      try {
-        entries = JSON.parse(rawEntries);
-      } catch (e) {
-        return { success: false, message: "Invalid schedule entries format." };
-      }
-    }
-
-    const createdSchedule = await prisma.schedule.create({
+    await prisma.schedule.create({
       data: {
         branchId,
-        level: level?.trim() || null,
-        description: description?.trim() || null,
+        level,
+        description,
         entries: {
           create: entries.map((entry) => ({
             day: entry.day,
-            startDate: new Date(entry.startDate || entry.date),
-            date: new Date(entry.date),
-            startTime: entry.startTime,
-            endTime: entry.endTime,
+            time: entry.time,
+            startingDate: entry.startingDate,
           })),
         },
       },
     });
 
-    revalidatePath("/admin/schedules");
-    return { success: true, scheduleId: createdSchedule.id };
+    return { success: true };
   } catch (error) {
-    console.error("Error creating schedule:", error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : "Failed to create schedule",
-    };
+    console.error("Failed to create schedule:", error);
+    return { success: false, message: "Server error creating schedule" };
   }
 }
 
@@ -91,5 +70,51 @@ export async function deleteSchedule(scheduleId: string) {
       success: false,
       message: error instanceof Error ? error.message : "Failed to delete schedule",
     };
+  }
+}
+
+
+export async function updateSchedule(scheduleId: string, formData: FormData) {
+  try {
+    const branchId = formData.get("branchId") as string;
+    const level = formData.get("level") as string;
+    const description = formData.get("description") as string;
+    const entriesRaw = formData.get("entries") as string;
+
+    const entries = JSON.parse(entriesRaw) as {
+      day: string;
+      time: string;
+      startingDate: string;
+    }[];
+
+    // Atomically replace existing entries with updated entries
+    await prisma.$transaction([
+      prisma.scheduleEntry.deleteMany({
+        where: { scheduleId },
+      }),
+      prisma.schedule.update({
+        where: { id: scheduleId },
+        data: {
+          branchId,
+          level,
+          description,
+          entries: {
+            create: entries.map((entry) => ({
+              day: entry.day,
+              time: entry.time,
+              startingDate: entry.startingDate,
+            })),
+          },
+        },
+      }),
+    ]);
+
+    revalidatePath("/admin/schedules");
+    revalidatePath("/courses");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update schedule:", error);
+    return { success: false, message: "Server error updating schedule." };
   }
 }

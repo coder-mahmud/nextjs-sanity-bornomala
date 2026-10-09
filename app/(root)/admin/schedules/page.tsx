@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, Calendar, Clock, MapPin } from "lucide-react";
+import { Plus, Calendar, Clock, MapPin, Pencil } from "lucide-react";
 import DeleteScheduleButton from "./DeleteScheduleButton";
 
 export interface ScheduleWithRelations {
@@ -18,10 +18,8 @@ export interface ScheduleWithRelations {
   entries: Array<{
     id: string;
     day: string;
-    startDate: Date;
-    date: Date;
-    startTime: string;
-    endTime: string;
+    time: string;
+    startingDate: string;
   }>;
   parisCourses: Array<{ id: string; title: string }>;
   hocheCourses: Array<{ id: string; title: string }>;
@@ -32,7 +30,7 @@ export default async function SchedulesPage() {
     include: {
       branch: true,
       entries: {
-        orderBy: { startDate: "asc" },
+        orderBy: { createdAt: "asc" },
       },
       parisCourses: { select: { id: true, title: true } },
       hocheCourses: { select: { id: true, title: true } },
@@ -75,7 +73,7 @@ export default async function SchedulesPage() {
               className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-4 flex flex-col justify-between"
             >
               <div className="space-y-3">
-                <div className="flex items-start justify-between">
+                <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-2 text-blue-600 text-xs font-semibold uppercase tracking-wider">
                       <MapPin className="w-3.5 h-3.5" />
@@ -85,7 +83,18 @@ export default async function SchedulesPage() {
                       {schedule.level || "General Schedule"}
                     </h2>
                   </div>
-                  <DeleteScheduleButton scheduleId={schedule.id} />
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-1">
+                    <Link
+                      href={`/admin/schedules/${schedule.id}/edit`}
+                      className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                      title="Edit Schedule"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Link>
+                    <DeleteScheduleButton scheduleId={schedule.id} />
+                  </div>
                 </div>
 
                 {schedule.description && (
@@ -105,14 +114,17 @@ export default async function SchedulesPage() {
                       {schedule.entries.map((entry) => (
                         <div
                           key={entry.id}
-                          className="flex items-center justify-between text-xs bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"
+                          className="flex items-center justify-between text-xs bg-gray-50 px-3 py-2 rounded-lg border border-gray-100"
                         >
-                          <span className="font-medium text-gray-800">
-                            {entry.day} ({new Date(entry.startDate).toLocaleDateString()} - {new Date(entry.date).toLocaleDateString()})
-                          </span>
-                          <span className="text-gray-600 flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-blue-500" />
-                            {entry.startTime} - {entry.endTime}
+                          <div className="font-medium text-gray-800 space-y-0.5">
+                            <div>{entry.day}</div>
+                            <div className="text-[11px] text-gray-500">
+                              ক্লাস স্টার্ট: {entry.startingDate}
+                            </div>
+                          </div>
+                          <span className="text-gray-600 flex items-center gap-1 font-medium">
+                            <Clock className="w-3.5 h-3.5 text-blue-500" />
+                            {entry.time}
                           </span>
                         </div>
                       ))}

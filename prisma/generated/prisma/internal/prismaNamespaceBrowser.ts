@@ -438,10 +438,8 @@ export const ScheduleEntryScalarFieldEnum = {
   id: 'id',
   scheduleId: 'scheduleId',
   day: 'day',
-  startDate: 'startDate',
-  date: 'date',
-  startTime: 'startTime',
-  endTime: 'endTime',
+  time: 'time',
+  startingDate: 'startingDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

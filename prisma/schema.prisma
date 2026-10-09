@@ -449,18 +449,14 @@ model ScheduleEntry {
   scheduleId String
   schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 
-  day       WeekDay
-  startDate DateTime
-  date      DateTime
-  startTime String
-  endTime   String
+  day          String   // e.g. "সোমবার" or "MONDAY"
+  time         String   // e.g. "সকাল ১১:০০ টা - ০২:০০ টা" or "11:00 AM - 02:00 PM"
+  startingDate String   // e.g. "০৫ ডিসেম্বর" or "05 December 2026"
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([scheduleId])
-  @@index([startDate])
-  @@index([date])
 }
 
 model CourseCard {

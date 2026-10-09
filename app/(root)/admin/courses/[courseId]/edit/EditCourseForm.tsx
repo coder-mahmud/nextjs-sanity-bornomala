@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { updateCourse } from "../../actions";
@@ -50,6 +50,13 @@ function TiptapEditor({
     },
   });
 
+  // Ensure content syncs if parent updates value dynamically
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [value, editor]);
+
   if (!editor) return null;
 
   return (
@@ -83,7 +90,7 @@ function TiptapEditor({
           Bullet List
         </button>
       </div>
-      <EditorContent editor={editor} className="min-h-[100px] prose text-sm" />
+      <EditorContent editor={editor} className="min-h-[100px] prose text-sm max-w-none focus:outline-none" />
     </div>
   );
 }
@@ -111,6 +118,7 @@ export default function EditCourseForm({
 
   const [formData, setFormData] = useState({
     title: course.title || "",
+    slug: course.slug || "",
     tagLine: course.tagLine || "",
     shortDescription: course.shortDescription || "",
     description: course.description || "",
@@ -203,53 +211,52 @@ export default function EditCourseForm({
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const payload = new FormData();
-      payload.append("title", formData.title);
-      payload.append("tagLine", formData.tagLine);
-      payload.append("shortDescription", formData.shortDescription);
-      payload.append("description", formData.description);
-      payload.append("price", formData.price);
-      payload.append("currency", formData.currency);
-      payload.append("level", formData.level);
-      payload.append("status", formData.status);
-      payload.append("duration", formData.duration);
-      payload.append("numberOfStudents", formData.numberOfStudents);
-      payload.append("rating", formData.rating);
-      payload.append("instructorId", formData.instructorId);
-      payload.append("parisScheduleId", formData.parisScheduleId);
-      payload.append("hocheScheduleId", formData.hocheScheduleId);
-      payload.append("order", formData.order);
-      payload.append("characteristics", formData.characteristics);
-      payload.append("targetAudience", formData.targetAudience);
-      payload.append("thumbnail", formData.thumbnail);
+    const payload = new FormData();
+    payload.append("title", formData.title);
+    payload.append("slug", formData.slug);
+    payload.append("tagLine", formData.tagLine);
+    payload.append("shortDescription", formData.shortDescription);
+    payload.append("description", formData.description);
+    payload.append("price", formData.price);
+    payload.append("currency", formData.currency);
+    payload.append("level", formData.level);
+    payload.append("status", formData.status);
+    payload.append("duration", formData.duration);
+    payload.append("numberOfStudents", formData.numberOfStudents);
+    payload.append("rating", formData.rating);
+    payload.append("instructorId", formData.instructorId);
+    payload.append("parisScheduleId", formData.parisScheduleId);
+    payload.append("hocheScheduleId", formData.hocheScheduleId);
+    payload.append("order", formData.order);
+    payload.append("characteristics", formData.characteristics);
+    payload.append("targetAudience", formData.targetAudience);
+    payload.append("thumbnail", formData.thumbnail);
 
-      const filteredFaqs = faqs.filter((f) => f.question.trim());
-      payload.append("faqs", JSON.stringify(filteredFaqs));
+    const filteredFaqs = faqs.filter((f) => f.question.trim());
+    payload.append("faqs", JSON.stringify(filteredFaqs));
 
-      const res = await updateCourse(course.id, payload);
-
-      if (res?.success) {
-        toast.success("Course updated successfully!");
-        router.refresh();
-      } else {
-        toast.error("Failed to update course.");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "An unexpected error occurred while updating."
-      );
-    } finally {
-      setLoading(false);
-    }
+    toast
+      .promise(updateCourse(course.id, payload), {
+        pending: "Updating course...",
+        success: "Course updated successfully!",
+        error: "Failed to update course.",
+      })
+      .then((res) => {
+        if (res?.success) {
+          router.refresh();
+        }
+      })
+      .catch((err) => {
+        console.error("Course update error:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Title & Tagline */}
+      {/* Title & Slug */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-semibold text-gray-700">Course Title *</label>
@@ -263,6 +270,20 @@ export default function EditCourseForm({
         </div>
 
         <div>
+          <label className="block text-xs font-semibold text-gray-700">Course Slug *</label>
+          <input
+            type="text"
+            required
+            value={formData.slug}
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none font-mono text-gray-800"
+          />
+        </div>
+      </div>
+
+      {/* Tagline & Short Description */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
           <label className="block text-xs font-semibold text-gray-700">Tag Line</label>
           <input
             type="text"
@@ -272,18 +293,17 @@ export default function EditCourseForm({
             className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
           />
         </div>
-      </div>
 
-      {/* Short Description */}
-      <div>
-        <label className="block text-xs font-semibold text-gray-700">Short Summary / Catchphrase</label>
-        <input
-          type="text"
-          placeholder="Brief 1-2 sentence preview"
-          value={formData.shortDescription}
-          onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-          className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
-        />
+        <div>
+          <label className="block text-xs font-semibold text-gray-700">Short Summary / Catchphrase</label>
+          <input
+            type="text"
+            placeholder="Brief 1-2 sentence preview"
+            value={formData.shortDescription}
+            onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+          />
+        </div>
       </div>
 
       {/* Full Description */}
@@ -489,7 +509,7 @@ export default function EditCourseForm({
                   <button
                     type="button"
                     onClick={() => handleRemoveFaq(index)}
-                    className="text-xs text-red-600 hover:underline"
+                    className="text-xs text-red-600 hover:underline cursor-pointer"
                   >
                     Remove
                   </button>
@@ -511,7 +531,7 @@ export default function EditCourseForm({
           <button
             type="button"
             onClick={handleAddFaq}
-            className="text-xs text-blue-600 font-medium hover:underline"
+            className="text-xs text-blue-600 font-medium hover:underline cursor-pointer"
           >
             + Add FAQ
           </button>
@@ -532,7 +552,7 @@ export default function EditCourseForm({
             <button
               type="button"
               onClick={removeImage}
-              className="absolute top-2 right-2 rounded-lg bg-rose-600 p-1.5 text-white hover:bg-rose-700 transition"
+              className="absolute top-2 right-2 rounded-lg bg-rose-600 p-1.5 text-white hover:bg-rose-700 transition cursor-pointer"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -564,14 +584,14 @@ export default function EditCourseForm({
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-xl border border-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+          className="rounded-xl border border-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading || uploading}
-          className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition"
+          className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition cursor-pointer"
         >
           {loading ? "Saving..." : "Save Changes"}
         </button>

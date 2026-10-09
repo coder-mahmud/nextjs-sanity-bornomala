@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createSchedule } from "../actions";
+import { updateSchedule } from "../../actions"; // Adjust path to server action
+
 import { toast } from "react-toastify";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -13,26 +14,41 @@ interface BranchOption {
 }
 
 interface ScheduleEntryRow {
+  id?: string;
   day: string;
   time: string;
   startingDate: string;
 }
 
-export default function CreateScheduleForm({
-  branches,
-}: {
+interface EditScheduleFormProps {
+  schedule: {
+    id: string;
+    branchId: string;
+    level: string | null;
+    description: string | null;
+    entries: ScheduleEntryRow[];
+  };
   branches: BranchOption[];
-}) {
+}
+
+export default function EditScheduleForm({
+  schedule,
+  branches,
+}: EditScheduleFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const [entries, setEntries] = useState<ScheduleEntryRow[]>([
-    {
-      day: "সোমবার",
-      time: "সকাল ১১:০০ টা - ০২:০০ টা",
-      startingDate: "০৫ ডিসেম্বর",
-    },
-  ]);
+  const [formData, setFormData] = useState({
+    branchId: schedule.branchId || "",
+    level: schedule.level || "",
+    description: schedule.description || "",
+  });
+
+  const [entries, setEntries] = useState<ScheduleEntryRow[]>(
+    schedule.entries.length > 0
+      ? schedule.entries
+      : [{ day: "", time: "", startingDate: "" }]
+  );
 
   const handleAddEntry = () => {
     setEntries([
@@ -63,14 +79,17 @@ export default function CreateScheduleForm({
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    formData.append("entries", JSON.stringify(entries));
+    const payload = new FormData();
+    payload.append("branchId", formData.branchId);
+    payload.append("level", formData.level);
+    payload.append("description", formData.description);
+    payload.append("entries", JSON.stringify(entries));
 
     toast
-      .promise(createSchedule(formData), {
-        pending: "Creating schedule...",
-        success: "Schedule created successfully!",
-        error: "Failed to create schedule.",
+      .promise(updateSchedule(schedule.id, payload), {
+        pending: "Updating schedule...",
+        success: "Schedule updated successfully!",
+        error: "Failed to update schedule.",
       })
       .then((res) => {
         if (res?.success) {
@@ -81,7 +100,7 @@ export default function CreateScheduleForm({
         }
       })
       .catch((err) => {
-        console.error("Error creating schedule:", err);
+        console.error("Error updating schedule:", err);
       })
       .finally(() => {
         setLoading(false);
@@ -96,7 +115,10 @@ export default function CreateScheduleForm({
           Branch *
         </label>
         <select
-          name="branchId"
+          value={formData.branchId}
+          onChange={(e) =>
+            setFormData({ ...formData, branchId: e.target.value })
+          }
           required
           className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
         >
@@ -117,7 +139,10 @@ export default function CreateScheduleForm({
           </label>
           <input
             type="text"
-            name="level"
+            value={formData.level}
+            onChange={(e) =>
+              setFormData({ ...formData, level: e.target.value })
+            }
             placeholder="e.g. Beginner or DELF A1"
             className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
           />
@@ -129,14 +154,17 @@ export default function CreateScheduleForm({
           </label>
           <input
             type="text"
-            name="description"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
             placeholder="e.g. DELF পরীক্ষার জন্য বিশেষ প্রস্তুতি..."
             className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
           />
         </div>
       </div>
 
-      {/* Schedule Entries */}
+      {/* Schedule Time Slots */}
       <div className="border-t pt-5">
         <div className="flex justify-between items-center mb-3">
           <h3 className="text-sm font-semibold text-gray-900">
@@ -221,7 +249,7 @@ export default function CreateScheduleForm({
         </div>
       </div>
 
-      {/* Buttons */}
+      {/* Action Buttons */}
       <div className="flex justify-end gap-3 pt-4 border-t">
         <button
           type="button"
@@ -235,7 +263,7 @@ export default function CreateScheduleForm({
           disabled={loading}
           className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition cursor-pointer"
         >
-          {loading ? "Creating..." : "Create Schedule"}
+          {loading ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </form>

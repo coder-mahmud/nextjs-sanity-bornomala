@@ -2669,10 +2669,8 @@ export const ScheduleEntryScalarFieldEnum = {
   id: 'id',
   scheduleId: 'scheduleId',
   day: 'day',
-  startDate: 'startDate',
-  date: 'date',
-  startTime: 'startTime',
-  endTime: 'endTime',
+  time: 'time',
+  startingDate: 'startingDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2947,20 +2945,6 @@ export type EnumCouponTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'CouponType[]'
  */
 export type ListEnumCouponTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponType[]'>
-    
-
-
-/**
- * Reference to a field of type 'WeekDay'
- */
-export type EnumWeekDayFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WeekDay'>
-    
-
-
-/**
- * Reference to a field of type 'WeekDay[]'
- */
-export type ListEnumWeekDayFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WeekDay[]'>
     
 
 /**

@@ -1,135 +1,74 @@
-'use client'
-import React, { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ChevronDown, HelpCircle, MessageCircle } from 'lucide-react'
+"use client";
 
-type Faqs = {
-  question: string
-  answer: string
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+
+type FAQItem = {
+  question: string;
+  answer: string;
+};
+
+interface FaqBlockProps {
+  faqs: FAQItem[];
+  title?: string;
 }
 
-const FaqBlock = ({
-  faqs,
-  title,
-  subtitle,
-}: {
-  faqs: Faqs[]
-  title?: string
-  subtitle?: string
-}) => {
-  if (!faqs || faqs.length === 0) {
-    return null
-  }
+export default function FaqBlock({ faqs, title }: FaqBlockProps) {
+  // Track which FAQ index is open (null = all closed)
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  if (!faqs || faqs.length === 0) return null;
 
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index)
-  }
+  const toggleFaq = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div
-          data-aos="fade-up"
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
-            <HelpCircle className="w-4 h-4 mr-2" />
-            প্রায়শই জিজ্ঞাসিত প্রশ্ন
-          </div>
+    <section className="py-12 bg-white">
+      <div className="container mx-auto px-4 max-w-4xl">
+        {title && (
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{title}</h2>
+        )}
 
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {title}
-          </h2>
-
-          {subtitle && (
-            <p className="text-lg text-gray-700">{subtitle}</p>
-          )}
-        </div>
-
-        {/* FAQ List */}
-        <div className="max-w-3xl mx-auto">
+        <div className="space-y-3">
           {faqs.map((faq, index) => {
-            const isOpen = openIndex === index
+            const isOpen = openIndex === index;
 
             return (
-              <Card
+              <div
                 key={index}
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
-                className="mb-4 border-0 shadow-sm hover:shadow-md transition-shadow duration-300"
+                className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-200 bg-gray-50/50 hover:bg-gray-50"
               >
-                {/* Question */}
-                <CardHeader
-                  className="cursor-pointer"
-                  onClick={() => toggleFAQ(index)}
+                {/* FAQ Question Header (Clickable) */}
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(index)}
+                  className="w-full text-left p-4 sm:p-5 flex justify-between items-center gap-4 cursor-pointer focus:outline-none"
                 >
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg font-medium text-gray-900 text-left">
-                      {faq.question}
-                    </CardTitle>
+                  <span className="font-semibold text-gray-800 text-base sm:text-lg">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${
+                      isOpen ? "rotate-180 text-blue-600" : ""
+                    }`}
+                  />
+                </button>
 
-                    {/* Rotating Chevron */}
+                {/* FAQ Answer Body (Collapsible) */}
+                {isOpen && (
+                  <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-gray-600 text-sm border-t border-gray-100 pt-3 bg-white">
                     <div
-                      className={`transition-transform duration-300 ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    >
-                      <ChevronDown className="h-5 w-5 text-primary" />
-                    </div>
+                      className="prose text-gray-600 text-sm max-w-none prose-p:my-1 prose-ul:my-1"
+                      dangerouslySetInnerHTML={{ __html: faq.answer }}
+                    />
                   </div>
-                </CardHeader>
-
-                {/* Answer with Animation */}
-                <div
-                  className={`grid transition-all duration-500 ease-in-out ${
-                    isOpen
-                      ? 'grid-rows-[1fr] opacity-100'
-                      : 'grid-rows-[0fr] opacity-0'
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <CardContent className="pt-0 pb-4">
-                      <p className="text-gray-700 leading-relaxed">
-                        {faq.answer}
-                      </p>
-                    </CardContent>
-                  </div>
-                </div>
-              </Card>
-            )
+                )}
+              </div>
+            );
           })}
-        </div>
-
-        {/* Bottom CTA */}
-        <div
-          data-aos="fade-up"
-          className="mt-16 text-center"
-        >
-          <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <MessageCircle className="w-4 h-4 mr-2" />
-            আরও প্রশ্ন আছে?
-          </div>
-
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            আপনার প্রশ্নের উত্তর খুঁজছেন?
-          </h3>
-
-          <p className="text-gray-700 max-w-2xl mx-auto mb-8">
-            যদি আপনার কোনো প্রশ্নের উত্তর এখানে না পান, তাহলে আমাদের সাথে
-            যোগাযোগ করুন। আমরা আপনার সকল প্রশ্নের উত্তর দিতে প্রস্তুত।
-          </p>
-
-          <Button asChild size="lg" className="px-8 py-3">
-            <a href="/contact">আমাদের সাথে যোগাযোগ করুন</a>
-          </Button>
         </div>
       </div>
     </section>
-  )
+  );
 }
-
-export default FaqBlock

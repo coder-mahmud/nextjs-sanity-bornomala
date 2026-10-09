@@ -18,14 +18,14 @@ import {
   HelpCircle
 } from "lucide-react";
 
-interface CourseDetailsPageProps {
-  params: Promise<{ courseId: string }>;
+interface FAQItem {
+  question: string;
+  answer: string;
 }
 
 type CourseWithDetails = Prisma.CourseGetPayload<{
   include: {
     instructor: true;
-    faqs: { orderBy: { order: "asc" } };
     cards: { orderBy: { order: "asc" } };
     batches: {
       orderBy: { createdAt: "desc" };
@@ -43,6 +43,10 @@ type CourseWithDetails = Prisma.CourseGetPayload<{
   };
 }>;
 
+interface CourseDetailsPageProps {
+  params: Promise<{ courseId: string }>;
+}
+
 export default async function CourseDetailsPage({ params }: CourseDetailsPageProps) {
   const { courseId } = await params;
   const session = await auth();
@@ -58,7 +62,6 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
     where: { id: courseId },
     include: {
       instructor: true,
-      faqs: { orderBy: { order: "asc" } },
       cards: { orderBy: { order: "asc" } },
       batches: {
         orderBy: { createdAt: "desc" },
@@ -81,6 +84,11 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
   }
 
   const courseImage = course.thumbnail;
+  
+  // Parse JSON FAQs array safely
+  const faqs: FAQItem[] = Array.isArray(course.faqs)
+    ? (course.faqs as unknown as FAQItem[])
+    : [];
 
   return (
     <section className="p-6 max-w-6xl mx-auto space-y-6">
@@ -280,17 +288,20 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
           </div>
 
           {/* FAQs */}
-          {course.faqs.length > 0 && (
+          {faqs.length > 0 && (
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-3">
               <h3 className="text-sm font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
                 <HelpCircle className="w-4 h-4 text-blue-600" />
-                Frequently Asked Questions ({course.faqs.length})
+                Frequently Asked Questions ({faqs.length})
               </h3>
               <div className="space-y-3 divide-y divide-gray-100">
-                {course.faqs.map((faq) => (
-                  <div key={faq.id} className="pt-2">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="pt-2">
                     <p className="text-xs font-bold text-gray-800">Q: {faq.question}</p>
-                    <p className="text-xs text-gray-600 mt-1">A: {faq.answer}</p>
+                    <div 
+                      className="text-xs text-gray-600 mt-1 prose max-w-none"
+                      dangerouslySetInnerHTML={{ __html: faq.answer }}
+                    />
                   </div>
                 ))}
               </div>
