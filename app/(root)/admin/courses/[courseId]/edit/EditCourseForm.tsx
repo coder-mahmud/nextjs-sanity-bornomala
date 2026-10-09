@@ -235,6 +235,7 @@ export default function EditCourseForm({
     const filteredFaqs = faqs.filter((f) => f.question.trim());
     payload.append("faqs", JSON.stringify(filteredFaqs));
 
+    /*
     toast
       .promise(updateCourse(course.id, payload), {
         pending: "Updating course...",
@@ -252,6 +253,30 @@ export default function EditCourseForm({
       .finally(() => {
         setLoading(false);
       });
+      */
+
+      toast.promise(
+        updateCourse(course.id, payload).then((res) => {
+          if (!res?.success) {
+            throw new Error(res?.message || "Failed to update course.");
+          }
+          router.refresh();
+          return res;
+        }),
+        {
+          pending: "Updating course...",
+          success: "Course updated successfully!",
+          error: {
+            render({ data }: { data: any }) {
+              return data?.message || "Failed to update course.";
+            },
+          },
+        }
+      );
+
+
+
+
   };
 
   return (
@@ -409,9 +434,10 @@ export default function EditCourseForm({
             <option value="">-- Select Paris Schedule --</option>
             {schedules.map((sched) => (
               <option key={sched.id} value={sched.id}>
-                {sched.branch.name} - {sched.level || "Schedule"} ({sched.description || sched.id})
+                {sched.level ? `${sched.level}` : ""}
               </option>
             ))}
+
           </select>
         </div>
 
@@ -425,9 +451,10 @@ export default function EditCourseForm({
             <option value="">-- Select Hoche Schedule --</option>
             {schedules.map((sched) => (
               <option key={sched.id} value={sched.id}>
-                {sched.branch.name} - {sched.level || "Schedule"} ({sched.description || sched.id})
+                {sched.level ? `${sched.level}` : ""}
               </option>
             ))}
+
           </select>
         </div>
       </div>

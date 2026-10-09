@@ -11,7 +11,7 @@ type FAQ = {
   answer: string;
 };
 
-// 1. Define the exact include query object
+// 1. Define the exact include query object ordered by createdAt
 const courseInclude = {
   instructor: true,
   cards: {
@@ -24,7 +24,7 @@ const courseInclude = {
       branch: true,
       entries: {
         orderBy: {
-          date: "asc",
+          createdAt: "asc",
         },
       },
     },
@@ -34,7 +34,7 @@ const courseInclude = {
       branch: true,
       entries: {
         orderBy: {
-          date: "asc",
+          createdAt: "asc",
         },
       },
     },
@@ -84,7 +84,7 @@ export default async function CoursePage({
   // Safely parse FAQs stored as JSON in Prisma
   const faqs = (course.faqs as unknown as FAQ[]) || [];
 
-  // Structure schedules safely with explicit type predicate (no implicit any)
+  // Structure schedules safely with explicit type predicate
   const schedules = [
     { name: "Paris", schedule: course.parisSchedule },
     { name: "Hoche", schedule: course.hocheSchedule },
@@ -175,24 +175,30 @@ export default async function CoursePage({
               </div>
             </div>
 
-            <div className="md:col-span-2 bg-gray-100 rounded-lg shadow-xl p-6 text-gray-800 h-fit flex flex-col gap-2">
+            {/* Schedules Section */}
+            <div className="md:col-span-2 bg-gray-100 rounded-lg shadow-xl p-6 text-gray-800 h-fit flex flex-col gap-3">
               {schedules.map((item, index: number) => {
                 const schedule = item.schedule;
                 const branchName = schedule.branch?.name || item.name;
 
                 return (
-                  <div key={index} className="rounded-lg border p-4 shadow-sm">
-                    <h2 className="text-xl font-semibold mb-1">
+                  <div key={index} className="rounded-lg border bg-white p-4 shadow-sm space-y-2">
+                    <h2 className="text-xl font-semibold text-gray-900">
                       {branchName}
                     </h2>
+                    {schedule.description && (
+                      <p className="text-xs text-gray-600">{schedule.description}</p>
+                    )}
 
-                    <div className="space-y-1">
+                    <div className="space-y-1.5 pt-1">
                       {schedule.entries &&
                         schedule.entries.map((entry, dayIndex: number) => (
-                          <div key={dayIndex} className="rounded-md">
-                            {entry.day} | {entry.startTime} - {entry.endTime} |
-                            ক্লাস স্টার্ট:{" "}
-                            {new Date(entry.startDate).toLocaleDateString()}
+                          <div key={dayIndex} className="text-xs bg-gray-50 p-2.5 rounded-md border border-gray-100 flex flex-col gap-0.5">
+                            <span className="font-semibold text-gray-800">{entry.day}</span>
+                            <span className="text-gray-600">{entry.time}</span>
+                            <span className="text-gray-500 text-[11px]">
+                              ক্লাস স্টার্ট: {entry.startingDate}
+                            </span>
                           </div>
                         ))}
                     </div>

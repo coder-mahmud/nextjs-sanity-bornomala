@@ -268,11 +268,22 @@ export default function CreateCourseForm({
             className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
           >
             <option value="">Select Paris Schedule (Optional)</option>
-            {schedules.map((schedule) => (
+            {/* {schedules.map((schedule) => (
               <option key={schedule.id} value={schedule.id}>
                 {schedule.branch.name} - {schedule.level || "Schedule"} ({schedule.description || schedule.id})
               </option>
+            ))} */}
+
+            {schedules.map((sched) => (
+              <option key={sched.id} value={sched.id}>
+                {sched.level ? `${sched.level}` : ""}
+              </option>
             ))}
+
+
+
+
+
           </select>
         </div>
 
@@ -285,11 +296,21 @@ export default function CreateCourseForm({
             className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
           >
             <option value="">Select Hoche Schedule (Optional)</option>
-            {schedules.map((schedule) => (
+            {/* {schedules.map((schedule) => (
               <option key={schedule.id} value={schedule.id}>
                 {schedule.branch.name} - {schedule.level || "Schedule"} ({schedule.description || schedule.id})
               </option>
+            ))} */}
+            {schedules.map((sched) => (
+              <option key={sched.id} value={sched.id}>
+                {sched.level ? `${sched.level}` : ""}
+              </option>
             ))}
+
+
+
+
+
           </select>
         </div>
       </div>
