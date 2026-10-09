@@ -2,17 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { 
-  Plus, 
-  BookOpen, 
-  Layers, 
-  Users, 
-  CreditCard, 
-  MoreVertical, 
-  Edit3, 
-  Trash2, 
-  Calendar 
-} from "lucide-react";
+import { Plus, BookOpen, Layers, Users, CreditCard } from "lucide-react";
 import CourseActionsDropdown from "./CourseActionsDropdown";
 
 const CoursesPage = async () => {
@@ -20,26 +10,44 @@ const CoursesPage = async () => {
 
   if (
     !session ||
-    (session.user?.role !== "ADMIN" &&
-      session.user?.role !== "SUPERADMIN")
+    (session.user?.role !== "ADMIN" && session.user?.role !== "SUPERADMIN")
   ) {
     redirect("/dashboard");
   }
 
+  /*
+   * Plain scalar query only (no include / _count), so it does not depend
+   * on relation fields being present in the generated Prisma types.
+   */
   const courses = await prisma.course.findMany({
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      _count: {
-        select: {
-          batches: true,
-          accesses: true,
-          payments: true,
-        },
-      },
-    },
   });
+
+  /*
+   * Counts per course. Uses plain findMany + select (no groupBy / _count),
+   * which type-checks even with an outdated generated Prisma client.
+   */
+  const [batches, accesses, payments] = await Promise.all([
+    prisma.batch.findMany({ select: { courseId: true } }),
+    prisma.courseAccess.findMany({ select: { courseId: true } }),
+    prisma.payment.findMany({ select: { courseId: true } }),
+  ]);
+
+  const tally = (rows: { courseId: string | null }[]) => {
+    const map = new Map<string, number>();
+    for (const row of rows) {
+      if (row.courseId) {
+        map.set(row.courseId, (map.get(row.courseId) ?? 0) + 1);
+      }
+    }
+    return map;
+  };
+
+  const batchMap = tally(batches);
+  const accessMap = tally(accesses);
+  const paymentMap = tally(payments);
 
   return (
     <section className="p-6 max-w-7xl mx-auto">
@@ -51,7 +59,8 @@ const CoursesPage = async () => {
             Course Management
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Manage all your courses, active batches, student enrollments, and lecture contents.
+            Manage all your courses, active batches, student enrollments, and
+            lecture contents.
           </p>
         </div>
 
@@ -102,7 +111,10 @@ const CoursesPage = async () => {
 
               <tbody className="divide-y divide-gray-100 bg-white">
                 {courses.map((course) => (
-                  <tr key={course.id} className="hover:bg-gray-50/50 transition">
+                  <tr
+                    key={course.id}
+                    className="hover:bg-gray-50/50 transition"
+                  >
                     {/* Course Info */}
                     <td className="px-6 py-4">
                       <div>
@@ -146,7 +158,7 @@ const CoursesPage = async () => {
                     <td className="px-6 py-4 text-gray-600">
                       <div className="flex items-center gap-1.5">
                         <Layers className="w-4 h-4 text-gray-400" />
-                        <span>{course._count.batches}</span>
+                        <span>{batchMap.get(course.id) ?? 0}</span>
                       </div>
                     </td>
 
@@ -154,7 +166,7 @@ const CoursesPage = async () => {
                     <td className="px-6 py-4 text-gray-600">
                       <div className="flex items-center gap-1.5">
                         <Users className="w-4 h-4 text-gray-400" />
-                        <span>{course._count.accesses}</span>
+                        <span>{accessMap.get(course.id) ?? 0}</span>
                       </div>
                     </td>
 
@@ -162,7 +174,7 @@ const CoursesPage = async () => {
                     <td className="px-6 py-4 text-gray-600">
                       <div className="flex items-center gap-1.5">
                         <CreditCard className="w-4 h-4 text-gray-400" />
-                        <span>{course._count.payments}</span>
+                        <span>{paymentMap.get(course.id) ?? 0}</span>
                       </div>
                     </td>
 

@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import fs from "fs";
 import {
   Document,
@@ -13,6 +14,20 @@ import {
   renderToStream,
 } from "@react-pdf/renderer";
 import { NextRequest } from "next/server";
+
+type CourseWithBatches = Prisma.CourseGetPayload<{
+  include: {
+    batches: {
+      include: {
+        lessons: {
+          include: {
+            progressRecords: true;
+          };
+        };
+      };
+    };
+  };
+}>;
 
 const styles = StyleSheet.create({
   page: {
@@ -107,18 +122,14 @@ function CertificatePDF({
   certificateNo: string;
   issuedAt: string;
 }) {
-  // const logoPath = `${process.cwd()}/public/images/GreenLogo.png`;
-  // const signaturePath = `${process.cwd()}/public/images/sig.png`;
-
   const logoPathSrc = `${process.cwd()}/public/images/GreenLogo.png`;
   const signaturePathSrc = `${process.cwd()}/public/images/sig.png`;
-  
+
   const logoBase64 = fs.readFileSync(logoPathSrc).toString("base64");
   const signatureBase64 = fs.readFileSync(signaturePathSrc).toString("base64");
-  
+
   const logoPath = `data:image/png;base64,${logoBase64}`;
   const signaturePath = `data:image/png;base64,${signatureBase64}`;
-
 
   return (
     <Document>
@@ -127,8 +138,6 @@ function CertificatePDF({
           <Image src={logoPath} style={styles.logo} />
 
           <Text style={styles.small}>Certificate of Completion</Text>
-
-          {/* <Text style={styles.title}>Bornomala Academy</Text> */}
 
           <Text style={styles.text}>This certificate is proudly presented to</Text>
 
@@ -181,17 +190,19 @@ export async function GET(
     return new Response("User not found", { status: 404 });
   }
 
-  const course = await prisma.course.findUnique({
+  const course = (await prisma.course.findUnique({
     where: { id: courseId },
     include: {
-      sections: {
+      batches: {
         include: {
           lessons: {
             include: {
               progressRecords: {
                 where: {
                   userId: user.id,
-                  completed: true,
+                  completedAt: {
+                    not: null,
+                  },
                 },
               },
             },
@@ -199,18 +210,16 @@ export async function GET(
         },
       },
     },
-  });
+  })) as unknown as CourseWithBatches | null;
 
   if (!course) {
     return new Response("Course not found", { status: 404 });
   }
 
-  const access = await prisma.courseAccess.findUnique({
+  const access = await prisma.courseAccess.findFirst({
     where: {
-      userId_courseId: {
-        userId: user.id,
-        courseId: course.id,
-      },
+      userId: user.id,
+      courseId: course.id,
     },
   });
 
@@ -218,7 +227,7 @@ export async function GET(
     return new Response("No course access", { status: 403 });
   }
 
-  const lessons = course.sections.flatMap((section) => section.lessons);
+  const lessons = course.batches.flatMap((batch) => batch.lessons);
   const totalLessons = lessons.length;
   const completedLessons = lessons.filter(
     (lesson) => lesson.progressRecords.length > 0

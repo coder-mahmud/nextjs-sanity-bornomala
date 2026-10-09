@@ -2,6 +2,17 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type UserWithQuizAccesses = Prisma.UserGetPayload<{
+  include: {
+    quizAccesses: {
+      include: {
+        quiz: true;
+      };
+    };
+  };
+}>;
 
 const UserQuizzesPage = async () => {
   const session = await auth();
@@ -10,7 +21,7 @@ const UserQuizzesPage = async () => {
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
+  const user = (await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
       quizAccesses: {
@@ -22,7 +33,7 @@ const UserQuizzesPage = async () => {
         },
       },
     },
-  });
+  })) as UserWithQuizAccesses | null;
 
   if (!user) {
     redirect("/login");

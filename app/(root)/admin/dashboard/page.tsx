@@ -1,6 +1,22 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type QuizAttemptWithRelations = Prisma.QuizAttemptGetPayload<{
+  include: {
+    user: true;
+    quiz: true;
+  };
+}>;
+
+type PaymentWithRelations = Prisma.PaymentGetPayload<{
+  include: {
+    user: true;
+    quiz: true;
+    course: true;
+  };
+}>;
 
 const AdminDashboardPage = async () => {
   const session = await auth();
@@ -78,7 +94,7 @@ const AdminDashboardPage = async () => {
     return acc + Number(payment.amount);
   }, 0);
 
-  const recentAttempts = await prisma.quizAttempt.findMany({
+  const recentAttempts = (await prisma.quizAttempt.findMany({
     take: 5,
     orderBy: {
       createdAt: "desc",
@@ -87,9 +103,9 @@ const AdminDashboardPage = async () => {
       user: true,
       quiz: true,
     },
-  });
+  })) as unknown as QuizAttemptWithRelations[];
 
-  const recentPayments = await prisma.payment.findMany({
+  const recentPayments = (await prisma.payment.findMany({
     take: 5,
     orderBy: {
       createdAt: "desc",
@@ -99,7 +115,7 @@ const AdminDashboardPage = async () => {
       quiz: true,
       course: true,
     },
-  });
+  })) as unknown as PaymentWithRelations[];
 
   return (
     <section>

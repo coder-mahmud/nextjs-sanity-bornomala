@@ -80,7 +80,7 @@ export default function AdminSidebar() {
         className={`
           fixed left-0 top-0 z-50 h-full w-72 bg-gray-900 text-white transition-transform duration-300
           ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
-          md:static md:z-auto md:w-64 md:translate-x-0
+          md:static md:z-auto md:w-64 md:translate-x-0 min-w-[260px]
         `}
       >
         <div className="flex items-center justify-between border-b border-gray-800 px-5 py-5">

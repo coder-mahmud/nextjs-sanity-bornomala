@@ -2,6 +2,27 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type UserWithDashboardData = Prisma.UserGetPayload<{
+  include: {
+    quizAccesses: {
+      include: {
+        quiz: true;
+      };
+    };
+    quizAttempts: {
+      include: {
+        quiz: true;
+      };
+    };
+    payments: {
+      include: {
+        quiz: true;
+      };
+    };
+  };
+}>;
 
 const UserDashboardPage = async () => {
   const session = await auth();
@@ -10,7 +31,7 @@ const UserDashboardPage = async () => {
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
+  const user = (await prisma.user.findUnique({
     where: {
       email: session.user.email,
     },
@@ -40,7 +61,7 @@ const UserDashboardPage = async () => {
         },
       },
     },
-  });
+  })) as UserWithDashboardData | null;
 
   if (!user) {
     redirect("/login");
@@ -49,7 +70,8 @@ const UserDashboardPage = async () => {
   const totalQuizzes = user.quizAccesses.length;
   const totalAttempts = user.quizAttempts.length;
   const passedAttempts = user.quizAttempts.filter(
-    (attempt) => attempt.passed === true
+    (attempt: UserWithDashboardData["quizAttempts"][number]) =>
+      attempt.passed === true
   ).length;
 
   const latestAttempts = user.quizAttempts.slice(0, 5);

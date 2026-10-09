@@ -49,13 +49,13 @@ export default async function CoursesPage() {
               <CardContent className="grow">
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-4 h-4 mr-2 text-primary" /> <span>সময়কাল: {course?.durationMinutes || "N/A"} </span>
+                    <Clock className="w-4 h-4 mr-2 text-primary" /> <span>সময়কাল: {course?.duration || "N/A"} </span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
-                    <Users className="w-4 h-4 mr-2 text-primary" /> <span>শিক্ষার্থী: 0</span>
+                    <Users className="w-4 h-4 mr-2 text-primary" /> <span>শিক্ষার্থী: {course?.numberOfStudents || "0"}</span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
-                    <Star className="w-4 h-4 mr-2 text-primary" /> <span>রেটিং: 5.0</span>
+                    <Star className="w-4 h-4 mr-2 text-primary" /> <span>রেটিং: {course?.rating || "5.0"}</span>
                   </div>
                 </div>
               </CardContent>

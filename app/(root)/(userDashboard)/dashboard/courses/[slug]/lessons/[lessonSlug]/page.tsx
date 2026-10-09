@@ -27,12 +27,8 @@ async function markLessonCompleted(formData: FormData) {
   }
 
   const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
-    select: {
-      id: true,
-    },
+    where: { email: session.user.email },
+    select: { id: true },
   });
 
   if (!user) {
@@ -47,17 +43,14 @@ async function markLessonCompleted(formData: FormData) {
       },
     },
     update: {
-      completed: true,
+      isCompleted: true,
       completedAt: new Date(),
-      lastWatchedAt: new Date(),
     },
     create: {
       userId: user.id,
       lessonId,
-      watchedSeconds: 0,
-      completed: true,
+      isCompleted: true,
       completedAt: new Date(),
-      lastWatchedAt: new Date(),
     },
   });
 
@@ -74,54 +67,73 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
+    where: { email: session.user.email },
+    select: { id: true },
   });
 
   if (!user) {
     redirect("/login");
   }
 
+  /*
+   * 1. Lesson (plain scalar fields only)
+   */
   const lesson = await prisma.lesson.findUnique({
-    where: {
-      slug: lessonSlug,
-    },
-    include: {
-      progressRecords: {
-        where: {
-          userId: user.id,
-        },
-      },
-      section: {
-        include: {
-          course: true,
-          lessons: {
-            orderBy: {
-              order: "asc",
-            },
-          },
-        },
-      },
-    },
+    where: { slug: lessonSlug },
   });
 
-  if (!lesson) {
+  if (!lesson || !lesson.batchId) {
     redirect("/dashboard/courses");
   }
 
-  const course = lesson.section.course;
+  /*
+   * 2. Batch (plain scalar fields only, no `include`).
+   */
+  const batch = await prisma.batch.findUnique({
+    where: { id: lesson.batchId },
+  });
 
+  if (!batch) {
+    redirect("/dashboard/courses");
+  }
+
+  /*
+   * 3. Course, loaded separately via batch.courseId
+   */
+  const course = await prisma.course.findUnique({
+    where: { id: batch.courseId },
+  });
+
+  if (!course) {
+    redirect("/dashboard/courses");
+  }
+
+  /*
+   * 4. All lessons in this batch, loaded separately via batch.id
+   */
+  const batchLessons = await prisma.lesson.findMany({
+    where: { batchId: batch.id },
+    orderBy: { order: "asc" },
+    select: {
+      id: true,
+      slug: true,
+    },
+  });
+
+  /*
+   * Make sure the URL course slug matches the actual course.
+   */
   if (course.slug !== slug) {
     redirect(`/dashboard/courses/${course.slug}/lessons/${lesson.slug}`);
   }
 
-  const access = await prisma.courseAccess.findUnique({
+  /*
+   * Check whether the current user has access to the course.
+   */
+  const access = await prisma.courseAccess.findFirst({
     where: {
-      userId_courseId: {
-        userId: user.id,
-        courseId: course.id,
-      },
+      userId: user.id,
+      courseId: course.id,
     },
   });
 
@@ -132,7 +144,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
       <section className="py-8">
         <div className="rounded-lg border border-red-200 bg-red-50 p-5">
           <p className="text-red-600">
-            You do not have access to this lesson. Please purchase the course.
+            You do not have access to this lesson. Please purchase the
+            course.
           </p>
 
           <Link
@@ -146,33 +159,36 @@ export default async function LessonPage({ params }: LessonPageProps) {
     );
   }
 
-  await prisma.lessonProgress.upsert({
+  /*
+   * Make sure a progress record exists.
+   */
+  const progress = await prisma.lessonProgress.upsert({
     where: {
       userId_lessonId: {
         userId: user.id,
         lessonId: lesson.id,
       },
     },
-    update: {
-      lastWatchedAt: new Date(),
-    },
+    update: {},
     create: {
       userId: user.id,
       lessonId: lesson.id,
-      watchedSeconds: 0,
-      lastWatchedAt: new Date(),
     },
   });
 
-  const progress = lesson.progressRecords[0];
-  const isCompleted = progress?.completed === true;
+  const isCompleted = progress.isCompleted === true;
 
-  const lessonIndex = lesson.section.lessons.findIndex(
-    (item) => item.id === lesson.id
-  );
+  /*
+   * Previous and next lessons in this batch.
+   */
+  const lessonIndex = batchLessons.findIndex((item) => item.id === lesson.id);
 
-  const prevLesson = lesson.section.lessons[lessonIndex - 1];
-  const nextLesson = lesson.section.lessons[lessonIndex + 1];
+  const prevLesson = lessonIndex > 0 ? batchLessons[lessonIndex - 1] : null;
+
+  const nextLesson =
+    lessonIndex >= 0 && lessonIndex < batchLessons.length - 1
+      ? batchLessons[lessonIndex + 1]
+      : null;
 
   return (
     <section className="py-8">
@@ -216,6 +232,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
         </div>
       </div>
 
+      {/* Video */}
       {lesson.bunnyVideoId ? (
         <SecureBunnyPlayer lessonId={lesson.id} />
       ) : lesson.videoUrl ? (
@@ -231,6 +248,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
         </div>
       )}
 
+      {/* Lesson navigation */}
       <div className="mt-6 flex items-center justify-between">
         <div>
           {prevLesson && (

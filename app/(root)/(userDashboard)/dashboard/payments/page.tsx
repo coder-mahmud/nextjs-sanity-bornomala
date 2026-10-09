@@ -1,6 +1,18 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type UserWithPayments = Prisma.UserGetPayload<{
+  include: {
+    payments: {
+      include: {
+        quiz: true;
+        course: true;
+      };
+    };
+  };
+}>;
 
 const UserPaymentsPage = async () => {
   const session = await auth();
@@ -9,7 +21,7 @@ const UserPaymentsPage = async () => {
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
+  const user = (await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
       payments: {
@@ -22,7 +34,7 @@ const UserPaymentsPage = async () => {
         },
       },
     },
-  });
+  })) as UserWithPayments | null;
 
   if (!user) {
     redirect("/login");

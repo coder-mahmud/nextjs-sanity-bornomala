@@ -136,7 +136,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
     if (courseId) {
@@ -153,12 +152,10 @@ export async function POST(req: Request) {
         );
       }
 
-      const existingAccess = await prisma.courseAccess.findUnique({
+      const existingAccess = await prisma.courseAccess.findFirst({
         where: {
-          userId_courseId: {
-            userId: user.id,
-            courseId: course.id,
-          },
+          userId: user.id,
+          courseId: course.id,
         },
       });
 
@@ -187,7 +184,6 @@ export async function POST(req: Request) {
         line_items: [
           {
             price_data: {
-              // currency: course.currency,
               currency: (course.currency || "eur").toLowerCase(),
               product_data: {
                 name: course.title,

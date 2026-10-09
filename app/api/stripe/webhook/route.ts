@@ -102,31 +102,40 @@ export async function POST(req: NextRequest) {
             stripeSessionId,
             stripeIntentId,
             amount: finalAmount || Number(course.price),
-            currency: course.currency,
+            currency: course.currency || "EUR",
             status: "CAPTURED",
             paidAt: new Date(),
             rawResponse: session as any,
           },
         });
 
-        await tx.courseAccess.upsert({
+        const existingCourseAccess = await tx.courseAccess.findFirst({
           where: {
-            userId_courseId: {
-              userId: user.id,
-              courseId: course.id,
-            },
-          },
-          update: {
-            paymentId: payment.id,
-            grantedAt: new Date(),
-          },
-          create: {
             userId: user.id,
             courseId: course.id,
-            paymentId: payment.id,
-            grantedAt: new Date(),
           },
         });
+
+        if (existingCourseAccess) {
+          await tx.courseAccess.update({
+            where: {
+              id: existingCourseAccess.id,
+            },
+            data: {
+              paymentId: payment.id,
+              grantedAt: new Date(),
+            },
+          });
+        } else {
+          await tx.courseAccess.create({
+            data: {
+              userId: user.id,
+              courseId: course.id,
+              paymentId: payment.id,
+              grantedAt: new Date(),
+            },
+          });
+        }
 
         // COUPON TRACKING
         if (couponId && couponCode) {
@@ -190,7 +199,7 @@ export async function POST(req: NextRequest) {
             stripeSessionId,
             stripeIntentId,
             amount: finalAmount || Number(quiz.price),
-            currency: quiz.currency,
+            currency: quiz.currency || "EUR",
             status: "CAPTURED",
             paidAt: new Date(),
             rawResponse: session as any,

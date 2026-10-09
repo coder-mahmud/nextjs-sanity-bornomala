@@ -1,16 +1,24 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireUser } from "@/lib/auth-user";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import { userHasQuizAccess } from "@/lib/quiz-access";
+
+type QuizWithQuestions = Prisma.QuizGetPayload<{
+  include: {
+    questions: {
+      select: {
+        id: true;
+      };
+    };
+  };
+}>;
 
 export async function POST(
   req: Request,
-  { params }: {  params: Promise<{ quizId: string }> }
+  { params }: { params: Promise<{ quizId: string }> }
 ) {
   try {
-    const { quizId } =  await params;
-
-    // console.log("quizId from /quizzes/[quizId]/start/route.ts", quizId)
+    const { quizId } = await params;
 
     const body = await req.json();
     const { userId } = body;
@@ -28,11 +36,7 @@ export async function POST(
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    // console.log("dbUser from route file:", dbUser) // working
-
-
-
-    const quiz = await prisma.quiz.findUnique({
+    const quiz = (await prisma.quiz.findUnique({
       where: { id: quizId },
       include: {
         questions: {
@@ -40,13 +44,11 @@ export async function POST(
           select: { id: true },
         },
       },
-    });
+    })) as unknown as QuizWithQuestions | null;
 
     if (!quiz || quiz.status !== "PUBLISHED") {
       return NextResponse.json({ message: "Quiz not found" }, { status: 404 });
     }
-
-    // console.log("quiz from route file:", quiz)
 
     const hasAccess = await userHasQuizAccess(dbUser.id, quiz.id);
     if (!hasAccess) {
@@ -87,7 +89,6 @@ export async function POST(
 
     return NextResponse.json({ attemptId: attempt.id }, { status: 201 });
   } catch (error) {
-    // console.error("POST /api/quizzes/[quizId]/start error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

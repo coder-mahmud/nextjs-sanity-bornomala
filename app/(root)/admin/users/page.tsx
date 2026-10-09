@@ -1,7 +1,20 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import SubmitButton from "@/components/shared/SubmitButton";
+
+type UserWithCount = Prisma.UserGetPayload<{
+  include: {
+    _count: {
+      select: {
+        quizAttempts: true;
+        payments: true;
+        quizAccesses: true;
+      };
+    };
+  };
+}>;
 
 async function updateUserRole(formData: FormData) {
   "use server";
@@ -54,7 +67,7 @@ const AdminUsersPage = async ({
     redirect("/dashboard");
   }
 
-  const users = await prisma.user.findMany({
+  const users = (await prisma.user.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -67,7 +80,7 @@ const AdminUsersPage = async ({
         },
       },
     },
-  });
+  })) as unknown as UserWithCount[];
 
   return (
     <section>

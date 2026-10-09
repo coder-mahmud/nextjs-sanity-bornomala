@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth-user";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type QuizAttemptForSubmit = Prisma.QuizAttemptGetPayload<{
+  include: {
+    quiz: {
+      include: {
+        questions: {
+          include: {
+            options: true;
+          };
+        };
+      };
+    };
+    answers: true;
+  };
+}>;
 
 export async function POST(
   _req: Request,
@@ -19,7 +35,7 @@ export async function POST(
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const attempt = await prisma.quizAttempt.findUnique({
+    const attempt = (await prisma.quizAttempt.findUnique({
       where: { id: attemptId },
       include: {
         quiz: {
@@ -34,7 +50,7 @@ export async function POST(
         },
         answers: true,
       },
-    });
+    })) as unknown as QuizAttemptForSubmit | null;
 
     if (!attempt || attempt.userId !== dbUser.id) {
       return NextResponse.json({ message: "Attempt not found" }, { status: 404 });

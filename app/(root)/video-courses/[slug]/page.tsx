@@ -20,9 +20,13 @@ export default async function VideoCourseDetailPage({ params }: { params: Promis
   // Check if user has purchased this course
   let hasPurchased = false;
   if (session?.user?.id) {
-    const access = await prisma.courseAccess.findUnique({
-      where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
+    const access = await prisma.courseAccess.findFirst({
+      where: {
+        userId: session.user.id,
+        courseId: course.id,
+      },
     });
+  
     hasPurchased = !!access;
   }
 

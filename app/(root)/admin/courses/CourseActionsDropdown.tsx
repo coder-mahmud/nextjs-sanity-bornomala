@@ -70,14 +70,6 @@ export default function CourseActionsDropdown({ courseId }: CourseActionsDropdow
             Show Details
           </Link>
 
-          <Link
-            href={`/admin/courses/${courseId}/batches`}
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
-          >
-            <Layers className="w-4 h-4 text-blue-500" />
-            Manage Batches
-          </Link>
 
           <Link
             href={`/admin/courses/${courseId}/content`}

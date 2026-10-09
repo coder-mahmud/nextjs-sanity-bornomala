@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import { 
   ArrowLeft, 
   Edit3, 
@@ -21,6 +22,27 @@ interface CourseDetailsPageProps {
   params: Promise<{ courseId: string }>;
 }
 
+type CourseWithDetails = Prisma.CourseGetPayload<{
+  include: {
+    instructor: true;
+    faqs: { orderBy: { order: "asc" } };
+    cards: { orderBy: { order: "asc" } };
+    batches: {
+      orderBy: { createdAt: "desc" };
+      include: {
+        _count: { select: { lessons: true; accesses: true } };
+      };
+    };
+    _count: {
+      select: {
+        batches: true;
+        accesses: true;
+        payments: true;
+      };
+    };
+  };
+}>;
+
 export default async function CourseDetailsPage({ params }: CourseDetailsPageProps) {
   const { courseId } = await params;
   const session = await auth();
@@ -32,7 +54,7 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
     redirect("/dashboard");
   }
 
-  const course = await prisma.course.findUnique({
+  const course = (await prisma.course.findUnique({
     where: { id: courseId },
     include: {
       instructor: true,
@@ -52,7 +74,7 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
         },
       },
     },
-  });
+  })) as CourseWithDetails | null;
 
   if (!course) {
     notFound();

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import QuizForm from "@/components/admin/quiz-form";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 type QuizStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
@@ -8,10 +9,20 @@ type PageProps = {
   params: Promise<{ id: string }>;
 };
 
+type QuizWithQuestions = Prisma.QuizGetPayload<{
+  include: {
+    questions: {
+      include: {
+        options: true;
+      };
+    };
+  };
+}>;
+
 export default async function QuizDetailsPage({ params }: PageProps) {
   const { id } = await params;
 
-  const quiz = await prisma.quiz.findUnique({
+  const quiz = (await prisma.quiz.findUnique({
     where: { id },
     include: {
       questions: {
@@ -23,7 +34,7 @@ export default async function QuizDetailsPage({ params }: PageProps) {
         },
       },
     },
-  });
+  })) as unknown as QuizWithQuestions | null;
 
   if (!quiz) {
     notFound();

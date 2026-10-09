@@ -1,6 +1,14 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type AdminPaymentWithRelations = Prisma.PaymentGetPayload<{
+  include: {
+    user: true;
+    quiz: true;
+  };
+}>;
 
 const AdminPaymentsPage = async () => {
   const session = await auth();
@@ -10,7 +18,7 @@ const AdminPaymentsPage = async () => {
     redirect("/admin/dashboard");
   }
 
-  const payments = await prisma.payment.findMany({
+  const payments = (await prisma.payment.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -18,7 +26,7 @@ const AdminPaymentsPage = async () => {
       user: true,
       quiz: true,
     },
-  });
+  })) as unknown as AdminPaymentWithRelations[];
 
   const totalRevenue = payments.reduce((acc, payment) => {
     return payment.status === "CAPTURED"
@@ -122,7 +130,7 @@ const AdminPaymentsPage = async () => {
                   </td>
 
                   <td className="px-4 py-4 font-medium text-gray-900">
-                    {payment.quiz?.title}
+                    {payment.quiz?.title || "-"}
                   </td>
 
                   <td className="px-4 py-4 text-gray-600">

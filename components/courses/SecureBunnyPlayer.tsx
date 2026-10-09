@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import { getBunnyStreamEmbedUrl } from "@/lib/bunny-stream";
 import Link from "next/link";
 
@@ -7,21 +8,31 @@ type SecureBunnyPlayerProps = {
   lessonId: string;
 };
 
+type LessonWithCourse = Prisma.LessonGetPayload<{
+  include: {
+    batch: {
+      include: {
+        course: true;
+      };
+    };
+  };
+}>;
+
 const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
   const session = await auth();
 
-  const lesson = await prisma.lesson.findUnique({
+  const lesson = (await prisma.lesson.findUnique({
     where: {
       id: lessonId,
     },
     include: {
-      section: {
+      batch: {
         include: {
           course: true,
         },
       },
     },
-  });
+  })) as unknown as LessonWithCourse | null;
 
   if (!lesson) {
     return (
@@ -39,7 +50,7 @@ const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
     );
   }
 
-  const course = lesson.section.course;
+  const course = lesson?.batch?.course;
 
   let hasAccess = lesson.isPreview;
 
@@ -66,12 +77,10 @@ const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
   }
 
   if (!hasAccess && dbUserId) {
-    const courseAccess = await prisma.courseAccess.findUnique({
+    const courseAccess = await prisma.courseAccess.findFirst({
       where: {
-        userId_courseId: {
-          userId: dbUserId,
-          courseId: course.id,
-        },
+        userId: dbUserId,
+        courseId: course?.id,
       },
     });
 
@@ -92,7 +101,7 @@ const SecureBunnyPlayer = async ({ lessonId }: SecureBunnyPlayerProps) => {
         </p>
 
         <Link
-          href={`/video-courses/${course.slug}`}
+          href={`/video-courses/${course?.slug}`}
           className="mt-5 inline-flex rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700"
         >
           View Course
