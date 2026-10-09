@@ -27,6 +27,11 @@ const menuItems = [
     icon: Video,
   },
   {
+    label: "Schedules",
+    href: "/admin/schedules",
+    icon: Video,
+  },
+  {
     label: "Payments",
     href: "/admin/payments",
     icon: ShoppingCart,

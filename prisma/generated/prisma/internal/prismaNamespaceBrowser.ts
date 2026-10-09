@@ -72,7 +72,6 @@ export const ModelName = {
   Branch: 'Branch',
   Schedule: 'Schedule',
   ScheduleEntry: 'ScheduleEntry',
-  FAQ: 'FAQ',
   CourseCard: 'CourseCard',
   Instructor: 'Instructor'
 } as const
@@ -179,7 +178,10 @@ export const CourseScalarFieldEnum = {
   numberOfStudents: 'numberOfStudents',
   rating: 'rating',
   order: 'order',
+  faqs: 'faqs',
   instructorId: 'instructorId',
+  parisScheduleId: 'parisScheduleId',
+  hocheScheduleId: 'hocheScheduleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -422,7 +424,6 @@ export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof 
 
 export const ScheduleScalarFieldEnum = {
   id: 'id',
-  courseId: 'courseId',
   branchId: 'branchId',
   level: 'level',
   description: 'description',
@@ -437,6 +438,7 @@ export const ScheduleEntryScalarFieldEnum = {
   id: 'id',
   scheduleId: 'scheduleId',
   day: 'day',
+  startDate: 'startDate',
   date: 'date',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -445,19 +447,6 @@ export const ScheduleEntryScalarFieldEnum = {
 } as const
 
 export type ScheduleEntryScalarFieldEnum = (typeof ScheduleEntryScalarFieldEnum)[keyof typeof ScheduleEntryScalarFieldEnum]
-
-
-export const FAQScalarFieldEnum = {
-  id: 'id',
-  courseId: 'courseId',
-  question: 'question',
-  answer: 'answer',
-  order: 'order',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type FAQScalarFieldEnum = (typeof FAQScalarFieldEnum)[keyof typeof FAQScalarFieldEnum]
 
 
 export const CourseCardScalarFieldEnum = {

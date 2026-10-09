@@ -133,11 +133,6 @@ export type Schedule = Prisma.ScheduleModel
  */
 export type ScheduleEntry = Prisma.ScheduleEntryModel
 /**
- * Model FAQ
- * 
- */
-export type FAQ = Prisma.FAQModel
-/**
  * Model CourseCard
  * 
  */

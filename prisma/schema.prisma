@@ -99,20 +99,28 @@ model Course {
   numberOfStudents String?
   rating           String?
   order            Int?
+  
+  // JSON array storing course-specific FAQs: [{ question: string, answer: string }]
+  faqs             Json?
 
-  instructorId String?
-  instructor   Instructor? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+  instructorId     String?
+  instructor       Instructor?  @relation(fields: [instructorId], references: [id], onDelete: SetNull)
 
-  schedules Schedule[]
-  faqs      FAQ[]
-  cards     CourseCard[]
-  batches   Batch[]
+  // Schedules
+  parisScheduleId  String?
+  parisSchedule    Schedule?    @relation("ParisSchedule", fields: [parisScheduleId], references: [id], onDelete: SetNull)
 
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  accesses           CourseAccess[]
+  hocheScheduleId  String?
+  hocheSchedule    Schedule?    @relation("HocheSchedule", fields: [hocheScheduleId], references: [id], onDelete: SetNull)
+
+  cards            CourseCard[]
+  batches          Batch[]
+
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  accesses         CourseAccess[]
   courseCertificates CourseCertificate[]
-  payments           Payment[]
+  payments         Payment[]
 
   @@index([status])
 }
@@ -125,7 +133,6 @@ model Batch {
   startDate       DateTime?
   endDate         DateTime?   // Batch access expiry threshold
   
-  // Fixed Batch Meeting Details
   meetingPlatform String?     // e.g. "ZOOM", "GOOGLE_MEET"
   meetingLink     String?     // Fixed class URL
   meetingPassword String?     // Passcode
@@ -144,71 +151,11 @@ model Batch {
   @@index([courseId])
   @@index([status])
 }
-/*
-model Lesson {
-  id              String           @id @default(cuid())
-  batchId         String?          
-  title           String
-  slug            String           @unique
-  description     String?
-  videoUrl        String?
-  order           Int
-  isPreview       Boolean          @default(false)
-  
-  // Lesson Schedule Window (e.g. for live/gated content or quiz timing per batch)
-  startsAt        DateTime?
-  endsAt          DateTime?
-
-  // Bunny Stream Integration
-  bunnyLibraryId  String?
-  bunnyVideoId    String?
-
-  // Materials & Lecture Content
-  attachments     String[]         // PDF, DOCX, ZIP URLs
-  notes           String?          // Rich text / markdown notes
-
-  batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
-  quiz            Quiz?            // One Quiz per lesson
-  progressRecords LessonProgress[]
-
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-
-  @@unique([batchId, order])
-  @@index([batchId])
-}
-
-model Quiz {
-  id              String        @id @default(cuid())
-  lessonId        String?       @unique // Linked directly to a lesson
-  title           String
-  slug            String        @unique
-  description     String?
-  price           Decimal       @default(0) @db.Decimal(10, 2)
-  currency        String        @default("EUR")
-  
-  // Time & Attempt Constraints
-  durationMinutes Int           // Fixed test duration (e.g. 30 mins once started)
-  maxAttempts     Int           @default(1) // Allows exactly 1 attempt per student
-
-  passingScore    Int           @default(50)
-  status          QuizStatus    @default(DRAFT)
-  
-  lesson          Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  payments        Payment[]
-  questions       Question[]
-  accesses        QuizAccess[]
-  attempts        QuizAttempt[]
-
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-}
-*/
 
 model Lesson {
   id              String           @id @default(cuid())
   batchId         String?          
-  quizId          String?          // Foreign key for Quiz
+  quizId          String?          
   title           String
   slug            String           @unique
   description     String?
@@ -225,12 +172,8 @@ model Lesson {
   attachments     String[]         
   notes           String?          
 
-  // 1. Keeps connection to Batch model
   batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
-
-  // 2. Many-to-one connection to Quiz model
   quiz            Quiz?            @relation(fields: [quizId], references: [id], onDelete: SetNull)
-
   progressRecords LessonProgress[]
 
   createdAt       DateTime         @default(now())
@@ -243,7 +186,6 @@ model Lesson {
 
 model Quiz {
   id              String        @id @default(cuid())
-  // 2. Remove lessonId from Quiz and change lesson to lessons (array)
   title           String
   slug            String        @unique
   description     String?
@@ -254,7 +196,7 @@ model Quiz {
   passingScore    Int           @default(50)
   status          QuizStatus    @default(DRAFT)
   
-  lessons         Lesson[]      // Replaces single lesson: Lesson?
+  lessons         Lesson[]      
   payments        Payment[]
   questions       Question[]
   accesses        QuizAccess[]
@@ -263,8 +205,6 @@ model Quiz {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 }
-
-
 
 model LessonProgress {
   id          String   @id @default(cuid())
@@ -283,8 +223,6 @@ model LessonProgress {
   @@index([userId])
   @@index([lessonId])
 }
-
-
 
 model Question {
   id          String              @id @default(cuid())
@@ -358,7 +296,7 @@ model CourseAccess {
   courseId  String
   batchId   String?
   grantedAt DateTime  @default(now())
-  expiresAt DateTime? // Set matching batch.endDate
+  expiresAt DateTime? 
   paymentId String?   @unique
   
   course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -407,7 +345,6 @@ model QuizAttempt {
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt
 
-  // Strict constraint: One attempt per student per quiz
   @@unique([userId, quizId])
   @@index([userId])
   @@index([quizId])
@@ -488,21 +425,21 @@ model Branch {
 model Schedule {
   id String @id @default(cuid())
 
-  courseId String
   branchId String
-
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branch   Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
 
   level       String?
   description String?
 
   entries ScheduleEntry[]
 
+  // Relations to Course
+  parisCourses Course[] @relation("ParisSchedule")
+  hocheCourses Course[] @relation("HocheSchedule")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([courseId])
   @@index([branchId])
 }
 
@@ -513,6 +450,7 @@ model ScheduleEntry {
   schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 
   day       WeekDay
+  startDate DateTime
   date      DateTime
   startTime String
   endTime   String
@@ -521,25 +459,8 @@ model ScheduleEntry {
   updatedAt DateTime @updatedAt
 
   @@index([scheduleId])
+  @@index([startDate])
   @@index([date])
-}
-
-model FAQ {
-  id String @id @default(cuid())
-
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  question String
-  answer   String
-
-  order Int @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([courseId, order])
-  @@index([courseId])
 }
 
 model CourseCard {

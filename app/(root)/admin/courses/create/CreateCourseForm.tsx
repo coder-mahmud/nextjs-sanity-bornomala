@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { createCourse } from "../actions";
 import CloudinaryUpload from "@/lib/CloudinaryUpload";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
 interface InstructorOption {
   id: string;
@@ -12,25 +14,114 @@ interface InstructorOption {
   title: string | null;
 }
 
+export interface ScheduleOption {
+  id: string;
+  level: string | null;
+  description: string | null;
+  branch: {
+    name: string;
+  };
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
 interface CreateCourseFormProps {
   instructors: InstructorOption[];
+  schedules: ScheduleOption[];
   cloudName: string;
   uploadPreset: string;
 }
 
+function TiptapEditor({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (html: string) => void;
+}) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  if (!editor) return null;
+
+  return (
+    <div className="rounded-xl border border-gray-300 p-2 focus-within:border-blue-500">
+      <div className="flex gap-2 border-b border-gray-200 pb-2 mb-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`px-2 py-1 text-xs rounded ${
+            editor.isActive("bold") ? "bg-gray-200 font-bold" : "bg-gray-100"
+          }`}
+        >
+          B
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`px-2 py-1 text-xs rounded ${
+            editor.isActive("italic") ? "bg-gray-200 italic" : "bg-gray-100"
+          }`}
+        >
+          I
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`px-2 py-1 text-xs rounded ${
+            editor.isActive("bulletList") ? "bg-gray-200" : "bg-gray-100"
+          }`}
+        >
+          Bullet List
+        </button>
+      </div>
+      <EditorContent editor={editor} className="min-h-[100px] prose text-sm" />
+    </div>
+  );
+}
+
 export default function CreateCourseForm({
   instructors,
+  schedules,
   cloudName,
   uploadPreset,
 }: CreateCourseFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [faqs, setFaqs] = useState<FAQItem[]>([{ question: "", answer: "" }]);
+
+  const handleAddFaq = () => {
+    setFaqs([...faqs, { question: "", answer: "" }]);
+  };
+
+  const handleRemoveFaq = (index: number) => {
+    setFaqs(faqs.filter((_, i) => i !== index));
+  };
+
+  const handleFaqChange = (
+    index: number,
+    field: "question" | "answer",
+    value: string
+  ) => {
+    const updated = [...faqs];
+    updated[index][field] = value;
+    setFaqs(updated);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
+    formData.append("faqs", JSON.stringify(faqs.filter((f) => f.question.trim())));
 
     toast
       .promise(createCourse(formData), {
@@ -166,6 +257,43 @@ export default function CreateCourseForm({
         </div>
       </div>
 
+      {/* Schedule Selection */}
+      <div className="grid gap-6 md:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Paris Schedule
+          </label>
+          <select
+            name="parisScheduleId"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          >
+            <option value="">Select Paris Schedule (Optional)</option>
+            {schedules.map((schedule) => (
+              <option key={schedule.id} value={schedule.id}>
+                {schedule.branch.name} - {schedule.level || "Schedule"} ({schedule.description || schedule.id})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Hoche Schedule
+          </label>
+          <select
+            name="hocheScheduleId"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          >
+            <option value="">Select Hoche Schedule (Optional)</option>
+            {schedules.map((schedule) => (
+              <option key={schedule.id} value={schedule.id}>
+                {schedule.branch.name} - {schedule.level || "Schedule"} ({schedule.description || schedule.id})
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {/* Student Count & Rating */}
       <div className="grid gap-6 md:grid-cols-2">
         <div>
@@ -238,6 +366,47 @@ export default function CreateCourseForm({
             <option value="PUBLISHED">Published</option>
             <option value="ARCHIVED">Archived</option>
           </select>
+        </div>
+      </div>
+
+      {/* Course FAQs Section with Tiptap */}
+      <div className="border-t border-gray-200 pt-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Course FAQs</h3>
+        <div className="space-y-4">
+          {faqs.map((faq, index) => (
+            <div key={index} className="p-4 border border-gray-200 rounded-xl space-y-3 bg-gray-50">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-700">FAQ #{index + 1}</span>
+                {faqs.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFaq(index)}
+                    className="text-xs text-red-600 hover:underline"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              <input
+                type="text"
+                value={faq.question}
+                onChange={(e) => handleFaqChange(index, "question", e.target.value)}
+                placeholder="Question"
+                className="w-full rounded-xl border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 bg-white"
+              />
+              <TiptapEditor
+                value={faq.answer}
+                onChange={(html) => handleFaqChange(index, "answer", html)}
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddFaq}
+            className="text-sm text-blue-600 font-medium hover:underline"
+          >
+            + Add FAQ
+          </button>
         </div>
       </div>
 

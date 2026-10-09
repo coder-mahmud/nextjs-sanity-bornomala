@@ -51,34 +51,7 @@ type Course = {
 
 };
 
-/*
-async function getCourse(slug: string): Promise<Course | null> {
-  const res = await fetch(process.env.WP_GRAPHQL_URL!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `
-        query allCourses($slug: String!) {
-          coursesBy(slug:$slug) {
-            id
-            title
-          }
-        }
-      `,
-      variables: { slug },
-    }),
-    next: { revalidate: 60 }, // ISR
-  });
 
-  const json = await res.json();
-
-  console.log("Page data:", json)
-
-  return json?.data?.course ?? null;
-}
-  */
 async function getCourse(slug:string): Promise<Course | null> {
   
   

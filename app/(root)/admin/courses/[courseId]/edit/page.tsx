@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import EditCourseForm from "./EditCourseForm";
+import EditCourseForm, { ScheduleOption } from "./EditCourseForm";
 import { ArrowLeft } from "lucide-react";
 
 interface EditCoursePageProps {
@@ -28,6 +28,32 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
     notFound();
   }
 
+  const instructors = await prisma.instructor.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  const schedules = (await prisma.schedule.findMany({
+    select: {
+      id: true,
+      level: true,
+      description: true,
+      branch: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })) as unknown as ScheduleOption[];
+
   // Convert Prisma Decimal and special types to plain JSON before passing to Client Component
   const serializedCourse = JSON.parse(JSON.stringify(course));
 
@@ -42,12 +68,18 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
         </Link>
         <div>
           <h1 className="text-xl font-bold text-gray-900">Edit Course Details</h1>
-          <p className="text-xs text-gray-500">Update general information, pricing, status, and imagery.</p>
+          <p className="text-xs text-gray-500">
+            Update general information, pricing, status, schedules, and FAQs.
+          </p>
         </div>
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-        <EditCourseForm course={serializedCourse} />
+        <EditCourseForm
+          course={serializedCourse}
+          instructors={instructors}
+          schedules={schedules}
+        />
       </div>
     </section>
   );

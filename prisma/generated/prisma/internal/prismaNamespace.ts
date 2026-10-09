@@ -413,7 +413,6 @@ export const ModelName = {
   Branch: 'Branch',
   Schedule: 'Schedule',
   ScheduleEntry: 'ScheduleEntry',
-  FAQ: 'FAQ',
   CourseCard: 'CourseCard',
   Instructor: 'Instructor'
 } as const
@@ -431,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "course" | "batch" | "lesson" | "quiz" | "lessonProgress" | "question" | "questionOption" | "payment" | "courseAccess" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "courseCertificate" | "coupon" | "couponUsage" | "branch" | "schedule" | "scheduleEntry" | "fAQ" | "courseCard" | "instructor"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "course" | "batch" | "lesson" | "quiz" | "lessonProgress" | "question" | "questionOption" | "payment" | "courseAccess" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "courseCertificate" | "coupon" | "couponUsage" | "branch" | "schedule" | "scheduleEntry" | "courseCard" | "instructor"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2137,80 +2136,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    FAQ: {
-      payload: Prisma.$FAQPayload<ExtArgs>
-      fields: Prisma.FAQFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.FAQFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.FAQFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>
-        }
-        findFirst: {
-          args: Prisma.FAQFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.FAQFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>
-        }
-        findMany: {
-          args: Prisma.FAQFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>[]
-        }
-        create: {
-          args: Prisma.FAQCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>
-        }
-        createMany: {
-          args: Prisma.FAQCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.FAQCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>[]
-        }
-        delete: {
-          args: Prisma.FAQDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>
-        }
-        update: {
-          args: Prisma.FAQUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>
-        }
-        deleteMany: {
-          args: Prisma.FAQDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.FAQUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.FAQUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>[]
-        }
-        upsert: {
-          args: Prisma.FAQUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FAQPayload>
-        }
-        aggregate: {
-          args: Prisma.FAQAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFAQ>
-        }
-        groupBy: {
-          args: Prisma.FAQGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FAQGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.FAQCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FAQCountAggregateOutputType> | number
-        }
-      }
-    }
     CourseCard: {
       payload: Prisma.$CourseCardPayload<ExtArgs>
       fields: Prisma.CourseCardFieldRefs
@@ -2484,7 +2409,10 @@ export const CourseScalarFieldEnum = {
   numberOfStudents: 'numberOfStudents',
   rating: 'rating',
   order: 'order',
+  faqs: 'faqs',
   instructorId: 'instructorId',
+  parisScheduleId: 'parisScheduleId',
+  hocheScheduleId: 'hocheScheduleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2727,7 +2655,6 @@ export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof 
 
 export const ScheduleScalarFieldEnum = {
   id: 'id',
-  courseId: 'courseId',
   branchId: 'branchId',
   level: 'level',
   description: 'description',
@@ -2742,6 +2669,7 @@ export const ScheduleEntryScalarFieldEnum = {
   id: 'id',
   scheduleId: 'scheduleId',
   day: 'day',
+  startDate: 'startDate',
   date: 'date',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -2750,19 +2678,6 @@ export const ScheduleEntryScalarFieldEnum = {
 } as const
 
 export type ScheduleEntryScalarFieldEnum = (typeof ScheduleEntryScalarFieldEnum)[keyof typeof ScheduleEntryScalarFieldEnum]
-
-
-export const FAQScalarFieldEnum = {
-  id: 'id',
-  courseId: 'courseId',
-  question: 'question',
-  answer: 'answer',
-  order: 'order',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type FAQScalarFieldEnum = (typeof FAQScalarFieldEnum)[keyof typeof FAQScalarFieldEnum]
 
 
 export const CourseCardScalarFieldEnum = {
@@ -2938,6 +2853,20 @@ export type ListEnumCourseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'BatchStatus'
  */
 export type EnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus'>
@@ -2976,20 +2905,6 @@ export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'PaymentStatus[]'
  */
 export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -3158,7 +3073,6 @@ export type GlobalOmitConfig = {
   branch?: Prisma.BranchOmit
   schedule?: Prisma.ScheduleOmit
   scheduleEntry?: Prisma.ScheduleEntryOmit
-  fAQ?: Prisma.FAQOmit
   courseCard?: Prisma.CourseCardOmit
   instructor?: Prisma.InstructorOmit
 }

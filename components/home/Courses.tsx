@@ -87,7 +87,7 @@ const CoursesSection = async () => {
                   {course.coursesFields.shortDescription}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex-grow">
+              <CardContent className="grow">
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-gray-600">
                     <Clock className="w-4 h-4 mr-2 text-primary" />

@@ -14,11 +14,6 @@ function slugify(text: string) {
     .replace(/-+/g, "-");
 }
 
-function getBunnyLibraryId(formData: FormData) {
-  const libraryId = getString(formData, "bunnyLibraryId");
-  return libraryId || process.env.BUNNY_STREAM_LIBRARY_ID || "";
-}
-
 async function requireAdmin() {
   const session = await auth();
 
@@ -62,6 +57,16 @@ function getStringArray(formData: FormData, key: string): string[] {
     .filter((item) => item.length > 0);
 }
 
+function getJsonArray(formData: FormData, key: string) {
+  const raw = formData.get(key);
+  if (typeof raw !== "string" || !raw.trim()) return null;
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
+  }
+}
+
 async function createUniqueLessonSlug(title: string) {
   const baseSlug = slugify(title) || "lesson";
 
@@ -94,14 +99,15 @@ export async function createCourse(formData: FormData) {
   const duration = getNullableString(formData, "duration");
   const numberOfStudents = getNullableString(formData, "numberOfStudents");
   const rating = getNullableString(formData, "rating");
-  const instructorId =
-    getNullableString(formData, "instructorId") || undefined;
+  const instructorId = getNullableString(formData, "instructorId") || undefined;
+  const parisScheduleId = getNullableString(formData, "parisScheduleId") || undefined;
+  const hocheScheduleId = getNullableString(formData, "hocheScheduleId") || undefined;
   const order = getNullableNumber(formData, "order");
-  const status =
-    ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+  const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
 
   const characteristics = getStringArray(formData, "characteristics");
   const targetAudience = getStringArray(formData, "targetAudience");
+  const faqs = getJsonArray(formData, "faqs");
 
   if (!title) {
     throw new Error("Title is required");
@@ -131,10 +137,13 @@ export async function createCourse(formData: FormData) {
       numberOfStudents,
       rating,
       instructorId,
+      parisScheduleId,
+      hocheScheduleId,
       order,
       status,
       characteristics,
       targetAudience,
+      faqs: faqs ?? undefined,
     },
   });
 
@@ -156,14 +165,15 @@ export async function updateCourse(courseId: string, formData: FormData) {
   const duration = getNullableString(formData, "duration");
   const numberOfStudents = getNullableString(formData, "numberOfStudents");
   const rating = getNullableString(formData, "rating");
-  const instructorId =
-    getNullableString(formData, "instructorId") || undefined;
+  const instructorId = getNullableString(formData, "instructorId");
+  const parisScheduleId = getNullableString(formData, "parisScheduleId");
+  const hocheScheduleId = getNullableString(formData, "hocheScheduleId");
   const order = getNullableNumber(formData, "order");
-  const status =
-    ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+  const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
 
   const characteristics = getStringArray(formData, "characteristics");
   const targetAudience = getStringArray(formData, "targetAudience");
+  const faqs = getJsonArray(formData, "faqs");
 
   if (!title) {
     throw new Error("Title is required");
@@ -183,11 +193,20 @@ export async function updateCourse(courseId: string, formData: FormData) {
       duration,
       numberOfStudents,
       rating,
-      instructorId,
+      instructor: instructorId
+        ? { connect: { id: instructorId } }
+        : { disconnect: true },
+      parisSchedule: parisScheduleId
+        ? { connect: { id: parisScheduleId } }
+        : { disconnect: true },
+      hocheSchedule: hocheScheduleId
+        ? { connect: { id: hocheScheduleId } }
+        : { disconnect: true },
       order,
       status,
       characteristics,
       targetAudience,
+      faqs: faqs ?? undefined,
     },
   });
 
@@ -259,10 +278,8 @@ export async function createLesson(
       return { status: "error" as const, message: "A batch must be assigned" };
     }
 
-    // Generate unique slug
     const slug = await createUniqueLessonSlug(rawSlug || title);
 
-    // Resolve order collisions: shift existing items or auto-increment
     let requestedOrder = getNullableNumber(formData, "order");
 
     if (requestedOrder === null) {
@@ -273,7 +290,6 @@ export async function createLesson(
       });
       requestedOrder = (maxLesson?.order ?? 0) + 1;
     } else {
-      // Shift existing lessons at or after this order to make space
       await prisma.lesson.updateMany({
         where: {
           batchId,
@@ -285,7 +301,6 @@ export async function createLesson(
       });
     }
 
-    // Safe Date Parsing
     const parseValidDate = (dateStr: string | null) => {
       if (!dateStr || dateStr.trim() === "") return null;
       const parsed = new Date(dateStr);
@@ -295,7 +310,6 @@ export async function createLesson(
     const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
     const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
 
-    // Safe Attachments Array Parsing
     const attachmentsRaw = formData.get("attachments");
     let attachments: string[] = [];
     if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
@@ -306,7 +320,6 @@ export async function createLesson(
       }
     }
 
-    // Create Lesson in Prisma
     await prisma.lesson.create({
       data: {
         title,
@@ -361,7 +374,6 @@ export async function updateLesson(
     const order = getNullableNumber(formData, "order") ?? 1;
     const isPreview = formData.get("isPreview") === "on";
 
-    // Safe Date Parsing
     const parseValidDate = (dateStr: string | null) => {
       if (!dateStr || dateStr.trim() === "") return null;
       const parsed = new Date(dateStr);
@@ -371,7 +383,6 @@ export async function updateLesson(
     const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
     const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
 
-    // Safe Attachments Array Parsing
     const attachmentsRaw = formData.get("attachments");
     let attachments: string[] = [];
     if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
@@ -394,7 +405,6 @@ export async function updateLesson(
       return { status: "error" as const, message: "Lesson not found" };
     }
 
-    // Update lesson model directly with quiz relation
     await prisma.lesson.update({
       where: { id: lessonId },
       data: {

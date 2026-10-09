@@ -26,7 +26,6 @@ export type AggregateSchedule = {
 
 export type ScheduleMinAggregateOutputType = {
   id: string | null
-  courseId: string | null
   branchId: string | null
   level: string | null
   description: string | null
@@ -36,7 +35,6 @@ export type ScheduleMinAggregateOutputType = {
 
 export type ScheduleMaxAggregateOutputType = {
   id: string | null
-  courseId: string | null
   branchId: string | null
   level: string | null
   description: string | null
@@ -46,7 +44,6 @@ export type ScheduleMaxAggregateOutputType = {
 
 export type ScheduleCountAggregateOutputType = {
   id: number
-  courseId: number
   branchId: number
   level: number
   description: number
@@ -58,7 +55,6 @@ export type ScheduleCountAggregateOutputType = {
 
 export type ScheduleMinAggregateInputType = {
   id?: true
-  courseId?: true
   branchId?: true
   level?: true
   description?: true
@@ -68,7 +64,6 @@ export type ScheduleMinAggregateInputType = {
 
 export type ScheduleMaxAggregateInputType = {
   id?: true
-  courseId?: true
   branchId?: true
   level?: true
   description?: true
@@ -78,7 +73,6 @@ export type ScheduleMaxAggregateInputType = {
 
 export type ScheduleCountAggregateInputType = {
   id?: true
-  courseId?: true
   branchId?: true
   level?: true
   description?: true
@@ -161,7 +155,6 @@ export type ScheduleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type ScheduleGroupByOutputType = {
   id: string
-  courseId: string
   branchId: string
   level: string | null
   description: string | null
@@ -192,28 +185,28 @@ export type ScheduleWhereInput = {
   OR?: Prisma.ScheduleWhereInput[]
   NOT?: Prisma.ScheduleWhereInput | Prisma.ScheduleWhereInput[]
   id?: Prisma.StringFilter<"Schedule"> | string
-  courseId?: Prisma.StringFilter<"Schedule"> | string
   branchId?: Prisma.StringFilter<"Schedule"> | string
   level?: Prisma.StringNullableFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableFilter<"Schedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   entries?: Prisma.ScheduleEntryListRelationFilter
+  parisCourses?: Prisma.CourseListRelationFilter
+  hocheCourses?: Prisma.CourseListRelationFilter
 }
 
 export type ScheduleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  courseId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  course?: Prisma.CourseOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
   entries?: Prisma.ScheduleEntryOrderByRelationAggregateInput
+  parisCourses?: Prisma.CourseOrderByRelationAggregateInput
+  hocheCourses?: Prisma.CourseOrderByRelationAggregateInput
 }
 
 export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
@@ -221,20 +214,19 @@ export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ScheduleWhereInput | Prisma.ScheduleWhereInput[]
   OR?: Prisma.ScheduleWhereInput[]
   NOT?: Prisma.ScheduleWhereInput | Prisma.ScheduleWhereInput[]
-  courseId?: Prisma.StringFilter<"Schedule"> | string
   branchId?: Prisma.StringFilter<"Schedule"> | string
   level?: Prisma.StringNullableFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableFilter<"Schedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   entries?: Prisma.ScheduleEntryListRelationFilter
+  parisCourses?: Prisma.CourseListRelationFilter
+  hocheCourses?: Prisma.CourseListRelationFilter
 }, "id">
 
 export type ScheduleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  courseId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,7 +242,6 @@ export type ScheduleScalarWhereWithAggregatesInput = {
   OR?: Prisma.ScheduleScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ScheduleScalarWhereWithAggregatesInput | Prisma.ScheduleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Schedule"> | string
-  courseId?: Prisma.StringWithAggregatesFilter<"Schedule"> | string
   branchId?: Prisma.StringWithAggregatesFilter<"Schedule"> | string
   level?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
@@ -264,20 +255,22 @@ export type ScheduleCreateInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
   branch: Prisma.BranchCreateNestedOneWithoutSchedulesInput
   entries?: Prisma.ScheduleEntryCreateNestedManyWithoutScheduleInput
+  parisCourses?: Prisma.CourseCreateNestedManyWithoutParisScheduleInput
+  hocheCourses?: Prisma.CourseCreateNestedManyWithoutHocheScheduleInput
 }
 
 export type ScheduleUncheckedCreateInput = {
   id?: string
-  courseId: string
   branchId: string
   level?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.ScheduleEntryUncheckedCreateNestedManyWithoutScheduleInput
+  parisCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutParisScheduleInput
+  hocheCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutHocheScheduleInput
 }
 
 export type ScheduleUpdateInput = {
@@ -286,25 +279,26 @@ export type ScheduleUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutSchedulesNestedInput
   entries?: Prisma.ScheduleEntryUpdateManyWithoutScheduleNestedInput
+  parisCourses?: Prisma.CourseUpdateManyWithoutParisScheduleNestedInput
+  hocheCourses?: Prisma.CourseUpdateManyWithoutHocheScheduleNestedInput
 }
 
 export type ScheduleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ScheduleEntryUncheckedUpdateManyWithoutScheduleNestedInput
+  parisCourses?: Prisma.CourseUncheckedUpdateManyWithoutParisScheduleNestedInput
+  hocheCourses?: Prisma.CourseUncheckedUpdateManyWithoutHocheScheduleNestedInput
 }
 
 export type ScheduleCreateManyInput = {
   id?: string
-  courseId: string
   branchId: string
   level?: string | null
   description?: string | null
@@ -322,12 +316,16 @@ export type ScheduleUpdateManyMutationInput = {
 
 export type ScheduleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ScheduleNullableScalarRelationFilter = {
+  is?: Prisma.ScheduleWhereInput | null
+  isNot?: Prisma.ScheduleWhereInput | null
 }
 
 export type ScheduleListRelationFilter = {
@@ -342,7 +340,6 @@ export type ScheduleOrderByRelationAggregateInput = {
 
 export type ScheduleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  courseId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -352,7 +349,6 @@ export type ScheduleCountOrderByAggregateInput = {
 
 export type ScheduleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  courseId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -362,7 +358,6 @@ export type ScheduleMaxOrderByAggregateInput = {
 
 export type ScheduleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  courseId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -375,46 +370,36 @@ export type ScheduleScalarRelationFilter = {
   isNot?: Prisma.ScheduleWhereInput
 }
 
-export type ScheduleCreateNestedManyWithoutCourseInput = {
-  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutCourseInput, Prisma.ScheduleUncheckedCreateWithoutCourseInput> | Prisma.ScheduleCreateWithoutCourseInput[] | Prisma.ScheduleUncheckedCreateWithoutCourseInput[]
-  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutCourseInput | Prisma.ScheduleCreateOrConnectWithoutCourseInput[]
-  createMany?: Prisma.ScheduleCreateManyCourseInputEnvelope
-  connect?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
+export type ScheduleCreateNestedOneWithoutParisCoursesInput = {
+  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutParisCoursesInput, Prisma.ScheduleUncheckedCreateWithoutParisCoursesInput>
+  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutParisCoursesInput
+  connect?: Prisma.ScheduleWhereUniqueInput
 }
 
-export type ScheduleUncheckedCreateNestedManyWithoutCourseInput = {
-  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutCourseInput, Prisma.ScheduleUncheckedCreateWithoutCourseInput> | Prisma.ScheduleCreateWithoutCourseInput[] | Prisma.ScheduleUncheckedCreateWithoutCourseInput[]
-  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutCourseInput | Prisma.ScheduleCreateOrConnectWithoutCourseInput[]
-  createMany?: Prisma.ScheduleCreateManyCourseInputEnvelope
-  connect?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
+export type ScheduleCreateNestedOneWithoutHocheCoursesInput = {
+  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutHocheCoursesInput, Prisma.ScheduleUncheckedCreateWithoutHocheCoursesInput>
+  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutHocheCoursesInput
+  connect?: Prisma.ScheduleWhereUniqueInput
 }
 
-export type ScheduleUpdateManyWithoutCourseNestedInput = {
-  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutCourseInput, Prisma.ScheduleUncheckedCreateWithoutCourseInput> | Prisma.ScheduleCreateWithoutCourseInput[] | Prisma.ScheduleUncheckedCreateWithoutCourseInput[]
-  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutCourseInput | Prisma.ScheduleCreateOrConnectWithoutCourseInput[]
-  upsert?: Prisma.ScheduleUpsertWithWhereUniqueWithoutCourseInput | Prisma.ScheduleUpsertWithWhereUniqueWithoutCourseInput[]
-  createMany?: Prisma.ScheduleCreateManyCourseInputEnvelope
-  set?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  disconnect?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  delete?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  connect?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  update?: Prisma.ScheduleUpdateWithWhereUniqueWithoutCourseInput | Prisma.ScheduleUpdateWithWhereUniqueWithoutCourseInput[]
-  updateMany?: Prisma.ScheduleUpdateManyWithWhereWithoutCourseInput | Prisma.ScheduleUpdateManyWithWhereWithoutCourseInput[]
-  deleteMany?: Prisma.ScheduleScalarWhereInput | Prisma.ScheduleScalarWhereInput[]
+export type ScheduleUpdateOneWithoutParisCoursesNestedInput = {
+  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutParisCoursesInput, Prisma.ScheduleUncheckedCreateWithoutParisCoursesInput>
+  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutParisCoursesInput
+  upsert?: Prisma.ScheduleUpsertWithoutParisCoursesInput
+  disconnect?: Prisma.ScheduleWhereInput | boolean
+  delete?: Prisma.ScheduleWhereInput | boolean
+  connect?: Prisma.ScheduleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ScheduleUpdateToOneWithWhereWithoutParisCoursesInput, Prisma.ScheduleUpdateWithoutParisCoursesInput>, Prisma.ScheduleUncheckedUpdateWithoutParisCoursesInput>
 }
 
-export type ScheduleUncheckedUpdateManyWithoutCourseNestedInput = {
-  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutCourseInput, Prisma.ScheduleUncheckedCreateWithoutCourseInput> | Prisma.ScheduleCreateWithoutCourseInput[] | Prisma.ScheduleUncheckedCreateWithoutCourseInput[]
-  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutCourseInput | Prisma.ScheduleCreateOrConnectWithoutCourseInput[]
-  upsert?: Prisma.ScheduleUpsertWithWhereUniqueWithoutCourseInput | Prisma.ScheduleUpsertWithWhereUniqueWithoutCourseInput[]
-  createMany?: Prisma.ScheduleCreateManyCourseInputEnvelope
-  set?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  disconnect?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  delete?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  connect?: Prisma.ScheduleWhereUniqueInput | Prisma.ScheduleWhereUniqueInput[]
-  update?: Prisma.ScheduleUpdateWithWhereUniqueWithoutCourseInput | Prisma.ScheduleUpdateWithWhereUniqueWithoutCourseInput[]
-  updateMany?: Prisma.ScheduleUpdateManyWithWhereWithoutCourseInput | Prisma.ScheduleUpdateManyWithWhereWithoutCourseInput[]
-  deleteMany?: Prisma.ScheduleScalarWhereInput | Prisma.ScheduleScalarWhereInput[]
+export type ScheduleUpdateOneWithoutHocheCoursesNestedInput = {
+  create?: Prisma.XOR<Prisma.ScheduleCreateWithoutHocheCoursesInput, Prisma.ScheduleUncheckedCreateWithoutHocheCoursesInput>
+  connectOrCreate?: Prisma.ScheduleCreateOrConnectWithoutHocheCoursesInput
+  upsert?: Prisma.ScheduleUpsertWithoutHocheCoursesInput
+  disconnect?: Prisma.ScheduleWhereInput | boolean
+  delete?: Prisma.ScheduleWhereInput | boolean
+  connect?: Prisma.ScheduleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ScheduleUpdateToOneWithWhereWithoutHocheCoursesInput, Prisma.ScheduleUpdateWithoutHocheCoursesInput>, Prisma.ScheduleUncheckedUpdateWithoutHocheCoursesInput>
 }
 
 export type ScheduleCreateNestedManyWithoutBranchInput = {
@@ -473,7 +458,7 @@ export type ScheduleUpdateOneRequiredWithoutEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ScheduleUpdateToOneWithWhereWithoutEntriesInput, Prisma.ScheduleUpdateWithoutEntriesInput>, Prisma.ScheduleUncheckedUpdateWithoutEntriesInput>
 }
 
-export type ScheduleCreateWithoutCourseInput = {
+export type ScheduleCreateWithoutParisCoursesInput = {
   id?: string
   level?: string | null
   description?: string | null
@@ -481,9 +466,10 @@ export type ScheduleCreateWithoutCourseInput = {
   updatedAt?: Date | string
   branch: Prisma.BranchCreateNestedOneWithoutSchedulesInput
   entries?: Prisma.ScheduleEntryCreateNestedManyWithoutScheduleInput
+  hocheCourses?: Prisma.CourseCreateNestedManyWithoutHocheScheduleInput
 }
 
-export type ScheduleUncheckedCreateWithoutCourseInput = {
+export type ScheduleUncheckedCreateWithoutParisCoursesInput = {
   id?: string
   branchId: string
   level?: string | null
@@ -491,45 +477,105 @@ export type ScheduleUncheckedCreateWithoutCourseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.ScheduleEntryUncheckedCreateNestedManyWithoutScheduleInput
+  hocheCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutHocheScheduleInput
 }
 
-export type ScheduleCreateOrConnectWithoutCourseInput = {
+export type ScheduleCreateOrConnectWithoutParisCoursesInput = {
   where: Prisma.ScheduleWhereUniqueInput
-  create: Prisma.XOR<Prisma.ScheduleCreateWithoutCourseInput, Prisma.ScheduleUncheckedCreateWithoutCourseInput>
+  create: Prisma.XOR<Prisma.ScheduleCreateWithoutParisCoursesInput, Prisma.ScheduleUncheckedCreateWithoutParisCoursesInput>
 }
 
-export type ScheduleCreateManyCourseInputEnvelope = {
-  data: Prisma.ScheduleCreateManyCourseInput | Prisma.ScheduleCreateManyCourseInput[]
-  skipDuplicates?: boolean
+export type ScheduleCreateWithoutHocheCoursesInput = {
+  id?: string
+  level?: string | null
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  branch: Prisma.BranchCreateNestedOneWithoutSchedulesInput
+  entries?: Prisma.ScheduleEntryCreateNestedManyWithoutScheduleInput
+  parisCourses?: Prisma.CourseCreateNestedManyWithoutParisScheduleInput
 }
 
-export type ScheduleUpsertWithWhereUniqueWithoutCourseInput = {
+export type ScheduleUncheckedCreateWithoutHocheCoursesInput = {
+  id?: string
+  branchId: string
+  level?: string | null
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  entries?: Prisma.ScheduleEntryUncheckedCreateNestedManyWithoutScheduleInput
+  parisCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutParisScheduleInput
+}
+
+export type ScheduleCreateOrConnectWithoutHocheCoursesInput = {
   where: Prisma.ScheduleWhereUniqueInput
-  update: Prisma.XOR<Prisma.ScheduleUpdateWithoutCourseInput, Prisma.ScheduleUncheckedUpdateWithoutCourseInput>
-  create: Prisma.XOR<Prisma.ScheduleCreateWithoutCourseInput, Prisma.ScheduleUncheckedCreateWithoutCourseInput>
+  create: Prisma.XOR<Prisma.ScheduleCreateWithoutHocheCoursesInput, Prisma.ScheduleUncheckedCreateWithoutHocheCoursesInput>
 }
 
-export type ScheduleUpdateWithWhereUniqueWithoutCourseInput = {
-  where: Prisma.ScheduleWhereUniqueInput
-  data: Prisma.XOR<Prisma.ScheduleUpdateWithoutCourseInput, Prisma.ScheduleUncheckedUpdateWithoutCourseInput>
+export type ScheduleUpsertWithoutParisCoursesInput = {
+  update: Prisma.XOR<Prisma.ScheduleUpdateWithoutParisCoursesInput, Prisma.ScheduleUncheckedUpdateWithoutParisCoursesInput>
+  create: Prisma.XOR<Prisma.ScheduleCreateWithoutParisCoursesInput, Prisma.ScheduleUncheckedCreateWithoutParisCoursesInput>
+  where?: Prisma.ScheduleWhereInput
 }
 
-export type ScheduleUpdateManyWithWhereWithoutCourseInput = {
-  where: Prisma.ScheduleScalarWhereInput
-  data: Prisma.XOR<Prisma.ScheduleUpdateManyMutationInput, Prisma.ScheduleUncheckedUpdateManyWithoutCourseInput>
+export type ScheduleUpdateToOneWithWhereWithoutParisCoursesInput = {
+  where?: Prisma.ScheduleWhereInput
+  data: Prisma.XOR<Prisma.ScheduleUpdateWithoutParisCoursesInput, Prisma.ScheduleUncheckedUpdateWithoutParisCoursesInput>
 }
 
-export type ScheduleScalarWhereInput = {
-  AND?: Prisma.ScheduleScalarWhereInput | Prisma.ScheduleScalarWhereInput[]
-  OR?: Prisma.ScheduleScalarWhereInput[]
-  NOT?: Prisma.ScheduleScalarWhereInput | Prisma.ScheduleScalarWhereInput[]
-  id?: Prisma.StringFilter<"Schedule"> | string
-  courseId?: Prisma.StringFilter<"Schedule"> | string
-  branchId?: Prisma.StringFilter<"Schedule"> | string
-  level?: Prisma.StringNullableFilter<"Schedule"> | string | null
-  description?: Prisma.StringNullableFilter<"Schedule"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
+export type ScheduleUpdateWithoutParisCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUpdateOneRequiredWithoutSchedulesNestedInput
+  entries?: Prisma.ScheduleEntryUpdateManyWithoutScheduleNestedInput
+  hocheCourses?: Prisma.CourseUpdateManyWithoutHocheScheduleNestedInput
+}
+
+export type ScheduleUncheckedUpdateWithoutParisCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  entries?: Prisma.ScheduleEntryUncheckedUpdateManyWithoutScheduleNestedInput
+  hocheCourses?: Prisma.CourseUncheckedUpdateManyWithoutHocheScheduleNestedInput
+}
+
+export type ScheduleUpsertWithoutHocheCoursesInput = {
+  update: Prisma.XOR<Prisma.ScheduleUpdateWithoutHocheCoursesInput, Prisma.ScheduleUncheckedUpdateWithoutHocheCoursesInput>
+  create: Prisma.XOR<Prisma.ScheduleCreateWithoutHocheCoursesInput, Prisma.ScheduleUncheckedCreateWithoutHocheCoursesInput>
+  where?: Prisma.ScheduleWhereInput
+}
+
+export type ScheduleUpdateToOneWithWhereWithoutHocheCoursesInput = {
+  where?: Prisma.ScheduleWhereInput
+  data: Prisma.XOR<Prisma.ScheduleUpdateWithoutHocheCoursesInput, Prisma.ScheduleUncheckedUpdateWithoutHocheCoursesInput>
+}
+
+export type ScheduleUpdateWithoutHocheCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUpdateOneRequiredWithoutSchedulesNestedInput
+  entries?: Prisma.ScheduleEntryUpdateManyWithoutScheduleNestedInput
+  parisCourses?: Prisma.CourseUpdateManyWithoutParisScheduleNestedInput
+}
+
+export type ScheduleUncheckedUpdateWithoutHocheCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  entries?: Prisma.ScheduleEntryUncheckedUpdateManyWithoutScheduleNestedInput
+  parisCourses?: Prisma.CourseUncheckedUpdateManyWithoutParisScheduleNestedInput
 }
 
 export type ScheduleCreateWithoutBranchInput = {
@@ -538,18 +584,20 @@ export type ScheduleCreateWithoutBranchInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
   entries?: Prisma.ScheduleEntryCreateNestedManyWithoutScheduleInput
+  parisCourses?: Prisma.CourseCreateNestedManyWithoutParisScheduleInput
+  hocheCourses?: Prisma.CourseCreateNestedManyWithoutHocheScheduleInput
 }
 
 export type ScheduleUncheckedCreateWithoutBranchInput = {
   id?: string
-  courseId: string
   level?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.ScheduleEntryUncheckedCreateNestedManyWithoutScheduleInput
+  parisCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutParisScheduleInput
+  hocheCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutHocheScheduleInput
 }
 
 export type ScheduleCreateOrConnectWithoutBranchInput = {
@@ -578,24 +626,38 @@ export type ScheduleUpdateManyWithWhereWithoutBranchInput = {
   data: Prisma.XOR<Prisma.ScheduleUpdateManyMutationInput, Prisma.ScheduleUncheckedUpdateManyWithoutBranchInput>
 }
 
+export type ScheduleScalarWhereInput = {
+  AND?: Prisma.ScheduleScalarWhereInput | Prisma.ScheduleScalarWhereInput[]
+  OR?: Prisma.ScheduleScalarWhereInput[]
+  NOT?: Prisma.ScheduleScalarWhereInput | Prisma.ScheduleScalarWhereInput[]
+  id?: Prisma.StringFilter<"Schedule"> | string
+  branchId?: Prisma.StringFilter<"Schedule"> | string
+  level?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  description?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
+}
+
 export type ScheduleCreateWithoutEntriesInput = {
   id?: string
   level?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
   branch: Prisma.BranchCreateNestedOneWithoutSchedulesInput
+  parisCourses?: Prisma.CourseCreateNestedManyWithoutParisScheduleInput
+  hocheCourses?: Prisma.CourseCreateNestedManyWithoutHocheScheduleInput
 }
 
 export type ScheduleUncheckedCreateWithoutEntriesInput = {
   id?: string
-  courseId: string
   branchId: string
   level?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  parisCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutParisScheduleInput
+  hocheCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutHocheScheduleInput
 }
 
 export type ScheduleCreateOrConnectWithoutEntriesInput = {
@@ -620,61 +682,24 @@ export type ScheduleUpdateWithoutEntriesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutSchedulesNestedInput
+  parisCourses?: Prisma.CourseUpdateManyWithoutParisScheduleNestedInput
+  hocheCourses?: Prisma.CourseUpdateManyWithoutHocheScheduleNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ScheduleCreateManyCourseInput = {
-  id?: string
-  branchId: string
-  level?: string | null
-  description?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ScheduleUpdateWithoutCourseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneRequiredWithoutSchedulesNestedInput
-  entries?: Prisma.ScheduleEntryUpdateManyWithoutScheduleNestedInput
-}
-
-export type ScheduleUncheckedUpdateWithoutCourseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  entries?: Prisma.ScheduleEntryUncheckedUpdateManyWithoutScheduleNestedInput
-}
-
-export type ScheduleUncheckedUpdateManyWithoutCourseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  parisCourses?: Prisma.CourseUncheckedUpdateManyWithoutParisScheduleNestedInput
+  hocheCourses?: Prisma.CourseUncheckedUpdateManyWithoutHocheScheduleNestedInput
 }
 
 export type ScheduleCreateManyBranchInput = {
   id?: string
-  courseId: string
   level?: string | null
   description?: string | null
   createdAt?: Date | string
@@ -687,23 +712,24 @@ export type ScheduleUpdateWithoutBranchInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
   entries?: Prisma.ScheduleEntryUpdateManyWithoutScheduleNestedInput
+  parisCourses?: Prisma.CourseUpdateManyWithoutParisScheduleNestedInput
+  hocheCourses?: Prisma.CourseUpdateManyWithoutHocheScheduleNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ScheduleEntryUncheckedUpdateManyWithoutScheduleNestedInput
+  parisCourses?: Prisma.CourseUncheckedUpdateManyWithoutParisScheduleNestedInput
+  hocheCourses?: Prisma.CourseUncheckedUpdateManyWithoutHocheScheduleNestedInput
 }
 
 export type ScheduleUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -717,10 +743,14 @@ export type ScheduleUncheckedUpdateManyWithoutBranchInput = {
 
 export type ScheduleCountOutputType = {
   entries: number
+  parisCourses: number
+  hocheCourses: number
 }
 
 export type ScheduleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | ScheduleCountOutputTypeCountEntriesArgs
+  parisCourses?: boolean | ScheduleCountOutputTypeCountParisCoursesArgs
+  hocheCourses?: boolean | ScheduleCountOutputTypeCountHocheCoursesArgs
 }
 
 /**
@@ -740,48 +770,57 @@ export type ScheduleCountOutputTypeCountEntriesArgs<ExtArgs extends runtime.Type
   where?: Prisma.ScheduleEntryWhereInput
 }
 
+/**
+ * ScheduleCountOutputType without action
+ */
+export type ScheduleCountOutputTypeCountParisCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseWhereInput
+}
+
+/**
+ * ScheduleCountOutputType without action
+ */
+export type ScheduleCountOutputTypeCountHocheCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseWhereInput
+}
+
 
 export type ScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  courseId?: boolean
   branchId?: boolean
   level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Schedule$entriesArgs<ExtArgs>
+  parisCourses?: boolean | Prisma.Schedule$parisCoursesArgs<ExtArgs>
+  hocheCourses?: boolean | Prisma.Schedule$hocheCoursesArgs<ExtArgs>
   _count?: boolean | Prisma.ScheduleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
 export type ScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  courseId?: boolean
   branchId?: boolean
   level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
 export type ScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  courseId?: boolean
   branchId?: boolean
   level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
 export type ScheduleSelectScalar = {
   id?: boolean
-  courseId?: boolean
   branchId?: boolean
   level?: boolean
   description?: boolean
@@ -789,32 +828,31 @@ export type ScheduleSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "branchId" | "level" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
+export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "branchId" | "level" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
 export type ScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Schedule$entriesArgs<ExtArgs>
+  parisCourses?: boolean | Prisma.Schedule$parisCoursesArgs<ExtArgs>
+  hocheCourses?: boolean | Prisma.Schedule$hocheCoursesArgs<ExtArgs>
   _count?: boolean | Prisma.ScheduleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ScheduleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }
 export type ScheduleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }
 
 export type $SchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Schedule"
   objects: {
-    course: Prisma.$CoursePayload<ExtArgs>
     branch: Prisma.$BranchPayload<ExtArgs>
     entries: Prisma.$ScheduleEntryPayload<ExtArgs>[]
+    parisCourses: Prisma.$CoursePayload<ExtArgs>[]
+    hocheCourses: Prisma.$CoursePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    courseId: string
     branchId: string
     level: string | null
     description: string | null
@@ -1214,9 +1252,10 @@ readonly fields: ScheduleFieldRefs;
  */
 export interface Prisma__ScheduleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   entries<T extends Prisma.Schedule$entriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScheduleEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  parisCourses<T extends Prisma.Schedule$parisCoursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$parisCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hocheCourses<T extends Prisma.Schedule$hocheCoursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$hocheCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1247,7 +1286,6 @@ export interface Prisma__ScheduleClient<T, Null = never, ExtArgs extends runtime
  */
 export interface ScheduleFieldRefs {
   readonly id: Prisma.FieldRef<"Schedule", 'String'>
-  readonly courseId: Prisma.FieldRef<"Schedule", 'String'>
   readonly branchId: Prisma.FieldRef<"Schedule", 'String'>
   readonly level: Prisma.FieldRef<"Schedule", 'String'>
   readonly description: Prisma.FieldRef<"Schedule", 'String'>
@@ -1670,6 +1708,54 @@ export type Schedule$entriesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ScheduleEntryScalarFieldEnum | Prisma.ScheduleEntryScalarFieldEnum[]
+}
+
+/**
+ * Schedule.parisCourses
+ */
+export type Schedule$parisCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Course
+   */
+  select?: Prisma.CourseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Course
+   */
+  omit?: Prisma.CourseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseInclude<ExtArgs> | null
+  where?: Prisma.CourseWhereInput
+  orderBy?: Prisma.CourseOrderByWithRelationInput | Prisma.CourseOrderByWithRelationInput[]
+  cursor?: Prisma.CourseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
+}
+
+/**
+ * Schedule.hocheCourses
+ */
+export type Schedule$hocheCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Course
+   */
+  select?: Prisma.CourseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Course
+   */
+  omit?: Prisma.CourseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseInclude<ExtArgs> | null
+  where?: Prisma.CourseWhereInput
+  orderBy?: Prisma.CourseOrderByWithRelationInput | Prisma.CourseOrderByWithRelationInput[]
+  cursor?: Prisma.CourseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
 }
 
 /**

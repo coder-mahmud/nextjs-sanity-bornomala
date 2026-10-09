@@ -1,5 +1,6 @@
+// app/admin/courses/create/page.tsx
 import { prisma } from "@/lib/prisma";
-import CreateCourseForm from "./CreateCourseForm";
+import CreateCourseForm, { ScheduleOption } from "./CreateCourseForm";
 
 const CreateCoursePage = async () => {
   const instructors = await prisma.instructor.findMany({
@@ -12,6 +13,22 @@ const CreateCoursePage = async () => {
       name: "asc",
     },
   });
+
+  const schedules = (await prisma.schedule.findMany({
+    select: {
+      id: true,
+      level: true,
+      description: true,
+      branch: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })) as unknown as ScheduleOption[];
 
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
@@ -27,6 +44,7 @@ const CreateCoursePage = async () => {
 
       <CreateCourseForm
         instructors={instructors}
+        schedules={schedules}
         cloudName={cloudName}
         uploadPreset={uploadPreset}
       />
