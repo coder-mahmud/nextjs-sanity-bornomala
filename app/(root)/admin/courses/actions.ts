@@ -274,3 +274,221 @@ export async function deleteCourse(courseId: string) {
     };
   }
 }
+
+
+/* ==========================================
+   LESSON ACTIONS (LINKED TO BATCH & QUIZ)
+   ========================================== */
+
+   export async function createLesson(
+    _previousState: {
+      status: "success" | "error";
+      message: string;
+    } | null,
+    formData: FormData
+  ) {
+    try {
+      await requireAdmin();
+  
+      const title = getString(formData, "title");
+      const rawSlug = getString(formData, "slug");
+      const description = getNullableString(formData, "description");
+      const notes = getNullableString(formData, "notes");
+      const videoUrl = getNullableString(formData, "videoUrl");
+      const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
+      const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
+      const batchId = getNullableString(formData, "batchId");
+      const quizId = getNullableString(formData, "quizId");
+      const isPreview = formData.get("isPreview") === "on";
+  
+      if (!title) {
+        return { status: "error" as const, message: "Lesson title is required" };
+      }
+  
+      if (!batchId) {
+        return { status: "error" as const, message: "A batch must be assigned" };
+      }
+  
+      const slug = await createUniqueLessonSlug(rawSlug || title);
+  
+      let requestedOrder = getNullableNumber(formData, "order");
+  
+      if (requestedOrder === null) {
+        const maxLesson = await prisma.lesson.findFirst({
+          where: { batchId },
+          orderBy: { order: "desc" },
+          select: { order: true },
+        });
+        requestedOrder = (maxLesson?.order ?? 0) + 1;
+      } else {
+        await prisma.lesson.updateMany({
+          where: {
+            batchId,
+            order: { gte: requestedOrder },
+          },
+          data: {
+            order: { increment: 1 },
+          },
+        });
+      }
+  
+      const parseValidDate = (dateStr: string | null) => {
+        if (!dateStr || dateStr.trim() === "") return null;
+        const parsed = new Date(dateStr);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      };
+  
+      const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
+      const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
+  
+      const attachmentsRaw = formData.get("attachments");
+      let attachments: string[] = [];
+      if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
+        try {
+          attachments = JSON.parse(attachmentsRaw);
+        } catch (e) {
+          attachments = [];
+        }
+      }
+  
+      await prisma.lesson.create({
+        data: {
+          title,
+          slug,
+          description,
+          notes,
+          videoUrl,
+          bunnyLibraryId,
+          bunnyVideoId,
+          order: requestedOrder,
+          isPreview,
+          startsAt,
+          endsAt,
+          attachments,
+          batch: { connect: { id: batchId } },
+          quiz: quizId ? { connect: { id: quizId } } : undefined,
+        },
+      });
+  
+      revalidatePath("/admin/courses");
+  
+      return { status: "success" as const, message: "Lesson created successfully" };
+    } catch (error) {
+      console.error("Create lesson error:", error);
+      return {
+        status: "error" as const,
+        message: error instanceof Error ? error.message : "Failed to create lesson",
+      };
+    }
+  }
+  
+  export async function updateLesson(
+    lessonId: string,
+    _previousState: {
+      status: "success" | "error";
+      message: string;
+    } | null,
+    formData: FormData
+  ) {
+    try {
+      await requireAdmin();
+  
+      const title = getString(formData, "title");
+      const slug = getString(formData, "slug");
+      const description = getNullableString(formData, "description");
+      const notes = getNullableString(formData, "notes");
+      const videoUrl = getNullableString(formData, "videoUrl");
+      const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
+      const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
+      const batchId = getNullableString(formData, "batchId");
+      const quizId = getNullableString(formData, "quizId");
+      const order = getNullableNumber(formData, "order") ?? 1;
+      const isPreview = formData.get("isPreview") === "on";
+  
+      const parseValidDate = (dateStr: string | null) => {
+        if (!dateStr || dateStr.trim() === "") return null;
+        const parsed = new Date(dateStr);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      };
+  
+      const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
+      const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
+  
+      const attachmentsRaw = formData.get("attachments");
+      let attachments: string[] = [];
+      if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
+        try {
+          attachments = JSON.parse(attachmentsRaw);
+        } catch (e) {
+          attachments = [];
+        }
+      }
+  
+      if (!title) {
+        return { status: "error" as const, message: "Lesson title is required" };
+      }
+  
+      const lesson = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+      });
+  
+      if (!lesson) {
+        return { status: "error" as const, message: "Lesson not found" };
+      }
+  
+      await prisma.lesson.update({
+        where: { id: lessonId },
+        data: {
+          title,
+          slug: slug || lesson.slug,
+          description,
+          notes,
+          videoUrl,
+          bunnyLibraryId,
+          bunnyVideoId,
+          order,
+          isPreview,
+          startsAt,
+          endsAt,
+          attachments,
+          batch: batchId
+            ? { connect: { id: batchId } }
+            : { disconnect: true },
+          quiz: quizId
+            ? { connect: { id: quizId } }
+            : { disconnect: true },
+        },
+      });
+  
+      revalidatePath("/admin/courses");
+  
+      return { status: "success" as const, message: "Lesson updated successfully" };
+    } catch (error) {
+      console.error("Prisma lesson update error:", error);
+      return {
+        status: "error" as const,
+        message:
+          error instanceof Error ? error.message : "Failed to update lesson",
+      };
+    }
+  }
+  
+  export async function deleteLesson(lessonId: string) {
+    try {
+      await requireAdmin();
+  
+      await prisma.lesson.delete({
+        where: { id: lessonId },
+      });
+  
+      revalidatePath("/admin/courses");
+  
+      return { status: "success" as const, message: "Lesson deleted successfully" };
+    } catch (error) {
+      console.error("Delete lesson error:", error);
+      return {
+        status: "error" as const,
+        message: error instanceof Error ? error.message : "Failed to delete lesson",
+      };
+    }
+  }

@@ -105,6 +105,8 @@ export default function EditCourseForm({
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
+  // console.log("Course data:", course)
+
   const initialThumbnail =
     course.thumbnail || course.imageUrl || course.image || "";
 
@@ -256,23 +258,36 @@ export default function EditCourseForm({
       */
 
       toast.promise(
-        updateCourse(course.id, payload).then((res) => {
+        async () => {
+          const res = await updateCourse(course.id, payload);
           if (!res?.success) {
             throw new Error(res?.message || "Failed to update course.");
           }
-          router.refresh();
           return res;
-        }),
+        },
         {
           pending: "Updating course...",
           success: "Course updated successfully!",
           error: {
             render({ data }: { data: any }) {
+              // Extract message safely whether it's an Error object or string
               return data?.message || "Failed to update course.";
             },
           },
         }
-      );
+      )
+      .then((res) => {
+        if (res?.success) {
+          router.push(`/admin/courses/${course.id}`);
+          router.refresh();
+        }
+      })
+      .catch((err) => {
+        console.error("Course update error:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
 
 
 

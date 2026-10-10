@@ -5,6 +5,7 @@ import { AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { deleteLesson } from "@/app/(root)/admin/courses/actions";
 
+
 interface DeleteLessonModalProps {
   isOpen: boolean;
   onClose: () => void;

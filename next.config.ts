@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         hostname: 'admin.ecolebornomala.com',
         pathname: '/**',
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
     ],
     dangerouslyAllowLocalIP: true,
   },
