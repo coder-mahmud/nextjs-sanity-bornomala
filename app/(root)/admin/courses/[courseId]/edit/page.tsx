@@ -22,6 +22,13 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
 
   const course = await prisma.course.findUnique({
     where: { id: courseId },
+    include: {
+      cards: {
+        orderBy: {
+          order: "asc",
+        },
+      },
+    },
   });
 
   if (!course) {

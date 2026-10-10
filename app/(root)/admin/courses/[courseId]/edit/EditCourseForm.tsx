@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { updateCourse } from "../../actions";
@@ -9,6 +9,7 @@ import { Upload, Trash2, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import CloudinaryUpload from "@/lib/CloudinaryUpload";
 
 interface InstructorOption {
   id: string;
@@ -27,6 +28,13 @@ export interface ScheduleOption {
 interface FAQItem {
   question: string;
   answer: string;
+}
+
+interface CourseCardItem {
+  title: string;
+  description: string;
+  image: string;
+  order: number;
 }
 
 interface EditCourseFormProps {
@@ -50,7 +58,6 @@ function TiptapEditor({
     },
   });
 
-  // Ensure content syncs if parent updates value dynamically
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value);
@@ -104,8 +111,7 @@ export default function EditCourseForm({
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-
-  // console.log("Course data:", course)
+  const formRef = useRef<HTMLFormElement>(null);
 
   const initialThumbnail =
     course.thumbnail || course.imageUrl || course.image || "";
@@ -117,6 +123,17 @@ export default function EditCourseForm({
   const [faqs, setFaqs] = useState<FAQItem[]>(
     initialFaqs.length > 0 ? initialFaqs : [{ question: "", answer: "" }]
   );
+
+  const initialCards: CourseCardItem[] = Array.isArray(course.cards)
+    ? course.cards.map((c: any, index: number) => ({
+        title: c.title || "",
+        description: c.description || "",
+        image: c.image || "",
+        order: c.order ?? index,
+      }))
+    : [];
+
+  const [cards, setCards] = useState<CourseCardItem[]>(initialCards);
 
   const [formData, setFormData] = useState({
     title: course.title || "",
@@ -163,6 +180,24 @@ export default function EditCourseForm({
     const updated = [...faqs];
     updated[index][field] = value;
     setFaqs(updated);
+  };
+
+  const handleAddCard = () => {
+    setCards([...cards, { title: "", description: "", image: "", order: cards.length }]);
+  };
+
+  const handleRemoveCard = (index: number) => {
+    setCards(cards.filter((_, i) => i !== index));
+  };
+
+  const handleCardChange = (
+    index: number,
+    field: keyof CourseCardItem,
+    value: string | number
+  ) => {
+    const updated = [...cards];
+    updated[index] = { ...updated[index], [field]: value };
+    setCards(updated);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -237,65 +272,59 @@ export default function EditCourseForm({
     const filteredFaqs = faqs.filter((f) => f.question.trim());
     payload.append("faqs", JSON.stringify(filteredFaqs));
 
-    /*
-    toast
-      .promise(updateCourse(course.id, payload), {
+    // Extract dynamic Cloudinary images from hidden inputs for course cards
+    const processedCards = cards.map((card, index) => {
+      let imageUrl = card.image;
+      if (formRef.current) {
+        const hiddenInput = formRef.current.querySelector(
+          `input[name="cardImage_${index}"]`
+        ) as HTMLInputElement;
+        if (hiddenInput && hiddenInput.value) {
+          imageUrl = hiddenInput.value;
+        }
+      }
+      return {
+        ...card,
+        image: imageUrl,
+      };
+    });
+
+    payload.append("cards", JSON.stringify(processedCards.filter((c) => c.title.trim())));
+
+    toast.promise(
+      async () => {
+        const res = await updateCourse(course.id, payload);
+        if (!res?.success) {
+          throw new Error(res?.message || "Failed to update course.");
+        }
+        return res;
+      },
+      {
         pending: "Updating course...",
         success: "Course updated successfully!",
-        error: "Failed to update course.",
-      })
-      .then((res) => {
-        if (res?.success) {
-          router.refresh();
-        }
-      })
-      .catch((err) => {
-        console.error("Course update error:", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-      */
-
-      toast.promise(
-        async () => {
-          const res = await updateCourse(course.id, payload);
-          if (!res?.success) {
-            throw new Error(res?.message || "Failed to update course.");
-          }
-          return res;
-        },
-        {
-          pending: "Updating course...",
-          success: "Course updated successfully!",
-          error: {
-            render({ data }: { data: any }) {
-              // Extract message safely whether it's an Error object or string
-              return data?.message || "Failed to update course.";
-            },
+        error: {
+          render({ data }: { data: any }) {
+            return data?.message || "Failed to update course.";
           },
-        }
-      )
-      .then((res) => {
-        if (res?.success) {
-          router.push(`/admin/courses/${course.id}`);
-          router.refresh();
-        }
-      })
-      .catch((err) => {
-        console.error("Course update error:", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-
-
-
+        },
+      }
+    )
+    .then((res) => {
+      if (res?.success) {
+        router.push(`/admin/courses/${course.id}`);
+        router.refresh();
+      }
+    })
+    .catch((err) => {
+      console.error("Course update error:", err);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       {/* Title & Slug */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
@@ -452,7 +481,6 @@ export default function EditCourseForm({
                 {sched.level ? `${sched.level}` : ""}
               </option>
             ))}
-
           </select>
         </div>
 
@@ -469,7 +497,6 @@ export default function EditCourseForm({
                 {sched.level ? `${sched.level}` : ""}
               </option>
             ))}
-
           </select>
         </div>
       </div>
@@ -538,6 +565,73 @@ export default function EditCourseForm({
           </select>
         </div>
       )}
+
+      {/* Course Cards Section */}
+      <div className="border-t border-gray-200 pt-6">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Course Cards</h3>
+        <div className="space-y-4">
+          {cards.map((card, index) => (
+            <div key={index} className="p-4 border border-gray-200 rounded-xl space-y-4 bg-gray-50">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-medium text-gray-700">Card #{index + 1}</span>
+                {cards.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveCard(index)}
+                    className="text-xs text-red-600 hover:underline cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <input
+                  type="text"
+                  value={card.title}
+                  onChange={(e) => handleCardChange(index, "title", e.target.value)}
+                  placeholder="Card Title *"
+                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+                />
+                <input
+                  type="number"
+                  value={card.order}
+                  onChange={(e) => handleCardChange(index, "order", parseInt(e.target.value) || 0)}
+                  placeholder="Display Order"
+                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+                />
+              </div>
+
+              {/* Cloudinary Upload for Card Image */}
+              <div>
+                <CloudinaryUpload
+                  name={`cardImage_${index}`}
+                  label="Card Image"
+                  defaultValue={card.image}
+                  cloudName={cloudName}
+                  uploadPreset={uploadPreset}
+                  folder="course-cards"
+                />
+              </div>
+
+              <textarea
+                value={card.description}
+                onChange={(e) => handleCardChange(index, "description", e.target.value)}
+                placeholder="Card Description"
+                rows={2}
+                className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddCard}
+            className="text-xs text-blue-600 font-medium hover:underline cursor-pointer"
+          >
+            + Add Course Card
+          </button>
+        </div>
+      </div>
 
       {/* Course FAQs Section with Tiptap */}
       <div className="border-t border-gray-200 pt-6">

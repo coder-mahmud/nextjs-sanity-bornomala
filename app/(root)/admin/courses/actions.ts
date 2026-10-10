@@ -85,78 +85,10 @@ async function createUniqueLessonSlug(title: string) {
    COURSE ACTIONS
    ========================================== */
 
-export async function createCourse(formData: FormData) {
-  await requireAdmin();
-
-  const title = getString(formData, "title");
-  const tagLine = getNullableString(formData, "tagLine");
-  const shortDescription = getNullableString(formData, "shortDescription");
-  const description = getNullableString(formData, "description");
-  const thumbnail = getNullableString(formData, "thumbnail");
-  const price = Number(formData.get("price") || 0);
-  const currency = getString(formData, "currency") || "EUR";
-  const level = getNullableString(formData, "level");
-  const duration = getNullableString(formData, "duration");
-  const numberOfStudents = getNullableString(formData, "numberOfStudents");
-  const rating = getNullableString(formData, "rating");
-  const instructorId = getNullableString(formData, "instructorId") || undefined;
-  const parisScheduleId = getNullableString(formData, "parisScheduleId") || undefined;
-  const hocheScheduleId = getNullableString(formData, "hocheScheduleId") || undefined;
-  const order = getNullableNumber(formData, "order");
-  const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
-
-  const characteristics = getStringArray(formData, "characteristics");
-  const targetAudience = getStringArray(formData, "targetAudience");
-  const faqs = getJsonArray(formData, "faqs");
-
-  if (!title) {
-    throw new Error("Title is required");
-  }
-
-  const baseSlug = slugify(title) || "course";
-  let slug = baseSlug;
-  let counter = 1;
-
-  while (await prisma.course.findUnique({ where: { slug } })) {
-    slug = `${baseSlug}-${counter}`;
-    counter++;
-  }
-
-  const course = await prisma.course.create({
-    data: {
-      title,
-      slug,
-      tagLine,
-      shortDescription,
-      description,
-      thumbnail,
-      price,
-      currency,
-      level,
-      duration,
-      numberOfStudents,
-      rating,
-      instructorId,
-      parisScheduleId,
-      hocheScheduleId,
-      order,
-      status,
-      characteristics,
-      targetAudience,
-      faqs: faqs ?? undefined,
-    },
-  });
-
-  revalidatePath("/admin/courses");
-  return { success: true, courseId: course.id };
-}
-
-export async function updateCourse(courseId: string, formData: FormData) {
-  try {
+   export async function createCourse(formData: FormData) {
     await requireAdmin();
-
+  
     const title = getString(formData, "title");
-    const rawSlug = getString(formData, "slug");
     const tagLine = getNullableString(formData, "tagLine");
     const shortDescription = getNullableString(formData, "shortDescription");
     const description = getNullableString(formData, "description");
@@ -167,42 +99,34 @@ export async function updateCourse(courseId: string, formData: FormData) {
     const duration = getNullableString(formData, "duration");
     const numberOfStudents = getNullableString(formData, "numberOfStudents");
     const rating = getNullableString(formData, "rating");
-    const instructorId = getNullableString(formData, "instructorId");
-    const parisScheduleId = getNullableString(formData, "parisScheduleId");
-    const hocheScheduleId = getNullableString(formData, "hocheScheduleId");
+    const instructorId = getNullableString(formData, "instructorId") || undefined;
+    const parisScheduleId = getNullableString(formData, "parisScheduleId") || undefined;
+    const hocheScheduleId = getNullableString(formData, "hocheScheduleId") || undefined;
     const order = getNullableNumber(formData, "order");
     const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
-
+  
     const characteristics = getStringArray(formData, "characteristics");
     const targetAudience = getStringArray(formData, "targetAudience");
     const faqs = getJsonArray(formData, "faqs");
-
+    const cards = getJsonArray(formData, "cards");
+  
     if (!title) {
-      return { success: false, message: "Course title is required" };
+      throw new Error("Title is required");
     }
-
-    const formattedSlug = slugify(rawSlug || title) || "course";
-
-    // Check if another course already uses this slug
-    const existingCourseWithSlug = await prisma.course.findFirst({
-      where: {
-        slug: formattedSlug,
-        NOT: { id: courseId },
-      },
-    });
-
-    if (existingCourseWithSlug) {
-      return { 
-        success: false, 
-        message: `The slug "${formattedSlug}" is already taken by another course. Please choose a unique slug.` 
-      };
+  
+    const baseSlug = slugify(title) || "course";
+    let slug = baseSlug;
+    let counter = 1;
+  
+    while (await prisma.course.findUnique({ where: { slug } })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
     }
-
-    await prisma.course.update({
-      where: { id: courseId },
+  
+    const course = await prisma.course.create({
       data: {
         title,
-        slug: formattedSlug,
+        slug,
         tagLine,
         shortDescription,
         description,
@@ -213,38 +137,146 @@ export async function updateCourse(courseId: string, formData: FormData) {
         duration,
         numberOfStudents,
         rating,
-        instructor: instructorId
-          ? { connect: { id: instructorId } }
-          : { disconnect: true },
-        parisSchedule: parisScheduleId
-          ? { connect: { id: parisScheduleId } }
-          : { disconnect: true },
-        hocheSchedule: hocheScheduleId
-          ? { connect: { id: hocheScheduleId } }
-          : { disconnect: true },
+        instructorId,
+        parisScheduleId,
+        hocheScheduleId,
         order,
         status,
         characteristics,
         targetAudience,
         faqs: faqs ?? undefined,
+        cards:
+          cards && Array.isArray(cards) && cards.length > 0
+            ? {
+                create: cards.map((c: any, index: number) => ({
+                  title: c.title,
+                  description: c.description || null,
+                  image: c.image || null,
+                  order: Number(c.order) ?? index,
+                })),
+              }
+            : undefined,
       },
     });
-
+  
     revalidatePath("/admin/courses");
-    revalidatePath(`/admin/courses/${courseId}`);
-    revalidatePath(`/admin/courses/${courseId}/edit`);
-    revalidatePath("/courses");
-
-    return { success: true };
-  } catch (error) {
-    console.error("Course update error:", error);
-    return { 
-      success: false, 
-      message: error instanceof Error ? error.message : "Failed to update course." 
-    };
+    return { success: true, courseId: course.id };
   }
-}
 
+  export async function updateCourse(courseId: string, formData: FormData) {
+    try {
+      await requireAdmin();
+  
+      const title = getString(formData, "title");
+      const rawSlug = getString(formData, "slug");
+      const tagLine = getNullableString(formData, "tagLine");
+      const shortDescription = getNullableString(formData, "shortDescription");
+      const description = getNullableString(formData, "description");
+      const thumbnail = getNullableString(formData, "thumbnail");
+      const price = Number(formData.get("price") || 0);
+      const currency = getString(formData, "currency") || "EUR";
+      const level = getNullableString(formData, "level");
+      const duration = getNullableString(formData, "duration");
+      const numberOfStudents = getNullableString(formData, "numberOfStudents");
+      const rating = getNullableString(formData, "rating");
+      const instructorId = getNullableString(formData, "instructorId");
+      const parisScheduleId = getNullableString(formData, "parisScheduleId");
+      const hocheScheduleId = getNullableString(formData, "hocheScheduleId");
+      const order = getNullableNumber(formData, "order");
+      const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+  
+      const characteristics = getStringArray(formData, "characteristics");
+      const targetAudience = getStringArray(formData, "targetAudience");
+      const faqs = getJsonArray(formData, "faqs");
+      const cards = getJsonArray(formData, "cards");
+  
+      if (!title) {
+        return { success: false, message: "Course title is required" };
+      }
+  
+      const formattedSlug = slugify(rawSlug || title) || "course";
+  
+      // Check if another course already uses this slug
+      const existingCourseWithSlug = await prisma.course.findFirst({
+        where: {
+          slug: formattedSlug,
+          NOT: { id: courseId },
+        },
+      });
+  
+      if (existingCourseWithSlug) {
+        return { 
+          success: false, 
+          message: `The slug "${formattedSlug}" is already taken by another course. Please choose a unique slug.` 
+        };
+      }
+  
+      await prisma.$transaction(async (tx) => {
+        // Update course fields
+        await tx.course.update({
+          where: { id: courseId },
+          data: {
+            title,
+            slug: formattedSlug,
+            tagLine,
+            shortDescription,
+            description,
+            thumbnail,
+            price,
+            currency,
+            level,
+            duration,
+            numberOfStudents,
+            rating,
+            instructor: instructorId
+              ? { connect: { id: instructorId } }
+              : { disconnect: true },
+            parisSchedule: parisScheduleId
+              ? { connect: { id: parisScheduleId } }
+              : { disconnect: true },
+            hocheSchedule: hocheScheduleId
+              ? { connect: { id: hocheScheduleId } }
+              : { disconnect: true },
+            order,
+            status,
+            characteristics,
+            targetAudience,
+            faqs: faqs ?? undefined,
+          },
+        });
+  
+        // Refresh course cards: delete existing and create new ones
+        await tx.courseCard.deleteMany({
+          where: { courseId },
+        });
+  
+        if (cards && Array.isArray(cards) && cards.length > 0) {
+          await tx.courseCard.createMany({
+            data: cards.map((c: any, index: number) => ({
+              courseId,
+              title: c.title,
+              description: c.description || null,
+              image: c.image || null,
+              order: Number(c.order) ?? index,
+            })),
+          });
+        }
+      });
+  
+      revalidatePath("/admin/courses");
+      revalidatePath(`/admin/courses/${courseId}`);
+      revalidatePath(`/admin/courses/${courseId}/edit`);
+      revalidatePath("/courses");
+  
+      return { success: true };
+    } catch (error) {
+      console.error("Course update error:", error);
+      return { 
+        success: false, 
+        message: error instanceof Error ? error.message : "Failed to update course." 
+      };
+    }
+  }
 
 
 export async function deleteCourse(courseId: string) {

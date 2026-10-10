@@ -193,12 +193,9 @@ export default async function CoursePage({
                     <div className="space-y-1.5 pt-1">
                       {schedule.entries &&
                         schedule.entries.map((entry, dayIndex: number) => (
-                          <div key={dayIndex} className="text-xs bg-gray-50 p-2.5 rounded-md border border-gray-100 flex flex-col gap-0.5">
-                            <span className="font-semibold text-gray-800">{entry.day}</span>
-                            <span className="text-gray-600">{entry.time}</span>
-                            <span className="text-gray-500 text-[11px]">
-                              ক্লাস স্টার্ট: {entry.startingDate}
-                            </span>
+                          <div key={dayIndex} className="text-xs bg-gray-50 p-2.5 rounded-md border border-gray-100 flex flex-col ">
+                            <span className="font-semibold text-gray-800 text-sm">{entry.day}</span>
+                            <span className="text-gray-600 text-sm">{entry.time} | ক্লাস স্টার্ট: {entry.startingDate}</span>
                           </div>
                         ))}
                     </div>
