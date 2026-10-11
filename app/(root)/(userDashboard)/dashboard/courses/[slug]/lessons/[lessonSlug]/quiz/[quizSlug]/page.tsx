@@ -55,7 +55,7 @@ export default async function QuizDetailsPage({
   // 2. Fetch Lesson & Quiz details
   const lesson = await prisma.lesson.findUnique({
     where: { slug: lessonSlug },
-    select: { id: true, slug: true, title: true },
+    select: { id: true, slug: true, title: true, startsAt: true, endsAt: true },
   });
 
   if (!lesson) {
@@ -115,6 +115,29 @@ export default async function QuizDetailsPage({
     orderBy: { createdAt: "desc" },
   });
 
+  // France Time Zone Validation Logic (Europe/Paris)
+  const timeZone = "Europe/Paris";
+  
+  // Convert current server time and database dates into Paris wall-clock equivalent timestamps for accurate comparison
+  const nowParisTime = new Date(new Date().toLocaleString("en-US", { timeZone })).getTime();
+  const startTime = lesson.startsAt ? new Date(new Date(lesson.startsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
+  const endTime = lesson.endsAt ? new Date(new Date(lesson.endsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
+
+  const isBeforeStart = startTime !== null ? nowParisTime < startTime : false;
+  const isAfterEnd = endTime !== null ? nowParisTime > endTime : false;
+
+  const startsAt = lesson.startsAt ? new Date(lesson.startsAt) : null;
+  const endsAt = lesson.endsAt ? new Date(lesson.endsAt) : null;
+
+  // Helper to format date explicitly in France time zone
+  const formatFranceDate = (date: Date) => {
+    return date.toLocaleString("en-US", {
+      timeZone,
+      dateStyle: "medium",
+      timeStyle: "short",
+    }) + " (France Time)";
+  };
+
   return (
     <main className="bg-slate-50 min-h-screen py-12">
       <section className="container mx-auto px-4">
@@ -148,6 +171,16 @@ export default async function QuizDetailsPage({
               <p className="text-sm leading-6 text-slate-600">
                 {quiz.description || "No description provided for this quiz."}
               </p>
+
+              {(startsAt || endsAt) && (
+                <div className="rounded-2xl bg-indigo-50/50 border border-indigo-100 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-indigo-900">
+                  <div>
+                    <span className="font-semibold">Quiz Window: </span>
+                    {startsAt ? formatFranceDate(startsAt) : "Anytime"} {" → "}
+                    {endsAt ? formatFranceDate(endsAt) : "No strict deadline"}
+                  </div>
+                </div>
+              )}
 
               <div className="grid gap-4 sm:grid-cols-3 pt-4">
                 <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200">
@@ -269,6 +302,62 @@ export default async function QuizDetailsPage({
                     >
                       Continue Attempt
                     </Link>
+
+                    <Link
+                      href={`/dashboard/courses/${slug}/lessons/${lessonSlug}`}
+                      className="w-full text-center border border-slate-300 bg-white text-slate-700 px-6 py-3 rounded-xl text-xs font-semibold hover:bg-slate-50 transition"
+                    >
+                      Back to Lesson
+                    </Link>
+                  </div>
+                </>
+              ) : isBeforeStart ? (
+                <>
+                  <h2 className="text-xl font-bold text-slate-900">Quiz Not Started Yet</h2>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    This quiz is scheduled to start at a later time. Please check back when it opens.
+                  </p>
+
+                  <div className="space-y-2 rounded-2xl bg-blue-50 p-4 border border-blue-200 text-xs text-blue-900">
+                    <span className="font-semibold block">Starts At:</span>
+                    <span>{startsAt ? formatFranceDate(startsAt) : ""}</span>
+                  </div>
+
+                  <div className="flex flex-col gap-3 pt-2">
+                    <button
+                      disabled
+                      className="w-full text-center bg-slate-200 text-slate-400 px-6 py-3 rounded-xl text-xs font-semibold cursor-not-allowed"
+                    >
+                      Quiz Locked
+                    </button>
+
+                    <Link
+                      href={`/dashboard/courses/${slug}/lessons/${lessonSlug}`}
+                      className="w-full text-center border border-slate-300 bg-white text-slate-700 px-6 py-3 rounded-xl text-xs font-semibold hover:bg-slate-50 transition"
+                    >
+                      Back to Lesson
+                    </Link>
+                  </div>
+                </>
+              ) : isAfterEnd ? (
+                <>
+                  <h2 className="text-xl font-bold text-slate-900">Quiz Closed</h2>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    The submission time window for this quiz has ended. New attempts are no longer permitted.
+                  </p>
+
+                  <div className="space-y-2 rounded-2xl bg-red-50 p-4 border border-red-200 text-xs text-red-900">
+                    <span className="font-semibold block">Ended At:</span>
+                    <span>{endsAt ? formatFranceDate(endsAt) : ""}</span>
+                  </div>
+
+                  <div className="flex flex-col gap-3 pt-2">
+                    <button
+                      disabled
+                      className="w-full text-center bg-slate-200 text-slate-400 px-6 py-3 rounded-xl text-xs font-semibold cursor-not-allowed"
+                    >
+                      Quiz Expired
+                    </button>
 
                     <Link
                       href={`/dashboard/courses/${slug}/lessons/${lessonSlug}`}

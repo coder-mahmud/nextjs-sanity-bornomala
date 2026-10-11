@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import UserSidebar from "@/components/user/UserSidebar";
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-// import UserSidebar from "@/components/user/UserSidebar";
 
 export default async function DashboardLayout({
   children,
@@ -10,7 +10,7 @@ export default async function DashboardLayout({
 }>) {
   const session = await auth();
 
-  if (!session) {
+  if (!session?.user?.email) {
     redirect("/login");
   }
 
@@ -19,6 +19,17 @@ export default async function DashboardLayout({
     session?.user?.role === "SUPERADMIN"
   ) {
     redirect("/admin/dashboard");
+  }
+
+  // Fetch the latest user status from the database
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { isActive: true },
+  });
+
+  // If the user does not exist or their account has been disabled, redirect them away
+  if (!user || user.isActive === false) {
+    redirect("/login?error=account-disabled");
   }
 
   return (

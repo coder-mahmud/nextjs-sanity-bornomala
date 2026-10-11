@@ -49,7 +49,12 @@ export default async function StartQuizPage({ params }: StartQuizPageProps) {
     redirect(`/dashboard/courses/${slug}`);
   }
 
-  // 2. Fetch Quiz metadata safely
+  // 2. Fetch Lesson & Quiz metadata safely (including schedule windows)
+  const lesson = await prisma.lesson.findUnique({
+    where: { slug: lessonSlug },
+    select: { startsAt: true, endsAt: true },
+  });
+
   const quiz = await prisma.quiz.findUnique({
     where: { slug: quizSlug },
     select: { id: true, status: true },
@@ -69,18 +74,36 @@ export default async function StartQuizPage({ params }: StartQuizPageProps) {
     orderBy: { createdAt: "desc" },
   });
 
+  // If an existing attempt is already finished/submitted, redirect to result
+  if (
+    existingAttempt &&
+    (existingAttempt.status === AttemptStatus.SUBMITTED ||
+     existingAttempt.status === AttemptStatus.EVALUATED)
+  ) {
+    redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/result/${existingAttempt.id}`);
+  }
+
+  // If an active attempt exists, they can continue even if the window just closed, 
+  // but if NO attempt exists, we must enforce the France time window guard.
+  if (!existingAttempt) {
+    const timeZone = "Europe/Paris";
+    const nowParisTime = new Date(new Date().toLocaleString("en-US", { timeZone })).getTime();
+    const startTime = lesson?.startsAt ? new Date(new Date(lesson.startsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
+    const endTime = lesson?.endsAt ? new Date(new Date(lesson.endsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
+
+    const isBeforeStart = startTime !== null ? nowParisTime < startTime : false;
+    const isAfterEnd = endTime !== null ? nowParisTime > endTime : false;
+
+    // Block starting a new attempt outside the allowed France time window
+    if (isBeforeStart || isAfterEnd) {
+      redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}`);
+    }
+  }
+
   let attemptId: string;
 
   if (existingAttempt) {
-    // Check against available enum values: SUBMITTED or EVALUATED means finished/completed
-    if (
-      existingAttempt.status === AttemptStatus.SUBMITTED ||
-      existingAttempt.status === AttemptStatus.EVALUATED
-    ) {
-      redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/result/${existingAttempt.id}`);
-    } else {
-      redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/attempt/${existingAttempt.id}`);
-    }
+    redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/attempt/${existingAttempt.id}`);
   }
 
   // Fetch questions separately if no attempt exists

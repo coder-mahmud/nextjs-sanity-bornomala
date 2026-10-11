@@ -84,7 +84,7 @@ export default async function CoursesPage() {
             href={`/dashboard/courses/${course.slug}`}
             className="group rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition"
           >
-            <div className="h-40 w-full overflow-hidden rounded-xl bg-gray-100">
+            <div className="h-40 w-full overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 to-gray-800">
               {course.thumbnail ? (
                 <img
                   src={course.thumbnail}
@@ -92,8 +92,10 @@ export default async function CoursesPage() {
                   className="h-full w-full object-cover group-hover:scale-105 transition-transform"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-gray-400">
-                  No Image
+                <div className="flex h-full w-full items-center justify-center p-6 text-center">
+                  <h3 className="text-xl font-bold tracking-tight text-white group-hover:scale-105 transition-transform line-clamp-3">
+                    {course.title}
+                  </h3>
                 </div>
               )}
             </div>

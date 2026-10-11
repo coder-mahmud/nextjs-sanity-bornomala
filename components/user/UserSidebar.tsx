@@ -21,16 +21,16 @@ const menuItems = [
     href: "/dashboard",
     icon: LayoutDashboard,
   },
-  {
-    label: "My Quizzes",
-    href: "/dashboard/quizzes",
-    icon: BadgeQuestionMark,
-  },
-  {
-    label: "Results",
-    href: "/dashboard/results",
-    icon: ClipboardCheck,
-  },
+  // {
+  //   label: "My Quizzes",
+  //   href: "/dashboard/quizzes",
+  //   icon: BadgeQuestionMark,
+  // },
+  // {
+  //   label: "Results",
+  //   href: "/dashboard/results",
+  //   icon: ClipboardCheck,
+  // },
   {
     label: "My Courses",
     href: "/dashboard/courses",
@@ -46,11 +46,11 @@ const menuItems = [
     href: "/dashboard/profile",
     icon: User,
   },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
+  // {
+  //   label: "Settings",
+  //   href: "/dashboard/settings",
+  //   icon: Settings,
+  // },
 ];
 
 export default function UserSidebar() {

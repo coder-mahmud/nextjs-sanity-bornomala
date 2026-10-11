@@ -22,6 +22,11 @@ const menuItems = [
     icon: Users,
   },
   {
+    label: "Students",
+    href: "/admin/students",
+    icon: Users,
+  },
+  {
     label: "Branches",
     href: "/admin/branches",
     icon: Building2,

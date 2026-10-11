@@ -6,19 +6,14 @@ import { Prisma } from "@/prisma/generated/prisma/client";
 
 type UserWithDashboardData = Prisma.UserGetPayload<{
   include: {
-    quizAccesses: {
+    courseAccesses: {
       include: {
-        quiz: true;
-      };
-    };
-    quizAttempts: {
-      include: {
-        quiz: true;
+        course: true;
       };
     };
     payments: {
       include: {
-        quiz: true;
+        course: true;
       };
     };
   };
@@ -36,25 +31,17 @@ const UserDashboardPage = async () => {
       email: session.user.email,
     },
     include: {
-      quizAccesses: {
+      courseAccesses: {
         include: {
-          quiz: true,
+          course: true,
         },
         orderBy: {
           grantedAt: "desc",
         },
       },
-      quizAttempts: {
-        include: {
-          quiz: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
       payments: {
         include: {
-          quiz: true,
+          course: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -67,79 +54,80 @@ const UserDashboardPage = async () => {
     redirect("/login");
   }
 
-  const totalQuizzes = user.quizAccesses.length;
-  const totalAttempts = user.quizAttempts.length;
-  const passedAttempts = user.quizAttempts.filter(
-    (attempt: UserWithDashboardData["quizAttempts"][number]) =>
-      attempt.passed === true
-  ).length;
+  const now = new Date();
+  
+  // Filter active/non-expired course accesses
+  const activeCourseAccesses = user.courseAccesses.filter(
+    (access) => !access.expiresAt || new Date(access.expiresAt) > now
+  );
 
-  const latestAttempts = user.quizAttempts.slice(0, 5);
-  const availableQuizzes = user.quizAccesses.slice(0, 6);
+  const totalCourses = activeCourseAccesses.length;
+  const totalPayments = user.payments.length;
+  const completedPayments = user.payments.filter((p) => p.status === "CAPTURED" || p.status === "APPROVED").length;
+
+  const enrolledCourses = activeCourseAccesses.slice(0, 6);
+  const recentPayments = user.payments.slice(0, 5);
 
   return (
-    <section className="min-h-[50vh]">
-      <div className="container">
+    <section className="min-h-[50vh] bg-slate-50 py-10">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
             Welcome back, {user.name || "Student"}
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            View your quizzes, attempts, results, and payment access.
+            Manage your enrolled courses, active learning access, and transaction history.
           </p>
         </div>
 
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <DashboardCard title="Available Quizzes" value={totalQuizzes} />
-          <DashboardCard title="Total Attempts" value={totalAttempts} />
-          <DashboardCard title="Passed Exams" value={passedAttempts} />
-          <DashboardCard
-            title="Payments"
-            value={user.payments.length}
-          />
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <DashboardCard title="Enrolled Courses" value={totalCourses} />
+          <DashboardCard title="Total Transactions" value={totalPayments} />
+          <DashboardCard title="Successful Payments" value={completedPayments} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">
-                My Quizzes
+          {/* Enrolled Courses Section */}
+          <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">
+                My Courses
               </h2>
               <Link
-                href="/quizzes"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                href="/dashboard/courses"
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700"
               >
-                Browse quizzes
+                View all courses →
               </Link>
             </div>
 
-            {availableQuizzes.length === 0 ? (
-              <EmptyState message="You do not have access to any quiz yet." />
+            {enrolledCourses.length === 0 ? (
+              <EmptyState message="You do not have access to any courses yet." actionUrl="/courses" actionText="Browse Courses" />
             ) : (
               <div className="space-y-4">
-                {availableQuizzes.map((access) => (
+                {enrolledCourses.map((access) => (
                   <div
                     key={access.id}
-                    className="rounded-xl border border-gray-100 p-4"
+                    className="rounded-2xl border border-gray-100 bg-gray-50/50 p-4 transition hover:bg-gray-50"
                   >
                     <h3 className="font-semibold text-gray-900">
-                      {access.quiz.title}
+                      {access.course.title}
                     </h3>
 
-                    <p className="mt-1 line-clamp-2 text-sm text-gray-500">
-                      {access.quiz.description || "No description available."}
+                    <p className="mt-1 line-clamp-2 text-xs text-gray-500">
+                      {access.course.shortDescription || access.course.description || "No description available."}
                     </p>
 
-                    <div className="mt-3 flex items-center justify-between gap-3">
-                      <span className="text-xs text-gray-500">
-                        Duration: {access.quiz.durationMinutes} mins
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <span className="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                        Access Active
                       </span>
 
                       <Link
-                        href={`/quizzes/${access.quiz.slug}`}
-                        className="rounded-lg bg-gray-900 px-3 py-2 text-xs font-medium text-white hover:bg-gray-800"
+                        href={`/dashboard/courses/${access.course.slug}`}
+                        className="rounded-xl bg-gray-900 px-4 py-2 text-xs font-semibold text-white hover:bg-gray-800 transition"
                       >
-                        Start Quiz
+                        Go to Course
                       </Link>
                     </div>
                   </div>
@@ -148,69 +136,55 @@ const UserDashboardPage = async () => {
             )}
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Recent Results
+          {/* Payment & Transaction History Section */}
+          <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">
+                Recent Payments
               </h2>
-              <Link
-                href="/dashboard/results"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
-              >
-                View all
-              </Link>
+              <span className="text-xs font-medium text-gray-400">
+                Latest transactions
+              </span>
             </div>
 
-            {latestAttempts.length === 0 ? (
-              <EmptyState message="You have not taken any quiz yet." />
+            {recentPayments.length === 0 ? (
+              <EmptyState message="No payment records found." />
             ) : (
               <div className="space-y-4">
-                {latestAttempts.map((attempt) => (
+                {recentPayments.map((payment) => (
                   <div
-                    key={attempt.id}
-                    className="rounded-xl border border-gray-100 p-4"
+                    key={payment.id}
+                    className="rounded-2xl border border-gray-100 bg-gray-50/50 p-4"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-semibold text-gray-900">
-                          {attempt.quiz.title}
+                        <h3 className="font-semibold text-gray-900 text-sm">
+                          {payment.course?.title || "Course Enrollment"}
                         </h3>
-
-                        <p className="mt-1 text-sm text-gray-500">
-                          Status: {attempt.status}
+                        <p className="mt-0.5 text-xs text-gray-400 uppercase tracking-wide">
+                          ID: {payment.id}
                         </p>
                       </div>
 
-                      {attempt.percentage !== null && (
-                        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-                          {attempt.percentage?.toFixed(0)}%
-                        </span>
-                      )}
+                      <span className="text-sm font-bold text-gray-900">
+                        {payment.amount.toString()} {payment.currency}
+                      </span>
                     </div>
 
-                    <div className="mt-3 flex items-center justify-between">
-                      <span
-                        className={`text-sm font-medium ${
-                          attempt.passed
-                            ? "text-green-600"
-                            : attempt.passed === false
-                              ? "text-red-600"
-                              : "text-gray-500"
-                        }`}
-                      >
-                        {attempt.passed === true
-                          ? "Passed"
-                          : attempt.passed === false
-                            ? "Failed"
-                            : "Pending"}
+                    <div className="mt-4 flex items-center justify-between text-xs">
+                      <span className={`font-semibold px-2.5 py-1 rounded-full ${
+                        payment.status === "CAPTURED" || payment.status === "APPROVED"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                          : payment.status === "CREATED"
+                          ? "bg-amber-50 text-amber-700 border border-amber-100"
+                          : "bg-red-50 text-red-700 border border-red-100"
+                      }`}>
+                        {payment.status}
                       </span>
 
-                      <Link
-                        href={`/dashboard/results/${attempt.id}`}
-                        className="text-sm font-medium text-blue-600 hover:text-blue-700"
-                      >
-                        Details
-                      </Link>
+                      <span className="text-gray-400">
+                        {new Date(payment.createdAt).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -233,17 +207,25 @@ const DashboardCard = ({
   value: number;
 }) => {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <p className="text-sm font-medium text-gray-500">{title}</p>
-      <h3 className="mt-2 text-3xl font-bold text-gray-900">{value}</h3>
+    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">{title}</p>
+      <h3 className="mt-2 text-3xl font-extrabold text-gray-900">{value}</h3>
     </div>
   );
 };
 
-const EmptyState = ({ message }: { message: string }) => {
+const EmptyState = ({ message, actionUrl, actionText }: { message: string; actionUrl?: string; actionText?: string }) => {
   return (
-    <div className="rounded-xl border border-dashed border-gray-200 p-6 text-center">
-      <p className="text-sm text-gray-500">{message}</p>
+    <div className="rounded-2xl border border-dashed border-gray-200 p-8 text-center bg-gray-50/50">
+      <p className="text-xs text-gray-500">{message}</p>
+      {actionUrl && actionText && (
+        <Link
+          href={actionUrl}
+          className="mt-4 inline-block rounded-xl bg-gray-900 px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition"
+        >
+          {actionText}
+        </Link>
+      )}
     </div>
   );
 };
