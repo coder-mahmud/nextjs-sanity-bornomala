@@ -52,11 +52,6 @@ export default async function CourseDetailPage({
     redirect("/login");
   }
 
-  /*
-   * Course only (scalar fields). Relations are loaded with separate
-   * queries below, because `include` result types are not reliable with
-   * an extended (e.g. Accelerate) Prisma client.
-   */
   const course = await prisma.course.findUnique({
     where: {
       slug,
@@ -71,9 +66,48 @@ export default async function CourseDetailPage({
     );
   }
 
-  /*
-   * Batches of this course
-   */
+  const now = new Date();
+
+  // Check user course access
+  const accesses = await prisma.courseAccess.findMany({
+    where: {
+      userId: user.id,
+      courseId: course.id,
+      OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+    },
+    select: {
+      id: true,
+      batchId: true,
+    },
+  });
+
+  const hasAccess = accesses.length > 0;
+
+  // Server Action to attach the selected batch to the user's access
+  async function selectBatchAction(formData: FormData) {
+    "use server";
+    const selectedBatchId = formData.get("batchId") as string;
+    if (!selectedBatchId) return;
+
+    const accessToUpdate = await prisma.courseAccess.findFirst({
+      where: {
+        userId: user?.id,
+        courseId: course?.id,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+      },
+    });
+
+    if (accessToUpdate) {
+      await prisma.courseAccess.update({
+        where: { id: accessToUpdate.id },
+        data: { batchId: selectedBatchId },
+      });
+    }
+
+    redirect(`/dashboard/courses/${slug}`);
+  }
+
+  // Get all batches for this course
   const batchRows = await prisma.batch.findMany({
     where: {
       courseId: course.id,
@@ -83,17 +117,70 @@ export default async function CourseDetailPage({
     },
   });
 
-  const batchIds = batchRows.map((batch) => batch.id);
+  // Find if a batch is already attached/selected by the user
+  const activeBatchId = accesses.find((access) => access.batchId !== null)?.batchId;
 
-  /*
-   * Lessons of those batches
-   */
+  // If user has access but hasn't selected a batch yet, show mandatory batch selection screen
+  if (hasAccess && !activeBatchId) {
+    return (
+      <section className="py-8 max-w-3xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
+          <p className="mt-2 text-gray-600">
+            You have access to this course! Please select your preferred batch below to access course content.
+          </p>
+        </div>
+
+        {batchRows.length === 0 ? (
+          <p className="text-gray-500">No batches available for this course yet.</p>
+        ) : (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-800">Available Batches</h2>
+            {batchRows.map((batch) => (
+              <div
+                key={batch.id}
+                className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+              >
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">{batch.title}</h3>
+                  <span className="inline-block mt-1 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                    {batch.status}
+                  </span>
+                  {(batch.startDate || batch.endDate) && (
+                    <p className="mt-1 text-sm text-gray-500">
+                      {batch.startDate && `Starts ${batch.startDate.toLocaleDateString()}`}
+                      {batch.startDate && batch.endDate && " · "}
+                      {batch.endDate && `Ends ${batch.endDate.toLocaleDateString()}`}
+                    </p>
+                  )}
+                </div>
+
+                <form action={selectBatchAction}>
+                  <input type="hidden" name="batchId" value={batch.id} />
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition"
+                  >
+                    Select Batch
+                  </button>
+                </form>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    );
+  }
+
+  // If a batch is selected, load lessons for that active batch
+  const targetBatchIds = activeBatchId ? [activeBatchId] : batchRows.map((b) => b.id);
+
   const lessonRows =
-    batchIds.length === 0
+    targetBatchIds.length === 0
       ? []
       : await prisma.lesson.findMany({
           where: {
-            batchId: { in: batchIds },
+            batchId: { in: targetBatchIds },
           },
           orderBy: {
             order: "asc",
@@ -107,9 +194,6 @@ export default async function CourseDetailPage({
           },
         });
 
-  /*
-   * This user's progress for those lessons
-   */
   const progressRows =
     lessonRows.length === 0
       ? []
@@ -150,66 +234,25 @@ export default async function CourseDetailPage({
     lessonsByBatch.set(lesson.batchId, list);
   }
 
-  const batches: BatchItem[] = batchRows.map((batch) => ({
-    id: batch.id,
-    title: batch.title,
-    status: batch.status,
-    startDate: batch.startDate,
-    endDate: batch.endDate,
-    lessons: lessonsByBatch.get(batch.id) ?? [],
-  }));
+  const batches: BatchItem[] = batchRows
+    .filter((batch) => !activeBatchId || batch.id === activeBatchId)
+    .map((batch) => ({
+      id: batch.id,
+      title: batch.title,
+      status: batch.status,
+      startDate: batch.startDate,
+      endDate: batch.endDate,
+      lessons: lessonsByBatch.get(batch.id) ?? [],
+    }));
 
-  /*
-   * A user can have several CourseAccess rows (one per batch, or one
-   * course-wide row where batchId is null). Ignore expired ones.
-   */
-  const now = new Date();
-
-  const accesses = await prisma.courseAccess.findMany({
-    where: {
-      userId: user.id,
-      courseId: course.id,
-      OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
-    },
-    select: {
-      batchId: true,
-    },
-  });
-
-  const hasAccess = accesses.length > 0;
-
-  // batchId === null means access to every batch of the course
-  const hasFullAccess = accesses.some((item: { batchId: string | null }) => item.batchId === null);
-
-  const accessibleBatchIds = new Set(
-    accesses
-      .map((item: { batchId: string | null }) => item.batchId)
-      .filter((id): id is string => id !== null)
-  );
-
-  const canAccessBatch = (batchId: string) =>
-    hasFullAccess || accessibleBatchIds.has(batchId);
-
-  /*
-   * Progress is calculated only over lessons the user can actually open
-   * through their purchase (not preview-only lessons).
-   */
-  const accessibleLessons = batches
-    .filter((batch: BatchItem) => canAccessBatch(batch.id))
-    .flatMap((batch: BatchItem) => batch.lessons);
-
+  const accessibleLessons = batches.flatMap((batch) => batch.lessons);
   const totalLessons = accessibleLessons.length;
-
-  const completedLessons = accessibleLessons.filter((lesson: LessonItem) =>
-    lesson.progressRecords.some(
-      (progress: { isCompleted: boolean }) => progress.isCompleted
-    )
+  const completedLessons = accessibleLessons.filter((lesson) =>
+    lesson.progressRecords.some((progress) => progress.isCompleted)
   ).length;
 
   const progressPercentage =
-    totalLessons === 0
-      ? 0
-      : Math.round((completedLessons / totalLessons) * 100);
+    totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
 
   return (
     <section className="py-8">
@@ -224,7 +267,7 @@ export default async function CourseDetailPage({
           <div className="mt-5 rounded-2xl border border-green-200 bg-green-50 p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                You have access to this course
+                Enrolled Batch Active
               </p>
 
               <p className="text-sm font-medium text-green-700">
@@ -262,115 +305,92 @@ export default async function CourseDetailPage({
         <p className="text-gray-500">No batches or lessons available.</p>
       ) : (
         <div className="space-y-6">
-          {batches.map((batch: BatchItem) => {
-            const batchUnlocked = canAccessBatch(batch.id);
+          {batches.map((batch: BatchItem) => (
+            <div
+              key={batch.id}
+              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {batch.title}
+                </h2>
 
-            return (
-              <div
-                key={batch.id}
-                className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {batch.title}
-                  </h2>
+                <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                  {batch.status}
+                </span>
 
-                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
-                    {batch.status}
-                  </span>
+                <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                  Selected Batch
+                </span>
+              </div>
 
-                  {batchUnlocked && (
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
-                      Enrolled
-                    </span>
-                  )}
-                </div>
+              {(batch.startDate || batch.endDate) && (
+                <p className="mt-1 text-sm text-gray-500">
+                  {batch.startDate &&
+                    `Starts ${batch.startDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}`}
+                  {batch.startDate && batch.endDate && " · "}
+                  {batch.endDate &&
+                    `Ends ${batch.endDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}`}
+                </p>
+              )}
 
-                {(batch.startDate || batch.endDate) && (
-                  <p className="mt-1 text-sm text-gray-500">
-                    {batch.startDate &&
-                      `Starts ${batch.startDate.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}`}
-                    {batch.startDate && batch.endDate && " · "}
-                    {batch.endDate &&
-                      `Ends ${batch.endDate.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}`}
-                  </p>
-                )}
+              {batch.lessons.length === 0 ? (
+                <p className="mt-4 text-gray-500">No lessons in this batch.</p>
+              ) : (
+                <ul className="mt-4 space-y-3">
+                  {batch.lessons.map((lesson: LessonItem) => {
+                    const isCompleted = lesson.progressRecords.some(
+                      (progress) => progress.isCompleted
+                    );
 
-                {batch.lessons.length === 0 ? (
-                  <p className="mt-4 text-gray-500">
-                    No lessons in this batch.
-                  </p>
-                ) : (
-                  <ul className="mt-4 space-y-3">
-                    {batch.lessons.map((lesson: LessonItem) => {
-                      const canViewLesson = batchUnlocked || lesson.isPreview;
+                    return (
+                      <li
+                        key={lesson.id}
+                        className={`flex items-center justify-between rounded-xl border p-4 ${
+                          isCompleted
+                            ? "border-green-200 bg-green-50"
+                            : "border-gray-100 bg-white"
+                        }`}
+                      >
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="font-medium text-gray-900">
+                              {lesson.title}
+                            </p>
 
-                      const isCompleted = lesson.progressRecords.some(
-                        (progress: { isCompleted: boolean }) =>
-                          progress.isCompleted
-                      );
+                            {isCompleted && (
+                              <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                                Completed
+                              </span>
+                            )}
+                          </div>
+                        </div>
 
-                      return (
-                        <li
-                          key={lesson.id}
-                          className={`flex items-center justify-between rounded-xl border p-4 ${
+                        <Link
+                          href={`/dashboard/courses/${course.slug}/lessons/${lesson.slug}`}
+                          className={`rounded-lg px-4 py-2 text-sm text-white ${
                             isCompleted
-                              ? "border-green-200 bg-green-50"
-                              : "border-gray-100 bg-white"
+                              ? "bg-green-600 hover:bg-green-700"
+                              : "bg-black hover:bg-gray-800"
                           }`}
                         >
-                          <div>
-                            <div className="flex flex-wrap items-center gap-2">
-                              <p className="font-medium text-gray-900">
-                                {lesson.title}
-                              </p>
-
-                              {isCompleted && (
-                                <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
-                                  Completed
-                                </span>
-                              )}
-
-                              {lesson.isPreview && (
-                                <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                                  Preview
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {canViewLesson ? (
-                            <Link
-                              href={`/dashboard/courses/${course.slug}/lessons/${lesson.slug}`}
-                              className={`rounded-lg px-4 py-2 text-sm text-white ${
-                                isCompleted
-                                  ? "bg-green-600 hover:bg-green-700"
-                                  : "bg-black hover:bg-gray-800"
-                              }`}
-                            >
-                              {isCompleted ? "Review" : "Watch"}
-                            </Link>
-                          ) : (
-                            <span className="rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-400">
-                              Locked
-                            </span>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
+                          Lesson Materials
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          ))}
         </div>
       )}
 

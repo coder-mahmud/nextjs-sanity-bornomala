@@ -1,3 +1,5 @@
+// app/(root)/admin/courses/[courseId]/content/batches/[batchId]/lessons/[lessonId]/page.tsx
+
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import { notFound } from "next/navigation";
@@ -119,18 +121,27 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
 
       {/* Quick Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
-          <div className="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
-            <Calendar className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-400 font-medium">Schedule Window</p>
-            <p className="text-xs font-semibold text-gray-800 mt-0.5">
-              {lesson.startsAt ? new Date(lesson.startsAt).toLocaleDateString() : "Immediate"} -{" "}
-              {lesson.endsAt ? new Date(lesson.endsAt).toLocaleDateString() : "No Limit"}
-            </p>
-          </div>
-        </div>
+        
+
+          {lesson.quizId  && (
+            <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
+              <div className="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-400 font-medium">
+                  {lesson.quizId ? "Quiz time" : "Schedule Window"}
+                </p>
+                <p className="text-xs font-semibold text-gray-800 mt-0.5">
+                  {lesson.startsAt ? new Date(lesson.startsAt).toLocaleString() : "Immediate"} -{" "}
+                  {lesson.endsAt ? new Date(lesson.endsAt).toLocaleString() : "No Limit"}
+                </p>
+              </div>
+            </div>
+          )}
+
+
+        
 
         <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
           <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
@@ -143,15 +154,27 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
-          <div className="p-2.5 bg-purple-50 text-purple-600 rounded-lg">
-            <HelpCircle className="w-5 h-5" />
+
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3">
+            <h3 className="font-bold text-sm text-gray-900 flex items-center gap-2">
+              <HelpCircle className="w-4 h-4 text-purple-600" /> Linked Quiz
+            </h3>
+            {lesson.quiz ? (
+              <div className="p-3 bg-purple-50/50 rounded-lg border border-purple-100 space-y-2">
+                <p className="text-xs font-semibold text-purple-950">{lesson.quiz.title}</p>
+                <div className="flex items-center justify-between text-[11px] text-purple-700">
+                  <span>Questions: {lesson.quiz.questions?.length || 0}</span>
+                  <span>Duration: {lesson.quiz.durationMinutes} mins</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400 italic">No quiz linked to this lesson.</p>
+            )}
           </div>
-          <div>
-            <p className="text-xs text-gray-400 font-medium">Attached Quiz</p>
-            <p className="text-xs font-semibold text-gray-800 mt-0.5 truncate max-w-[180px]">
-              {lesson.quiz ? lesson.quiz.title : "None Attached"}
-            </p>
-          </div>
+
+
+
+
         </div>
       </div>
 
@@ -259,23 +282,7 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
 
         {/* Right Column: Quiz Info & Student Progress */}
         <div className="space-y-6">
-          {/* Linked Quiz Summary */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3">
-            <h3 className="font-bold text-sm text-gray-900 flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-purple-600" /> Linked Quiz
-            </h3>
-            {lesson.quiz ? (
-              <div className="p-3 bg-purple-50/50 rounded-lg border border-purple-100 space-y-2">
-                <p className="text-xs font-semibold text-purple-950">{lesson.quiz.title}</p>
-                <div className="flex items-center justify-between text-[11px] text-purple-700">
-                  <span>Questions: {lesson.quiz.questions?.length || 0}</span>
-                  <span>Duration: {lesson.quiz.durationMinutes} mins</span>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-gray-400 italic">No quiz linked to this lesson.</p>
-            )}
-          </div>
+
 
           {/* Student Progress Activity Log */}
           <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3">

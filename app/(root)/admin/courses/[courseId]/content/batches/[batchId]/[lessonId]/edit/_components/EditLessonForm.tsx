@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateLesson } from "@/app/(root)/admin/courses/actions";
 import { deleteCloudinaryImage } from "@/actions/cloudinary";
-import { Paperclip, Trash2, Loader2 } from "lucide-react";
+import { Paperclip, Trash2, Loader2,CalendarClock } from "lucide-react";
 import { toast } from "react-toastify";
 
 interface EditLessonFormProps {
@@ -256,7 +256,7 @@ export default function EditLessonForm({
       </div>
 
       {/* Schedule Windows */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-xl bg-blue-50/50 p-3 border border-blue-100">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-xl bg-blue-50/50 p-3 border border-blue-100">
         <div>
           <label className="block text-xs font-semibold text-blue-900">Starts At (Schedule Window)</label>
           <input
@@ -275,7 +275,42 @@ export default function EditLessonForm({
             className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:outline-none bg-white"
           />
         </div>
-      </div>
+      </div> */}
+
+              {/* Lesson Schedule (StartsAt & EndsAt) - Only shown if a quiz is selected */}
+              {formData.quizId && (
+                <div className="rounded-xl bg-purple-50/60 p-4 border border-purple-100 space-y-3 animate-fadeIn">
+                  <div className="flex items-center gap-2 text-purple-700 font-semibold text-xs">
+                    <CalendarClock className="w-4 h-4" />
+                    Lesson Quiz time
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700">Starts At</label>
+                      <input
+                        type="datetime-local"
+                        value={formData.startsAt}
+                        onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700">Ends At</label>
+                      <input
+                        type="datetime-local"
+                        value={formData.endsAt}
+                        onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+
+
 
       {/* Preview Toggle */}
       <div className="flex items-center gap-2 pt-1">

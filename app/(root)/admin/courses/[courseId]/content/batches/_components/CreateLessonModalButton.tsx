@@ -310,10 +310,10 @@ export default function CreateLessonModalButton({
               </div>
 
               {/* Lesson Schedule (StartsAt & EndsAt) */}
-              <div className="rounded-xl bg-purple-50/60 p-4 border border-purple-100 space-y-3">
+              {/* <div className="rounded-xl bg-purple-50/60 p-4 border border-purple-100 space-y-3">
                 <div className="flex items-center gap-2 text-purple-700 font-semibold text-xs">
                   <CalendarClock className="w-4 h-4" />
-                  Lesson Schedule Window
+                  Lesson Quiz time
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -337,7 +337,42 @@ export default function CreateLessonModalButton({
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+              {/* Lesson Schedule (StartsAt & EndsAt) - Only shown if a quiz is selected */}
+              {formData.quizId && (
+                <div className="rounded-xl bg-purple-50/60 p-4 border border-purple-100 space-y-3 animate-fadeIn">
+                  <div className="flex items-center gap-2 text-purple-700 font-semibold text-xs">
+                    <CalendarClock className="w-4 h-4" />
+                    Lesson Quiz time
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700">Starts At</label>
+                      <input
+                        type="datetime-local"
+                        value={formData.startsAt}
+                        onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700">Ends At</label>
+                      <input
+                        type="datetime-local"
+                        value={formData.endsAt}
+                        onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-purple-500 focus:outline-none bg-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+
+
 
               {/* Video Streaming */}
               <div className="space-y-3 border-t pt-3">

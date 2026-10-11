@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import SecureBunnyPlayer from "@/components/courses/SecureBunnyPlayer";
+import { FileText, CalendarClock, Paperclip, Download, HelpCircle, CheckCircle } from "lucide-react";
 
 interface LessonPageProps {
   params: Promise<{
@@ -76,10 +76,21 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   /*
-   * 1. Lesson (plain scalar fields only)
+   * 1. Lesson with relation to quiz
    */
   const lesson = await prisma.lesson.findUnique({
     where: { slug: lessonSlug },
+    include: {
+      quiz: {
+        select: {
+          id: true,
+          title: true,
+          durationMinutes: true,
+          passingScore: true,
+          slug:true,
+        },
+      },
+    },
   });
 
   if (!lesson || !lesson.batchId) {
@@ -87,7 +98,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   /*
-   * 2. Batch (plain scalar fields only, no `include`).
+   * 2. Batch details
    */
   const batch = await prisma.batch.findUnique({
     where: { id: lesson.batchId },
@@ -98,7 +109,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   /*
-   * 3. Course, loaded separately via batch.courseId
+   * 3. Course details
    */
   const course = await prisma.course.findUnique({
     where: { id: batch.courseId },
@@ -109,7 +120,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   /*
-   * 4. All lessons in this batch, loaded separately via batch.id
+   * 4. All lessons in this batch for pagination
    */
   const batchLessons = await prisma.lesson.findMany({
     where: { batchId: batch.id },
@@ -120,15 +131,12 @@ export default async function LessonPage({ params }: LessonPageProps) {
     },
   });
 
-  /*
-   * Make sure the URL course slug matches the actual course.
-   */
   if (course.slug !== slug) {
     redirect(`/dashboard/courses/${course.slug}/lessons/${lesson.slug}`);
   }
 
   /*
-   * Check whether the current user has access to the course.
+   * Check access
    */
   const access = await prisma.courseAccess.findFirst({
     where: {
@@ -141,18 +149,17 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   if (!hasAccess) {
     return (
-      <section className="py-8">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-5">
-          <p className="text-red-600">
-            You do not have access to this lesson. Please purchase the
-            course.
+      <section className="py-8 max-w-4xl mx-auto px-4">
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+          <p className="text-red-600 font-medium">
+            You do not have access to this lesson. Please purchase the course to unlock its contents.
           </p>
 
           <Link
-            href={`/video-courses/${course.slug}`}
-            className="mt-4 inline-block rounded-lg bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            href={`/dashboard/courses/${course.slug}`}
+            className="mt-4 inline-block rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition"
           >
-            View Course
+            Back to Course Overview
           </Link>
         </div>
       </section>
@@ -160,7 +167,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   /*
-   * Make sure a progress record exists.
+   * Track progress record upsert
    */
   const progress = await prisma.lessonProgress.upsert({
     where: {
@@ -178,94 +185,182 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const isCompleted = progress.isCompleted === true;
 
-  /*
-   * Previous and next lessons in this batch.
-   */
   const lessonIndex = batchLessons.findIndex((item) => item.id === lesson.id);
-
   const prevLesson = lessonIndex > 0 ? batchLessons[lessonIndex - 1] : null;
-
   const nextLesson =
     lessonIndex >= 0 && lessonIndex < batchLessons.length - 1
       ? batchLessons[lessonIndex + 1]
       : null;
 
+
+  console.log("Lesson quiz:", lesson.quiz)
   return (
-    <section className="py-8">
-      <div className="mb-6">
+    <section className="py-8 max-w-4xl mx-auto px-4 space-y-6">
+      {/* Breadcrumb & Header */}
+      <div>
         <Link
           href={`/dashboard/courses/${course.slug}`}
-          className="text-sm text-blue-600 hover:underline"
+          className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1 mb-3"
         >
-          ← Back to course
+          ← Back to {course.title}
         </Link>
 
-        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {lesson.title}
-            </h1>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl bg-white border border-gray-200 p-6 shadow-sm">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-gray-600">
+                Lesson #{lesson.order}
+              </span>
+              {lesson.isPreview && (
+                <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700 border border-blue-200">
+                  Free Preview
+                </span>
+              )}
+            </div>
+
+            <h1 className="text-2xl font-bold text-gray-900">{lesson.title}</h1>
 
             {lesson.description && (
-              <p className="mt-2 text-gray-500">{lesson.description}</p>
+              <p className="text-xs text-gray-600 leading-relaxed">{lesson.description}</p>
             )}
           </div>
 
-          {isCompleted ? (
-            <span className="inline-flex rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
-              Completed
-            </span>
-          ) : (
-            <form action={markLessonCompleted}>
-              <input type="hidden" name="lessonId" value={lesson.id} />
-              <input type="hidden" name="courseSlug" value={course.slug} />
-              <input type="hidden" name="lessonSlug" value={lesson.slug} />
+          <div>
+            {isCompleted ? (
+              <span className="inline-flex items-center gap-1.5 rounded-xl bg-green-50 border border-green-200 px-4 py-2 text-xs font-semibold text-green-700">
+                <CheckCircle className="w-4 h-4" /> Completed
+              </span>
+            ) : (
+              <form action={markLessonCompleted}>
+                <input type="hidden" name="lessonId" value={lesson.id} />
+                <input type="hidden" name="courseSlug" value={course.slug} />
+                <input type="hidden" name="lessonSlug" value={lesson.slug} />
 
-              <button
-                type="submit"
-                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
-              >
-                Mark as Completed
-              </button>
-            </form>
-          )}
+                <button
+                  type="submit"
+                  className="rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition shadow-sm"
+                >
+                  Mark as Completed
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Video */}
-      {lesson.bunnyVideoId ? (
-        <SecureBunnyPlayer lessonId={lesson.id} />
-      ) : lesson.videoUrl ? (
-        <video
-          src={lesson.videoUrl}
-          controls
-          controlsList="nodownload"
-          className="w-full rounded-lg shadow-sm"
-        />
-      ) : (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center">
-          <p className="text-gray-500">No video available for this lesson.</p>
+    {/* Quiz Time Window (If Scheduled) */}
+    {(lesson.startsAt || lesson.endsAt) && (
+      <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-5 space-y-2 shadow-sm">
+        <div className="flex items-center gap-2 text-purple-800 text-xs font-bold">
+          <CalendarClock className="w-4 h-4 text-purple-600" />
+          Quiz time Window
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-purple-950 font-medium">
+          <div>
+            <span className="text-purple-600 block text-[11px]">Starts At:</span>
+            {lesson.startsAt
+              ? new Date(lesson.startsAt).toLocaleString("en-US", { timeZone: "UTC" })
+              : "Immediate"}
+          </div>
+          <div>
+            <span className="text-purple-600 block text-[11px]">Ends At:</span>
+            {lesson.endsAt
+              ? new Date(lesson.endsAt).toLocaleString("en-US", { timeZone: "UTC" })
+              : "No Limit"}
+          </div>
+        </div>
+      </div>
+    )}
+    
+    {/* Linked Quiz Details */}
+    {lesson.quiz && (
+      <div className="rounded-2xl border border-indigo-100 bg-white p-5 space-y-3 shadow-sm">
+        <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs">
+          <HelpCircle className="w-4 h-4 text-indigo-600" />
+          Associated Quiz
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-indigo-50/40 border border-indigo-100">
+          <div>
+            <p className="text-xs font-bold text-gray-900">{lesson.quiz.title}</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">
+              Duration: {lesson.quiz.durationMinutes} mins • Passing Score: {lesson.quiz.passingScore}%
+            </p>
+          </div>
+
+          {/* Nested relative route to the lesson's quiz */}
+          <Link
+            href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${lesson.quiz.slug}/`}
+            className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition shrink-0"
+          >
+            See Quiz Details →
+          </Link>
+        </div>
+      </div>
+    )}
+
+      {/* Lecture Notes */}
+      {lesson.notes && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3 shadow-sm">
+          <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
+            <FileText className="w-4 h-4 text-blue-600" />
+            Lecture Notes & Content
+          </div>
+          <div className="prose prose-sm text-gray-700 text-xs leading-relaxed max-w-none whitespace-pre-wrap">
+            {lesson.notes}
+          </div>
         </div>
       )}
 
-      {/* Lesson navigation */}
-      <div className="mt-6 flex items-center justify-between">
+      {/* Attachments & Resources */}
+      {lesson.attachments && lesson.attachments.length > 0 && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3 shadow-sm">
+          <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
+            <Paperclip className="w-4 h-4 text-blue-600" />
+            Attachments & Downloads ({lesson.attachments.length})
+          </div>
+          <div className="space-y-2">
+            {lesson.attachments.map((fileUrl, index) => {
+              const downloadUrl = fileUrl.includes("/upload/")
+                ? fileUrl.replace("/upload/", "/upload/fl_attachment/")
+                : fileUrl;
+
+              return (
+                <a
+                  key={index}
+                  href={downloadUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 text-xs transition"
+                >
+                  <span className="font-mono text-gray-700 truncate max-w-[75%]">{fileUrl}</span>
+                  <span className="inline-flex items-center gap-1 font-semibold text-blue-600 shrink-0">
+                    <Download className="w-3.5 h-3.5" /> Download
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Navigation */}
+      <div className="pt-4 flex items-center justify-between border-t border-gray-200">
         <div>
-          {prevLesson && (
+          {prevLesson ? (
             <Link
               href={`/dashboard/courses/${course.slug}/lessons/${prevLesson.slug}`}
-              className="text-blue-600 hover:underline"
+              className="text-xs font-semibold text-gray-700 hover:text-black transition inline-flex items-center gap-1"
             >
               ← Previous Lesson
             </Link>
-          )}
+          ) : <span />}
         </div>
 
         <div>
           {nextLesson && (
             <Link
               href={`/dashboard/courses/${course.slug}/lessons/${nextLesson.slug}`}
-              className="text-blue-600 hover:underline"
+              className="text-xs font-semibold text-gray-700 hover:text-black transition inline-flex items-center gap-1"
             >
               Next Lesson →
             </Link>

@@ -123,7 +123,7 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
           <div>
             <p className="text-xs text-gray-400 font-medium">Enrolled Students</p>
             <p className="text-lg font-bold text-gray-900">
-              {batch._count.accesses} {batch.maxStudents ? `/ ${batch.maxStudents}` : "(Unlimited)"}
+              {batch._count.accesses} {batch.maxStudents ? `/ ${batch.maxStudents}` : ""}
             </p>
           </div>
         </div>
