@@ -42,7 +42,8 @@ export async function POST(req: NextRequest) {
     const couponId = session.metadata?.couponId || null;
     const couponCode = session.metadata?.couponCode || null;
 
-    const userEmail = session.customer_email;
+    // const userEmail = session.customer_email;
+    const userEmail = session.customer_email || session.customer_details?.email;
 
     const stripeSessionId = session.id;
 

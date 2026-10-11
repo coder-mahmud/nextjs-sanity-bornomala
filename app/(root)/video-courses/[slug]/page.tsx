@@ -12,7 +12,7 @@ export default async function VideoCourseDetailPage({ params }: { params: Promis
 
   // Fetch course by slug
   const course = await prisma.course.findUnique({ where: { slug } });
-  if (!course) redirect("/video-courses");
+  if (!course) redirect("/courses");
 
   // Check user session
   const session = await auth();
