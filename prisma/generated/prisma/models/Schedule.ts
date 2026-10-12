@@ -28,6 +28,7 @@ export type ScheduleMinAggregateOutputType = {
   id: string | null
   branchId: string | null
   level: string | null
+  tag: string | null
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -37,6 +38,7 @@ export type ScheduleMaxAggregateOutputType = {
   id: string | null
   branchId: string | null
   level: string | null
+  tag: string | null
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,6 +48,7 @@ export type ScheduleCountAggregateOutputType = {
   id: number
   branchId: number
   level: number
+  tag: number
   description: number
   createdAt: number
   updatedAt: number
@@ -57,6 +60,7 @@ export type ScheduleMinAggregateInputType = {
   id?: true
   branchId?: true
   level?: true
+  tag?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -66,6 +70,7 @@ export type ScheduleMaxAggregateInputType = {
   id?: true
   branchId?: true
   level?: true
+  tag?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +80,7 @@ export type ScheduleCountAggregateInputType = {
   id?: true
   branchId?: true
   level?: true
+  tag?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -157,6 +163,7 @@ export type ScheduleGroupByOutputType = {
   id: string
   branchId: string
   level: string | null
+  tag: string | null
   description: string | null
   createdAt: Date
   updatedAt: Date
@@ -187,6 +194,7 @@ export type ScheduleWhereInput = {
   id?: Prisma.StringFilter<"Schedule"> | string
   branchId?: Prisma.StringFilter<"Schedule"> | string
   level?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  tag?: Prisma.StringNullableFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableFilter<"Schedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
@@ -200,6 +208,7 @@ export type ScheduleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
+  tag?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -216,6 +225,7 @@ export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ScheduleWhereInput | Prisma.ScheduleWhereInput[]
   branchId?: Prisma.StringFilter<"Schedule"> | string
   level?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  tag?: Prisma.StringNullableFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableFilter<"Schedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
@@ -229,6 +239,7 @@ export type ScheduleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
+  tag?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -244,6 +255,7 @@ export type ScheduleScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Schedule"> | string
   branchId?: Prisma.StringWithAggregatesFilter<"Schedule"> | string
   level?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
+  tag?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Schedule"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Schedule"> | Date | string
@@ -252,6 +264,7 @@ export type ScheduleScalarWhereWithAggregatesInput = {
 export type ScheduleCreateInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -265,6 +278,7 @@ export type ScheduleUncheckedCreateInput = {
   id?: string
   branchId: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -276,6 +290,7 @@ export type ScheduleUncheckedCreateInput = {
 export type ScheduleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -289,6 +304,7 @@ export type ScheduleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -301,6 +317,7 @@ export type ScheduleCreateManyInput = {
   id?: string
   branchId: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -309,6 +326,7 @@ export type ScheduleCreateManyInput = {
 export type ScheduleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,6 +336,7 @@ export type ScheduleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -342,6 +361,7 @@ export type ScheduleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  tag?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -351,6 +371,7 @@ export type ScheduleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  tag?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -360,6 +381,7 @@ export type ScheduleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  tag?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -461,6 +483,7 @@ export type ScheduleUpdateOneRequiredWithoutEntriesNestedInput = {
 export type ScheduleCreateWithoutParisCoursesInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -473,6 +496,7 @@ export type ScheduleUncheckedCreateWithoutParisCoursesInput = {
   id?: string
   branchId: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -488,6 +512,7 @@ export type ScheduleCreateOrConnectWithoutParisCoursesInput = {
 export type ScheduleCreateWithoutHocheCoursesInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -500,6 +525,7 @@ export type ScheduleUncheckedCreateWithoutHocheCoursesInput = {
   id?: string
   branchId: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -526,6 +552,7 @@ export type ScheduleUpdateToOneWithWhereWithoutParisCoursesInput = {
 export type ScheduleUpdateWithoutParisCoursesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -538,6 +565,7 @@ export type ScheduleUncheckedUpdateWithoutParisCoursesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -559,6 +587,7 @@ export type ScheduleUpdateToOneWithWhereWithoutHocheCoursesInput = {
 export type ScheduleUpdateWithoutHocheCoursesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -571,6 +600,7 @@ export type ScheduleUncheckedUpdateWithoutHocheCoursesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -581,6 +611,7 @@ export type ScheduleUncheckedUpdateWithoutHocheCoursesInput = {
 export type ScheduleCreateWithoutBranchInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -592,6 +623,7 @@ export type ScheduleCreateWithoutBranchInput = {
 export type ScheduleUncheckedCreateWithoutBranchInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -633,6 +665,7 @@ export type ScheduleScalarWhereInput = {
   id?: Prisma.StringFilter<"Schedule"> | string
   branchId?: Prisma.StringFilter<"Schedule"> | string
   level?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  tag?: Prisma.StringNullableFilter<"Schedule"> | string | null
   description?: Prisma.StringNullableFilter<"Schedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
@@ -641,6 +674,7 @@ export type ScheduleScalarWhereInput = {
 export type ScheduleCreateWithoutEntriesInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -653,6 +687,7 @@ export type ScheduleUncheckedCreateWithoutEntriesInput = {
   id?: string
   branchId: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -679,6 +714,7 @@ export type ScheduleUpdateToOneWithWhereWithoutEntriesInput = {
 export type ScheduleUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -691,6 +727,7 @@ export type ScheduleUncheckedUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -701,6 +738,7 @@ export type ScheduleUncheckedUpdateWithoutEntriesInput = {
 export type ScheduleCreateManyBranchInput = {
   id?: string
   level?: string | null
+  tag?: string | null
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -709,6 +747,7 @@ export type ScheduleCreateManyBranchInput = {
 export type ScheduleUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -720,6 +759,7 @@ export type ScheduleUpdateWithoutBranchInput = {
 export type ScheduleUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -731,6 +771,7 @@ export type ScheduleUncheckedUpdateWithoutBranchInput = {
 export type ScheduleUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -789,6 +830,7 @@ export type ScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   branchId?: boolean
   level?: boolean
+  tag?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -803,6 +845,7 @@ export type ScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   branchId?: boolean
   level?: boolean
+  tag?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -813,6 +856,7 @@ export type ScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   branchId?: boolean
   level?: boolean
+  tag?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -823,12 +867,13 @@ export type ScheduleSelectScalar = {
   id?: boolean
   branchId?: boolean
   level?: boolean
+  tag?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "branchId" | "level" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
+export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "branchId" | "level" | "tag" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
 export type ScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Schedule$entriesArgs<ExtArgs>
@@ -855,6 +900,7 @@ export type $SchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     branchId: string
     level: string | null
+    tag: string | null
     description: string | null
     createdAt: Date
     updatedAt: Date
@@ -1288,6 +1334,7 @@ export interface ScheduleFieldRefs {
   readonly id: Prisma.FieldRef<"Schedule", 'String'>
   readonly branchId: Prisma.FieldRef<"Schedule", 'String'>
   readonly level: Prisma.FieldRef<"Schedule", 'String'>
+  readonly tag: Prisma.FieldRef<"Schedule", 'String'>
   readonly description: Prisma.FieldRef<"Schedule", 'String'>
   readonly createdAt: Prisma.FieldRef<"Schedule", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Schedule", 'DateTime'>

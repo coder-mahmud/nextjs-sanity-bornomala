@@ -300,7 +300,7 @@ export default async function QuizDetailsPage({
                       href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/start`}
                       className="w-full text-center bg-amber-600 text-white px-6 py-3 rounded-xl text-xs font-semibold hover:bg-amber-700 transition"
                     >
-                      Continue Attempt
+                      Continue Quiz
                     </Link>
 
                     <Link
@@ -394,7 +394,7 @@ export default async function QuizDetailsPage({
                       href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/start`}
                       className="w-full text-center bg-black text-white px-6 py-3 rounded-xl text-xs font-semibold hover:bg-gray-800 transition"
                     >
-                      Start Quiz Attempt
+                      Start Quiz
                     </Link>
 
                     <Link

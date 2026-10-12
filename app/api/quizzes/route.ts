@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
 
-  console.log("All quizes route hit!")
+  // console.log("All quizes route hit!")
 
   const quizzes = await prisma.quiz.findMany({
     where: {

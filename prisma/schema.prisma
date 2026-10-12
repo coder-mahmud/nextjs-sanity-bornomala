@@ -430,6 +430,7 @@ model Schedule {
   branch   Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
 
   level       String?
+  tag         String?   // Added new Tag field
   description String?
 
   entries ScheduleEntry[]

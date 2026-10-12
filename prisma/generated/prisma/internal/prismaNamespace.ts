@@ -2658,6 +2658,7 @@ export const ScheduleScalarFieldEnum = {
   id: 'id',
   branchId: 'branchId',
   level: 'level',
+  tag: 'tag',
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

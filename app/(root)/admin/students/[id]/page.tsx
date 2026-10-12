@@ -1,8 +1,46 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, CreditCard, Award, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, BookOpen, CreditCard, CheckCircle2, Clock } from "lucide-react";
+
+type StudentDetailsPayload = Prisma.UserGetPayload<{
+  include: {
+    courseAccesses: {
+      include: {
+        course: {
+          include: {
+            batches: {
+              include: {
+                lessons: {
+                  include: {
+                    quiz: {
+                      include: {
+                        attempts: true;
+                      };
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    lessonProgress: {
+      include: {
+        lesson: true;
+      };
+    };
+    payments: {
+      include: {
+        course: true;
+        quiz: true;
+      };
+    };
+  };
+}>;
 
 interface StudentDetailsPageProps {
   params: Promise<{
@@ -18,7 +56,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
     redirect("/dashboard");
   }
 
-  const student = await prisma.user.findUnique({
+  const student = (await prisma.user.findUnique({
     where: { id },
     include: {
       courseAccesses: {
@@ -57,7 +95,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
         orderBy: { createdAt: "desc" },
       },
     },
-  });
+  })) as unknown as StudentDetailsPayload | null;
 
   if (!student) {
     redirect("/admin/students");
@@ -114,7 +152,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
                     <div className="flex items-center justify-between">
                       <h3 className="font-bold text-gray-900 text-base">{course.title}</h3>
                       <span className="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 px-3 py-1 rounded-full">
-                        Enrolled via Course Access
+                        Enrolled
                       </span>
                     </div>
 

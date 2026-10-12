@@ -6,6 +6,8 @@ import WhyChooseUsSection from "@/components/home/WhyChooseUs";
 import ContactSection from "@/components/home/ContactUsSection";
 import FAQSection from "@/components/home/Faq";
 import ScheduleSectionNew from "@/components/home/ScheduleNew";
+import ScheduleSectionPrisma from "@/components/home/ScheduleNext";
+import AllCourses from "@/components/shared/courses/AllCourses";
 
 // export const dynamic = "force-dynamic";
 
@@ -139,9 +141,11 @@ export default async function Home() {
       <HomeHero data={{numberOfStudents,successRate, certifiedStudents, homeSubtitle, homeTitle, homeDescription, homeImage}} />
       <FeaturesSection data={{successRate}} />
       <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
-      <CoursesSection />
+      {/* <CoursesSection /> */}
+      <AllCourses />
       <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} />
-      <ScheduleSectionNew />
+      {/* <ScheduleSectionNew /> */}
+      <ScheduleSectionPrisma />
       <ContactSection />
       <FAQSection faqs={faqs} />
 

@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireUser } from "@/lib/auth-user";
 
 export async function POST(
   _req: Request,
   { params }: { params: Promise<{ attemptId: string }> }
 ) {
   try {
-
     const { attemptId } = await params;
     const body = await _req.json();
     const { userId } = body;
 
     const dbUser = await prisma.user.findUnique({
-      where: { id:userId },
+      where: { id: userId },
       select: { id: true },
     });
 
@@ -40,6 +38,22 @@ export async function POST(
             passingScore: true,
           },
         },
+        // Include detailed question answers for the review breakdown
+        answers: {
+          include: {
+            question: {
+              include: {
+                options: true,
+              },
+            },
+            selectedOption: true,
+          },
+          orderBy: {
+            question: {
+              order: "asc",
+            },
+          },
+        },
       },
     });
 
@@ -51,10 +65,9 @@ export async function POST(
       return NextResponse.json({ message: "Result not published yet" }, { status: 403 });
     }
 
-    // console.log("attempt before returning:", attempt)
     return NextResponse.json(attempt);
-  } catch(error) {
-    console.log("Error on api/attempts/[attemptid]/resul/route", error)
+  } catch (error) {
+    console.log("Error on api/attempts/[attemptid]/result/route", error);
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 }

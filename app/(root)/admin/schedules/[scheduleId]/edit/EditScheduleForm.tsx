@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateSchedule } from "../../actions"; // Adjust path to server action
-
+import { updateSchedule } from "../../actions";
 import { toast } from "react-toastify";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -11,6 +10,11 @@ interface BranchOption {
   id: string;
   name: string;
   address: string | null;
+}
+
+interface CourseOption {
+  id: string;
+  title: string;
 }
 
 interface ScheduleEntryRow {
@@ -24,23 +28,29 @@ interface EditScheduleFormProps {
   schedule: {
     id: string;
     branchId: string;
+    courseId?: string;
     level: string | null;
+    tag?: string | null;
     description: string | null;
     entries: ScheduleEntryRow[];
   };
   branches: BranchOption[];
+  courses: CourseOption[];
 }
 
 export default function EditScheduleForm({
   schedule,
   branches,
+  courses,
 }: EditScheduleFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     branchId: schedule.branchId || "",
+    courseId: schedule.courseId || "",
     level: schedule.level || "",
+    tag: schedule.tag || "",
     description: schedule.description || "",
   });
 
@@ -81,7 +91,9 @@ export default function EditScheduleForm({
 
     const payload = new FormData();
     payload.append("branchId", formData.branchId);
+    payload.append("courseId", formData.courseId);
     payload.append("level", formData.level);
+    payload.append("tag", formData.tag);
     payload.append("description", formData.description);
     payload.append("entries", JSON.stringify(entries));
 
@@ -109,33 +121,56 @@ export default function EditScheduleForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Branch Selection */}
-      <div>
-        <label className="block text-xs font-semibold text-gray-700 mb-1">
-          Branch *
-        </label>
-        <select
-          value={formData.branchId}
-          onChange={(e) =>
-            setFormData({ ...formData, branchId: e.target.value })
-          }
-          required
-          className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
-        >
-          <option value="">-- Select Branch --</option>
-          {branches.map((branch) => (
-            <option key={branch.id} value={branch.id}>
-              {branch.name} {branch.address ? `(${branch.address})` : ""}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Level & Description */}
+      {/* Branch & Course Selection */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Level / Tag
+            Branch *
+          </label>
+          <select
+            value={formData.branchId}
+            onChange={(e) =>
+              setFormData({ ...formData, branchId: e.target.value })
+            }
+            required
+            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">-- Select Branch --</option>
+            {branches.map((branch) => (
+              <option key={branch.id} value={branch.id}>
+                {branch.name} {branch.address ? `(${branch.address})` : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-700 mb-1">
+            Course *
+          </label>
+          <select
+            value={formData.courseId}
+            onChange={(e) =>
+              setFormData({ ...formData, courseId: e.target.value })
+            }
+            required
+            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">-- Select Course --</option>
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Title & Tag */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-semibold text-gray-700 mb-1">
+            Title
           </label>
           <input
             type="text"
@@ -150,18 +185,34 @@ export default function EditScheduleForm({
 
         <div>
           <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Description
+            Tag
           </label>
           <input
             type="text"
-            value={formData.description}
+            value={formData.tag}
             onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
+              setFormData({ ...formData, tag: e.target.value })
             }
-            placeholder="e.g. DELF পরীক্ষার জন্য বিশেষ প্রস্তুতি..."
+            placeholder="e.g. Weekend Batch / Fast Track"
             className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
           />
         </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-700 mb-1">
+          Description
+        </label>
+        <input
+          type="text"
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
+          placeholder="e.g. DELF পরীক্ষার জন্য বিশেষ প্রস্তুতি..."
+          className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+        />
       </div>
 
       {/* Schedule Time Slots */}

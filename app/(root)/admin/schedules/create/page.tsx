@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export default async function CreateSchedulePage() {
+
   const branches = await prisma.branch.findMany({
     select: {
       id: true,
@@ -13,6 +14,13 @@ export default async function CreateSchedulePage() {
     orderBy: {
       name: "asc",
     },
+  });
+
+
+  // Fetch courses to populate the dropdown
+  const courses = await prisma.course.findMany({
+    select: { id: true, title: true },
+    orderBy: { title: "asc" },
   });
 
   return (
@@ -31,7 +39,8 @@ export default async function CreateSchedulePage() {
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-        <CreateScheduleForm branches={branches} />
+        {/* <CreateScheduleForm branches={branches} /> */}
+        <CreateScheduleForm branches={branches} courses={courses} />
       </div>
     </div>
   );

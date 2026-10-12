@@ -18,11 +18,13 @@ async function requireAdmin() {
   return session;
 }
 
+
 // actions.ts
 export async function createSchedule(formData: FormData) {
   try {
     const branchId = formData.get("branchId") as string;
     const level = formData.get("level") as string;
+    const tag = formData.get("tag") as string; // Added tag field
     const description = formData.get("description") as string;
     const entriesRaw = formData.get("entries") as string;
 
@@ -36,6 +38,7 @@ export async function createSchedule(formData: FormData) {
       data: {
         branchId,
         level,
+        tag, // Included in prisma create payload
         description,
         entries: {
           create: entries.map((entry) => ({
@@ -51,6 +54,71 @@ export async function createSchedule(formData: FormData) {
   } catch (error) {
     console.error("Failed to create schedule:", error);
     return { success: false, message: "Server error creating schedule" };
+  }
+}
+
+export async function updateSchedule(scheduleId: string, formData: FormData) {
+  try {
+    const branchId = formData.get("branchId") as string;
+    const courseId = formData.get("courseId") as string;
+    const level = formData.get("level") as string;
+    const tag = formData.get("tag") as string; // Added tag field
+    const description = formData.get("description") as string;
+    const entriesRaw = formData.get("entries") as string;
+
+    const entries = JSON.parse(entriesRaw) as {
+      day: string;
+      time: string;
+      startingDate: string;
+    }[];
+
+    const branch = await prisma.branch.findUnique({ where: { id: branchId } });
+    const isParis = branch?.name.toLowerCase().includes("paris");
+
+    // Clear previous course connections and update entries within a transaction
+    await prisma.$transaction([
+      prisma.scheduleEntry.deleteMany({
+        where: { scheduleId },
+      }),
+      prisma.course.updateMany({
+        where: isParis ? { parisScheduleId: scheduleId } : { hocheScheduleId: scheduleId },
+        data: isParis ? { parisScheduleId: null } : { hocheScheduleId: null },
+      }),
+      prisma.schedule.update({
+        where: { id: scheduleId },
+        data: {
+          branchId,
+          level,
+          tag, // Included tag field in update payload
+          description,
+          entries: {
+            create: entries.map((entry) => ({
+              day: entry.day,
+              time: entry.time,
+              startingDate: entry.startingDate,
+            })),
+          },
+        },
+      }),
+    ]);
+
+    // Connect the newly chosen course
+    if (courseId) {
+      await prisma.course.update({
+        where: { id: courseId },
+        data: isParis
+          ? { parisScheduleId: scheduleId }
+          : { hocheScheduleId: scheduleId },
+      });
+    }
+
+    revalidatePath("/admin/schedules");
+    revalidatePath("/courses");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update schedule:", error);
+    return { success: false, message: "Server error updating schedule." };
   }
 }
 
@@ -70,51 +138,5 @@ export async function deleteSchedule(scheduleId: string) {
       success: false,
       message: error instanceof Error ? error.message : "Failed to delete schedule",
     };
-  }
-}
-
-
-export async function updateSchedule(scheduleId: string, formData: FormData) {
-  try {
-    const branchId = formData.get("branchId") as string;
-    const level = formData.get("level") as string;
-    const description = formData.get("description") as string;
-    const entriesRaw = formData.get("entries") as string;
-
-    const entries = JSON.parse(entriesRaw) as {
-      day: string;
-      time: string;
-      startingDate: string;
-    }[];
-
-    // Atomically replace existing entries with updated entries
-    await prisma.$transaction([
-      prisma.scheduleEntry.deleteMany({
-        where: { scheduleId },
-      }),
-      prisma.schedule.update({
-        where: { id: scheduleId },
-        data: {
-          branchId,
-          level,
-          description,
-          entries: {
-            create: entries.map((entry) => ({
-              day: entry.day,
-              time: entry.time,
-              startingDate: entry.startingDate,
-            })),
-          },
-        },
-      }),
-    ]);
-
-    revalidatePath("/admin/schedules");
-    revalidatePath("/courses");
-
-    return { success: true };
-  } catch (error) {
-    console.error("Failed to update schedule:", error);
-    return { success: false, message: "Server error updating schedule." };
   }
 }

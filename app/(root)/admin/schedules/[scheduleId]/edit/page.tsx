@@ -46,7 +46,28 @@ export default async function EditSchedulePage({
     },
   });
 
-  const serializedSchedule = JSON.parse(JSON.stringify(schedule));
+  const courses = await prisma.course.findMany({
+    select: { id: true, title: true },
+    orderBy: { title: "asc" },
+  });
+
+  // Find the course linked to this schedule directly
+  const linkedCourse = await prisma.course.findFirst({
+    where: {
+      OR: [
+        { parisScheduleId: scheduleId },
+        { hocheScheduleId: scheduleId },
+      ],
+    },
+    select: { id: true },
+  });
+
+  const currentCourseId = linkedCourse?.id || "";
+
+  const serializedSchedule = {
+    ...JSON.parse(JSON.stringify(schedule)),
+    courseId: currentCourseId,
+  };
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
@@ -69,6 +90,7 @@ export default async function EditSchedulePage({
         <EditScheduleForm
           schedule={serializedSchedule}
           branches={branches}
+          courses={courses}
         />
       </div>
     </div>

@@ -31,8 +31,14 @@ type AttemptData = {
 
 export default function QuizPlayer({
   initialData,
+  courseSlug,
+  lessonSlug,
+  quizSlug,
 }: {
   initialData: AttemptData;
+  courseSlug: string;
+  lessonSlug: string;
+  quizSlug: string;
 }) {
   const router = useRouter();
   const [attempt, setAttempt] = useState(initialData);
@@ -86,7 +92,10 @@ export default function QuizPlayer({
         method: "POST",
       });
 
-      router.replace(`/quizzes/${attempt.quiz.id}/result/${attempt.id}`);
+      // Redirect cleanly with lessonsSlug passed as a query parameter
+      router.replace(
+        `/dashboard/courses/${courseSlug}/lessons/${lessonSlug}/quiz/${quizSlug}/result/${attempt.id}?lessonsSlug=${lessonSlug}`
+      );
     });
   }
 

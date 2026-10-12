@@ -12,6 +12,11 @@ interface BranchOption {
   address: string | null;
 }
 
+interface CourseOption {
+  id: string;
+  title: string;
+}
+
 interface ScheduleEntryRow {
   day: string;
   time: string;
@@ -20,8 +25,10 @@ interface ScheduleEntryRow {
 
 export default function CreateScheduleForm({
   branches,
+  courses,
 }: {
   branches: BranchOption[];
+  courses: CourseOption[];
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -90,30 +97,50 @@ export default function CreateScheduleForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Branch Selection */}
-      <div>
-        <label className="block text-xs font-semibold text-gray-700 mb-1">
-          Branch *
-        </label>
-        <select
-          name="branchId"
-          required
-          className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
-        >
-          <option value="">-- Select Branch --</option>
-          {branches.map((branch) => (
-            <option key={branch.id} value={branch.id}>
-              {branch.name} {branch.address ? `(${branch.address})` : ""}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Level & Description */}
+      {/* Branch & Course Selection */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Level / Tag
+            Branch *
+          </label>
+          <select
+            name="branchId"
+            required
+            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">-- Select Branch --</option>
+            {branches.map((branch) => (
+              <option key={branch.id} value={branch.id}>
+                {branch.name} {branch.address ? `(${branch.address})` : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-700 mb-1">
+            Course *
+          </label>
+          <select
+            name="courseId"
+            required
+            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">-- Select Course --</option>
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Title & Tag */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-semibold text-gray-700 mb-1">
+            Title
           </label>
           <input
             type="text"
@@ -125,15 +152,28 @@ export default function CreateScheduleForm({
 
         <div>
           <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Description
+            Tag
           </label>
           <input
             type="text"
-            name="description"
-            placeholder="e.g. DELF পরীক্ষার জন্য বিশেষ প্রস্তুতি..."
+            name="tag"
+            placeholder="e.g. Weekend Batch / Fast Track"
             className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
           />
         </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-700 mb-1">
+          Description
+        </label>
+        <input
+          type="text"
+          name="description"
+          placeholder="e.g. DELF পরীক্ষার জন্য বিশেষ প্রস্তুতি..."
+          className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+        />
       </div>
 
       {/* Schedule Entries */}
