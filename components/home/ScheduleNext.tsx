@@ -131,7 +131,7 @@ const ScheduleSectionPrisma = async () => {
           )}
         </div>
 
-        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-12">
+        <div data-aos="fade-up" data-aos-offset="0" data-aos-duration="1000" data-aos-delay="0" className="mt-16 bg-linear-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-12">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
