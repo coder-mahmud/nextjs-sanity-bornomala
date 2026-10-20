@@ -183,6 +183,7 @@ export type BranchWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   schedules?: Prisma.ScheduleListRelationFilter
+  dailyExpenses?: Prisma.DailyExpenseListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -192,6 +193,7 @@ export type BranchOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   schedules?: Prisma.ScheduleOrderByRelationAggregateInput
+  dailyExpenses?: Prisma.DailyExpenseOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -204,6 +206,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   schedules?: Prisma.ScheduleListRelationFilter
+  dailyExpenses?: Prisma.DailyExpenseListRelationFilter
 }, "id">
 
 export type BranchOrderByWithAggregationInput = {
@@ -235,6 +238,7 @@ export type BranchCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   schedules?: Prisma.ScheduleCreateNestedManyWithoutBranchInput
+  dailyExpenses?: Prisma.DailyExpenseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -244,6 +248,7 @@ export type BranchUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutBranchInput
+  dailyExpenses?: Prisma.DailyExpenseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -253,6 +258,7 @@ export type BranchUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedules?: Prisma.ScheduleUpdateManyWithoutBranchNestedInput
+  dailyExpenses?: Prisma.DailyExpenseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -262,6 +268,7 @@ export type BranchUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutBranchNestedInput
+  dailyExpenses?: Prisma.DailyExpenseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -331,12 +338,27 @@ export type BranchUpdateOneRequiredWithoutSchedulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutSchedulesInput, Prisma.BranchUpdateWithoutSchedulesInput>, Prisma.BranchUncheckedUpdateWithoutSchedulesInput>
 }
 
+export type BranchCreateNestedOneWithoutDailyExpensesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutDailyExpensesInput, Prisma.BranchUncheckedCreateWithoutDailyExpensesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutDailyExpensesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutDailyExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutDailyExpensesInput, Prisma.BranchUncheckedCreateWithoutDailyExpensesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutDailyExpensesInput
+  upsert?: Prisma.BranchUpsertWithoutDailyExpensesInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutDailyExpensesInput, Prisma.BranchUpdateWithoutDailyExpensesInput>, Prisma.BranchUncheckedUpdateWithoutDailyExpensesInput>
+}
+
 export type BranchCreateWithoutSchedulesInput = {
   id?: string
   name: string
   address?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  dailyExpenses?: Prisma.DailyExpenseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutSchedulesInput = {
@@ -345,6 +367,7 @@ export type BranchUncheckedCreateWithoutSchedulesInput = {
   address?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  dailyExpenses?: Prisma.DailyExpenseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutSchedulesInput = {
@@ -369,6 +392,7 @@ export type BranchUpdateWithoutSchedulesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dailyExpenses?: Prisma.DailyExpenseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutSchedulesInput = {
@@ -377,6 +401,59 @@ export type BranchUncheckedUpdateWithoutSchedulesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dailyExpenses?: Prisma.DailyExpenseUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutDailyExpensesInput = {
+  id?: string
+  name: string
+  address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutDailyExpensesInput = {
+  id?: string
+  name: string
+  address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutDailyExpensesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutDailyExpensesInput, Prisma.BranchUncheckedCreateWithoutDailyExpensesInput>
+}
+
+export type BranchUpsertWithoutDailyExpensesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutDailyExpensesInput, Prisma.BranchUncheckedUpdateWithoutDailyExpensesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutDailyExpensesInput, Prisma.BranchUncheckedCreateWithoutDailyExpensesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutDailyExpensesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutDailyExpensesInput, Prisma.BranchUncheckedUpdateWithoutDailyExpensesInput>
+}
+
+export type BranchUpdateWithoutDailyExpensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutDailyExpensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 
@@ -386,10 +463,12 @@ export type BranchUncheckedUpdateWithoutSchedulesInput = {
 
 export type BranchCountOutputType = {
   schedules: number
+  dailyExpenses: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   schedules?: boolean | BranchCountOutputTypeCountSchedulesArgs
+  dailyExpenses?: boolean | BranchCountOutputTypeCountDailyExpensesArgs
 }
 
 /**
@@ -409,6 +488,13 @@ export type BranchCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Type
   where?: Prisma.ScheduleWhereInput
 }
 
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountDailyExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DailyExpenseWhereInput
+}
+
 
 export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -417,6 +503,7 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   schedules?: boolean | Prisma.Branch$schedulesArgs<ExtArgs>
+  dailyExpenses?: boolean | Prisma.Branch$dailyExpensesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -447,6 +534,7 @@ export type BranchSelectScalar = {
 export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "createdAt" | "updatedAt", ExtArgs["result"]["branch"]>
 export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   schedules?: boolean | Prisma.Branch$schedulesArgs<ExtArgs>
+  dailyExpenses?: boolean | Prisma.Branch$dailyExpensesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -456,6 +544,7 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Branch"
   objects: {
     schedules: Prisma.$SchedulePayload<ExtArgs>[]
+    dailyExpenses: Prisma.$DailyExpensePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -858,6 +947,7 @@ readonly fields: BranchFieldRefs;
 export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   schedules<T extends Prisma.Branch$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dailyExpenses<T extends Prisma.Branch$dailyExpensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$dailyExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DailyExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1301,6 +1391,30 @@ export type Branch$schedulesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ScheduleScalarFieldEnum | Prisma.ScheduleScalarFieldEnum[]
+}
+
+/**
+ * Branch.dailyExpenses
+ */
+export type Branch$dailyExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DailyExpense
+   */
+  select?: Prisma.DailyExpenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DailyExpense
+   */
+  omit?: Prisma.DailyExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DailyExpenseInclude<ExtArgs> | null
+  where?: Prisma.DailyExpenseWhereInput
+  orderBy?: Prisma.DailyExpenseOrderByWithRelationInput | Prisma.DailyExpenseOrderByWithRelationInput[]
+  cursor?: Prisma.DailyExpenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DailyExpenseScalarFieldEnum | Prisma.DailyExpenseScalarFieldEnum[]
 }
 
 /**

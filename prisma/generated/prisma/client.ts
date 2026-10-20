@@ -173,3 +173,18 @@ export type CourseCard = Prisma.CourseCardModel
  * 
  */
 export type Instructor = Prisma.InstructorModel
+/**
+ * Model Inventory
+ * 
+ */
+export type Inventory = Prisma.InventoryModel
+/**
+ * Model Student
+ * 
+ */
+export type Student = Prisma.StudentModel
+/**
+ * Model DailyExpense
+ * 
+ */
+export type DailyExpense = Prisma.DailyExpenseModel

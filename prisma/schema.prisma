@@ -417,7 +417,8 @@ model Branch {
   name    String
   address String?
 
-  schedules Schedule[]
+  schedules     Schedule[]
+  dailyExpenses DailyExpense[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -504,6 +505,69 @@ model Instructor {
   updatedAt DateTime @updatedAt
 }
 
+// ==========================================
+// NEW MODELS: INVENTORY & DAILY EXPENSES
+// ==========================================
+
+model Inventory {
+  id        String    @id @default(cuid())
+  title     String
+  students  Student[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Student {
+  id               String          @id @default(cuid())
+  inventoryId      String
+  inventory        Inventory       @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+
+  studentId        String?         // Custom student ID code/string
+  firstName        String
+  lastName         String
+  phoneNumber      String?
+  subscriptionDate DateTime?
+  totalAmount      Decimal         @default(0) @db.Decimal(10, 2)
+  discount         Decimal         @default(0) @db.Decimal(10, 2)
+  paidAmount       Decimal         @default(0) @db.Decimal(10, 2)
+  paymentDates     DateTime[]      // Native array for multiple payment dates (compatible with dayjs)
+  due              Decimal         @default(0) @db.Decimal(10, 2)
+  location         StudentLocation @default(ONLINE)
+
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([inventoryId])
+}
+
+model DailyExpense {
+  id             String   @id @default(cuid())
+  date           DateTime // Date-based field (Day.js formats can be parsed/saved directly to DateTime)
+  
+  income         Decimal  @default(0) @db.Decimal(10, 2)
+  delfA1         Decimal  @default(0) @db.Decimal(10, 2)
+  delfA2         Decimal  @default(0) @db.Decimal(10, 2)
+  delfB1         Decimal  @default(0) @db.Decimal(10, 2)
+  delfB2         Decimal  @default(0) @db.Decimal(10, 2)
+  pdf            Decimal  @default(0) @db.Decimal(10, 2)
+  mixedIncome    Decimal  @default(0) @db.Decimal(10, 2)
+  mixedExpenses  Decimal  @default(0) @db.Decimal(10, 2)
+
+  branchId       String
+  branch         Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([branchId])
+  @@index([date])
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
 enum Role {
   STUDENT
   USER
@@ -557,4 +621,10 @@ enum WeekDay {
   THURSDAY
   FRIDAY
   SATURDAY
+}
+
+enum StudentLocation {
+  PARIS
+  HOCHE
+  ONLINE
 }

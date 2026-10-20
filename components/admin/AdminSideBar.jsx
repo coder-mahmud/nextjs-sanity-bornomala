@@ -56,11 +56,11 @@ const menuItems = [
     href: "/admin/coupons",
     icon: ShoppingCart,
   },
-  // {
-  //   label: "Products",
-  //   href: "/admin/products",
-  //   icon: Package,
-  // },
+  {
+    label: "Inventories",
+    href: "/admin/inventories",
+    icon: Package,
+  },
   {
     label: "Settings",
     href: "/admin/settings",

@@ -73,7 +73,10 @@ export const ModelName = {
   Schedule: 'Schedule',
   ScheduleEntry: 'ScheduleEntry',
   CourseCard: 'CourseCard',
-  Instructor: 'Instructor'
+  Instructor: 'Instructor',
+  Inventory: 'Inventory',
+  Student: 'Student',
+  DailyExpense: 'DailyExpense'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -481,6 +484,56 @@ export const InstructorScalarFieldEnum = {
 } as const
 
 export type InstructorScalarFieldEnum = (typeof InstructorScalarFieldEnum)[keyof typeof InstructorScalarFieldEnum]
+
+
+export const InventoryScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
+
+
+export const StudentScalarFieldEnum = {
+  id: 'id',
+  inventoryId: 'inventoryId',
+  studentId: 'studentId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phoneNumber: 'phoneNumber',
+  subscriptionDate: 'subscriptionDate',
+  totalAmount: 'totalAmount',
+  discount: 'discount',
+  paidAmount: 'paidAmount',
+  paymentDates: 'paymentDates',
+  due: 'due',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
+
+
+export const DailyExpenseScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  income: 'income',
+  delfA1: 'delfA1',
+  delfA2: 'delfA2',
+  delfB1: 'delfB1',
+  delfB2: 'delfB2',
+  pdf: 'pdf',
+  mixedIncome: 'mixedIncome',
+  mixedExpenses: 'mixedExpenses',
+  branchId: 'branchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DailyExpenseScalarFieldEnum = (typeof DailyExpenseScalarFieldEnum)[keyof typeof DailyExpenseScalarFieldEnum]
 
 
 export const SortOrder = {

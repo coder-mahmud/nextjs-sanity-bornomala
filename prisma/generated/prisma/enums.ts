@@ -86,3 +86,12 @@ export const WeekDay = {
 } as const
 
 export type WeekDay = (typeof WeekDay)[keyof typeof WeekDay]
+
+
+export const StudentLocation = {
+  PARIS: 'PARIS',
+  HOCHE: 'HOCHE',
+  ONLINE: 'ONLINE'
+} as const
+
+export type StudentLocation = (typeof StudentLocation)[keyof typeof StudentLocation]
