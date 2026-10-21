@@ -54,7 +54,7 @@ export default function InventoryListPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Inventories</h1>
-          <p className="text-sm text-gray-500">Manage student inventories and subscriptions from database</p>
+          <p className="text-sm text-gray-500">Manage student inventories and spreadsheet records</p>
         </div>
         <Link
           href="/admin/inventories/create"
@@ -71,7 +71,7 @@ export default function InventoryListPage() {
               <th className="py-3 px-4 w-16">SL</th>
               <th className="py-3 px-4">Title</th>
               <th className="py-3 px-4">Students</th>
-              <th className="py-3 px-4">Total Amount (€)</th>
+              <th className="py-3 px-4">Total Tarif (€)</th>
               <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
@@ -90,8 +90,8 @@ export default function InventoryListPage() {
               </tr>
             ) : (
               inventories.map((item, index) => {
-                const totalSum = item.students.reduce(
-                  (acc: number, s: any) => acc + Number(s.totalAmount),
+                const totalTarifSum = item.students.reduce(
+                  (acc: number, s: any) => acc + Number(s.tarif),
                   0
                 );
                 return (
@@ -100,7 +100,7 @@ export default function InventoryListPage() {
                     <td className="py-3.5 px-4 font-semibold text-gray-900">{item.title}</td>
                     <td className="py-3.5 px-4 text-gray-600">{item.students.length} Students</td>
                     <td className="py-3.5 px-4 text-gray-900 font-medium">
-                      €{totalSum.toLocaleString()}
+                      €{totalTarifSum.toLocaleString()}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center justify-end space-x-2">

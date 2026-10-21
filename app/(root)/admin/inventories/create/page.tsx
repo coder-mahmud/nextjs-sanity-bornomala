@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, Save, Calendar } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { createInventory } from "@/actions/inventory";
@@ -13,16 +13,17 @@ export default function CreateInventoryPage() {
   const [students, setStudents] = useState([
     {
       id: "1",
-      studentId: "",
-      firstName: "",
+      identity: "",
       lastName: "",
+      firstName: "",
       phoneNumber: "",
       subscriptionDate: "",
-      totalAmount: 0,
-      discount: 0,
-      paidAmount: 0,
-      paymentDates: [""], // Array of date strings for Day.js compatibility
-      location: "PARIS" as const,
+      tarif: 0,
+      deduit: 0,
+      paye: 0,
+      birthPlace: "",
+      city: "",
+      comment: "",
     },
   ]);
 
@@ -32,41 +33,22 @@ export default function CreateInventoryPage() {
     setStudents(updated);
   };
 
-  const handlePaymentDateChange = (studentIndex: number, dateIndex: number, value: string) => {
-    const updated = [...students];
-    const dates = [...updated[studentIndex].paymentDates];
-    dates[dateIndex] = value;
-    updated[studentIndex].paymentDates = dates;
-    setStudents(updated);
-  };
-
-  const addPaymentDate = (studentIndex: number) => {
-    const updated = [...students];
-    updated[studentIndex].paymentDates.push("");
-    setStudents(updated);
-  };
-
-  const removePaymentDate = (studentIndex: number, dateIndex: number) => {
-    const updated = [...students];
-    updated[studentIndex].paymentDates = updated[studentIndex].paymentDates.filter((_, i) => i !== dateIndex);
-    setStudents(updated);
-  };
-
   const addStudent = () => {
     setStudents([
       ...students,
       {
         id: Date.now().toString(),
-        studentId: "",
-        firstName: "",
+        identity: "",
         lastName: "",
+        firstName: "",
         phoneNumber: "",
         subscriptionDate: "",
-        totalAmount: 0,
-        discount: 0,
-        paidAmount: 0,
-        paymentDates: [""],
-        location: "PARIS",
+        tarif: 0,
+        deduit: 0,
+        paye: 0,
+        birthPlace: "",
+        city: "",
+        comment: "",
       },
     ]);
   };
@@ -122,7 +104,7 @@ export default function CreateInventoryPage() {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="e.g. Batch 02 - Intensive French"
+          placeholder="e.g. SAMEDI B2 11h00-14h00"
           required
           className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
@@ -142,7 +124,7 @@ export default function CreateInventoryPage() {
 
         <div className="space-y-6">
           {students.map((student, sIndex) => {
-            const due = (Number(student.totalAmount) || 0) - (Number(student.discount) || 0) - (Number(student.paidAmount) || 0);
+            const aRegler = (Number(student.tarif) || 0) - (Number(student.deduit) || 0) - (Number(student.paye) || 0);
             return (
               <div
                 key={student.id}
@@ -160,54 +142,54 @@ export default function CreateInventoryPage() {
                   </button>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Student ID</label>
+                    <label className="block text-xs font-medium text-gray-600">Identité</label>
                     <input
                       type="text"
-                      value={student.studentId}
-                      onChange={(e) => handleStudentChange(sIndex, "studentId", e.target.value)}
-                      placeholder="e.g. STU-001"
+                      value={student.identity}
+                      onChange={(e) => handleStudentChange(sIndex, "identity", e.target.value)}
+                      placeholder="e.g. 3798"
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">First Name *</label>
-                    <input
-                      type="text"
-                      value={student.firstName}
-                      onChange={(e) => handleStudentChange(sIndex, "firstName", e.target.value)}
-                      required
-                      placeholder="First name"
-                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600">Last Name *</label>
+                    <label className="block text-xs font-medium text-gray-600">Nom (Last Name) *</label>
                     <input
                       type="text"
                       value={student.lastName}
                       onChange={(e) => handleStudentChange(sIndex, "lastName", e.target.value)}
                       required
-                      placeholder="Last name"
+                      placeholder="Nom"
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Prénom (First Name) *</label>
+                    <input
+                      type="text"
+                      value={student.firstName}
+                      onChange={(e) => handleStudentChange(sIndex, "firstName", e.target.value)}
+                      required
+                      placeholder="Prénom"
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Numéro tel</label>
+                    <input
+                      type="text"
+                      value={student.phoneNumber}
+                      onChange={(e) => handleStudentChange(sIndex, "phoneNumber", e.target.value)}
+                      placeholder="605895626"
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Phone Number</label>
-                    <input
-                      type="text"
-                      value={student.phoneNumber}
-                      onChange={(e) => handleStudentChange(sIndex, "phoneNumber", e.target.value)}
-                      placeholder="+33 6..."
-                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600">Subscription Date</label>
+                    <label className="block text-xs font-medium text-gray-600">Inscription (Date)</label>
                     <input
                       type="date"
                       value={student.subscriptionDate}
@@ -216,90 +198,71 @@ export default function CreateInventoryPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Location</label>
-                    <select
-                      value={student.location}
-                      onChange={(e) => handleStudentChange(sIndex, "location", e.target.value)}
+                    <label className="block text-xs font-medium text-gray-600">Lieu de naissance</label>
+                    <input
+                      type="text"
+                      value={student.birthPlace}
+                      onChange={(e) => handleStudentChange(sIndex, "birthPlace", e.target.value)}
+                      placeholder="e.g. Noakhali"
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
-                    >
-                      <option value="PARIS">Paris</option>
-                      <option value="HOCHE">Hoche</option>
-                      <option value="ONLINE">Online</option>
-                    </select>
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Ville</label>
+                    <input
+                      type="text"
+                      value={student.city}
+                      onChange={(e) => handleStudentChange(sIndex, "city", e.target.value)}
+                      placeholder="e.g. Paris 18"
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Commentaire</label>
+                    <input
+                      type="text"
+                      value={student.comment}
+                      onChange={(e) => handleStudentChange(sIndex, "comment", e.target.value)}
+                      placeholder="Optional notes"
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2 border-t border-gray-200">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Total Amount (€)</label>
+                    <label className="block text-xs font-medium text-gray-600">Tarif (€)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={student.totalAmount}
-                      onChange={(e) => handleStudentChange(sIndex, "totalAmount", parseFloat(e.target.value))}
+                      value={student.tarif === 0 ? "" : student.tarif}
+                      onChange={(e) => handleStudentChange(sIndex, "tarif", e.target.value === "" ? 0 : parseFloat(e.target.value))}
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Discount (€)</label>
+                    <label className="block text-xs font-medium text-gray-600">Déduit (€)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={student.discount}
-                      onChange={(e) => handleStudentChange(sIndex, "discount", parseFloat(e.target.value))}
+                      value={student.deduit === 0 ? "" : student.deduit}
+                      onChange={(e) => handleStudentChange(sIndex, "deduit", e.target.value === "" ? 0 : parseFloat(e.target.value))}
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Paid Amount (€)</label>
+                    <label className="block text-xs font-medium text-gray-600">Payé (€)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={student.paidAmount}
-                      onChange={(e) => handleStudentChange(sIndex, "paidAmount", parseFloat(e.target.value))}
+                      value={student.paye === 0 ? "" : student.paye}
+                      onChange={(e) => handleStudentChange(sIndex, "paye", e.target.value === "" ? 0 : parseFloat(e.target.value))}
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Calculated Due (€)</label>
-                    <span className="block mt-2 text-base font-bold text-rose-600">€{due.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* Multiple Payment Dates Section */}
-                <div className="pt-2 border-t border-gray-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className=" text-xs font-semibold text-gray-700 flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-gray-500" /> Payment Dates
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => addPaymentDate(sIndex)}
-                      className="text-xs text-blue-600 hover:underline font-medium"
-                    >
-                      + Add Payment Date
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {student.paymentDates.map((pDate, dIndex) => (
-                      <div key={dIndex} className="flex items-center gap-1 bg-white border border-gray-200 p-1 rounded-md">
-                        <input
-                          type="date"
-                          value={pDate}
-                          onChange={(e) => handlePaymentDateChange(sIndex, dIndex, e.target.value)}
-                          className="text-xs border-0 focus:outline-none bg-transparent"
-                        />
-                        {student.paymentDates.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removePaymentDate(sIndex, dIndex)}
-                            className="text-red-500 hover:text-red-700 p-0.5"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    ))}
+                    <label className="block text-xs font-medium text-gray-600">A régler (Due) (€)</label>
+                    <span className="block mt-2 text-base font-bold text-rose-600">€{aRegler.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

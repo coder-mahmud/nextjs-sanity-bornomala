@@ -12,7 +12,7 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
 
   const [inventory, setInventory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedStudent, setSelectedStudent] = useState<any>(null); // State to control the student popup modal
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
 
   useEffect(() => {
     async function fetchDetails() {
@@ -52,10 +52,10 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
 
   const students = inventory.students || [];
   const totalStudents = students.length;
-  const sumTotalAmount = students.reduce((acc: number, curr: any) => acc + Number(curr.totalAmount), 0);
-  const sumPaidAmount = students.reduce((acc: number, curr: any) => acc + Number(curr.paidAmount), 0);
-  const sumDueAmount = students.reduce((acc: number, curr: any) => acc + Number(curr.due), 0);
-  const sumDiscount = students.reduce((acc: number, curr: any) => acc + Number(curr.discount), 0);
+  const sumTarif = students.reduce((acc: number, curr: any) => acc + Number(curr.tarif), 0);
+  const sumPaye = students.reduce((acc: number, curr: any) => acc + Number(curr.paye), 0);
+  const sumARegler = students.reduce((acc: number, curr: any) => acc + Number(curr.aRegler), 0);
+  const sumDeduit = students.reduce((acc: number, curr: any) => acc + Number(curr.deduit), 0);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -74,7 +74,6 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
           </div>
         </div>
 
-        {/* Edit Button */}
         <Link
           href={`/admin/inventories/${inventoryId}/edit`}
           className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium transition shadow-sm"
@@ -97,9 +96,9 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase">Sum Total Amount</p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">€{sumTotalAmount.toLocaleString()}</p>
-            <span className="text-xs text-gray-400">Discount: €{sumDiscount.toLocaleString()}</span>
+            <p className="text-xs font-semibold text-gray-500 uppercase">Total Tarif</p>
+            <p className="text-2xl font-bold text-gray-900 mt-1">€{sumTarif.toLocaleString()}</p>
+            <span className="text-xs text-gray-400">Déduit: €{sumDeduit.toLocaleString()}</span>
           </div>
           <div className="p-3 bg-purple-50 text-purple-600 rounded-lg">
             <DollarSign className="w-6 h-6" />
@@ -108,8 +107,8 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase">Total Paid</p>
-            <p className="text-2xl font-bold text-emerald-600 mt-1">€{sumPaidAmount.toLocaleString()}</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase">Total Payé</p>
+            <p className="text-2xl font-bold text-emerald-600 mt-1">€{sumPaye.toLocaleString()}</p>
           </div>
           <div className="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
             <CheckCircle2 className="w-6 h-6" />
@@ -118,8 +117,8 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase">Total Due</p>
-            <p className="text-2xl font-bold text-rose-600 mt-1">€{sumDueAmount.toLocaleString()}</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase">Total A Régler</p>
+            <p className="text-2xl font-bold text-rose-600 mt-1">€{sumARegler.toLocaleString()}</p>
           </div>
           <div className="p-3 bg-rose-50 text-rose-600 rounded-lg">
             <AlertCircle className="w-6 h-6" />
@@ -135,21 +134,22 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase bg-gray-50/50">
-              <th className="py-3 px-4">Student ID</th>
-              <th className="py-3 px-4">Name</th>
-              <th className="py-3 px-4">Phone</th>
-              <th className="py-3 px-4">Location</th>
-              <th className="py-3 px-4">Total</th>
-              <th className="py-3 px-4">Discount</th>
-              <th className="py-3 px-4">Paid</th>
-              <th className="py-3 px-4">Due</th>
+              <th className="py-3 px-4">Identité</th>
+              <th className="py-3 px-4">Nom (Last)</th>
+              <th className="py-3 px-4">Prénom (First)</th>
+              <th className="py-3 px-4">Numéro tel</th>
+              <th className="py-3 px-4">Inscription</th>
+              <th className="py-3 px-4">Tarif</th>
+              <th className="py-3 px-4">Déduit</th>
+              <th className="py-3 px-4">Payé</th>
+              <th className="py-3 px-4">A régler</th>
               <th className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 text-sm">
             {students.length === 0 ? (
               <tr>
-                <td colSpan={9} className="py-8 text-center text-gray-500">
+                <td colSpan={10} className="py-8 text-center text-gray-500">
                   No students assigned to this inventory record.
                 </td>
               </tr>
@@ -157,32 +157,21 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
               students.map((student: any) => (
                 <tr key={student.id} className="hover:bg-gray-50">
                   <td className="py-3.5 px-4 font-mono text-xs text-gray-600">
-                    {student.studentId || "N/A"}
+                    {student.identity || "N/A"}
                   </td>
-                  <td className="py-3.5 px-4 font-medium text-gray-900">
-                    {student.firstName} {student.lastName}
-                  </td>
+                  <td className="py-3.5 px-4 font-semibold text-gray-900">{student.lastName}</td>
+                  <td className="py-3.5 px-4 font-medium text-gray-800">{student.firstName}</td>
                   <td className="py-3.5 px-4 text-gray-600">{student.phoneNumber || "N/A"}</td>
-                  <td className="py-3.5 px-4">
-                    <span
-                      className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
-                        student.location === "PARIS"
-                          ? "bg-blue-100 text-blue-800"
-                          : student.location === "HOCHE"
-                          ? "bg-amber-100 text-amber-800"
-                          : "bg-emerald-100 text-emerald-800"
-                      }`}
-                    >
-                      {student.location}
-                    </span>
+                  <td className="py-3.5 px-4 text-gray-600 text-xs">
+                    {student.subscriptionDate ? new Date(student.subscriptionDate).toLocaleDateString() : "N/A"}
                   </td>
-                  <td className="py-3.5 px-4">€{Number(student.totalAmount).toLocaleString()}</td>
-                  <td className="py-3.5 px-4 text-gray-500">€{Number(student.discount).toLocaleString()}</td>
+                  <td className="py-3.5 px-4">€{Number(student.tarif).toLocaleString()}</td>
+                  <td className="py-3.5 px-4 text-gray-500">€{Number(student.deduit).toLocaleString()}</td>
                   <td className="py-3.5 px-4 text-emerald-600 font-medium">
-                    €{Number(student.paidAmount).toLocaleString()}
+                    €{Number(student.paye).toLocaleString()}
                   </td>
                   <td className="py-3.5 px-4 text-rose-600 font-medium">
-                    €{Number(student.due).toLocaleString()}
+                    €{Number(student.aRegler).toLocaleString()}
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <button
@@ -207,9 +196,9 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
             <div className="flex justify-between items-center border-b pb-3">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">
-                  {selectedStudent.firstName} {selectedStudent.lastName}
+                  {selectedStudent.lastName} {selectedStudent.firstName}
                 </h3>
-                <p className="text-xs text-gray-500 font-mono">ID: {selectedStudent.studentId || "N/A"}</p>
+                <p className="text-xs text-gray-500 font-mono">Identité: {selectedStudent.identity || "N/A"}</p>
               </div>
               <button
                 onClick={() => setSelectedStudent(null)}
@@ -221,55 +210,43 @@ export default function InventoryDetailsPage({ params }: { params: Promise<{ id:
 
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase">Phone Number</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Numéro tel</p>
                 <p className="font-medium text-gray-800 mt-0.5">{selectedStudent.phoneNumber || "N/A"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase">Location</p>
-                <span className="inline-flex mt-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                  {selectedStudent.location}
-                </span>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase">Subscription Date</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Inscription</p>
                 <p className="font-medium text-gray-800 mt-0.5">
                   {selectedStudent.subscriptionDate ? new Date(selectedStudent.subscriptionDate).toLocaleDateString() : "N/A"}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase">Total Amount</p>
-                <p className="font-semibold text-gray-900 mt-0.5">€{Number(selectedStudent.totalAmount).toLocaleString()}</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Lieu de naissance</p>
+                <p className="font-medium text-gray-800 mt-0.5">{selectedStudent.birthPlace || "N/A"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase">Discount</p>
-                <p className="font-semibold text-gray-500 mt-0.5">€{Number(selectedStudent.discount).toLocaleString()}</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Ville</p>
+                <p className="font-medium text-gray-800 mt-0.5">{selectedStudent.city || "N/A"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase">Paid Amount</p>
-                <p className="font-semibold text-emerald-600 mt-0.5">€{Number(selectedStudent.paidAmount).toLocaleString()}</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Tarif</p>
+                <p className="font-semibold text-gray-900 mt-0.5">€{Number(selectedStudent.tarif).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Déduit</p>
+                <p className="font-semibold text-gray-500 mt-0.5">€{Number(selectedStudent.deduit).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Payé</p>
+                <p className="font-semibold text-emerald-600 mt-0.5">€{Number(selectedStudent.paye).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 font-semibold uppercase">A régler</p>
+                <p className="font-semibold text-rose-600 mt-0.5">€{Number(selectedStudent.aRegler).toLocaleString()}</p>
               </div>
               <div className="col-span-2">
-                <p className="text-xs text-gray-500 font-semibold uppercase">Due Amount</p>
-                <p className="font-semibold text-rose-600 mt-0.5 text-base">€{Number(selectedStudent.due).toLocaleString()}</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Commentaire</p>
+                <p className="font-medium text-gray-700 mt-0.5">{selectedStudent.comment || "N/A"}</p>
               </div>
-            </div>
-
-            {/* Payment Dates History */}
-            <div className="pt-3 border-t border-gray-100 space-y-2">
-              <p className="text-xs text-gray-500 font-semibold uppercase flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-gray-400" /> Payment Dates History
-              </p>
-              {selectedStudent.paymentDates && selectedStudent.paymentDates.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {selectedStudent.paymentDates.map((pDate: string, idx: number) => (
-                    <span key={idx} className="bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded-md font-medium">
-                      {new Date(pDate).toLocaleDateString()}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-gray-400 italic">No payment dates recorded.</p>
-              )}
             </div>
 
             <div className="flex justify-end pt-2">

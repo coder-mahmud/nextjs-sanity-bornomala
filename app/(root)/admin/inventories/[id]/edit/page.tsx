@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, Save, Calendar } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { getInventoryById, updateInventory } from "@/actions/inventory";
-import { AnyCaaRecord } from "dns";
 
 export default function EditInventoryPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -23,22 +22,21 @@ export default function EditInventoryPage({ params }: { params: Promise<{ id: st
       const res = await getInventoryById(inventoryId);
       if (res.success && res.data) {
         setTitle(res.data.title);
-        // Map database records including subscriptionDate and paymentDates
+        // Map database records to the new spreadsheet column field shape
         setStudents(
           res.data.students.map((s: any) => ({
             id: s.id,
-            studentId: s.studentId || "",
-            firstName: s.firstName,
-            lastName: s.lastName,
+            identity: s.identity || "",
+            lastName: s.lastName || "",
+            firstName: s.firstName || "",
             phoneNumber: s.phoneNumber || "",
             subscriptionDate: s.subscriptionDate ? s.subscriptionDate.split("T")[0] : "",
-            totalAmount: Number(s.totalAmount),
-            discount: Number(s.discount),
-            paidAmount: Number(s.paidAmount),
-            paymentDates: s.paymentDates && s.paymentDates.length > 0 
-              ? s.paymentDates.map((d: string) => d.split("T")[0]) 
-              : [""],
-            location: s.location,
+            tarif: Number(s.tarif) || 0,
+            deduit: Number(s.deduit) || 0,
+            paye: Number(s.paye) || 0,
+            birthPlace: s.birthPlace || "",
+            city: s.city || "",
+            comment: s.comment || "",
           }))
         );
       } else {
@@ -55,40 +53,21 @@ export default function EditInventoryPage({ params }: { params: Promise<{ id: st
     setStudents(updated);
   };
 
-  const handlePaymentDateChange = (studentIndex: number, dateIndex: number, value: string) => {
-    const updated = [...students];
-    const dates = [...updated[studentIndex].paymentDates];
-    dates[dateIndex] = value;
-    updated[studentIndex].paymentDates = dates;
-    setStudents(updated);
-  };
-
-  const addPaymentDate = (studentIndex: number) => {
-    const updated = [...students];
-    updated[studentIndex].paymentDates.push("");
-    setStudents(updated);
-  };
-
-  const removePaymentDate = (studentIndex: number, dateIndex: number) => {
-    const updated = [...students];
-    updated[studentIndex].paymentDates = updated[studentIndex].paymentDates.filter((_:any, i:any) => i !== dateIndex);
-    setStudents(updated);
-  };
-
   const addStudent = () => {
     setStudents([
       ...students,
       {
-        studentId: "",
-        firstName: "",
+        identity: "",
         lastName: "",
+        firstName: "",
         phoneNumber: "",
         subscriptionDate: "",
-        totalAmount: 0,
-        discount: 0,
-        paidAmount: 0,
-        paymentDates: [""],
-        location: "PARIS",
+        tarif: 0,
+        deduit: 0,
+        paye: 0,
+        birthPlace: "",
+        city: "",
+        comment: "",
       },
     ]);
   };
@@ -171,7 +150,7 @@ export default function EditInventoryPage({ params }: { params: Promise<{ id: st
 
         <div className="space-y-6">
           {students.map((student, sIndex) => {
-            const due = (Number(student.totalAmount) || 0) - (Number(student.discount) || 0) - (Number(student.paidAmount) || 0);
+            const aRegler = (Number(student.tarif) || 0) - (Number(student.deduit) || 0) - (Number(student.paye) || 0);
 
             return (
               <div
@@ -189,19 +168,29 @@ export default function EditInventoryPage({ params }: { params: Promise<{ id: st
                   </button>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Student ID</label>
+                    <label className="block text-xs font-medium text-gray-600">Identité</label>
                     <input
                       type="text"
-                      value={student.studentId}
-                      onChange={(e) => handleStudentChange(sIndex, "studentId", e.target.value)}
-                      placeholder="e.g. STU-001"
+                      value={student.identity}
+                      onChange={(e) => handleStudentChange(sIndex, "identity", e.target.value)}
+                      placeholder="e.g. 3798"
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">First Name *</label>
+                    <label className="block text-xs font-medium text-gray-600">Nom (Last Name) *</label>
+                    <input
+                      type="text"
+                      value={student.lastName}
+                      onChange={(e) => handleStudentChange(sIndex, "lastName", e.target.value)}
+                      required
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Prénom (First Name) *</label>
                     <input
                       type="text"
                       value={student.firstName}
@@ -211,30 +200,20 @@ export default function EditInventoryPage({ params }: { params: Promise<{ id: st
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Last Name *</label>
+                    <label className="block text-xs font-medium text-gray-600">Numéro tel</label>
                     <input
                       type="text"
-                      value={student.lastName}
-                      onChange={(e) => handleStudentChange(sIndex, "lastName", e.target.value)}
-                      required
+                      value={student.phoneNumber}
+                      onChange={(e) => handleStudentChange(sIndex, "phoneNumber", e.target.value)}
+                      placeholder="605895626"
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Phone Number</label>
-                    <input
-                      type="text"
-                      value={student.phoneNumber}
-                      onChange={(e) => handleStudentChange(sIndex, "phoneNumber", e.target.value)}
-                      placeholder="+33 6..."
-                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600">Subscription Date</label>
+                    <label className="block text-xs font-medium text-gray-600">Inscription (Date)</label>
                     <input
                       type="date"
                       value={student.subscriptionDate}
@@ -243,90 +222,71 @@ export default function EditInventoryPage({ params }: { params: Promise<{ id: st
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Location</label>
-                    <select
-                      value={student.location}
-                      onChange={(e) => handleStudentChange(sIndex, "location", e.target.value)}
+                    <label className="block text-xs font-medium text-gray-600">Lieu de naissance</label>
+                    <input
+                      type="text"
+                      value={student.birthPlace}
+                      onChange={(e) => handleStudentChange(sIndex, "birthPlace", e.target.value)}
+                      placeholder="e.g. Noakhali"
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
-                    >
-                      <option value="PARIS">Paris</option>
-                      <option value="HOCHE">Hoche</option>
-                      <option value="ONLINE">Online</option>
-                    </select>
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Ville</label>
+                    <input
+                      type="text"
+                      value={student.city}
+                      onChange={(e) => handleStudentChange(sIndex, "city", e.target.value)}
+                      placeholder="e.g. Paris 18"
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Commentaire</label>
+                    <input
+                      type="text"
+                      value={student.comment}
+                      onChange={(e) => handleStudentChange(sIndex, "comment", e.target.value)}
+                      placeholder="Notes"
+                      className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                    />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2 border-t border-gray-200">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Total Amount (€)</label>
+                    <label className="block text-xs font-medium text-gray-600">Tarif (€)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={student.totalAmount}
-                      onChange={(e) => handleStudentChange(sIndex, "totalAmount", parseFloat(e.target.value))}
+                      value={student.tarif}
+                      onChange={(e) => handleStudentChange(sIndex, "tarif", parseFloat(e.target.value))}
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Discount (€)</label>
+                    <label className="block text-xs font-medium text-gray-600">Déduit (€)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={student.discount}
-                      onChange={(e) => handleStudentChange(sIndex, "discount", parseFloat(e.target.value))}
+                      value={student.deduit}
+                      onChange={(e) => handleStudentChange(sIndex, "deduit", parseFloat(e.target.value))}
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Paid Amount (€)</label>
+                    <label className="block text-xs font-medium text-gray-600">Payé (€)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={student.paidAmount}
-                      onChange={(e) => handleStudentChange(sIndex, "paidAmount", parseFloat(e.target.value))}
+                      value={student.paye}
+                      onChange={(e) => handleStudentChange(sIndex, "paye", parseFloat(e.target.value))}
                       className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600">Calculated Due (€)</label>
-                    <span className="block mt-2 text-base font-bold text-rose-600">€{due.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* Multiple Payment Dates Section */}
-                <div className="pt-2 border-t border-gray-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-gray-700 flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-gray-500" /> Payment Dates
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => addPaymentDate(sIndex)}
-                      className="text-xs text-blue-600 hover:underline font-medium"
-                    >
-                      + Add Payment Date
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {student.paymentDates.map((pDate: string, dIndex: number) => (
-                      <div key={dIndex} className="flex items-center gap-1 bg-white border border-gray-200 p-1 rounded-md">
-                        <input
-                          type="date"
-                          value={pDate}
-                          onChange={(e) => handlePaymentDateChange(sIndex, dIndex, e.target.value)}
-                          className="text-xs border-0 focus:outline-none bg-transparent"
-                        />
-                        {student.paymentDates.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removePaymentDate(sIndex, dIndex)}
-                            className="text-red-500 hover:text-red-700 p-0.5"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    ))}
+                    <label className="block text-xs font-medium text-gray-600">A régler (Due) (€)</label>
+                    <span className="block mt-2 text-base font-bold text-rose-600">€{aRegler.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

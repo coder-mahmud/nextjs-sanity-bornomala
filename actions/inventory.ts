@@ -3,24 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-// Foolproof serializer that converts Decimals, Dates, and complex objects into plain JSON primitives
 function sanitizeData(data: any): any {
-  if (data === null || data === undefined) {
-    return data;
-  }
-
-  if (typeof data === "object" && typeof data.toNumber === "function") {
-    return data.toNumber();
-  }
-
-  if (data instanceof Date) {
-    return data.toISOString();
-  }
-
-  if (Array.isArray(data)) {
-    return data.map(sanitizeData);
-  }
-
+  if (data === null || data === undefined) return data;
+  if (typeof data === "object" && typeof data.toNumber === "function") return data.toNumber();
+  if (data instanceof Date) return data.toISOString();
+  if (Array.isArray(data)) return data.map(sanitizeData);
   if (typeof data === "object") {
     const sanitized: Record<string, any> = {};
     for (const key of Object.keys(data)) {
@@ -28,27 +15,16 @@ function sanitizeData(data: any): any {
     }
     return sanitized;
   }
-
   return data;
 }
 
 export async function getInventories() {
   try {
     const inventories = await prisma.inventory.findMany({
-      include: {
-        students: true,
-      },
+      include: { students: true },
       orderBy: { createdAt: "desc" },
     });
-
-    const plainInventories = JSON.parse(JSON.stringify(inventories, (key, value) => {
-      if (value !== null && typeof value === "object" && "s" in value && "e" in value && "d" in value) {
-        return Number(value.toString());
-      }
-      return value;
-    }));
-
-    return { success: true, data: sanitizeData(plainInventories) };
+    return { success: true, data: sanitizeData(inventories) };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -60,17 +36,8 @@ export async function getInventoryById(id: string) {
       where: { id },
       include: { students: true },
     });
-
     if (!inventory) return { success: false, error: "Inventory not found" };
-
-    const plainInventory = JSON.parse(JSON.stringify(inventory, (key, value) => {
-      if (value !== null && typeof value === "object" && "s" in value && "e" in value && "d" in value) {
-        return Number(value.toString());
-      }
-      return value;
-    }));
-
-    return { success: true, data: sanitizeData(plainInventory) };
+    return { success: true, data: sanitizeData(inventory) };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -79,16 +46,17 @@ export async function getInventoryById(id: string) {
 export async function createInventory(formData: {
   title: string;
   students: Array<{
-    studentId?: string;
-    firstName: string;
+    identity?: string;
     lastName: string;
+    firstName: string;
     phoneNumber?: string;
     subscriptionDate?: string;
-    totalAmount: number;
-    discount: number;
-    paidAmount: number;
-    paymentDates?: string[];
-    location: "PARIS" | "HOCHE" | "ONLINE";
+    tarif: number;
+    deduit: number;
+    paye: number;
+    birthPlace?: string;
+    city?: string;
+    comment?: string;
   }>;
 }) {
   try {
@@ -99,23 +67,24 @@ export async function createInventory(formData: {
         title,
         students: {
           create: students.map((s) => {
-            const total = Number(s.totalAmount) || 0;
-            const discount = Number(s.discount) || 0;
-            const paid = Number(s.paidAmount) || 0;
-            const due = total - discount - paid;
+            const tarif = Number(s.tarif) || 0;
+            const deduit = Number(s.deduit) || 0;
+            const paye = Number(s.paye) || 0;
+            const aRegler = tarif - deduit - paye;
 
             return {
-              studentId: s.studentId || null,
-              firstName: s.firstName,
+              identity: s.identity || null,
               lastName: s.lastName,
+              firstName: s.firstName,
               phoneNumber: s.phoneNumber || null,
               subscriptionDate: s.subscriptionDate ? new Date(s.subscriptionDate) : null,
-              totalAmount: total,
-              discount: discount,
-              paidAmount: paid,
-              paymentDates: s.paymentDates ? s.paymentDates.filter(Boolean).map((d) => new Date(d)) : [],
-              due: due,
-              location: s.location,
+              tarif,
+              deduit,
+              paye,
+              aRegler,
+              birthPlace: s.birthPlace || null,
+              city: s.city || null,
+              comment: s.comment || null,
             };
           }),
         },
@@ -135,16 +104,17 @@ export async function updateInventory(
     title: string;
     students: Array<{
       id?: string;
-      studentId?: string;
-      firstName: string;
+      identity?: string;
       lastName: string;
+      firstName: string;
       phoneNumber?: string;
       subscriptionDate?: string;
-      totalAmount: number;
-      discount: number;
-      paidAmount: number;
-      paymentDates?: string[];
-      location: "PARIS" | "HOCHE" | "ONLINE";
+      tarif: number;
+      deduit: number;
+      paye: number;
+      birthPlace?: string;
+      city?: string;
+      comment?: string;
     }>;
   }
 ) {
@@ -172,23 +142,24 @@ export async function updateInventory(
       }
 
       for (const s of students) {
-        const total = Number(s.totalAmount) || 0;
-        const discount = Number(s.discount) || 0;
-        const paid = Number(s.paidAmount) || 0;
-        const due = total - discount - paid;
+        const tarif = Number(s.tarif) || 0;
+        const deduit = Number(s.deduit) || 0;
+        const paye = Number(s.paye) || 0;
+        const aRegler = tarif - deduit - paye;
 
         const studentPayload = {
-          studentId: s.studentId || null,
-          firstName: s.firstName,
+          identity: s.identity || null,
           lastName: s.lastName,
+          firstName: s.firstName,
           phoneNumber: s.phoneNumber || null,
           subscriptionDate: s.subscriptionDate ? new Date(s.subscriptionDate) : null,
-          totalAmount: total,
-          discount,
-          paidAmount: paid,
-          paymentDates: s.paymentDates ? s.paymentDates.filter(Boolean).map((d) => new Date(d)) : [],
-          due,
-          location: s.location,
+          tarif,
+          deduit,
+          paye,
+          aRegler,
+          birthPlace: s.birthPlace || null,
+          city: s.city || null,
+          comment: s.comment || null,
         };
 
         if (s.id && existingIds.includes(s.id)) {
@@ -217,9 +188,7 @@ export async function updateInventory(
 
 export async function deleteInventory(id: string) {
   try {
-    await prisma.inventory.delete({
-      where: { id },
-    });
+    await prisma.inventory.delete({ where: { id } });
     revalidatePath("/admin/inventories");
     return { success: true, message: "Inventory deleted successfully!" };
   } catch (error: any) {

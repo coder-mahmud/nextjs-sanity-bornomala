@@ -466,23 +466,6 @@ export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
 }
 
-export type EnumStudentLocationFilter<$PrismaModel = never> = {
-  equals?: $Enums.StudentLocation | Prisma.EnumStudentLocationFieldRefInput<$PrismaModel>
-  in?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumStudentLocationFilter<$PrismaModel> | $Enums.StudentLocation
-}
-
-export type EnumStudentLocationWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.StudentLocation | Prisma.EnumStudentLocationFieldRefInput<$PrismaModel>
-  in?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumStudentLocationWithAggregatesFilter<$PrismaModel> | $Enums.StudentLocation
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumStudentLocationFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumStudentLocationFilter<$PrismaModel>
-}
-
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -908,23 +891,6 @@ export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
-}
-
-export type NestedEnumStudentLocationFilter<$PrismaModel = never> = {
-  equals?: $Enums.StudentLocation | Prisma.EnumStudentLocationFieldRefInput<$PrismaModel>
-  in?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumStudentLocationFilter<$PrismaModel> | $Enums.StudentLocation
-}
-
-export type NestedEnumStudentLocationWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.StudentLocation | Prisma.EnumStudentLocationFieldRefInput<$PrismaModel>
-  in?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  notIn?: $Enums.StudentLocation[] | Prisma.ListEnumStudentLocationFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumStudentLocationWithAggregatesFilter<$PrismaModel> | $Enums.StudentLocation
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumStudentLocationFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumStudentLocationFilter<$PrismaModel>
 }
 
 

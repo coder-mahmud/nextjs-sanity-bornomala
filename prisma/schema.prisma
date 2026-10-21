@@ -519,46 +519,52 @@ model Inventory {
 }
 
 model Student {
-  id               String          @id @default(cuid())
+  id               String       @id @default(cuid())
   inventoryId      String
-  inventory        Inventory       @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  inventory        Inventory    @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
 
-  studentId        String?         // Custom student ID code/string
-  firstName        String
-  lastName         String
-  phoneNumber      String?
-  subscriptionDate DateTime?
-  totalAmount      Decimal         @default(0) @db.Decimal(10, 2)
-  discount         Decimal         @default(0) @db.Decimal(10, 2)
-  paidAmount       Decimal         @default(0) @db.Decimal(10, 2)
-  paymentDates     DateTime[]      // Native array for multiple payment dates (compatible with dayjs)
-  due              Decimal         @default(0) @db.Decimal(10, 2)
-  location         StudentLocation @default(ONLINE)
+  identity         String?      // Identité
+  lastName         String       // Nom
+  firstName        String       // Prénom
+  phoneNumber      String?      // Numéro tel
+  subscriptionDate DateTime?    // Inscription
+  tarif            Decimal      @default(0) @db.Decimal(10, 2) // Tarif
+  deduit           Decimal      @default(0) @db.Decimal(10, 2) // Déduit
+  paye             Decimal      @default(0) @db.Decimal(10, 2) // Payé
+  aRegler          Decimal      @default(0) @db.Decimal(10, 2) // A régler (Due)
+  birthPlace       String?      // lieu de naissance
+  city             String?      // Ville
+  comment          String?      // COMMENTAIRE
 
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
   @@index([inventoryId])
 }
 
 model DailyExpense {
-  id             String   @id @default(cuid())
-  date           DateTime // Date-based field (Day.js formats can be parsed/saved directly to DateTime)
-  
-  income         Decimal  @default(0) @db.Decimal(10, 2)
-  delfA1         Decimal  @default(0) @db.Decimal(10, 2)
-  delfA2         Decimal  @default(0) @db.Decimal(10, 2)
-  delfB1         Decimal  @default(0) @db.Decimal(10, 2)
-  delfB2         Decimal  @default(0) @db.Decimal(10, 2)
-  pdf            Decimal  @default(0) @db.Decimal(10, 2)
-  mixedIncome    Decimal  @default(0) @db.Decimal(10, 2)
-  mixedExpenses  Decimal  @default(0) @db.Decimal(10, 2)
+  id               String   @id @default(cuid())
+  date             DateTime // DATE
 
-  branchId       String
-  branch         Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  admissionDelfA1  Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF A1
+  admissionDelfA2  Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF A2
+  admissionDelfB1  Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF B1
+  admissionDelfB2  Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF B2
+  delfExam         Decimal  @default(0) @db.Decimal(10, 2) // DELF EXAM
+  pdf              Decimal  @default(0) @db.Decimal(10, 2) // PDF
+  civique          Decimal  @default(0) @db.Decimal(10, 2) // CIVIQUE
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  total            Decimal  @default(0) @db.Decimal(10, 2) // Total (Sum of income sources)
+  expenses         Decimal  @default(0) @db.Decimal(10, 2) // Expenses
+  profit           Decimal  @default(0) @db.Decimal(10, 2) // Daily PROFIT/LOSS (Total - Expenses)
+
+  comment          String?  // Optional Comment field requested by client
+
+  branchId         String
+  branch           Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([branchId])
   @@index([date])

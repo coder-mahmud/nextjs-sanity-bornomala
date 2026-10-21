@@ -27,32 +27,34 @@ export type AggregateStudent = {
 }
 
 export type StudentAvgAggregateOutputType = {
-  totalAmount: runtime.Decimal | null
-  discount: runtime.Decimal | null
-  paidAmount: runtime.Decimal | null
-  due: runtime.Decimal | null
+  tarif: runtime.Decimal | null
+  deduit: runtime.Decimal | null
+  paye: runtime.Decimal | null
+  aRegler: runtime.Decimal | null
 }
 
 export type StudentSumAggregateOutputType = {
-  totalAmount: runtime.Decimal | null
-  discount: runtime.Decimal | null
-  paidAmount: runtime.Decimal | null
-  due: runtime.Decimal | null
+  tarif: runtime.Decimal | null
+  deduit: runtime.Decimal | null
+  paye: runtime.Decimal | null
+  aRegler: runtime.Decimal | null
 }
 
 export type StudentMinAggregateOutputType = {
   id: string | null
   inventoryId: string | null
-  studentId: string | null
-  firstName: string | null
+  identity: string | null
   lastName: string | null
+  firstName: string | null
   phoneNumber: string | null
   subscriptionDate: Date | null
-  totalAmount: runtime.Decimal | null
-  discount: runtime.Decimal | null
-  paidAmount: runtime.Decimal | null
-  due: runtime.Decimal | null
-  location: $Enums.StudentLocation | null
+  tarif: runtime.Decimal | null
+  deduit: runtime.Decimal | null
+  paye: runtime.Decimal | null
+  aRegler: runtime.Decimal | null
+  birthPlace: string | null
+  city: string | null
+  comment: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,16 +62,18 @@ export type StudentMinAggregateOutputType = {
 export type StudentMaxAggregateOutputType = {
   id: string | null
   inventoryId: string | null
-  studentId: string | null
-  firstName: string | null
+  identity: string | null
   lastName: string | null
+  firstName: string | null
   phoneNumber: string | null
   subscriptionDate: Date | null
-  totalAmount: runtime.Decimal | null
-  discount: runtime.Decimal | null
-  paidAmount: runtime.Decimal | null
-  due: runtime.Decimal | null
-  location: $Enums.StudentLocation | null
+  tarif: runtime.Decimal | null
+  deduit: runtime.Decimal | null
+  paye: runtime.Decimal | null
+  aRegler: runtime.Decimal | null
+  birthPlace: string | null
+  city: string | null
+  comment: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -77,17 +81,18 @@ export type StudentMaxAggregateOutputType = {
 export type StudentCountAggregateOutputType = {
   id: number
   inventoryId: number
-  studentId: number
-  firstName: number
+  identity: number
   lastName: number
+  firstName: number
   phoneNumber: number
   subscriptionDate: number
-  totalAmount: number
-  discount: number
-  paidAmount: number
-  paymentDates: number
-  due: number
-  location: number
+  tarif: number
+  deduit: number
+  paye: number
+  aRegler: number
+  birthPlace: number
+  city: number
+  comment: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -95,32 +100,34 @@ export type StudentCountAggregateOutputType = {
 
 
 export type StudentAvgAggregateInputType = {
-  totalAmount?: true
-  discount?: true
-  paidAmount?: true
-  due?: true
+  tarif?: true
+  deduit?: true
+  paye?: true
+  aRegler?: true
 }
 
 export type StudentSumAggregateInputType = {
-  totalAmount?: true
-  discount?: true
-  paidAmount?: true
-  due?: true
+  tarif?: true
+  deduit?: true
+  paye?: true
+  aRegler?: true
 }
 
 export type StudentMinAggregateInputType = {
   id?: true
   inventoryId?: true
-  studentId?: true
-  firstName?: true
+  identity?: true
   lastName?: true
+  firstName?: true
   phoneNumber?: true
   subscriptionDate?: true
-  totalAmount?: true
-  discount?: true
-  paidAmount?: true
-  due?: true
-  location?: true
+  tarif?: true
+  deduit?: true
+  paye?: true
+  aRegler?: true
+  birthPlace?: true
+  city?: true
+  comment?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -128,16 +135,18 @@ export type StudentMinAggregateInputType = {
 export type StudentMaxAggregateInputType = {
   id?: true
   inventoryId?: true
-  studentId?: true
-  firstName?: true
+  identity?: true
   lastName?: true
+  firstName?: true
   phoneNumber?: true
   subscriptionDate?: true
-  totalAmount?: true
-  discount?: true
-  paidAmount?: true
-  due?: true
-  location?: true
+  tarif?: true
+  deduit?: true
+  paye?: true
+  aRegler?: true
+  birthPlace?: true
+  city?: true
+  comment?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -145,17 +154,18 @@ export type StudentMaxAggregateInputType = {
 export type StudentCountAggregateInputType = {
   id?: true
   inventoryId?: true
-  studentId?: true
-  firstName?: true
+  identity?: true
   lastName?: true
+  firstName?: true
   phoneNumber?: true
   subscriptionDate?: true
-  totalAmount?: true
-  discount?: true
-  paidAmount?: true
-  paymentDates?: true
-  due?: true
-  location?: true
+  tarif?: true
+  deduit?: true
+  paye?: true
+  aRegler?: true
+  birthPlace?: true
+  city?: true
+  comment?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -250,17 +260,18 @@ export type StudentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type StudentGroupByOutputType = {
   id: string
   inventoryId: string
-  studentId: string | null
-  firstName: string
+  identity: string | null
   lastName: string
+  firstName: string
   phoneNumber: string | null
   subscriptionDate: Date | null
-  totalAmount: runtime.Decimal
-  discount: runtime.Decimal
-  paidAmount: runtime.Decimal
-  paymentDates: Date[]
-  due: runtime.Decimal
-  location: $Enums.StudentLocation
+  tarif: runtime.Decimal
+  deduit: runtime.Decimal
+  paye: runtime.Decimal
+  aRegler: runtime.Decimal
+  birthPlace: string | null
+  city: string | null
+  comment: string | null
   createdAt: Date
   updatedAt: Date
   _count: StudentCountAggregateOutputType | null
@@ -291,17 +302,18 @@ export type StudentWhereInput = {
   NOT?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   id?: Prisma.StringFilter<"Student"> | string
   inventoryId?: Prisma.StringFilter<"Student"> | string
-  studentId?: Prisma.StringNullableFilter<"Student"> | string | null
-  firstName?: Prisma.StringFilter<"Student"> | string
+  identity?: Prisma.StringNullableFilter<"Student"> | string | null
   lastName?: Prisma.StringFilter<"Student"> | string
+  firstName?: Prisma.StringFilter<"Student"> | string
   phoneNumber?: Prisma.StringNullableFilter<"Student"> | string | null
   subscriptionDate?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
-  totalAmount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.DateTimeNullableListFilter<"Student">
-  due?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFilter<"Student"> | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.StringNullableFilter<"Student"> | string | null
+  city?: Prisma.StringNullableFilter<"Student"> | string | null
+  comment?: Prisma.StringNullableFilter<"Student"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   inventory?: Prisma.XOR<Prisma.InventoryScalarRelationFilter, Prisma.InventoryWhereInput>
@@ -310,17 +322,18 @@ export type StudentWhereInput = {
 export type StudentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   inventoryId?: Prisma.SortOrder
-  studentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  firstName?: Prisma.SortOrder
+  identity?: Prisma.SortOrderInput | Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   subscriptionDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  paymentDates?: Prisma.SortOrder
-  due?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
+  birthPlace?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  comment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   inventory?: Prisma.InventoryOrderByWithRelationInput
@@ -332,17 +345,18 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StudentWhereInput[]
   NOT?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   inventoryId?: Prisma.StringFilter<"Student"> | string
-  studentId?: Prisma.StringNullableFilter<"Student"> | string | null
-  firstName?: Prisma.StringFilter<"Student"> | string
+  identity?: Prisma.StringNullableFilter<"Student"> | string | null
   lastName?: Prisma.StringFilter<"Student"> | string
+  firstName?: Prisma.StringFilter<"Student"> | string
   phoneNumber?: Prisma.StringNullableFilter<"Student"> | string | null
   subscriptionDate?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
-  totalAmount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.DateTimeNullableListFilter<"Student">
-  due?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFilter<"Student"> | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.StringNullableFilter<"Student"> | string | null
+  city?: Prisma.StringNullableFilter<"Student"> | string | null
+  comment?: Prisma.StringNullableFilter<"Student"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   inventory?: Prisma.XOR<Prisma.InventoryScalarRelationFilter, Prisma.InventoryWhereInput>
@@ -351,17 +365,18 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
 export type StudentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   inventoryId?: Prisma.SortOrder
-  studentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  firstName?: Prisma.SortOrder
+  identity?: Prisma.SortOrderInput | Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   subscriptionDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  paymentDates?: Prisma.SortOrder
-  due?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
+  birthPlace?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  comment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentCountOrderByAggregateInput
@@ -377,34 +392,36 @@ export type StudentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StudentScalarWhereWithAggregatesInput | Prisma.StudentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Student"> | string
   inventoryId?: Prisma.StringWithAggregatesFilter<"Student"> | string
-  studentId?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
-  firstName?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  identity?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   lastName?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  firstName?: Prisma.StringWithAggregatesFilter<"Student"> | string
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   subscriptionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
-  totalAmount?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.DateTimeNullableListFilter<"Student">
-  due?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationWithAggregatesFilter<"Student"> | $Enums.StudentLocation
+  tarif?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalWithAggregatesFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
+  city?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
+  comment?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
 }
 
 export type StudentCreateInput = {
   id?: string
-  studentId?: string | null
-  firstName: string
+  identity?: string | null
   lastName: string
+  firstName: string
   phoneNumber?: string | null
   subscriptionDate?: Date | string | null
-  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentCreatepaymentDatesInput | Date[] | string[]
-  due?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: $Enums.StudentLocation
+  tarif?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: string | null
+  city?: string | null
+  comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   inventory: Prisma.InventoryCreateNestedOneWithoutStudentsInput
@@ -413,34 +430,36 @@ export type StudentCreateInput = {
 export type StudentUncheckedCreateInput = {
   id?: string
   inventoryId: string
-  studentId?: string | null
-  firstName: string
+  identity?: string | null
   lastName: string
+  firstName: string
   phoneNumber?: string | null
   subscriptionDate?: Date | string | null
-  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentCreatepaymentDatesInput | Date[] | string[]
-  due?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: $Enums.StudentLocation
+  tarif?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: string | null
+  city?: string | null
+  comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StudentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inventory?: Prisma.InventoryUpdateOneRequiredWithoutStudentsNestedInput
@@ -449,17 +468,18 @@ export type StudentUpdateInput = {
 export type StudentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   inventoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -467,34 +487,36 @@ export type StudentUncheckedUpdateInput = {
 export type StudentCreateManyInput = {
   id?: string
   inventoryId: string
-  studentId?: string | null
-  firstName: string
+  identity?: string | null
   lastName: string
+  firstName: string
   phoneNumber?: string | null
   subscriptionDate?: Date | string | null
-  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentCreatepaymentDatesInput | Date[] | string[]
-  due?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: $Enums.StudentLocation
+  tarif?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: string | null
+  city?: string | null
+  comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StudentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -502,17 +524,18 @@ export type StudentUpdateManyMutationInput = {
 export type StudentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   inventoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -527,52 +550,47 @@ export type StudentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type DateTimeNullableListFilter<$PrismaModel = never> = {
-  equals?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
-  has?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
-  hasEvery?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel>
-  hasSome?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type StudentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   inventoryId?: Prisma.SortOrder
-  studentId?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
+  identity?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   subscriptionDate?: Prisma.SortOrder
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  paymentDates?: Prisma.SortOrder
-  due?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
+  birthPlace?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type StudentAvgOrderByAggregateInput = {
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  due?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
 }
 
 export type StudentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   inventoryId?: Prisma.SortOrder
-  studentId?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
+  identity?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   subscriptionDate?: Prisma.SortOrder
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  due?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
+  birthPlace?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -580,25 +598,27 @@ export type StudentMaxOrderByAggregateInput = {
 export type StudentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   inventoryId?: Prisma.SortOrder
-  studentId?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
+  identity?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   subscriptionDate?: Prisma.SortOrder
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  due?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
+  birthPlace?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type StudentSumOrderByAggregateInput = {
-  totalAmount?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  paidAmount?: Prisma.SortOrder
-  due?: Prisma.SortOrder
+  tarif?: Prisma.SortOrder
+  deduit?: Prisma.SortOrder
+  paye?: Prisma.SortOrder
+  aRegler?: Prisma.SortOrder
 }
 
 export type StudentCreateNestedManyWithoutInventoryInput = {
@@ -643,49 +663,38 @@ export type StudentUncheckedUpdateManyWithoutInventoryNestedInput = {
   deleteMany?: Prisma.StudentScalarWhereInput | Prisma.StudentScalarWhereInput[]
 }
 
-export type StudentCreatepaymentDatesInput = {
-  set: Date[] | string[]
-}
-
-export type StudentUpdatepaymentDatesInput = {
-  set?: Date[] | string[]
-  push?: Date | string | Date[] | string[]
-}
-
-export type EnumStudentLocationFieldUpdateOperationsInput = {
-  set?: $Enums.StudentLocation
-}
-
 export type StudentCreateWithoutInventoryInput = {
   id?: string
-  studentId?: string | null
-  firstName: string
+  identity?: string | null
   lastName: string
+  firstName: string
   phoneNumber?: string | null
   subscriptionDate?: Date | string | null
-  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentCreatepaymentDatesInput | Date[] | string[]
-  due?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: $Enums.StudentLocation
+  tarif?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: string | null
+  city?: string | null
+  comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StudentUncheckedCreateWithoutInventoryInput = {
   id?: string
-  studentId?: string | null
-  firstName: string
+  identity?: string | null
   lastName: string
+  firstName: string
   phoneNumber?: string | null
   subscriptionDate?: Date | string | null
-  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentCreatepaymentDatesInput | Date[] | string[]
-  due?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: $Enums.StudentLocation
+  tarif?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: string | null
+  city?: string | null
+  comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -722,85 +731,90 @@ export type StudentScalarWhereInput = {
   NOT?: Prisma.StudentScalarWhereInput | Prisma.StudentScalarWhereInput[]
   id?: Prisma.StringFilter<"Student"> | string
   inventoryId?: Prisma.StringFilter<"Student"> | string
-  studentId?: Prisma.StringNullableFilter<"Student"> | string | null
-  firstName?: Prisma.StringFilter<"Student"> | string
+  identity?: Prisma.StringNullableFilter<"Student"> | string | null
   lastName?: Prisma.StringFilter<"Student"> | string
+  firstName?: Prisma.StringFilter<"Student"> | string
   phoneNumber?: Prisma.StringNullableFilter<"Student"> | string | null
   subscriptionDate?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
-  totalAmount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.DateTimeNullableListFilter<"Student">
-  due?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFilter<"Student"> | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFilter<"Student"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.StringNullableFilter<"Student"> | string | null
+  city?: Prisma.StringNullableFilter<"Student"> | string | null
+  comment?: Prisma.StringNullableFilter<"Student"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
 }
 
 export type StudentCreateManyInventoryInput = {
   id?: string
-  studentId?: string | null
-  firstName: string
+  identity?: string | null
   lastName: string
+  firstName: string
   phoneNumber?: string | null
   subscriptionDate?: Date | string | null
-  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentCreatepaymentDatesInput | Date[] | string[]
-  due?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: $Enums.StudentLocation
+  tarif?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: string | null
+  city?: string | null
+  comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StudentUpdateWithoutInventoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentUncheckedUpdateWithoutInventoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StudentUncheckedUpdateManyWithoutInventoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDates?: Prisma.StudentUpdatepaymentDatesInput | Date[] | string[]
-  due?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  location?: Prisma.EnumStudentLocationFieldUpdateOperationsInput | $Enums.StudentLocation
+  tarif?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deduit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paye?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aRegler?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  birthPlace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -810,17 +824,18 @@ export type StudentUncheckedUpdateManyWithoutInventoryInput = {
 export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   inventoryId?: boolean
-  studentId?: boolean
-  firstName?: boolean
+  identity?: boolean
   lastName?: boolean
+  firstName?: boolean
   phoneNumber?: boolean
   subscriptionDate?: boolean
-  totalAmount?: boolean
-  discount?: boolean
-  paidAmount?: boolean
-  paymentDates?: boolean
-  due?: boolean
-  location?: boolean
+  tarif?: boolean
+  deduit?: boolean
+  paye?: boolean
+  aRegler?: boolean
+  birthPlace?: boolean
+  city?: boolean
+  comment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   inventory?: boolean | Prisma.InventoryDefaultArgs<ExtArgs>
@@ -829,17 +844,18 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   inventoryId?: boolean
-  studentId?: boolean
-  firstName?: boolean
+  identity?: boolean
   lastName?: boolean
+  firstName?: boolean
   phoneNumber?: boolean
   subscriptionDate?: boolean
-  totalAmount?: boolean
-  discount?: boolean
-  paidAmount?: boolean
-  paymentDates?: boolean
-  due?: boolean
-  location?: boolean
+  tarif?: boolean
+  deduit?: boolean
+  paye?: boolean
+  aRegler?: boolean
+  birthPlace?: boolean
+  city?: boolean
+  comment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   inventory?: boolean | Prisma.InventoryDefaultArgs<ExtArgs>
@@ -848,17 +864,18 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   inventoryId?: boolean
-  studentId?: boolean
-  firstName?: boolean
+  identity?: boolean
   lastName?: boolean
+  firstName?: boolean
   phoneNumber?: boolean
   subscriptionDate?: boolean
-  totalAmount?: boolean
-  discount?: boolean
-  paidAmount?: boolean
-  paymentDates?: boolean
-  due?: boolean
-  location?: boolean
+  tarif?: boolean
+  deduit?: boolean
+  paye?: boolean
+  aRegler?: boolean
+  birthPlace?: boolean
+  city?: boolean
+  comment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   inventory?: boolean | Prisma.InventoryDefaultArgs<ExtArgs>
@@ -867,22 +884,23 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type StudentSelectScalar = {
   id?: boolean
   inventoryId?: boolean
-  studentId?: boolean
-  firstName?: boolean
+  identity?: boolean
   lastName?: boolean
+  firstName?: boolean
   phoneNumber?: boolean
   subscriptionDate?: boolean
-  totalAmount?: boolean
-  discount?: boolean
-  paidAmount?: boolean
-  paymentDates?: boolean
-  due?: boolean
-  location?: boolean
+  tarif?: boolean
+  deduit?: boolean
+  paye?: boolean
+  aRegler?: boolean
+  birthPlace?: boolean
+  city?: boolean
+  comment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "inventoryId" | "studentId" | "firstName" | "lastName" | "phoneNumber" | "subscriptionDate" | "totalAmount" | "discount" | "paidAmount" | "paymentDates" | "due" | "location" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "inventoryId" | "identity" | "lastName" | "firstName" | "phoneNumber" | "subscriptionDate" | "tarif" | "deduit" | "paye" | "aRegler" | "birthPlace" | "city" | "comment" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inventory?: boolean | Prisma.InventoryDefaultArgs<ExtArgs>
 }
@@ -901,17 +919,18 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     inventoryId: string
-    studentId: string | null
-    firstName: string
+    identity: string | null
     lastName: string
+    firstName: string
     phoneNumber: string | null
     subscriptionDate: Date | null
-    totalAmount: runtime.Decimal
-    discount: runtime.Decimal
-    paidAmount: runtime.Decimal
-    paymentDates: Date[]
-    due: runtime.Decimal
-    location: $Enums.StudentLocation
+    tarif: runtime.Decimal
+    deduit: runtime.Decimal
+    paye: runtime.Decimal
+    aRegler: runtime.Decimal
+    birthPlace: string | null
+    city: string | null
+    comment: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["student"]>
@@ -1340,17 +1359,18 @@ export interface Prisma__StudentClient<T, Null = never, ExtArgs extends runtime.
 export interface StudentFieldRefs {
   readonly id: Prisma.FieldRef<"Student", 'String'>
   readonly inventoryId: Prisma.FieldRef<"Student", 'String'>
-  readonly studentId: Prisma.FieldRef<"Student", 'String'>
-  readonly firstName: Prisma.FieldRef<"Student", 'String'>
+  readonly identity: Prisma.FieldRef<"Student", 'String'>
   readonly lastName: Prisma.FieldRef<"Student", 'String'>
+  readonly firstName: Prisma.FieldRef<"Student", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"Student", 'String'>
   readonly subscriptionDate: Prisma.FieldRef<"Student", 'DateTime'>
-  readonly totalAmount: Prisma.FieldRef<"Student", 'Decimal'>
-  readonly discount: Prisma.FieldRef<"Student", 'Decimal'>
-  readonly paidAmount: Prisma.FieldRef<"Student", 'Decimal'>
-  readonly paymentDates: Prisma.FieldRef<"Student", 'DateTime[]'>
-  readonly due: Prisma.FieldRef<"Student", 'Decimal'>
-  readonly location: Prisma.FieldRef<"Student", 'StudentLocation'>
+  readonly tarif: Prisma.FieldRef<"Student", 'Decimal'>
+  readonly deduit: Prisma.FieldRef<"Student", 'Decimal'>
+  readonly paye: Prisma.FieldRef<"Student", 'Decimal'>
+  readonly aRegler: Prisma.FieldRef<"Student", 'Decimal'>
+  readonly birthPlace: Prisma.FieldRef<"Student", 'String'>
+  readonly city: Prisma.FieldRef<"Student", 'String'>
+  readonly comment: Prisma.FieldRef<"Student", 'String'>
   readonly createdAt: Prisma.FieldRef<"Student", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Student", 'DateTime'>
 }

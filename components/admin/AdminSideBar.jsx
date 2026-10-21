@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, LayoutDashboard, Users, ShoppingCart, Package, Settings, BadgeQuestionMark, Video, Book, Building2, Clock, UserCheck } from "lucide-react";
+import { Menu, X, LayoutDashboard, Users, ShoppingCart, Package, Settings, BadgeQuestionMark, Video, Book, Building2, Clock, UserCheck, Calculator } from "lucide-react";
 import { useState } from "react";
 
 const menuItems = [
@@ -60,6 +60,11 @@ const menuItems = [
     label: "Inventories",
     href: "/admin/inventories",
     icon: Package,
+  },
+  {
+    label: "Expenses",
+    href: "/admin/expenses",
+    icon: Calculator,
   },
   {
     label: "Settings",
