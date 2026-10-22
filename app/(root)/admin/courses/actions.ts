@@ -1,9 +1,10 @@
+// app/(root)/admin/courses/actions.ts
 "use server";
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
-import { CourseStatus } from "@/prisma/generated/prisma/enums";
+import { CourseStatus, CourseType } from "@/prisma/generated/prisma/enums";
 
 function slugify(text: string) {
   return text
@@ -85,85 +86,106 @@ async function createUniqueLessonSlug(title: string) {
    COURSE ACTIONS
    ========================================== */
 
-   export async function createCourse(formData: FormData) {
-    await requireAdmin();
+export async function createCourse(formData: FormData) {
+  await requireAdmin();
+
+  const title = getString(formData, "title");
+  const tagLine = getNullableString(formData, "tagLine");
+  const shortDescription = getNullableString(formData, "shortDescription");
+  const description = getNullableString(formData, "description");
+  const thumbnail = getNullableString(formData, "thumbnail");
+  const courseBook = getNullableString(formData, "courseBook");
+  const courseVideo = getNullableString(formData, "courseVideo"); // <--- Extracted courseVideo
+  const price = Number(formData.get("price") || 0);
+  const currency = getString(formData, "currency") || "EUR";
+  const level = getNullableString(formData, "level");
+  const duration = getNullableString(formData, "duration");
+  const numberOfStudents = getNullableString(formData, "numberOfStudents");
+  const rating = getNullableString(formData, "rating");
   
-    const title = getString(formData, "title");
-    const tagLine = getNullableString(formData, "tagLine");
-    const shortDescription = getNullableString(formData, "shortDescription");
-    const description = getNullableString(formData, "description");
-    const thumbnail = getNullableString(formData, "thumbnail");
-    const price = Number(formData.get("price") || 0);
-    const currency = getString(formData, "currency") || "EUR";
-    const level = getNullableString(formData, "level");
-    const duration = getNullableString(formData, "duration");
-    const numberOfStudents = getNullableString(formData, "numberOfStudents");
-    const rating = getNullableString(formData, "rating");
-    const instructorId = getNullableString(formData, "instructorId") || undefined;
-    const parisScheduleId = getNullableString(formData, "parisScheduleId") || undefined;
-    const hocheScheduleId = getNullableString(formData, "hocheScheduleId") || undefined;
-    const order = getNullableNumber(formData, "order");
-    const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+  const isExamCivique = formData.get("isExamCivique") === "on";
   
-    const characteristics = getStringArray(formData, "characteristics");
-    const targetAudience = getStringArray(formData, "targetAudience");
-    const faqs = getJsonArray(formData, "faqs");
-    const cards = getJsonArray(formData, "cards");
-  
-    if (!title) {
-      throw new Error("Title is required");
+  // Multiple instructors handling
+  const instructorIdsRaw = formData.get("instructorIds");
+  let instructorIds: string[] = [];
+  if (typeof instructorIdsRaw === "string" && instructorIdsRaw.trim() !== "") {
+    try {
+      instructorIds = JSON.parse(instructorIdsRaw);
+    } catch {
+      instructorIds = instructorIdsRaw.split(",").map((id) => id.trim()).filter(Boolean);
     }
-  
-    const baseSlug = slugify(title) || "course";
-    let slug = baseSlug;
-    let counter = 1;
-  
-    while (await prisma.course.findUnique({ where: { slug } })) {
-      slug = `${baseSlug}-${counter}`;
-      counter++;
-    }
-  
-    const course = await prisma.course.create({
-      data: {
-        title,
-        slug,
-        tagLine,
-        shortDescription,
-        description,
-        thumbnail,
-        price,
-        currency,
-        level,
-        duration,
-        numberOfStudents,
-        rating,
-        instructorId,
-        parisScheduleId,
-        hocheScheduleId,
-        order,
-        status,
-        characteristics,
-        targetAudience,
-        faqs: faqs ?? undefined,
-        cards:
-          cards && Array.isArray(cards) && cards.length > 0
-            ? {
-                create: cards.map((c: any, index: number) => ({
-                  title: c.title,
-                  description: c.description || null,
-                  image: c.image || null,
-                  order: Number(c.order) ?? index,
-                })),
-              }
-            : undefined,
-      },
-    });
-  
-    revalidatePath("/admin/courses");
-    return { success: true, courseId: course.id };
   }
 
-  
+  const parisScheduleId = getNullableString(formData, "parisScheduleId") || undefined;
+  const hocheScheduleId = getNullableString(formData, "hocheScheduleId") || undefined;
+  const order = getNullableNumber(formData, "order");
+  const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+  const courseType = ((formData.get("courseType") as string) || "ONLINE") as CourseType;
+
+  const characteristics = getStringArray(formData, "characteristics");
+  const targetAudience = getStringArray(formData, "targetAudience");
+  const faqs = getJsonArray(formData, "faqs");
+  const cards = getJsonArray(formData, "cards");
+
+  if (!title) {
+    throw new Error("Title is required");
+  }
+
+  const baseSlug = slugify(title) || "course";
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (await prisma.course.findUnique({ where: { slug } })) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+
+  const course = await prisma.course.create({
+    data: {
+      title,
+      slug,
+      tagLine,
+      shortDescription,
+      description,
+      thumbnail,
+      courseBook,
+      courseVideo, // <--- Saved to DB
+      price,
+      currency,
+      level,
+      duration,
+      numberOfStudents,
+      rating,
+      isExamCivique,
+      parisScheduleId,
+      hocheScheduleId,
+      order,
+      status,
+      courseType,
+      characteristics,
+      targetAudience,
+      faqs: faqs ?? undefined,
+      instructors: instructorIds.length > 0 ? {
+        connect: instructorIds.map((id) => ({ id }))
+      } : undefined,
+      cards:
+        cards && Array.isArray(cards) && cards.length > 0
+          ? {
+              create: cards.map((c: any, index: number) => ({
+                title: c.title,
+                description: c.description || null,
+                image: c.image || null,
+                order: Number(c.order) ?? index,
+              })),
+            }
+          : undefined,
+    },
+  });
+
+  revalidatePath("/admin/courses");
+  return { success: true, courseId: course.id };
+}
+
 export async function updateCourse(courseId: string, formData: FormData) {
   try {
     await requireAdmin();
@@ -174,17 +196,32 @@ export async function updateCourse(courseId: string, formData: FormData) {
     const shortDescription = getNullableString(formData, "shortDescription");
     const description = getNullableString(formData, "description");
     const thumbnail = getNullableString(formData, "thumbnail");
+    const courseBook = getNullableString(formData, "courseBook");
+    const courseVideo = getNullableString(formData, "courseVideo"); // <--- Extracted courseVideo
     const price = Number(formData.get("price") || 0);
     const currency = getString(formData, "currency") || "EUR";
     const level = getNullableString(formData, "level");
     const duration = getNullableString(formData, "duration");
     const numberOfStudents = getNullableString(formData, "numberOfStudents");
     const rating = getNullableString(formData, "rating");
-    const instructorId = getNullableString(formData, "instructorId");
+    
+    const isExamCivique = formData.get("isExamCivique") === "on";
+
+    const instructorIdsRaw = formData.get("instructorIds");
+    let instructorIds: string[] = [];
+    if (typeof instructorIdsRaw === "string" && instructorIdsRaw.trim() !== "") {
+      try {
+        instructorIds = JSON.parse(instructorIdsRaw);
+      } catch {
+        instructorIds = instructorIdsRaw.split(",").map((id) => id.trim()).filter(Boolean);
+      }
+    }
+
     const parisScheduleId = getNullableString(formData, "parisScheduleId");
     const hocheScheduleId = getNullableString(formData, "hocheScheduleId");
     const order = getNullableNumber(formData, "order");
     const status = ((formData.get("status") as string) || "DRAFT") as CourseStatus;
+    const courseType = ((formData.get("courseType") as string) || "ONLINE") as CourseType;
 
     const characteristics = getStringArray(formData, "characteristics");
     const targetAudience = getStringArray(formData, "targetAudience");
@@ -197,7 +234,6 @@ export async function updateCourse(courseId: string, formData: FormData) {
 
     const formattedSlug = slugify(rawSlug || title) || "course";
 
-    // Check if another course already uses this slug
     const existingCourseWithSlug = await prisma.course.findFirst({
       where: {
         slug: formattedSlug,
@@ -213,7 +249,6 @@ export async function updateCourse(courseId: string, formData: FormData) {
     }
 
     await prisma.$transaction(async (tx) => {
-      // Update course fields
       await tx.course.update({
         where: { id: courseId },
         data: {
@@ -223,30 +258,29 @@ export async function updateCourse(courseId: string, formData: FormData) {
           shortDescription,
           description,
           thumbnail,
+          courseBook,
+          courseVideo, // <--- Saved to DB
           price,
           currency,
           level,
           duration,
           numberOfStudents,
           rating,
-          instructor: instructorId
-            ? { connect: { id: instructorId } }
-            : { disconnect: true },
-          parisSchedule: parisScheduleId
-            ? { connect: { id: parisScheduleId } }
-            : { disconnect: true },
-          hocheSchedule: hocheScheduleId
-            ? { connect: { id: hocheScheduleId } }
-            : { disconnect: true },
+          isExamCivique,
+          parisScheduleId: parisScheduleId || null,
+          hocheScheduleId: hocheScheduleId || null,
           order,
           status,
+          courseType,
           characteristics,
           targetAudience,
           faqs: faqs ?? undefined,
+          instructors: {
+            set: instructorIds.map((id) => ({ id })),
+          },
         },
       });
 
-      // Refresh course cards: delete existing and create new ones
       await tx.courseCard.deleteMany({
         where: { courseId },
       });
@@ -279,9 +313,6 @@ export async function updateCourse(courseId: string, formData: FormData) {
   }
 }
   
-
-
-
 export async function deleteCourse(courseId: string) {
   try {
     await requireAdmin();
@@ -310,259 +341,197 @@ export async function deleteCourse(courseId: string) {
   }
 }
 
+export async function createLesson(prevState: any, formData: FormData) {
+  try {
+    await requireAdmin();
 
-/* ==========================================
-   LESSON ACTIONS (LINKED TO BATCH & QUIZ)
-   ========================================== */
+    const title = getString(formData, "title");
+    const rawSlug = getString(formData, "slug");
+    const description = getNullableString(formData, "description");
+    const batchId = getNullableString(formData, "batchId");
+    const quizId = getNullableString(formData, "quizId");
+    const order = getNullableNumber(formData, "order") ?? 1;
+    const isPreview = formData.get("isPreview") === "on";
+    const startsAt = getNullableString(formData, "startsAt") ? new Date(getString(formData, "startsAt")) : null;
+    const endsAt = getNullableString(formData, "endsAt") ? new Date(getString(formData, "endsAt")) : null;
+    const videoUrl = getNullableString(formData, "videoUrl");
+    const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
+    const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
+    const notes = getNullableString(formData, "notes");
+    const attachmentsRaw = formData.get("attachments") as string;
 
-   export async function createLesson(
-    _previousState: {
-      status: "success" | "error";
-      message: string;
-    } | null,
-    formData: FormData
-  ) {
-    try {
-      await requireAdmin();
-  
-      const title = getString(formData, "title");
-      const rawSlug = getString(formData, "slug");
-      const description = getNullableString(formData, "description");
-      const notes = getNullableString(formData, "notes");
-      const videoUrl = getNullableString(formData, "videoUrl");
-      const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
-      const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
-      const batchId = getNullableString(formData, "batchId");
-      const quizId = getNullableString(formData, "quizId");
-      const isPreview = formData.get("isPreview") === "on";
-  
-      if (!title) {
-        return { status: "error" as const, message: "Lesson title is required" };
-      }
-  
-      if (!batchId) {
-        return { status: "error" as const, message: "A batch must be assigned" };
-      }
-  
-      const slug = await createUniqueLessonSlug(rawSlug || title);
-  
-      let requestedOrder = getNullableNumber(formData, "order");
-  
-      if (requestedOrder === null) {
-        const maxLesson = await prisma.lesson.findFirst({
-          where: { batchId },
-          orderBy: { order: "desc" },
-          select: { order: true },
-        });
-        requestedOrder = (maxLesson?.order ?? 0) + 1;
-      } else {
-        await prisma.lesson.updateMany({
-          where: {
-            batchId,
-            order: { gte: requestedOrder },
-          },
-          data: {
-            order: { increment: 1 },
-          },
-        });
-      }
-  
-      const parseValidDate = (dateStr: string | null) => {
-        if (!dateStr || dateStr.trim() === "") return null;
-        
-        // datetime-local gives "YYYY-MM-DDTHH:mm". 
-        // Appending ":00.000Z" forces Node.js to treat the exact numbers 
-        // you picked as the literal UTC time, preventing timezone shifts.
-        const normalized = dateStr.includes("Z") ? dateStr : `${dateStr}:00.000Z`;
-        const parsed = new Date(normalized);
-        
-        return isNaN(parsed.getTime()) ? null : parsed;
-      };
-  
-      const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
-      const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
-  
-      const attachmentsRaw = formData.get("attachments");
-      let attachments: string[] = [];
-      if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
-        try {
-          attachments = JSON.parse(attachmentsRaw);
-        } catch (e) {
-          attachments = [];
-        }
-      }
-  
-      await prisma.lesson.create({
-        data: {
-          title,
-          slug,
-          description,
-          notes,
-          videoUrl,
-          bunnyLibraryId,
-          bunnyVideoId,
-          order: requestedOrder,
-          isPreview,
-          startsAt,
-          endsAt,
-          attachments,
-          batch: { connect: { id: batchId } },
-          quiz: quizId ? { connect: { id: quizId } } : undefined,
-        },
-      });
-  
-      revalidatePath("/admin/courses");
-  
-      return { status: "success" as const, message: "Lesson created successfully" };
-    } catch (error) {
-      console.error("Create lesson error:", error);
-      return {
-        status: "error" as const,
-        message: error instanceof Error ? error.message : "Failed to create lesson",
-      };
+    if (!title) {
+      return { status: "error" as const, message: "Lesson title is required." };
     }
+
+    const baseSlug = slugify(rawSlug || title) || "lesson";
+    let slug = baseSlug;
+    let counter = 1;
+    while (await prisma.lesson.findUnique({ where: { slug } })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+
+    let attachmentsJson = [];
+    if (attachmentsRaw) {
+      try {
+        attachmentsJson = JSON.parse(attachmentsRaw);
+      } catch (e) {
+        attachmentsJson = [];
+      }
+    }
+
+    await prisma.lesson.create({
+      data: {
+        title,
+        slug,
+        description,
+        batchId: batchId || null,
+        quizId: quizId || null,
+        order,
+        isPreview,
+        startsAt,
+        endsAt,
+        videoUrl,
+        bunnyLibraryId,
+        bunnyVideoId,
+        notes,
+        attachments: attachmentsJson,
+      },
+    });
+
+    revalidatePath(`/admin/courses`);
+    return { status: "success" as const, message: "Lesson created successfully!" };
+  } catch (error: any) {
+    console.error("Failed to create lesson:", error);
+    return { status: "error" as const, message: error.message || "Failed to create lesson." };
   }
-  
-  export async function updateLesson(
-    lessonId: string,
-    _previousState: {
-      status: "success" | "error";
-      message: string;
-    } | null,
-    formData: FormData
-  ) {
-    try {
-      await requireAdmin();
-  
-      const title = getString(formData, "title");
-      const rawSlug = getString(formData, "slug");
-      const description = getNullableString(formData, "description");
-      const notes = getNullableString(formData, "notes");
-      const videoUrl = getNullableString(formData, "videoUrl");
-      const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
-      const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
-      const batchId = getNullableString(formData, "batchId");
-      const quizId = getNullableString(formData, "quizId");
-      const order = getNullableNumber(formData, "order") ?? 1;
-      const isPreview = formData.get("isPreview") === "on";
-  
-      const parseValidDate = (dateStr: string | null) => {
-        if (!dateStr || dateStr.trim() === "") return null;
-        
-        // datetime-local gives "YYYY-MM-DDTHH:mm". 
-        // Appending ":00.000Z" forces Node.js to treat the exact numbers 
-        // you picked as the literal UTC time, preventing timezone shifts.
-        const normalized = dateStr.includes("Z") ? dateStr : `${dateStr}:00.000Z`;
-        const parsed = new Date(normalized);
-        
-        return isNaN(parsed.getTime()) ? null : parsed;
-      };
-  
-      const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
-      const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
-  
-      const attachmentsRaw = formData.get("attachments");
-      let attachments: string[] = [];
-      if (typeof attachmentsRaw === "string" && attachmentsRaw.trim() !== "") {
-        try {
-          attachments = JSON.parse(attachmentsRaw);
-        } catch (e) {
-          attachments = [];
-        }
+}
+
+export async function updateLesson(
+  lessonId: string,
+  _previousState: { status: "success" | "error"; message: string } | null,
+  formData: FormData
+) {
+  try {
+    await requireAdmin();
+
+    const title = getString(formData, "title");
+    const rawSlug = getString(formData, "slug");
+    const description = getNullableString(formData, "description");
+    const notes = getNullableString(formData, "notes");
+    const videoUrl = getNullableString(formData, "videoUrl");
+    const bunnyLibraryId = getNullableString(formData, "bunnyLibraryId");
+    const bunnyVideoId = getNullableString(formData, "bunnyVideoId");
+    const batchId = getNullableString(formData, "batchId");
+    const quizId = getNullableString(formData, "quizId");
+    const order = getNullableNumber(formData, "order") ?? 1;
+    const isPreview = formData.get("isPreview") === "on";
+
+    const parseValidDate = (dateStr: string | null) => {
+      if (!dateStr || dateStr.trim() === "") return null;
+      const normalized = dateStr.includes("Z") ? dateStr : `${dateStr}:00.000Z`;
+      const parsed = new Date(normalized);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const startsAt = parseValidDate(getNullableString(formData, "startsAt"));
+    const endsAt = parseValidDate(getNullableString(formData, "endsAt"));
+
+    const attachmentsRaw = formData.get("attachments") as string;
+    let attachmentsJson = [];
+    if (attachmentsRaw) {
+      try {
+        attachmentsJson = JSON.parse(attachmentsRaw);
+      } catch (e) {
+        attachmentsJson = [];
       }
-  
-      if (!title) {
-        return { status: "error" as const, message: "Lesson title is required" };
-      }
-  
-      const lesson = await prisma.lesson.findUnique({
-        where: { id: lessonId },
-      });
-  
-      if (!lesson) {
-        return { status: "error" as const, message: "Lesson not found" };
-      }
-  
-      const formattedSlug = slugify(rawSlug || title) || "lesson";
-  
-      // Check if another lesson already uses this slug
-      const existingLessonWithSlug = await prisma.lesson.findFirst({
-        where: {
-          slug: formattedSlug,
-          NOT: { id: lessonId },
-        },
-      });
-  
-      if (existingLessonWithSlug) {
-        return {
-          status: "error" as const,
-          message: `The slug "${formattedSlug}" is already taken by another lesson. Please choose a unique slug.`,
-        };
-      }
-  
-      await prisma.lesson.update({
-        where: { id: lessonId },
-        data: {
-          title,
-          slug: formattedSlug,
-          description,
-          notes,
-          videoUrl,
-          bunnyLibraryId,
-          bunnyVideoId,
-          order,
-          isPreview,
-          startsAt,
-          endsAt,
-          attachments,
-          batch: batchId
-            ? { connect: { id: batchId } }
-            : { disconnect: true },
-          quiz: quizId
-            ? { connect: { id: quizId } }
-            : { disconnect: true },
-        },
-      });
-  
-      revalidatePath("/admin/courses");
-  
-      return { status: "success" as const, message: "Lesson updated successfully" };
-    } catch (error: any) {
-      console.error("Prisma lesson update error:", error);
-  
-      // Gracefully handle Prisma unique constraint violation code (P2002)
-      if (error?.code === "P2002") {
-        return {
-          status: "error" as const,
-          message: "A lesson with this slug already exists. Please choose a unique slug.",
-        };
-      }
-  
+    }
+
+    if (!title) {
+      return { status: "error" as const, message: "Lesson title is required" };
+    }
+
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+    });
+
+    if (!lesson) {
+      return { status: "error" as const, message: "Lesson not found" };
+    }
+
+    const formattedSlug = slugify(rawSlug || title) || "lesson";
+
+    const existingLessonWithSlug = await prisma.lesson.findFirst({
+      where: {
+        slug: formattedSlug,
+        NOT: { id: lessonId },
+      },
+    });
+
+    if (existingLessonWithSlug) {
       return {
         status: "error" as const,
-        message:
-          error instanceof Error ? error.message : "Failed to update lesson",
+        message: `The slug "${formattedSlug}" is already taken by another lesson. Please choose a unique slug.`,
       };
     }
-  }  
 
+    await prisma.lesson.update({
+      where: { id: lessonId },
+      data: {
+        title,
+        slug: formattedSlug,
+        description,
+        notes,
+        videoUrl,
+        bunnyLibraryId,
+        bunnyVideoId,
+        order,
+        isPreview,
+        startsAt,
+        endsAt,
+        attachments: attachmentsJson,
+        batch: batchId ? { connect: { id: batchId } } : { disconnect: true },
+        quiz: quizId ? { connect: { id: quizId } } : { disconnect: true },
+      },
+    });
 
-  export async function deleteLesson(lessonId: string) {
-    try {
-      await requireAdmin();
-  
-      await prisma.lesson.delete({
-        where: { id: lessonId },
-      });
-  
-      revalidatePath("/admin/courses");
-  
-      return { status: "success" as const, message: "Lesson deleted successfully" };
-    } catch (error) {
-      console.error("Delete lesson error:", error);
+    revalidatePath("/admin/courses");
+
+    return { status: "success" as const, message: "Lesson updated successfully" };
+  } catch (error: any) {
+    console.error("Prisma lesson update error:", error);
+
+    if (error?.code === "P2002") {
       return {
         status: "error" as const,
-        message: error instanceof Error ? error.message : "Failed to delete lesson",
+        message: "A lesson with this slug already exists. Please choose a unique slug.",
       };
     }
+
+    return {
+      status: "error" as const,
+      message: error instanceof Error ? error.message : "Failed to update lesson",
+    };
   }
+}
+
+export async function deleteLesson(lessonId: string) {
+  try {
+    await requireAdmin();
+
+    await prisma.lesson.delete({
+      where: { id: lessonId },
+    });
+
+    revalidatePath("/admin/courses");
+
+    return { status: "success" as const, message: "Lesson deleted successfully" };
+  } catch (error) {
+    console.error("Delete lesson error:", error);
+    return {
+      status: "error" as const,
+      message: error instanceof Error ? error.message : "Failed to delete lesson",
+    };
+  }
+}

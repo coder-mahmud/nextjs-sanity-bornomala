@@ -48,15 +48,52 @@ export type Authenticator = Prisma.AuthenticatorModel
  */
 export type Course = Prisma.CourseModel
 /**
+ * Model Lesson
+ * model Lesson {
+ *   id              String           @id @default(cuid())
+ *   batchId         String?          
+ *   quizId          String?          
+ *   instructorId    String?          // Single instructor for this specific lesson
+ *   title           String
+ *   slug            String           @unique
+ *   description     String?
+ *   videoUrl        String?
+ *   order           Int
+ *   isPreview       Boolean          @default(false)
+ *   
+ *   startsAt        DateTime?
+ *   endsAt          DateTime?
+ * 
+ *   bunnyLibraryId  String?
+ *   bunnyVideoId    String?
+ * 
+ *   attachments     String[]         
+ *   notes           String?          
+ * 
+ *   batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
+ *   quiz            Quiz?            @relation(fields: [quizId], references: [id], onDelete: SetNull)
+ *   instructor      Instructor?      @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+ *   progressRecords LessonProgress[]
+ * 
+ *   createdAt       DateTime         @default(now())
+ *   updatedAt       DateTime         @updatedAt
+ * 
+ *   @@index([batchId])
+ *   @@index([quizId])
+ *   @@index([instructorId])
+ * }
+ */
+export type Lesson = Prisma.LessonModel
+/**
+ * Model Instructor
+ * 
+ */
+export type Instructor = Prisma.InstructorModel
+/**
  * Model Batch
  * 
  */
 export type Batch = Prisma.BatchModel
-/**
- * Model Lesson
- * 
- */
-export type Lesson = Prisma.LessonModel
 /**
  * Model Quiz
  * 
@@ -137,11 +174,6 @@ export type ScheduleEntry = Prisma.ScheduleEntryModel
  * 
  */
 export type CourseCard = Prisma.CourseCardModel
-/**
- * Model Instructor
- * 
- */
-export type Instructor = Prisma.InstructorModel
 /**
  * Model Inventory
  * 

@@ -38,6 +38,11 @@ type LessonWithRelations = Prisma.LessonGetPayload<{
   };
 }>;
 
+interface AttachmentItem {
+  name?: string;
+  url: string;
+}
+
 interface LessonDetailsPageProps {
   params: Promise<{
     courseId: string;
@@ -78,6 +83,7 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
   }
 
   const completedCount = lesson.progressRecords.filter((p) => p.isCompleted).length;
+  const attachments = (lesson.attachments as AttachmentItem[]) || [];
 
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
@@ -121,28 +127,23 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
 
       {/* Quick Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        
+        {/* Schedule Card */}
+        <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
+          <div className="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+            <Calendar className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xs text-gray-400 font-medium">
+              {lesson.quizId ? "Quiz Time Window" : "Schedule Window"}
+            </p>
+            <p className="text-xs font-semibold text-gray-800 mt-0.5">
+              {lesson.startsAt ? new Date(lesson.startsAt).toLocaleString() : "Immediate"} -{" "}
+              {lesson.endsAt ? new Date(lesson.endsAt).toLocaleString() : "No Limit"}
+            </p>
+          </div>
+        </div>
 
-          {lesson.quizId  && (
-            <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
-              <div className="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
-                <Calendar className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 font-medium">
-                  {lesson.quizId ? "Quiz time" : "Schedule Window"}
-                </p>
-                <p className="text-xs font-semibold text-gray-800 mt-0.5">
-                  {lesson.startsAt ? new Date(lesson.startsAt).toLocaleString() : "Immediate"} -{" "}
-                  {lesson.endsAt ? new Date(lesson.endsAt).toLocaleString() : "No Limit"}
-                </p>
-              </div>
-            </div>
-          )}
-
-
-        
-
+        {/* Completions Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
           <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
             <CheckCircle2 className="w-5 h-5" />
@@ -153,28 +154,21 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
           </div>
         </div>
 
+        {/* Linked Quiz Summary Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
-
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3">
-            <h3 className="font-bold text-sm text-gray-900 flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-purple-600" /> Linked Quiz
-            </h3>
+          <div className="p-2.5 bg-purple-50 text-purple-600 rounded-lg">
+            <HelpCircle className="w-5 h-5" />
+          </div>
+          <div className="overflow-hidden">
+            <p className="text-xs text-gray-400 font-medium">Linked Quiz</p>
             {lesson.quiz ? (
-              <div className="p-3 bg-purple-50/50 rounded-lg border border-purple-100 space-y-2">
-                <p className="text-xs font-semibold text-purple-950">{lesson.quiz.title}</p>
-                <div className="flex items-center justify-between text-[11px] text-purple-700">
-                  <span>Questions: {lesson.quiz.questions?.length || 0}</span>
-                  <span>Duration: {lesson.quiz.durationMinutes} mins</span>
-                </div>
-              </div>
+              <p className="text-xs font-semibold text-purple-900 truncate" title={lesson.quiz.title}>
+                {lesson.quiz.title} ({lesson.quiz.questions?.length || 0} Qs)
+              </p>
             ) : (
-              <p className="text-xs text-gray-400 italic">No quiz linked to this lesson.</p>
+              <p className="text-xs text-gray-400 italic">No quiz linked</p>
             )}
           </div>
-
-
-
-
         </div>
       </div>
 
@@ -201,7 +195,7 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
                 <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
                   <iframe
                     src={lesson.videoUrl}
-                    className="w-full h-full"
+                    className="w-full h-full border-0"
                     allowFullScreen
                   />
                 </div>
@@ -255,20 +249,23 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
           <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3">
             <div className="flex items-center gap-2 text-gray-900 font-bold text-sm">
               <Paperclip className="w-4 h-4 text-indigo-600" />
-              Attachments & Downloads ({lesson.attachments.length})
+              Attachments & Downloads ({attachments.length})
             </div>
-            {lesson.attachments.length > 0 ? (
+            {attachments.length > 0 ? (
               <div className="space-y-2">
-                {lesson.attachments.map((fileUrl, index) => (
+                {attachments.map((file, index) => (
                   <a
                     key={index}
-                    href={fileUrl}
+                    href={file.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-between p-3 rounded-lg border border-gray-100 bg-gray-50/50 hover:bg-gray-100 text-xs transition"
                   >
-                    <span className="font-mono text-gray-700 truncate max-w-md">{fileUrl}</span>
-                    <span className="inline-flex items-center gap-1 font-semibold text-indigo-600">
+                    <div>
+                      <p className="font-semibold text-gray-800">{file.name || "Unnamed Attachment"}</p>
+                      <p className="font-mono text-[10px] text-gray-400 truncate max-w-sm">{file.url}</p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 font-semibold text-indigo-600 shrink-0">
                       <Download className="w-3.5 h-3.5" /> Download
                     </span>
                   </a>
@@ -280,17 +277,14 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
           </div>
         </div>
 
-        {/* Right Column: Quiz Info & Student Progress */}
+        {/* Right Column: Student Progress */}
         <div className="space-y-6">
-
-
-          {/* Student Progress Activity Log */}
           <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3">
             <h3 className="font-bold text-sm text-gray-900 flex items-center gap-2">
               <Eye className="w-4 h-4 text-emerald-600" /> Recent Student Activity
             </h3>
             {lesson.progressRecords.length > 0 ? (
-              <div className="divide-y divide-gray-100 max-h-60 overflow-y-auto">
+              <div className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
                 {lesson.progressRecords.map((record) => (
                   <div key={record.id} className="py-2 flex items-center justify-between text-xs">
                     <div>
@@ -300,7 +294,7 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
                       <p className="text-[10px] text-gray-400">{record.user?.email}</p>
                     </div>
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded ${
+                      className={`text-[10px] px-2 py-0.5 rounded font-medium ${
                         record.isCompleted
                           ? "bg-emerald-100 text-emerald-800"
                           : "bg-gray-100 text-gray-600"

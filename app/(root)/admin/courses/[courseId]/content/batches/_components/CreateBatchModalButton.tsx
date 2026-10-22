@@ -1,16 +1,27 @@
+// app/(root)/admin/courses/[courseId]/content/batches/_components/CreateBatchModalButton.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, X, Calendar, Video, Users } from "lucide-react";
+import { Plus, X, Calendar, Video, Users, UserCheck } from "lucide-react";
 import { toast } from "react-toastify";
 import { createBatch } from "../actions";
 
-interface CreateBatchModalButtonProps {
-  courseId: string;
+interface InstructorOption {
+  id: string;
+  name: string;
+  title?: string | null;
 }
 
-export default function CreateBatchModalButton({ courseId }: CreateBatchModalButtonProps) {
+interface CreateBatchModalButtonProps {
+  courseId: string;
+  instructors?: InstructorOption[];
+}
+
+export default function CreateBatchModalButton({
+  courseId,
+  instructors = [],
+}: CreateBatchModalButtonProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,6 +29,7 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
+    instructorId: "",
     startDate: "",
     endDate: "",
     meetingPlatform: "ZOOM",
@@ -45,6 +57,7 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
         data.append("courseId", courseId);
         data.append("title", formData.title);
         data.append("slug", formData.slug);
+        data.append("instructorId", formData.instructorId);
         data.append("startDate", formData.startDate);
         data.append("endDate", formData.endDate);
         data.append("meetingPlatform", formData.meetingPlatform);
@@ -61,6 +74,7 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
           setFormData({
             title: "",
             slug: "",
+            instructorId: "",
             startDate: "",
             endDate: "",
             meetingPlatform: "ZOOM",
@@ -95,7 +109,7 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 transition"
+        className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 transition cursor-pointer"
       >
         <Plus className="w-4 h-4" />
         Create Batch
@@ -109,7 +123,7 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 p-1"
+                className="text-gray-400 hover:text-gray-600 p-1 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -140,6 +154,26 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
                     className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm bg-gray-50 focus:outline-none font-mono"
                   />
                 </div>
+              </div>
+
+              {/* Instructor Selection */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+                  <UserCheck className="w-4 h-4 text-blue-600" />
+                  Assigned Instructor (Optional)
+                </label>
+                <select
+                  value={formData.instructorId}
+                  onChange={(e) => setFormData({ ...formData, instructorId: e.target.value })}
+                  className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
+                >
+                  <option value="">-- Select Instructor --</option>
+                  {(instructors ?? []).map((inst) => (
+                    <option key={inst.id} value={inst.id}>
+                      {inst.name} {inst.title ? `(${inst.title})` : ""}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Status & Max Students */}
@@ -253,14 +287,14 @@ export default function CreateBatchModalButton({ courseId }: CreateBatchModalBut
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-xl border border-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+                  className="rounded-xl border border-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
                 >
                   {loading ? "Creating..." : "Save Batch"}
                 </button>

@@ -1,3 +1,4 @@
+// app/admin/courses/[courseId]/content/batches/[batchId]/page.tsx
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import { notFound } from "next/navigation";
@@ -11,15 +12,16 @@ import {
   ExternalLink,
   Lock,
   Globe,
+  UserCheck,
 } from "lucide-react";
 import CreateLessonModalButton from "../_components/CreateLessonModalButton";
 import LessonList from "../_components/LessonList";
 import EditBatchModal from "../_components/EditBatchModal";
 
-// Define explicit return payload type from Prisma
 type BatchWithRelations = Prisma.BatchGetPayload<{
   include: {
     course: { select: { id: true; title: true } };
+    instructor: { select: { id: true; name: true; title: true } };
     lessons: {
       include: {
         quiz: { select: { id: true; title: true } };
@@ -46,6 +48,9 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
       course: {
         select: { id: true, title: true },
       },
+      instructor: {
+        select: { id: true, name: true, title: true },
+      },
       lessons: {
         include: {
           quiz: { select: { id: true, title: true } },
@@ -70,6 +75,12 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
     select: { id: true, title: true },
   });
 
+  // Fetch instructors for the edit batch modal dropdown
+  const instructors = await prisma.instructor.findMany({
+    select: { id: true, name: true, title: true },
+    orderBy: { name: "asc" },
+  });
+
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
       {/* Top Navigation & Header */}
@@ -82,11 +93,17 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
         </Link>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold text-gray-900">{batch.title}</h1>
               <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">
                 {batch.status}
               </span>
+              {batch.instructor && (
+                <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 border border-gray-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                  <UserCheck className="w-3 h-3 text-blue-600" />
+                  {batch.instructor.name}
+                </span>
+              )}
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Course: <span className="font-semibold text-gray-700">{batch.course.title}</span> • Slug: <span className="font-mono">/{batch.slug}</span>
@@ -94,10 +111,10 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
           </div>
 
           <div className="flex items-center gap-3">
-            <EditBatchModal batch={batch} />
+            <EditBatchModal batch={batch} instructors={instructors} />
             <CreateLessonModalButton
               courseId={courseId}
-              batches={[{ id: batch.id, title: batch.title }]}
+              batchId={batch.id}
               quizzes={unlinkedQuizzes}
             />
           </div>

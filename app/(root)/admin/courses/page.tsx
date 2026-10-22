@@ -1,8 +1,9 @@
+// app/admin/courses/page.tsx
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Plus, BookOpen, Layers, Users, Eye, Pencil, Trash2 } from "lucide-react";
+import { Plus, BookOpen, Layers, Users, Eye, Pencil, Video, MapPin } from "lucide-react";
 import CourseRowDelete from "./CourseRowDelete";
 
 const CoursesPage = async () => {
@@ -88,7 +89,7 @@ const CoursesPage = async () => {
               <thead className="bg-gray-50/80">
                 <tr className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                   <th className="px-6 py-4">Course</th>
-                  <th className="px-6 py-4">Price</th>
+                  <th className="px-6 py-4">Type</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Batches</th>
                   <th className="px-6 py-4">Students</th>
@@ -104,23 +105,43 @@ const CoursesPage = async () => {
                   >
                     {/* Course Info */}
                     <td className="px-6 py-4">
-                      <div>
+                      <div className="space-y-1.5">
                         <h3 className="font-semibold text-gray-900">
-                          <Link href={`/admin/courses/${course.id}`}>
+                          <Link href={`/admin/courses/${course.id}`} className="hover:text-blue-600 transition">
                             {course.title}
                           </Link>
                         </h3>
-                        {course.level && (
-                          <span className="mt-1 inline-block rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
-                            {course.level}
+
+                        {/* Level & Price under title */}
+                        <div className="flex flex-col items-center gap-2 text-xs">
+                          {course.level && (
+                            <span className="rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-600">
+                              {course.level}
+                            </span>
+                          )}
+                          <span className="font-semibold text-gray-900">
+                            {course.price.toString()} {course.currency || "EUR"}
                           </span>
-                        )}
+                        </div>
                       </div>
                     </td>
 
-                    {/* Price */}
-                    <td className="px-6 py-4 font-medium text-gray-900">
-                      {course.price.toString()} {course.currency || "EUR"}
+                    {/* Type Column (Online / Offline Button Style) */}
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-medium shadow-xs ${
+                          course.courseType === "ONLINE"
+                            ? "bg-sky-100 text-sky-800 border border-sky-200"
+                            : "bg-purple-100 text-purple-800 border border-purple-200"
+                        }`}
+                      >
+                        {course.courseType === "ONLINE" ? (
+                          <Video className="w-3.5 h-3.5 text-sky-600" />
+                        ) : (
+                          <MapPin className="w-3.5 h-3.5 text-purple-600" />
+                        )}
+                        {course.courseType === "ONLINE" ? "Online" : "Offline"}
+                      </span>
                     </td>
 
                     {/* Status */}
@@ -176,7 +197,6 @@ const CoursesPage = async () => {
                         </Link>
 
                         {/* Delete Action */}
-                        {/* Note: If you want the confirmation modal behavior, you can extract a small client component for the delete button */}
                         <CourseRowDelete courseId={course.id} />
                       </div>
                     </td>

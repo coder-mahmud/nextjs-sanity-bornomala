@@ -1,11 +1,9 @@
+// app/admin/courses/[courseId]/edit/EditCourseForm.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { updateCourse } from "../../actions";
-import { deleteCloudinaryImage } from "@/actions/cloudinary";
-import { Upload, Trash2, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -14,6 +12,7 @@ import CloudinaryUpload from "@/lib/CloudinaryUpload";
 interface InstructorOption {
   id: string;
   name: string;
+  title?: string | null;
 }
 
 export interface ScheduleOption {
@@ -41,6 +40,8 @@ interface EditCourseFormProps {
   course: any;
   instructors?: InstructorOption[];
   schedules?: ScheduleOption[];
+  cloudName: string;
+  uploadPreset: string;
 }
 
 function TiptapEditor({
@@ -106,15 +107,21 @@ export default function EditCourseForm({
   course,
   instructors = [],
   schedules = [],
+  cloudName,
+  uploadPreset,
 }: EditCourseFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const initialThumbnail =
-    course.thumbnail || course.imageUrl || course.image || "";
+  // Initialize selected instructors from course relation or legacy field
+  const initialInstructorIds: string[] = Array.isArray(course.instructors)
+    ? course.instructors.map((i: any) => i.id)
+    : course.instructorId
+    ? [course.instructorId]
+    : [];
+
+  const [selectedInstructors, setSelectedInstructors] = useState<string[]>(initialInstructorIds);
 
   const initialFaqs: FAQItem[] = Array.isArray(course.faqs)
     ? course.faqs
@@ -141,14 +148,17 @@ export default function EditCourseForm({
     tagLine: course.tagLine || "",
     shortDescription: course.shortDescription || "",
     description: course.description || "",
+    courseBook: course.courseBook || "",
+    courseVideo: course.courseVideo || "",
+    isExamCivique: course.isExamCivique || false,
     price: course.price?.toString() || "0",
     currency: course.currency || "EUR",
     level: course.level || "Beginner",
     status: course.status || "DRAFT",
+    courseType: course.courseType || "ONLINE",
     duration: course.duration || "",
     numberOfStudents: course.numberOfStudents || "",
     rating: course.rating || "",
-    instructorId: course.instructorId || "",
     parisScheduleId: course.parisScheduleId || "",
     hocheScheduleId: course.hocheScheduleId || "",
     order: course.order?.toString() || "0",
@@ -158,11 +168,14 @@ export default function EditCourseForm({
     targetAudience: Array.isArray(course.targetAudience)
       ? course.targetAudience.join("\n")
       : "",
-    thumbnail: initialThumbnail,
+    thumbnail: course.thumbnail || "",
   });
 
-  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
-  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
+  const handleInstructorToggle = (id: string) => {
+    setSelectedInstructors((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
 
   const handleAddFaq = () => {
     setFaqs([...faqs, { question: "", answer: "" }]);
@@ -200,51 +213,7 @@ export default function EditCourseForm({
     setCards(updated);
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    setUploadError(null);
-
-    try {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", uploadPreset);
-      data.append("folder", "course_thumbnails");
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        { method: "POST", body: data }
-      );
-
-      const result = await res.json();
-
-      if (res.ok && result.secure_url) {
-        setFormData((prev) => ({ ...prev, thumbnail: result.secure_url }));
-      } else {
-        throw new Error(result.error?.message || "Cloudinary upload failed");
-      }
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Image upload failed");
-    } finally {
-      setUploading(false);
-      e.target.value = "";
-    }
-  };
-
-  const removeImage = async () => {
-    if (!formData.thumbnail) return;
-    try {
-      await deleteCloudinaryImage(formData.thumbnail);
-    } catch (err) {
-      console.error("Cloudinary deletion failed, removing reference anyway:", err);
-    } finally {
-      setFormData((prev) => ({ ...prev, thumbnail: "" }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -254,20 +223,36 @@ export default function EditCourseForm({
     payload.append("tagLine", formData.tagLine);
     payload.append("shortDescription", formData.shortDescription);
     payload.append("description", formData.description);
+    payload.append("courseBook", formData.courseBook);
+    payload.append("courseVideo", formData.courseVideo);
+    if (formData.isExamCivique) payload.append("isExamCivique", "on");
     payload.append("price", formData.price);
     payload.append("currency", formData.currency);
     payload.append("level", formData.level);
     payload.append("status", formData.status);
+    payload.append("courseType", formData.courseType);
     payload.append("duration", formData.duration);
     payload.append("numberOfStudents", formData.numberOfStudents);
     payload.append("rating", formData.rating);
-    payload.append("instructorId", formData.instructorId);
     payload.append("parisScheduleId", formData.parisScheduleId);
     payload.append("hocheScheduleId", formData.hocheScheduleId);
     payload.append("order", formData.order);
     payload.append("characteristics", formData.characteristics);
     payload.append("targetAudience", formData.targetAudience);
-    payload.append("thumbnail", formData.thumbnail);
+
+    // Grab thumbnail URL from CloudinaryUpload component if rendered via ref or hidden inputs,
+    // or fallback to state.
+    let thumbnailUrl = formData.thumbnail;
+    if (formRef.current) {
+      const thumbInput = formRef.current.querySelector('input[name="thumbnail"]') as HTMLInputElement;
+      if (thumbInput && thumbInput.value) {
+        thumbnailUrl = thumbInput.value;
+      }
+    }
+    payload.append("thumbnail", thumbnailUrl);
+
+    // Attach multiple instructors
+    payload.append("instructorIds", JSON.stringify(selectedInstructors));
 
     const filteredFaqs = faqs.filter((f) => f.question.trim());
     payload.append("faqs", JSON.stringify(filteredFaqs));
@@ -386,37 +371,44 @@ export default function EditCourseForm({
         />
       </div>
 
-      {/* Characteristics & Target Audience */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-semibold text-gray-700">
-            Course Features / Characteristics <span className="font-normal text-gray-400">(One per line)</span>
-          </label>
-          <textarea
-            rows={4}
-            placeholder="Lifetime Access&#10;Certificate of Completion&#10;Source Code Included"
-            value={formData.characteristics}
-            onChange={(e) => setFormData({ ...formData, characteristics: e.target.value })}
-            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-gray-700">
-            Target Audience <span className="font-normal text-gray-400">(One per line)</span>
-          </label>
-          <textarea
-            rows={4}
-            placeholder="Beginner Software Engineers&#10;Students wanting to learn React&#10;Career Switchers"
-            value={formData.targetAudience}
-            onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
-          />
-        </div>
+      {/* Course Video (YouTube Link) */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-700">Course Video (YouTube Link)</label>
+        <input
+          type="url"
+          placeholder="https://www.youtube.com/watch?v=..."
+          value={formData.courseVideo}
+          onChange={(e) => setFormData({ ...formData, courseVideo: e.target.value })}
+          className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+        />
       </div>
 
-      {/* Price, Currency, Level & Status */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      {/* Course Book Amazon Link */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-700">Course Book (Amazon Link)</label>
+        <input
+          type="url"
+          placeholder="https://amazon.com/dp/..."
+          value={formData.courseBook}
+          onChange={(e) => setFormData({ ...formData, courseBook: e.target.value })}
+          className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+
+      {/* Cloudinary Thumbnail Upload */}
+      <div>
+        <CloudinaryUpload
+          name="thumbnail"
+          label="Course Thumbnail"
+          defaultValue={formData.thumbnail}
+          cloudName={cloudName}
+          uploadPreset={uploadPreset}
+          folder="courses"
+        />
+      </div>
+
+      {/* Price, Currency, Level, Course Type & Status */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">
         <div>
           <label className="block text-xs font-semibold text-gray-700">Price</label>
           <input
@@ -453,6 +445,18 @@ export default function EditCourseForm({
         </div>
 
         <div>
+          <label className="block text-xs font-semibold text-gray-700">Course Type</label>
+          <select
+            value={formData.courseType}
+            onChange={(e) => setFormData({ ...formData, courseType: e.target.value })}
+            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white font-semibold"
+          >
+            <option value="ONLINE">Online</option>
+            <option value="OFFLINE">Offline</option>
+          </select>
+        </div>
+
+        <div>
           <label className="block text-xs font-semibold text-gray-700">Status</label>
           <select
             value={formData.status}
@@ -464,6 +468,23 @@ export default function EditCourseForm({
             <option value="ARCHIVED">ARCHIVED</option>
           </select>
         </div>
+      </div>
+
+      {/* Is Exam Civique Checkbox */}
+      <div className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+        <input
+          type="checkbox"
+          id="isExamCivique"
+          checked={formData.isExamCivique}
+          onChange={(e) => setFormData({ ...formData, isExamCivique: e.target.checked })}
+          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+        />
+        <label
+          htmlFor="isExamCivique"
+          className="text-sm font-semibold text-gray-800 cursor-pointer select-none"
+        >
+          Is Exam Civique?
+        </label>
       </div>
 
       {/* Schedules (Paris & Hoche) */}
@@ -547,24 +568,69 @@ export default function EditCourseForm({
         </div>
       </div>
 
-      {/* Instructor Selection */}
-      {instructors.length > 0 && (
+      {/* Multiple Instructors Checkbox Selection */}
+      <div className="border border-gray-200 rounded-xl p-4 bg-gray-50/50 space-y-3">
+        <label className="block text-xs font-semibold text-gray-800">
+          Instructors (Select Multiple)
+        </label>
+        {instructors.length === 0 ? (
+          <p className="text-xs text-gray-500">No instructors found.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 bg-white rounded-lg border border-gray-200">
+            {instructors.map((instructor) => {
+              const isChecked = selectedInstructors.includes(instructor.id);
+              return (
+                <label
+                  key={instructor.id}
+                  className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition text-xs ${
+                    isChecked ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => handleInstructorToggle(instructor.id)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  />
+                  <span className="font-medium text-gray-800">
+                    {instructor.name}
+                    {instructor.title ? ` (${instructor.title})` : ""}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Characteristics & Target Audience */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold text-gray-700">Instructor</label>
-          <select
-            value={formData.instructorId}
-            onChange={(e) => setFormData({ ...formData, instructorId: e.target.value })}
-            className="mt-1 w-full sm:w-1/2 rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none bg-white"
-          >
-            <option value="">-- Select Instructor --</option>
-            {instructors.map((inst) => (
-              <option key={inst.id} value={inst.id}>
-                {inst.name}
-              </option>
-            ))}
-          </select>
+          <label className="block text-xs font-semibold text-gray-700">
+            Course Features / Characteristics <span className="font-normal text-gray-400">(One per line)</span>
+          </label>
+          <textarea
+            rows={4}
+            placeholder="Lifetime Access&#10;Certificate of Completion&#10;Source Code Included"
+            value={formData.characteristics}
+            onChange={(e) => setFormData({ ...formData, characteristics: e.target.value })}
+            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+          />
         </div>
-      )}
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-700">
+            Target Audience <span className="font-normal text-gray-400">(One per line)</span>
+          </label>
+          <textarea
+            rows={4}
+            placeholder="Beginner Software Engineers&#10;Students wanting to learn React&#10;Career Switchers"
+            value={formData.targetAudience}
+            onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
+            className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
+          />
+        </div>
+      </div>
 
       {/* Course Cards Section */}
       <div className="border-t border-gray-200 pt-6">
@@ -674,47 +740,6 @@ export default function EditCourseForm({
         </div>
       </div>
 
-      {/* Course Thumbnail Upload */}
-      <div>
-        <label className="block text-xs font-semibold text-gray-700 mb-2">Course Thumbnail</label>
-        {formData.thumbnail ? (
-          <div className="relative aspect-video w-64 rounded-xl border border-gray-200 overflow-hidden bg-gray-50">
-            <Image
-              src={formData.thumbnail}
-              alt="Course Thumbnail"
-              fill
-              className="object-cover"
-            />
-            <button
-              type="button"
-              onClick={removeImage}
-              className="absolute top-2 right-2 rounded-lg bg-rose-600 p-1.5 text-white hover:bg-rose-700 transition cursor-pointer"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        ) : (
-          <div>
-            <label className="inline-flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-200 cursor-pointer transition">
-              {uploading ? (
-                <Loader2 className="w-4 h-4 animate-spin text-gray-600" />
-              ) : (
-                <Upload className="w-4 h-4 text-gray-600" />
-              )}
-              <span>{uploading ? "Uploading Image..." : "Upload Thumbnail"}</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                disabled={uploading}
-                className="hidden"
-              />
-            </label>
-            {uploadError && <p className="text-xs text-rose-600 mt-1">{uploadError}</p>}
-          </div>
-        )}
-      </div>
-
       {/* Action Buttons */}
       <div className="flex justify-end gap-3 pt-4 border-t">
         <button
@@ -726,7 +751,7 @@ export default function EditCourseForm({
         </button>
         <button
           type="submit"
-          disabled={loading || uploading}
+          disabled={loading}
           className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition cursor-pointer"
         >
           {loading ? "Saving..." : "Save Changes"}

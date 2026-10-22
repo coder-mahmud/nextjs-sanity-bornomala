@@ -1,3 +1,4 @@
+// app/admin/courses/[courseId]/content/batches/[batchId]/lessons/[lessonId]/edit/page.tsx
 import { auth } from "@/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
@@ -9,7 +10,7 @@ interface EditLessonPageProps {
   params: Promise<{
     courseId: string;
     lessonId: string;
-    batchId:string;
+    batchId: string;
   }>;
 }
 
@@ -41,7 +42,7 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
       },
     }),
     prisma.quiz.findMany({
-      select: { id: true, title: true,},
+      select: { id: true, title: true },
       orderBy: { createdAt: "desc" },
     }),
   ]);
@@ -53,7 +54,7 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
   return (
     <section className="p-6 max-w-4xl mx-auto space-y-6">
       <Link
-        href={`/admin/courses/${courseId}/content/batches/${[batchId]}/${[lessonId]}`}
+        href={`/admin/courses/${courseId}/content/batches/${batchId}/${lessonId}`}
         className="inline-flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-gray-900 transition"
       >
         <ArrowLeft className="w-4 h-4" />

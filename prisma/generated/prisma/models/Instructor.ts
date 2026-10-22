@@ -293,6 +293,7 @@ export type InstructorWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Instructor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Instructor"> | Date | string
   courses?: Prisma.CourseListRelationFilter
+  batches?: Prisma.BatchListRelationFilter
 }
 
 export type InstructorOrderByWithRelationInput = {
@@ -311,6 +312,7 @@ export type InstructorOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   courses?: Prisma.CourseOrderByRelationAggregateInput
+  batches?: Prisma.BatchOrderByRelationAggregateInput
 }
 
 export type InstructorWhereUniqueInput = Prisma.AtLeast<{
@@ -332,6 +334,7 @@ export type InstructorWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Instructor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Instructor"> | Date | string
   courses?: Prisma.CourseListRelationFilter
+  batches?: Prisma.BatchListRelationFilter
 }, "id">
 
 export type InstructorOrderByWithAggregationInput = {
@@ -391,7 +394,8 @@ export type InstructorCreateInput = {
   tags?: Prisma.InstructorCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
-  courses?: Prisma.CourseCreateNestedManyWithoutInstructorInput
+  courses?: Prisma.CourseCreateNestedManyWithoutInstructorsInput
+  batches?: Prisma.BatchCreateNestedManyWithoutInstructorInput
 }
 
 export type InstructorUncheckedCreateInput = {
@@ -409,7 +413,8 @@ export type InstructorUncheckedCreateInput = {
   tags?: Prisma.InstructorCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutInstructorInput
+  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutInstructorsInput
+  batches?: Prisma.BatchUncheckedCreateNestedManyWithoutInstructorInput
 }
 
 export type InstructorUpdateInput = {
@@ -427,7 +432,8 @@ export type InstructorUpdateInput = {
   tags?: Prisma.InstructorUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  courses?: Prisma.CourseUpdateManyWithoutInstructorNestedInput
+  courses?: Prisma.CourseUpdateManyWithoutInstructorsNestedInput
+  batches?: Prisma.BatchUpdateManyWithoutInstructorNestedInput
 }
 
 export type InstructorUncheckedUpdateInput = {
@@ -445,7 +451,8 @@ export type InstructorUncheckedUpdateInput = {
   tags?: Prisma.InstructorUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutInstructorNestedInput
+  courses?: Prisma.CourseUncheckedUpdateManyWithoutInstructorsNestedInput
+  batches?: Prisma.BatchUncheckedUpdateManyWithoutInstructorNestedInput
 }
 
 export type InstructorCreateManyInput = {
@@ -499,9 +506,14 @@ export type InstructorUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type InstructorNullableScalarRelationFilter = {
-  is?: Prisma.InstructorWhereInput | null
-  isNot?: Prisma.InstructorWhereInput | null
+export type InstructorListRelationFilter = {
+  every?: Prisma.InstructorWhereInput
+  some?: Prisma.InstructorWhereInput
+  none?: Prisma.InstructorWhereInput
+}
+
+export type InstructorOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type InstructorCountOrderByAggregateInput = {
@@ -565,20 +577,47 @@ export type InstructorSumOrderByAggregateInput = {
   rating?: Prisma.SortOrder
 }
 
-export type InstructorCreateNestedOneWithoutCoursesInput = {
-  create?: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput>
-  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutCoursesInput
-  connect?: Prisma.InstructorWhereUniqueInput
+export type InstructorNullableScalarRelationFilter = {
+  is?: Prisma.InstructorWhereInput | null
+  isNot?: Prisma.InstructorWhereInput | null
 }
 
-export type InstructorUpdateOneWithoutCoursesNestedInput = {
-  create?: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput>
-  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutCoursesInput
-  upsert?: Prisma.InstructorUpsertWithoutCoursesInput
-  disconnect?: Prisma.InstructorWhereInput | boolean
-  delete?: Prisma.InstructorWhereInput | boolean
-  connect?: Prisma.InstructorWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InstructorUpdateToOneWithWhereWithoutCoursesInput, Prisma.InstructorUpdateWithoutCoursesInput>, Prisma.InstructorUncheckedUpdateWithoutCoursesInput>
+export type InstructorCreateNestedManyWithoutCoursesInput = {
+  create?: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput> | Prisma.InstructorCreateWithoutCoursesInput[] | Prisma.InstructorUncheckedCreateWithoutCoursesInput[]
+  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutCoursesInput | Prisma.InstructorCreateOrConnectWithoutCoursesInput[]
+  connect?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+}
+
+export type InstructorUncheckedCreateNestedManyWithoutCoursesInput = {
+  create?: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput> | Prisma.InstructorCreateWithoutCoursesInput[] | Prisma.InstructorUncheckedCreateWithoutCoursesInput[]
+  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutCoursesInput | Prisma.InstructorCreateOrConnectWithoutCoursesInput[]
+  connect?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+}
+
+export type InstructorUpdateManyWithoutCoursesNestedInput = {
+  create?: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput> | Prisma.InstructorCreateWithoutCoursesInput[] | Prisma.InstructorUncheckedCreateWithoutCoursesInput[]
+  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutCoursesInput | Prisma.InstructorCreateOrConnectWithoutCoursesInput[]
+  upsert?: Prisma.InstructorUpsertWithWhereUniqueWithoutCoursesInput | Prisma.InstructorUpsertWithWhereUniqueWithoutCoursesInput[]
+  set?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  disconnect?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  delete?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  connect?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  update?: Prisma.InstructorUpdateWithWhereUniqueWithoutCoursesInput | Prisma.InstructorUpdateWithWhereUniqueWithoutCoursesInput[]
+  updateMany?: Prisma.InstructorUpdateManyWithWhereWithoutCoursesInput | Prisma.InstructorUpdateManyWithWhereWithoutCoursesInput[]
+  deleteMany?: Prisma.InstructorScalarWhereInput | Prisma.InstructorScalarWhereInput[]
+}
+
+export type InstructorUncheckedUpdateManyWithoutCoursesNestedInput = {
+  create?: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput> | Prisma.InstructorCreateWithoutCoursesInput[] | Prisma.InstructorUncheckedCreateWithoutCoursesInput[]
+  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutCoursesInput | Prisma.InstructorCreateOrConnectWithoutCoursesInput[]
+  upsert?: Prisma.InstructorUpsertWithWhereUniqueWithoutCoursesInput | Prisma.InstructorUpsertWithWhereUniqueWithoutCoursesInput[]
+  set?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  disconnect?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  delete?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  connect?: Prisma.InstructorWhereUniqueInput | Prisma.InstructorWhereUniqueInput[]
+  update?: Prisma.InstructorUpdateWithWhereUniqueWithoutCoursesInput | Prisma.InstructorUpdateWithWhereUniqueWithoutCoursesInput[]
+  updateMany?: Prisma.InstructorUpdateManyWithWhereWithoutCoursesInput | Prisma.InstructorUpdateManyWithWhereWithoutCoursesInput[]
+  deleteMany?: Prisma.InstructorScalarWhereInput | Prisma.InstructorScalarWhereInput[]
 }
 
 export type InstructorCreatetagsInput = {
@@ -598,6 +637,22 @@ export type InstructorUpdatetagsInput = {
   push?: string | string[]
 }
 
+export type InstructorCreateNestedOneWithoutBatchesInput = {
+  create?: Prisma.XOR<Prisma.InstructorCreateWithoutBatchesInput, Prisma.InstructorUncheckedCreateWithoutBatchesInput>
+  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutBatchesInput
+  connect?: Prisma.InstructorWhereUniqueInput
+}
+
+export type InstructorUpdateOneWithoutBatchesNestedInput = {
+  create?: Prisma.XOR<Prisma.InstructorCreateWithoutBatchesInput, Prisma.InstructorUncheckedCreateWithoutBatchesInput>
+  connectOrCreate?: Prisma.InstructorCreateOrConnectWithoutBatchesInput
+  upsert?: Prisma.InstructorUpsertWithoutBatchesInput
+  disconnect?: Prisma.InstructorWhereInput | boolean
+  delete?: Prisma.InstructorWhereInput | boolean
+  connect?: Prisma.InstructorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InstructorUpdateToOneWithWhereWithoutBatchesInput, Prisma.InstructorUpdateWithoutBatchesInput>, Prisma.InstructorUncheckedUpdateWithoutBatchesInput>
+}
+
 export type InstructorCreateWithoutCoursesInput = {
   id?: string
   name: string
@@ -613,6 +668,7 @@ export type InstructorCreateWithoutCoursesInput = {
   tags?: Prisma.InstructorCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  batches?: Prisma.BatchCreateNestedManyWithoutInstructorInput
 }
 
 export type InstructorUncheckedCreateWithoutCoursesInput = {
@@ -630,6 +686,7 @@ export type InstructorUncheckedCreateWithoutCoursesInput = {
   tags?: Prisma.InstructorCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  batches?: Prisma.BatchUncheckedCreateNestedManyWithoutInstructorInput
 }
 
 export type InstructorCreateOrConnectWithoutCoursesInput = {
@@ -637,15 +694,128 @@ export type InstructorCreateOrConnectWithoutCoursesInput = {
   create: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput>
 }
 
-export type InstructorUpsertWithoutCoursesInput = {
+export type InstructorUpsertWithWhereUniqueWithoutCoursesInput = {
+  where: Prisma.InstructorWhereUniqueInput
   update: Prisma.XOR<Prisma.InstructorUpdateWithoutCoursesInput, Prisma.InstructorUncheckedUpdateWithoutCoursesInput>
   create: Prisma.XOR<Prisma.InstructorCreateWithoutCoursesInput, Prisma.InstructorUncheckedCreateWithoutCoursesInput>
+}
+
+export type InstructorUpdateWithWhereUniqueWithoutCoursesInput = {
+  where: Prisma.InstructorWhereUniqueInput
+  data: Prisma.XOR<Prisma.InstructorUpdateWithoutCoursesInput, Prisma.InstructorUncheckedUpdateWithoutCoursesInput>
+}
+
+export type InstructorUpdateManyWithWhereWithoutCoursesInput = {
+  where: Prisma.InstructorScalarWhereInput
+  data: Prisma.XOR<Prisma.InstructorUpdateManyMutationInput, Prisma.InstructorUncheckedUpdateManyWithoutCoursesInput>
+}
+
+export type InstructorScalarWhereInput = {
+  AND?: Prisma.InstructorScalarWhereInput | Prisma.InstructorScalarWhereInput[]
+  OR?: Prisma.InstructorScalarWhereInput[]
+  NOT?: Prisma.InstructorScalarWhereInput | Prisma.InstructorScalarWhereInput[]
+  id?: Prisma.StringFilter<"Instructor"> | string
+  name?: Prisma.StringFilter<"Instructor"> | string
+  title?: Prisma.StringNullableFilter<"Instructor"> | string | null
+  designation?: Prisma.StringNullableFilter<"Instructor"> | string | null
+  experience?: Prisma.StringNullableFilter<"Instructor"> | string | null
+  studentCount?: Prisma.IntFilter<"Instructor"> | number
+  courseCount?: Prisma.IntFilter<"Instructor"> | number
+  rating?: Prisma.DecimalNullableFilter<"Instructor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  description?: Prisma.StringNullableFilter<"Instructor"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Instructor"> | string | null
+  imagePublicId?: Prisma.StringNullableFilter<"Instructor"> | string | null
+  tags?: Prisma.StringNullableListFilter<"Instructor">
+  createdAt?: Prisma.DateTimeFilter<"Instructor"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Instructor"> | Date | string
+}
+
+export type InstructorCreateWithoutBatchesInput = {
+  id?: string
+  name: string
+  title?: string | null
+  designation?: string | null
+  experience?: string | null
+  studentCount?: number
+  courseCount?: number
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  description?: string | null
+  imageUrl?: string | null
+  imagePublicId?: string | null
+  tags?: Prisma.InstructorCreatetagsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courses?: Prisma.CourseCreateNestedManyWithoutInstructorsInput
+}
+
+export type InstructorUncheckedCreateWithoutBatchesInput = {
+  id?: string
+  name: string
+  title?: string | null
+  designation?: string | null
+  experience?: string | null
+  studentCount?: number
+  courseCount?: number
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  description?: string | null
+  imageUrl?: string | null
+  imagePublicId?: string | null
+  tags?: Prisma.InstructorCreatetagsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutInstructorsInput
+}
+
+export type InstructorCreateOrConnectWithoutBatchesInput = {
+  where: Prisma.InstructorWhereUniqueInput
+  create: Prisma.XOR<Prisma.InstructorCreateWithoutBatchesInput, Prisma.InstructorUncheckedCreateWithoutBatchesInput>
+}
+
+export type InstructorUpsertWithoutBatchesInput = {
+  update: Prisma.XOR<Prisma.InstructorUpdateWithoutBatchesInput, Prisma.InstructorUncheckedUpdateWithoutBatchesInput>
+  create: Prisma.XOR<Prisma.InstructorCreateWithoutBatchesInput, Prisma.InstructorUncheckedCreateWithoutBatchesInput>
   where?: Prisma.InstructorWhereInput
 }
 
-export type InstructorUpdateToOneWithWhereWithoutCoursesInput = {
+export type InstructorUpdateToOneWithWhereWithoutBatchesInput = {
   where?: Prisma.InstructorWhereInput
-  data: Prisma.XOR<Prisma.InstructorUpdateWithoutCoursesInput, Prisma.InstructorUncheckedUpdateWithoutCoursesInput>
+  data: Prisma.XOR<Prisma.InstructorUpdateWithoutBatchesInput, Prisma.InstructorUncheckedUpdateWithoutBatchesInput>
+}
+
+export type InstructorUpdateWithoutBatchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  courseCount?: Prisma.IntFieldUpdateOperationsInput | number
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.InstructorUpdatetagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courses?: Prisma.CourseUpdateManyWithoutInstructorsNestedInput
+}
+
+export type InstructorUncheckedUpdateWithoutBatchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  courseCount?: Prisma.IntFieldUpdateOperationsInput | number
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.InstructorUpdatetagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courses?: Prisma.CourseUncheckedUpdateManyWithoutInstructorsNestedInput
 }
 
 export type InstructorUpdateWithoutCoursesInput = {
@@ -663,9 +833,28 @@ export type InstructorUpdateWithoutCoursesInput = {
   tags?: Prisma.InstructorUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batches?: Prisma.BatchUpdateManyWithoutInstructorNestedInput
 }
 
 export type InstructorUncheckedUpdateWithoutCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  courseCount?: Prisma.IntFieldUpdateOperationsInput | number
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.InstructorUpdatetagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batches?: Prisma.BatchUncheckedUpdateManyWithoutInstructorNestedInput
+}
+
+export type InstructorUncheckedUpdateManyWithoutCoursesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -689,10 +878,12 @@ export type InstructorUncheckedUpdateWithoutCoursesInput = {
 
 export type InstructorCountOutputType = {
   courses: number
+  batches: number
 }
 
 export type InstructorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   courses?: boolean | InstructorCountOutputTypeCountCoursesArgs
+  batches?: boolean | InstructorCountOutputTypeCountBatchesArgs
 }
 
 /**
@@ -712,6 +903,13 @@ export type InstructorCountOutputTypeCountCoursesArgs<ExtArgs extends runtime.Ty
   where?: Prisma.CourseWhereInput
 }
 
+/**
+ * InstructorCountOutputType without action
+ */
+export type InstructorCountOutputTypeCountBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BatchWhereInput
+}
+
 
 export type InstructorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -729,6 +927,7 @@ export type InstructorSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   updatedAt?: boolean
   courses?: boolean | Prisma.Instructor$coursesArgs<ExtArgs>
+  batches?: boolean | Prisma.Instructor$batchesArgs<ExtArgs>
   _count?: boolean | Prisma.InstructorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["instructor"]>
 
@@ -786,6 +985,7 @@ export type InstructorSelectScalar = {
 export type InstructorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "title" | "designation" | "experience" | "studentCount" | "courseCount" | "rating" | "description" | "imageUrl" | "imagePublicId" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["instructor"]>
 export type InstructorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   courses?: boolean | Prisma.Instructor$coursesArgs<ExtArgs>
+  batches?: boolean | Prisma.Instructor$batchesArgs<ExtArgs>
   _count?: boolean | Prisma.InstructorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InstructorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -795,6 +995,7 @@ export type $InstructorPayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "Instructor"
   objects: {
     courses: Prisma.$CoursePayload<ExtArgs>[]
+    batches: Prisma.$BatchPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1206,6 +1407,7 @@ readonly fields: InstructorFieldRefs;
 export interface Prisma__InstructorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   courses<T extends Prisma.Instructor$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Instructor$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  batches<T extends Prisma.Instructor$batchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Instructor$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1658,6 +1860,30 @@ export type Instructor$coursesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
+}
+
+/**
+ * Instructor.batches
+ */
+export type Instructor$batchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Batch
+   */
+  select?: Prisma.BatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Batch
+   */
+  omit?: Prisma.BatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BatchInclude<ExtArgs> | null
+  where?: Prisma.BatchWhereInput
+  orderBy?: Prisma.BatchOrderByWithRelationInput | Prisma.BatchOrderByWithRelationInput[]
+  cursor?: Prisma.BatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BatchScalarFieldEnum | Prisma.BatchScalarFieldEnum[]
 }
 
 /**

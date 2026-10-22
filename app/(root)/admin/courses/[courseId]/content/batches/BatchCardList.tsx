@@ -1,8 +1,9 @@
+// app/admin/courses/[courseId]/content/batches/BatchCardList.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Calendar, Users, BookOpen, ChevronRight, Video, Trash2, AlertTriangle, Loader2, X } from "lucide-react";
+import { Calendar, Users, BookOpen, ChevronRight, Video, Trash2, AlertTriangle, Loader2, X, UserCheck } from "lucide-react";
 import { toast } from "react-toastify";
 import { deleteBatch } from "./actions";
 import { useRouter } from "next/navigation";
@@ -13,10 +14,14 @@ interface BatchItem {
   title: string;
   slug: string;
   status: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: string | null;
+  endDate: string | null;
   maxStudents: number | null;
   meetingPlatform: string | null;
+  instructor?: {
+    name: string;
+    title?: string | null;
+  } | null;
   _count?: {
     lessons: number;
     accesses: number;
@@ -25,6 +30,12 @@ interface BatchItem {
 
 export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
   const router = useRouter();
+  
+  // Prevent hydration mismatch by confirming client mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // State for deletion confirmation modal
   const [selectedBatch, setSelectedBatch] = useState<BatchItem | null>(null);
@@ -101,6 +112,14 @@ export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
                 {getStatusBadge(batch.status)}
               </div>
 
+              {/* Assigned Instructor */}
+              {batch.instructor && (
+                <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100">
+                  <UserCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="font-medium text-gray-800">{batch.instructor.name}</span>
+                </div>
+              )}
+
               {/* Metrics */}
               <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 pt-2 border-t">
                 <div className="flex items-center gap-1.5">
@@ -113,13 +132,19 @@ export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
                 </div>
               </div>
 
-              {/* Start / End Dates */}
+              {/* Start / End Dates (Safe hydration guard) */}
               {(batch.startDate || batch.endDate) && (
                 <div className="flex items-center gap-1.5 text-xs text-gray-500">
                   <Calendar className="w-4 h-4 text-purple-500 shrink-0" />
                   <span>
-                    {batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "TBD"} -{" "}
-                    {batch.endDate ? new Date(batch.endDate).toLocaleDateString() : "TBD"}
+                    {mounted ? (
+                      <>
+                        {batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "TBD"} -{" "}
+                        {batch.endDate ? new Date(batch.endDate).toLocaleDateString() : "TBD"}
+                      </>
+                    ) : (
+                      <span className="text-transparent bg-gray-100 rounded animate-pulse">Loading dates...</span>
+                    )}
                   </span>
                 </div>
               )}
@@ -136,7 +161,7 @@ export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
             <div className="flex items-center justify-between border-t pt-4 mt-4">
               <button
                 onClick={() => setSelectedBatch(batch)}
-                className="text-gray-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition"
+                className="text-gray-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer"
                 title="Delete Batch"
               >
                 <Trash2 className="w-4 h-4" />
@@ -171,7 +196,7 @@ export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
               <button
                 disabled={isDeleting}
                 onClick={() => setSelectedBatch(null)}
-                className="rounded-lg p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition disabled:opacity-50"
+                className="rounded-lg p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition disabled:opacity-50 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -191,7 +216,7 @@ export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSelectedBatch(null)}
-                className="rounded-xl border border-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+                className="rounded-xl border border-gray-300 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition disabled:opacity-50 cursor-pointer"
               >
                 Cancel
               </button>
@@ -199,7 +224,7 @@ export default function BatchCardList({ batches }: { batches: BatchItem[] }) {
                 type="button"
                 disabled={isDeleting}
                 onClick={confirmDelete}
-                className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-rose-700 transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-rose-700 transition disabled:opacity-50 cursor-pointer"
               >
                 {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
                 {isDeleting ? "Deleting..." : "Yes, Delete Batch"}

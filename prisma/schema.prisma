@@ -81,7 +81,7 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
-
+/*
 model Course {
   id               String       @id @default(cuid())
   title            String
@@ -125,10 +125,158 @@ model Course {
 
   @@index([status])
 }
+*/
+
+// ==========================================
+// COURSE MODEL
+// ==========================================
+
+model Course {
+  id               String       @id @default(cuid())
+  title            String
+  slug             String       @unique
+  description      String?
+  shortDescription String?
+  tagLine          String?
+  level            String?
+  thumbnail        String?
+  price            Decimal      @db.Decimal(10, 2)
+  currency         String?      @default("EUR")
+  status           CourseStatus @default(DRAFT)
+  courseType       CourseType   @default(ONLINE)
+  characteristics  String[]
+  targetAudience   String[]
+  duration         String?
+  numberOfStudents String?
+  rating           String?
+  order            Int?
+  courseBook       String?
+  courseVideo      String?
+  isExamCivique    Boolean      @default(false)
+  
+  // JSON array storing course-specific FAQs: [{ question: string, answer: string }]
+  faqs             Json?
+
+  // Multiple Instructors (Implicit Many-to-Many)
+  instructors      Instructor[]
+
+  // Schedules
+  parisScheduleId  String?
+  parisSchedule    Schedule?    @relation("ParisSchedule", fields: [parisScheduleId], references: [id], onDelete: SetNull)
+
+  hocheScheduleId  String?
+  hocheSchedule    Schedule?    @relation("HocheSchedule", fields: [hocheScheduleId], references: [id], onDelete: SetNull)
+
+  cards            CourseCard[]
+  batches          Batch[]
+
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  accesses         CourseAccess[]
+  courseCertificates CourseCertificate[]
+  payments         Payment[]
+
+  @@index([status])
+  @@index([courseType])
+}
+/*
+model Lesson {
+  id              String           @id @default(cuid())
+  batchId         String?          
+  quizId          String?          
+  instructorId    String?          // Single instructor for this specific lesson
+  title           String
+  slug            String           @unique
+  description     String?
+  videoUrl        String?
+  order           Int
+  isPreview       Boolean          @default(false)
+  
+  startsAt        DateTime?
+  endsAt          DateTime?
+
+  bunnyLibraryId  String?
+  bunnyVideoId    String?
+
+  attachments     String[]         
+  notes           String?          
+
+  batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  quiz            Quiz?            @relation(fields: [quizId], references: [id], onDelete: SetNull)
+  instructor      Instructor?      @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+  progressRecords LessonProgress[]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([batchId])
+  @@index([quizId])
+  @@index([instructorId])
+}
+*/
+model Lesson {
+  id              String           @id @default(cuid())
+  batchId         String?          
+  quizId          String?          
+  title           String
+  slug            String           @unique
+  description     String?
+  videoUrl        String?
+  order           Int
+  isPreview       Boolean          @default(false)
+  
+  startsAt        DateTime?
+  endsAt          DateTime?
+
+  bunnyLibraryId  String?
+  bunnyVideoId    String?
+
+  // JSON Array storing structured attachments: [{ name: string, url: string }]
+  attachments     Json?            
+  notes           String?          
+
+  batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  quiz            Quiz?            @relation(fields: [quizId], references: [id], onDelete: SetNull)
+  progressRecords LessonProgress[]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([batchId])
+  @@index([quizId])
+}
+
+model Instructor {
+  id String @id @default(cuid())
+
+  name        String
+  title       String?
+  designation String?
+  experience  String?
+
+  studentCount Int      @default(0)
+  courseCount  Int      @default(0)
+  rating       Decimal? @db.Decimal(3, 2)
+
+  description String?
+
+  imageUrl      String?
+  imagePublicId String?
+
+  tags String[]
+
+  // Relations
+  courses     Course[]     // Implicit many-to-many relation with courses
+  batches     Batch[]      // One-to-many relation with batches
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 model Batch {
   id              String      @id @default(cuid())
   courseId        String
+  instructorId    String?     // Specific instructor assigned to this batch
   title           String      // e.g. "Batch 01 - Spring 2026"
   slug            String      @unique
   startDate       DateTime?
@@ -142,6 +290,7 @@ model Batch {
   status          BatchStatus @default(UPCOMING)
 
   course          Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  instructor      Instructor?    @relation(fields: [instructorId], references: [id], onDelete: SetNull)
   lessons         Lesson[]
   accesses        CourseAccess[]
   payments        Payment[]
@@ -150,9 +299,20 @@ model Batch {
   updatedAt       DateTime    @updatedAt
 
   @@index([courseId])
+  @@index([instructorId])
   @@index([status])
 }
 
+
+
+enum CourseType {
+  ONLINE
+  OFFLINE
+}
+
+
+
+/*
 model Lesson {
   id              String           @id @default(cuid())
   batchId         String?          
@@ -180,10 +340,12 @@ model Lesson {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
-  @@unique([batchId, order])
+  // REMOVED: @@unique([batchId, order]) -> Allows duplicate order numbers in a batch!
+
   @@index([batchId])
   @@index([quizId])
 }
+*/
 
 model Quiz {
   id              String        @id @default(cuid())
@@ -480,6 +642,7 @@ model CourseCard {
   @@index([courseId])
 }
 
+/*
 model Instructor {
   id String @id @default(cuid())
 
@@ -504,7 +667,7 @@ model Instructor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
+*/
 // ==========================================
 // NEW MODELS: INVENTORY & DAILY EXPENSES
 // ==========================================

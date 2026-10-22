@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const CourseType = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
+} as const
+
+export type CourseType = (typeof CourseType)[keyof typeof CourseType]
+
+
 export const Role = {
   STUDENT: 'STUDENT',
   USER: 'USER',

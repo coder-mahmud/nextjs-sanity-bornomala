@@ -1,14 +1,22 @@
+// app/admin/courses/[courseId]/content/batches/_components/EditBatchModal.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Loader2, X, Video, Calendar } from "lucide-react";
+import { Pencil, Loader2, X, Video, Calendar, UserCheck } from "lucide-react";
 import { toast } from "react-toastify";
 import { updateBatch } from "../actions";
+
+interface InstructorOption {
+  id: string;
+  name: string;
+  title?: string | null;
+}
 
 interface BatchData {
   id: string;
   courseId: string;
+  instructorId?: string | null;
   title: string;
   slug: string;
   status: string;
@@ -20,7 +28,12 @@ interface BatchData {
   meetingPassword: string | null;
 }
 
-export default function EditBatchModal({ batch }: { batch: BatchData }) {
+interface EditBatchModalProps {
+  batch: BatchData;
+  instructors?: InstructorOption[];
+}
+
+export default function EditBatchModal({ batch, instructors = [] }: EditBatchModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,6 +46,7 @@ export default function EditBatchModal({ batch }: { batch: BatchData }) {
   const [formData, setFormData] = useState({
     title: batch.title || "",
     slug: batch.slug || "",
+    instructorId: batch.instructorId || "",
     status: batch.status || "UPCOMING",
     maxStudents: batch.maxStudents ? String(batch.maxStudents) : "",
     startDate: formatDateForInput(batch.startDate),
@@ -50,6 +64,7 @@ export default function EditBatchModal({ batch }: { batch: BatchData }) {
       const data = new FormData();
       data.append("title", formData.title);
       data.append("slug", formData.slug);
+      data.append("instructorId", formData.instructorId);
       data.append("status", formData.status);
       data.append("maxStudents", formData.maxStudents);
       data.append("startDate", formData.startDate);
@@ -87,7 +102,7 @@ export default function EditBatchModal({ batch }: { batch: BatchData }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition shadow-sm"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-300 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition shadow-sm cursor-pointer"
       >
         <Pencil className="w-3.5 h-3.5" />
         Edit Batch Info
@@ -95,17 +110,17 @@ export default function EditBatchModal({ batch }: { batch: BatchData }) {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
-          <div className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl border border-gray-100 space-y-5 my-8">
+          <div className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl border border-gray-100 space-y-5 my-8 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b pb-4">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Edit Batch Details</h3>
-                <p className="text-xs text-gray-500">Update live stream room links, access limits, and schedules.</p>
+                <p className="text-xs text-gray-500">Update instructor, live stream room links, access limits, and schedules.</p>
               </div>
               <button
                 type="button"
                 disabled={loading}
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+                className="rounded-lg p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -137,13 +152,33 @@ export default function EditBatchModal({ batch }: { batch: BatchData }) {
                 </div>
               </div>
 
+              {/* Instructor Selection */}
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+                  <UserCheck className="w-3.5 h-3.5 text-blue-600" />
+                  Assigned Instructor
+                </label>
+                <select
+                  value={formData.instructorId}
+                  onChange={(e) => setFormData({ ...formData, instructorId: e.target.value })}
+                  className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white font-medium"
+                >
+                  <option value="">-- No Instructor Assigned --</option>
+                  {instructors.map((inst) => (
+                    <option key={inst.id} value={inst.id}>
+                      {inst.name} {inst.title ? `(${inst.title})` : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-700">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white font-semibold"
                   >
                     <option value="UPCOMING">UPCOMING</option>
                     <option value="ONGOING">ONGOING</option>
@@ -243,14 +278,14 @@ export default function EditBatchModal({ batch }: { batch: BatchData }) {
                   type="button"
                   disabled={loading}
                   onClick={() => setIsOpen(false)}
-                  className="rounded-xl border border-gray-300 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                  className="rounded-xl border border-gray-300 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition disabled:opacity-50 cursor-pointer"
                 >
                   {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                   {loading ? "Saving..." : "Save Changes"}

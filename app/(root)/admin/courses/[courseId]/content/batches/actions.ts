@@ -1,3 +1,4 @@
+// app/admin/courses/actions.ts
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -8,6 +9,7 @@ export async function createBatch(prevState: any, formData: FormData) {
     const courseId = formData.get("courseId") as string;
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
+    const instructorId = formData.get("instructorId") as string;
     const startDate = formData.get("startDate") as string;
     const endDate = formData.get("endDate") as string;
     const meetingPlatform = formData.get("meetingPlatform") as string;
@@ -30,6 +32,7 @@ export async function createBatch(prevState: any, formData: FormData) {
         courseId,
         title,
         slug,
+        instructorId: instructorId || null,
         startDate: startDate ? new Date(startDate) : null,
         endDate: endDate ? new Date(endDate) : null,
         meetingPlatform: meetingPlatform || null,
@@ -52,6 +55,7 @@ export async function updateBatch(batchId: string, courseId: string, formData: F
   try {
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
+    const instructorId = formData.get("instructorId") as string;
     const startDate = formData.get("startDate") as string;
     const endDate = formData.get("endDate") as string;
     const meetingPlatform = formData.get("meetingPlatform") as string;
@@ -64,7 +68,6 @@ export async function updateBatch(batchId: string, courseId: string, formData: F
       return { status: "error", message: "Batch ID, title, and slug are required." };
     }
 
-    // Check if slug belongs to another batch
     const existingSlug = await prisma.batch.findFirst({
       where: {
         slug,
@@ -81,6 +84,7 @@ export async function updateBatch(batchId: string, courseId: string, formData: F
       data: {
         title,
         slug,
+        instructorId: instructorId || null,
         startDate: startDate ? new Date(startDate) : null,
         endDate: endDate ? new Date(endDate) : null,
         meetingPlatform: meetingPlatform || null,

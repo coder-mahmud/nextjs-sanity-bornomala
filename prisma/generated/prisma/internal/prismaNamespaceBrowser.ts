@@ -55,8 +55,9 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Authenticator: 'Authenticator',
   Course: 'Course',
-  Batch: 'Batch',
   Lesson: 'Lesson',
+  Instructor: 'Instructor',
+  Batch: 'Batch',
   Quiz: 'Quiz',
   LessonProgress: 'LessonProgress',
   Question: 'Question',
@@ -73,7 +74,6 @@ export const ModelName = {
   Schedule: 'Schedule',
   ScheduleEntry: 'ScheduleEntry',
   CourseCard: 'CourseCard',
-  Instructor: 'Instructor',
   Inventory: 'Inventory',
   Student: 'Student',
   DailyExpense: 'DailyExpense'
@@ -176,14 +176,17 @@ export const CourseScalarFieldEnum = {
   price: 'price',
   currency: 'currency',
   status: 'status',
+  courseType: 'courseType',
   characteristics: 'characteristics',
   targetAudience: 'targetAudience',
   duration: 'duration',
   numberOfStudents: 'numberOfStudents',
   rating: 'rating',
   order: 'order',
+  courseBook: 'courseBook',
+  courseVideo: 'courseVideo',
+  isExamCivique: 'isExamCivique',
   faqs: 'faqs',
-  instructorId: 'instructorId',
   parisScheduleId: 'parisScheduleId',
   hocheScheduleId: 'hocheScheduleId',
   createdAt: 'createdAt',
@@ -191,25 +194,6 @@ export const CourseScalarFieldEnum = {
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
-
-
-export const BatchScalarFieldEnum = {
-  id: 'id',
-  courseId: 'courseId',
-  title: 'title',
-  slug: 'slug',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  meetingPlatform: 'meetingPlatform',
-  meetingLink: 'meetingLink',
-  meetingPassword: 'meetingPassword',
-  maxStudents: 'maxStudents',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
 
 
 export const LessonScalarFieldEnum = {
@@ -233,6 +217,46 @@ export const LessonScalarFieldEnum = {
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const InstructorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  title: 'title',
+  designation: 'designation',
+  experience: 'experience',
+  studentCount: 'studentCount',
+  courseCount: 'courseCount',
+  rating: 'rating',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  imagePublicId: 'imagePublicId',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstructorScalarFieldEnum = (typeof InstructorScalarFieldEnum)[keyof typeof InstructorScalarFieldEnum]
+
+
+export const BatchScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  instructorId: 'instructorId',
+  title: 'title',
+  slug: 'slug',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  meetingPlatform: 'meetingPlatform',
+  meetingLink: 'meetingLink',
+  meetingPassword: 'meetingPassword',
+  maxStudents: 'maxStudents',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
 
 
 export const QuizScalarFieldEnum = {
@@ -464,26 +488,6 @@ export const CourseCardScalarFieldEnum = {
 } as const
 
 export type CourseCardScalarFieldEnum = (typeof CourseCardScalarFieldEnum)[keyof typeof CourseCardScalarFieldEnum]
-
-
-export const InstructorScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  title: 'title',
-  designation: 'designation',
-  experience: 'experience',
-  studentCount: 'studentCount',
-  courseCount: 'courseCount',
-  rating: 'rating',
-  description: 'description',
-  imageUrl: 'imageUrl',
-  imagePublicId: 'imagePublicId',
-  tags: 'tags',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type InstructorScalarFieldEnum = (typeof InstructorScalarFieldEnum)[keyof typeof InstructorScalarFieldEnum]
 
 
 export const InventoryScalarFieldEnum = {

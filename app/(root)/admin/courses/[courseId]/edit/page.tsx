@@ -1,3 +1,4 @@
+// app/admin/courses/[courseId]/edit/page.tsx
 import { auth } from "@/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
@@ -23,6 +24,13 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
   const course = await prisma.course.findUnique({
     where: { id: courseId },
     include: {
+      instructors: {
+        select: {
+          id: true,
+          name: true,
+          title: true,
+        },
+      },
       cards: {
         orderBy: {
           order: "asc",
@@ -39,6 +47,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
     select: {
       id: true,
       name: true,
+      title: true,
     },
     orderBy: {
       name: "asc",
@@ -60,6 +69,9 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
       createdAt: "desc",
     },
   })) as unknown as ScheduleOption[];
+
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
+  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
   // Convert Prisma Decimal and special types to plain JSON before passing to Client Component
   const serializedCourse = JSON.parse(JSON.stringify(course));
@@ -86,6 +98,8 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
           course={serializedCourse}
           instructors={instructors}
           schedules={schedules}
+          cloudName={cloudName}
+          uploadPreset={uploadPreset}
         />
       </div>
     </section>

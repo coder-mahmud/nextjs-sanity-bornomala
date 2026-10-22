@@ -1,3 +1,4 @@
+// app/admin/courses/[courseId]/page.tsx
 import { auth } from "@/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
@@ -15,7 +16,12 @@ import {
   Star,
   UserCheck,
   CheckCircle2,
-  HelpCircle
+  HelpCircle,
+  ExternalLink,
+  Video,
+  MapPin,
+  Youtube,
+  Award
 } from "lucide-react";
 
 interface FAQItem {
@@ -25,7 +31,7 @@ interface FAQItem {
 
 type CourseWithDetails = Prisma.CourseGetPayload<{
   include: {
-    instructor: true;
+    instructors: true;
     cards: { orderBy: { order: "asc" } };
     batches: {
       orderBy: { createdAt: "desc" };
@@ -61,7 +67,7 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
   const course = (await prisma.course.findUnique({
     where: { id: courseId },
     include: {
-      instructor: true,
+      instructors: true,
       cards: { orderBy: { order: "asc" } },
       batches: {
         orderBy: { createdAt: "desc" },
@@ -102,8 +108,10 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
+              
+              {/* Status Badge */}
               <span
                 className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                   course.status === "PUBLISHED"
@@ -115,7 +123,28 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
               >
                 {course.status}
               </span>
+
+              {/* Course Type Badge (ONLINE / OFFLINE) */}
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                  course.courseType === "ONLINE"
+                    ? "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20"
+                    : "bg-purple-50 text-purple-700 ring-1 ring-purple-600/20"
+                }`}
+              >
+                {course.courseType === "ONLINE" ? <Video className="w-3 h-3" /> : <MapPin className="w-3 h-3" />}
+                {course.courseType}
+              </span>
+
+              {/* Exam Civique Badge */}
+              {course.isExamCivique && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-600/20">
+                  <Award className="w-3 h-3" />
+                  Exam Civique
+                </span>
+              )}
             </div>
+
             {course.tagLine && (
               <p className="text-sm font-medium text-blue-600 mt-0.5">{course.tagLine}</p>
             )}
@@ -194,6 +223,43 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
                 {course.description || "No description provided for this course."}
               </p>
             </div>
+
+            {/* Course Video & Course Book Links */}
+            {(course.courseVideo || course.courseBook) && (
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                {course.courseVideo && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Course Intro Video</p>
+                    <a
+                      href={course.courseVideo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg border border-red-200 transition"
+                    >
+                      <Youtube className="w-3.5 h-3.5" />
+                      <span>Watch Intro Video</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+
+                {course.courseBook && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Required Course Book</p>
+                    <a
+                      href={course.courseBook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>View Book on Amazon</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t">
               <div>
@@ -330,31 +396,37 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
             )}
           </div>
 
-          {/* Instructor Info */}
+          {/* Multiple Instructors Info */}
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-3">
-            <h3 className="text-sm font-bold text-gray-900 border-b pb-2">Instructor</h3>
-            {course.instructor ? (
-              <div className="flex items-center gap-3">
-                {course.instructor.imageUrl ? (
-                  <Image
-                    src={course.instructor.imageUrl}
-                    alt={course.instructor.name}
-                    width={40}
-                    height={40}
-                    className="rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
-                    {course.instructor.name[0]}
+            <h3 className="text-sm font-bold text-gray-900 border-b pb-2">
+              Instructors ({course.instructors.length})
+            </h3>
+            {course.instructors.length > 0 ? (
+              <div className="space-y-3">
+                {course.instructors.map((instructor) => (
+                  <div key={instructor.id} className="flex items-center gap-3">
+                    {instructor.imageUrl ? (
+                      <Image
+                        src={instructor.imageUrl}
+                        alt={instructor.name}
+                        width={36}
+                        height={36}
+                        className="rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
+                        {instructor.name[0]}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-xs font-bold text-gray-900">{instructor.name}</p>
+                      <p className="text-xs text-gray-500">{instructor.title || instructor.designation || "Instructor"}</p>
+                    </div>
                   </div>
-                )}
-                <div>
-                  <p className="text-xs font-bold text-gray-900">{course.instructor.name}</p>
-                  <p className="text-xs text-gray-500">{course.instructor.title || course.instructor.designation || "Instructor"}</p>
-                </div>
+                ))}
               </div>
             ) : (
-              <p className="text-xs text-gray-500 italic">No instructor assigned.</p>
+              <p className="text-xs text-gray-500 italic">No instructors assigned.</p>
             )}
           </div>
 
@@ -362,6 +434,16 @@ export default async function CourseDetailsPage({ params }: CourseDetailsPagePro
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-3">
             <h3 className="text-sm font-bold text-gray-900 border-b pb-2">Course Details</h3>
             <div className="text-xs text-gray-600 space-y-2">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Course Type:</span>
+                <span className="font-semibold text-gray-900">{course.courseType}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Exam Civique:</span>
+                <span className={`font-semibold ${course.isExamCivique ? "text-emerald-600" : "text-gray-500"}`}>
+                  {course.isExamCivique ? "Yes" : "No"}
+                </span>
+              </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Order Position:</span>
                 <span className="font-mono">{course.order ?? "N/A"}</span>

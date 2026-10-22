@@ -1,3 +1,4 @@
+// app/admin/courses/create/CreateCourseForm.tsx
 "use client";
 
 import { useState, useRef } from "react";
@@ -105,10 +106,17 @@ export default function CreateCourseForm({
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
+  const [selectedInstructors, setSelectedInstructors] = useState<string[]>([]);
   const [faqs, setFaqs] = useState<FAQItem[]>([{ question: "", answer: "" }]);
   const [cards, setCards] = useState<CourseCardItem[]>([
     { title: "", description: "", image: "", order: 0 },
   ]);
+
+  const handleInstructorToggle = (id: string) => {
+    setSelectedInstructors((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
 
   const handleAddFaq = () => {
     setFaqs([...faqs, { question: "", answer: "" }]);
@@ -152,7 +160,8 @@ export default function CreateCourseForm({
 
     const formData = new FormData(e.currentTarget);
 
-    // Grab the latest Cloudinary image URLs from the hidden inputs for each card
+    formData.append("instructorIds", JSON.stringify(selectedInstructors));
+
     const processedCards = cards.map((card, index) => {
       let imageUrl = card.image;
       if (formRef.current) {
@@ -262,19 +271,77 @@ export default function CreateCourseForm({
         />
       </div>
 
-      {/* Price */}
+      {/* Course Video (YouTube Link) */}
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">
-          Price *
+          Course Video (YouTube Link)
         </label>
         <input
-          type="number"
-          step="0.01"
-          name="price"
-          required
-          defaultValue="0"
+          type="url"
+          name="courseVideo"
           className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          placeholder="https://www.youtube.com/watch?v=..."
         />
+      </div>
+
+      {/* Course Book (Amazon Link) */}
+      <div>
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          Course Book (Amazon Link)
+        </label>
+        <input
+          type="url"
+          name="courseBook"
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          placeholder="https://amazon.com/dp/..."
+        />
+      </div>
+
+      {/* Price & Course Type */}
+      <div className="grid gap-6 md:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Price *
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            name="price"
+            required
+            defaultValue="0"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Course Type *
+          </label>
+          <select
+            name="courseType"
+            defaultValue="ONLINE"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 bg-white"
+          >
+            <option value="ONLINE">Online</option>
+            <option value="OFFLINE">Offline</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Is Exam Civique Checkbox */}
+      <div className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+        <input
+          type="checkbox"
+          id="isExamCivique"
+          name="isExamCivique"
+          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+        />
+        <label
+          htmlFor="isExamCivique"
+          className="text-sm font-semibold text-gray-800 cursor-pointer select-none"
+        >
+          Is Exam Civique?
+        </label>
       </div>
 
       {/* Level & Duration */}
@@ -285,7 +352,7 @@ export default function CreateCourseForm({
           </label>
           <select
             name="level"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 bg-white"
           >
             <option value="">Select Level</option>
             <option value="Beginner">Beginner</option>
@@ -315,7 +382,7 @@ export default function CreateCourseForm({
           </label>
           <select
             name="parisScheduleId"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 bg-white"
           >
             <option value="">Select Paris Schedule (Optional)</option>
             {schedules.map((sched) => (
@@ -332,7 +399,7 @@ export default function CreateCourseForm({
           </label>
           <select
             name="hocheScheduleId"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 bg-white"
           >
             <option value="">Select Hoche Schedule (Optional)</option>
             {schedules.map((sched) => (
@@ -371,26 +438,43 @@ export default function CreateCourseForm({
         </div>
       </div>
 
-      {/* Instructor, Display Order & Status */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            Instructor
-          </label>
-          <select
-            name="instructorId"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
-          >
-            <option value="">Select Instructor (Optional)</option>
-            {instructors.map((instructor) => (
-              <option key={instructor.id} value={instructor.id}>
-                {instructor.name}
-                {instructor.title ? ` (${instructor.title})` : ""}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Multiple Instructors Checkbox Selection */}
+      <div className="border border-gray-200 rounded-xl p-4 bg-gray-50/50 space-y-3">
+        <label className="block text-sm font-semibold text-gray-800">
+          Instructors (Select Multiple)
+        </label>
+        {instructors.length === 0 ? (
+          <p className="text-xs text-gray-500">No instructors found.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 bg-white rounded-lg border border-gray-200">
+            {instructors.map((instructor) => {
+              const isChecked = selectedInstructors.includes(instructor.id);
+              return (
+                <label
+                  key={instructor.id}
+                  className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition text-sm ${
+                    isChecked ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => handleInstructorToggle(instructor.id)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  />
+                  <span className="font-medium text-gray-800">
+                    {instructor.name}
+                    {instructor.title ? ` (${instructor.title})` : ""}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
+      {/* Display Order & Status */}
+      <div className="grid gap-6 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-700">
             Display Order
@@ -410,7 +494,7 @@ export default function CreateCourseForm({
           <select
             name="status"
             defaultValue="DRAFT"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 bg-white"
           >
             <option value="DRAFT">Draft</option>
             <option value="PUBLISHED">Published</option>
@@ -419,7 +503,7 @@ export default function CreateCourseForm({
         </div>
       </div>
 
-      {/* Course Cards Section with Cloudinary Upload */}
+      {/* Course Cards Section */}
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Course Cards</h3>
         <div className="space-y-4">
@@ -455,7 +539,6 @@ export default function CreateCourseForm({
                 />
               </div>
 
-              {/* Cloudinary Image Upload for Card */}
               <div>
                 <CloudinaryUpload
                   name={`cardImage_${index}`}
@@ -486,7 +569,7 @@ export default function CreateCourseForm({
         </div>
       </div>
 
-      {/* Course FAQs Section with Tiptap */}
+      {/* Course FAQs Section */}
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Course FAQs</h3>
         <div className="space-y-4">
