@@ -1,8 +1,9 @@
+// app/admin/expenses/[id]/edit/page.tsx
 "use client";
 
 import React, { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { ArrowLeft, Save, Calendar } from "lucide-react";
+import { ArrowLeft, Save, Calendar, MessageSquare } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { getBranches, getDailyExpenseById, updateDailyExpense } from "@/actions/expense";
@@ -17,14 +18,32 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
 
   const [date, setDate] = useState("");
   const [branchId, setBranchId] = useState("");
+
+  // Amounts & Comments states
   const [admissionDelfA1, setAdmissionDelfA1] = useState<number | "">(0);
+  const [admissionDelfA1Comment, setAdmissionDelfA1Comment] = useState("");
+
   const [admissionDelfA2, setAdmissionDelfA2] = useState<number | "">(0);
+  const [admissionDelfA2Comment, setAdmissionDelfA2Comment] = useState("");
+
   const [admissionDelfB1, setAdmissionDelfB1] = useState<number | "">(0);
+  const [admissionDelfB1Comment, setAdmissionDelfB1Comment] = useState("");
+
   const [admissionDelfB2, setAdmissionDelfB2] = useState<number | "">(0);
+  const [admissionDelfB2Comment, setAdmissionDelfB2Comment] = useState("");
+
   const [delfExam, setDelfExam] = useState<number | "">(0);
+  const [delfExamComment, setDelfExamComment] = useState("");
+
   const [pdf, setPdf] = useState<number | "">(0);
+  const [pdfComment, setPdfComment] = useState("");
+
   const [civique, setCivique] = useState<number | "">(0);
+  const [civiqueComment, setCiviqueComment] = useState("");
+
   const [expenses, setExpenses] = useState<number | "">(0);
+  const [expensesComment, setExpensesComment] = useState("");
+
   const [comment, setComment] = useState("");
 
   useEffect(() => {
@@ -40,14 +59,32 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
         const item = expenseRes.data;
         setDate(item.date ? item.date.split("T")[0] : "");
         setBranchId(item.branchId || "");
+
+        // Populate amounts & comments
         setAdmissionDelfA1(Number(item.admissionDelfA1) || 0);
+        setAdmissionDelfA1Comment(item.admissionDelfA1Comment || "");
+
         setAdmissionDelfA2(Number(item.admissionDelfA2) || 0);
+        setAdmissionDelfA2Comment(item.admissionDelfA2Comment || "");
+
         setAdmissionDelfB1(Number(item.admissionDelfB1) || 0);
+        setAdmissionDelfB1Comment(item.admissionDelfB1Comment || "");
+
         setAdmissionDelfB2(Number(item.admissionDelfB2) || 0);
+        setAdmissionDelfB2Comment(item.admissionDelfB2Comment || "");
+
         setDelfExam(Number(item.delfExam) || 0);
+        setDelfExamComment(item.delfExamComment || "");
+
         setPdf(Number(item.pdf) || 0);
+        setPdfComment(item.pdfComment || "");
+
         setCivique(Number(item.civique) || 0);
+        setCiviqueComment(item.civiqueComment || "");
+
         setExpenses(Number(item.expenses) || 0);
+        setExpensesComment(item.expensesComment || "");
+
         setComment(item.comment || "");
       } else {
         toast.error(expenseRes.error || "Failed to load record");
@@ -76,13 +113,21 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
         date,
         branchId,
         admissionDelfA1: Number(admissionDelfA1) || 0,
+        admissionDelfA1Comment,
         admissionDelfA2: Number(admissionDelfA2) || 0,
+        admissionDelfA2Comment,
         admissionDelfB1: Number(admissionDelfB1) || 0,
+        admissionDelfB1Comment,
         admissionDelfB2: Number(admissionDelfB2) || 0,
+        admissionDelfB2Comment,
         delfExam: Number(delfExam) || 0,
+        delfExamComment,
         pdf: Number(pdf) || 0,
+        pdfComment,
         civique: Number(civique) || 0,
+        civiqueComment,
         expenses: Number(expenses) || 0,
+        expensesComment,
         comment,
       });
       if (!res.success) throw new Error(res.error);
@@ -119,7 +164,7 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
         </div>
         <button
           type="submit"
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-sm"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-sm cursor-pointer"
         >
           <Save className="w-4 h-4" /> Save Changes
         </button>
@@ -128,7 +173,7 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
+            <label className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-gray-500" /> Date *
             </label>
             <input
@@ -146,7 +191,7 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
               value={branchId}
               onChange={(e) => setBranchId(e.target.value)}
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
             >
               {branches.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -157,98 +202,175 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
           </div>
         </div>
 
-        {/* Financial Fields Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Admission DELF A1 (€)</label>
+        {/* Financial Fields & Textarea Comments Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+          
+          {/* Admission DELF A1 */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">Admission DELF A1 (€)</label>
             <input
               type="number"
               step="0.01"
               value={admissionDelfA1 === 0 ? "" : admissionDelfA1}
               onChange={(e) => setAdmissionDelfA1(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for A1..."
+              value={admissionDelfA1Comment}
+              onChange={(e) => setAdmissionDelfA1Comment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Admission DELF A2 (€)</label>
+
+          {/* Admission DELF A2 */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">Admission DELF A2 (€)</label>
             <input
               type="number"
               step="0.01"
               value={admissionDelfA2 === 0 ? "" : admissionDelfA2}
               onChange={(e) => setAdmissionDelfA2(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for A2..."
+              value={admissionDelfA2Comment}
+              onChange={(e) => setAdmissionDelfA2Comment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Admission DELF B1 (€)</label>
+
+          {/* Admission DELF B1 */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">Admission DELF B1 (€)</label>
             <input
               type="number"
               step="0.01"
               value={admissionDelfB1 === 0 ? "" : admissionDelfB1}
               onChange={(e) => setAdmissionDelfB1(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for B1..."
+              value={admissionDelfB1Comment}
+              onChange={(e) => setAdmissionDelfB1Comment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Admission DELF B2 (€)</label>
+
+          {/* Admission DELF B2 */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">Admission DELF B2 (€)</label>
             <input
               type="number"
               step="0.01"
               value={admissionDelfB2 === 0 ? "" : admissionDelfB2}
               onChange={(e) => setAdmissionDelfB2(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for B2..."
+              value={admissionDelfB2Comment}
+              onChange={(e) => setAdmissionDelfB2Comment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">DELF Exam (€)</label>
+
+          {/* DELF Exam */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">DELF Exam (€)</label>
             <input
               type="number"
               step="0.01"
               value={delfExam === 0 ? "" : delfExam}
               onChange={(e) => setDelfExam(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for Exam..."
+              value={delfExamComment}
+              onChange={(e) => setDelfExamComment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">PDF (€)</label>
+
+          {/* PDF */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">PDF (€)</label>
             <input
               type="number"
               step="0.01"
               value={pdf === 0 ? "" : pdf}
               onChange={(e) => setPdf(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for PDF..."
+              value={pdfComment}
+              onChange={(e) => setPdfComment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Civique (€)</label>
+
+          {/* Civique */}
+          <div className="p-3 bg-gray-50/60 rounded-xl border border-gray-200 space-y-2">
+            <label className="block text-xs font-semibold text-gray-700">Civique (€)</label>
             <input
               type="number"
               step="0.01"
               value={civique === 0 ? "" : civique}
               onChange={(e) => setCivique(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for Civique..."
+              value={civiqueComment}
+              onChange={(e) => setCiviqueComment(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Expenses (€)</label>
+
+          {/* Expenses */}
+          <div className="p-3 bg-rose-50/30 rounded-xl border border-rose-200 space-y-2">
+            <label className="block text-xs font-semibold text-rose-700">Expenses (€)</label>
             <input
               type="number"
               step="0.01"
               value={expenses === 0 ? "" : expenses}
               onChange={(e) => setExpenses(e.target.value === "" ? 0 : parseFloat(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm border-rose-200 bg-rose-50/20"
+              className="w-full border border-rose-300 rounded-lg px-3 py-2 text-sm bg-white"
+            />
+            <textarea
+              rows={2}
+              placeholder="Comment for Expenses..."
+              value={expensesComment}
+              onChange={(e) => setExpensesComment(e.target.value)}
+              className="w-full border border-rose-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-600 focus:ring-2 focus:ring-rose-400 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Comment</label>
-            <input
-              type="text"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Notes..."
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-            />
-          </div>
+
+        </div>
+
+        {/* Overall General Comment */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
+            <MessageSquare className="w-4 h-4 text-gray-500" /> Overall Daily Comment / Notes
+          </label>
+          <textarea
+            rows={3}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="General remarks or notes for the day..."
+            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
         </div>
 
         {/* Live Calculation Summary Bar */}

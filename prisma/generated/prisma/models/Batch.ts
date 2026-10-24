@@ -42,6 +42,7 @@ export type BatchMinAggregateOutputType = {
   slug: string | null
   startDate: Date | null
   endDate: Date | null
+  scheduleText: string | null
   meetingPlatform: string | null
   meetingLink: string | null
   meetingPassword: string | null
@@ -59,6 +60,7 @@ export type BatchMaxAggregateOutputType = {
   slug: string | null
   startDate: Date | null
   endDate: Date | null
+  scheduleText: string | null
   meetingPlatform: string | null
   meetingLink: string | null
   meetingPassword: string | null
@@ -76,6 +78,7 @@ export type BatchCountAggregateOutputType = {
   slug: number
   startDate: number
   endDate: number
+  scheduleText: number
   meetingPlatform: number
   meetingLink: number
   meetingPassword: number
@@ -103,6 +106,7 @@ export type BatchMinAggregateInputType = {
   slug?: true
   startDate?: true
   endDate?: true
+  scheduleText?: true
   meetingPlatform?: true
   meetingLink?: true
   meetingPassword?: true
@@ -120,6 +124,7 @@ export type BatchMaxAggregateInputType = {
   slug?: true
   startDate?: true
   endDate?: true
+  scheduleText?: true
   meetingPlatform?: true
   meetingLink?: true
   meetingPassword?: true
@@ -137,6 +142,7 @@ export type BatchCountAggregateInputType = {
   slug?: true
   startDate?: true
   endDate?: true
+  scheduleText?: true
   meetingPlatform?: true
   meetingLink?: true
   meetingPassword?: true
@@ -241,6 +247,7 @@ export type BatchGroupByOutputType = {
   slug: string
   startDate: Date | null
   endDate: Date | null
+  scheduleText: string | null
   meetingPlatform: string | null
   meetingLink: string | null
   meetingPassword: string | null
@@ -281,6 +288,7 @@ export type BatchWhereInput = {
   slug?: Prisma.StringFilter<"Batch"> | string
   startDate?: Prisma.DateTimeNullableFilter<"Batch"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Batch"> | Date | string | null
+  scheduleText?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingPlatform?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingLink?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingPassword?: Prisma.StringNullableFilter<"Batch"> | string | null
@@ -303,6 +311,7 @@ export type BatchOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduleText?: Prisma.SortOrderInput | Prisma.SortOrder
   meetingPlatform?: Prisma.SortOrderInput | Prisma.SortOrder
   meetingLink?: Prisma.SortOrderInput | Prisma.SortOrder
   meetingPassword?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -328,6 +337,7 @@ export type BatchWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Batch"> | string
   startDate?: Prisma.DateTimeNullableFilter<"Batch"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Batch"> | Date | string | null
+  scheduleText?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingPlatform?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingLink?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingPassword?: Prisma.StringNullableFilter<"Batch"> | string | null
@@ -350,6 +360,7 @@ export type BatchOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduleText?: Prisma.SortOrderInput | Prisma.SortOrder
   meetingPlatform?: Prisma.SortOrderInput | Prisma.SortOrder
   meetingLink?: Prisma.SortOrderInput | Prisma.SortOrder
   meetingPassword?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -375,6 +386,7 @@ export type BatchScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Batch"> | string
   startDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
+  scheduleText?: Prisma.StringNullableWithAggregatesFilter<"Batch"> | string | null
   meetingPlatform?: Prisma.StringNullableWithAggregatesFilter<"Batch"> | string | null
   meetingLink?: Prisma.StringNullableWithAggregatesFilter<"Batch"> | string | null
   meetingPassword?: Prisma.StringNullableWithAggregatesFilter<"Batch"> | string | null
@@ -390,6 +402,7 @@ export type BatchCreateInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -412,6 +425,7 @@ export type BatchUncheckedCreateInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -430,6 +444,7 @@ export type BatchUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -452,6 +467,7 @@ export type BatchUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -472,6 +488,7 @@ export type BatchCreateManyInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -487,6 +504,7 @@ export type BatchUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -504,6 +522,7 @@ export type BatchUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -536,6 +555,7 @@ export type BatchCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  scheduleText?: Prisma.SortOrder
   meetingPlatform?: Prisma.SortOrder
   meetingLink?: Prisma.SortOrder
   meetingPassword?: Prisma.SortOrder
@@ -557,6 +577,7 @@ export type BatchMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  scheduleText?: Prisma.SortOrder
   meetingPlatform?: Prisma.SortOrder
   meetingLink?: Prisma.SortOrder
   meetingPassword?: Prisma.SortOrder
@@ -574,6 +595,7 @@ export type BatchMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  scheduleText?: Prisma.SortOrder
   meetingPlatform?: Prisma.SortOrder
   meetingLink?: Prisma.SortOrder
   meetingPassword?: Prisma.SortOrder
@@ -729,6 +751,7 @@ export type BatchCreateWithoutCourseInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -749,6 +772,7 @@ export type BatchUncheckedCreateWithoutCourseInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -798,6 +822,7 @@ export type BatchScalarWhereInput = {
   slug?: Prisma.StringFilter<"Batch"> | string
   startDate?: Prisma.DateTimeNullableFilter<"Batch"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Batch"> | Date | string | null
+  scheduleText?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingPlatform?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingLink?: Prisma.StringNullableFilter<"Batch"> | string | null
   meetingPassword?: Prisma.StringNullableFilter<"Batch"> | string | null
@@ -813,6 +838,7 @@ export type BatchCreateWithoutLessonsInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -834,6 +860,7 @@ export type BatchUncheckedCreateWithoutLessonsInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -867,6 +894,7 @@ export type BatchUpdateWithoutLessonsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -888,6 +916,7 @@ export type BatchUncheckedUpdateWithoutLessonsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -905,6 +934,7 @@ export type BatchCreateWithoutInstructorInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -925,6 +955,7 @@ export type BatchUncheckedCreateWithoutInstructorInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -969,6 +1000,7 @@ export type BatchCreateWithoutPaymentsInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -990,6 +1022,7 @@ export type BatchUncheckedCreateWithoutPaymentsInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -1023,6 +1056,7 @@ export type BatchUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1044,6 +1078,7 @@ export type BatchUncheckedUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1061,6 +1096,7 @@ export type BatchCreateWithoutAccessesInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -1082,6 +1118,7 @@ export type BatchUncheckedCreateWithoutAccessesInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -1115,6 +1152,7 @@ export type BatchUpdateWithoutAccessesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1136,6 +1174,7 @@ export type BatchUncheckedUpdateWithoutAccessesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1154,6 +1193,7 @@ export type BatchCreateManyCourseInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -1169,6 +1209,7 @@ export type BatchUpdateWithoutCourseInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1189,6 +1230,7 @@ export type BatchUncheckedUpdateWithoutCourseInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1208,6 +1250,7 @@ export type BatchUncheckedUpdateManyWithoutCourseInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1224,6 +1267,7 @@ export type BatchCreateManyInstructorInput = {
   slug: string
   startDate?: Date | string | null
   endDate?: Date | string | null
+  scheduleText?: string | null
   meetingPlatform?: string | null
   meetingLink?: string | null
   meetingPassword?: string | null
@@ -1239,6 +1283,7 @@ export type BatchUpdateWithoutInstructorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1259,6 +1304,7 @@ export type BatchUncheckedUpdateWithoutInstructorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1278,6 +1324,7 @@ export type BatchUncheckedUpdateManyWithoutInstructorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduleText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPlatform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   meetingPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1344,6 +1391,7 @@ export type BatchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   slug?: boolean
   startDate?: boolean
   endDate?: boolean
+  scheduleText?: boolean
   meetingPlatform?: boolean
   meetingLink?: boolean
   meetingPassword?: boolean
@@ -1367,6 +1415,7 @@ export type BatchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   slug?: boolean
   startDate?: boolean
   endDate?: boolean
+  scheduleText?: boolean
   meetingPlatform?: boolean
   meetingLink?: boolean
   meetingPassword?: boolean
@@ -1386,6 +1435,7 @@ export type BatchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   slug?: boolean
   startDate?: boolean
   endDate?: boolean
+  scheduleText?: boolean
   meetingPlatform?: boolean
   meetingLink?: boolean
   meetingPassword?: boolean
@@ -1405,6 +1455,7 @@ export type BatchSelectScalar = {
   slug?: boolean
   startDate?: boolean
   endDate?: boolean
+  scheduleText?: boolean
   meetingPlatform?: boolean
   meetingLink?: boolean
   meetingPassword?: boolean
@@ -1414,7 +1465,7 @@ export type BatchSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "instructorId" | "title" | "slug" | "startDate" | "endDate" | "meetingPlatform" | "meetingLink" | "meetingPassword" | "maxStudents" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
+export type BatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "instructorId" | "title" | "slug" | "startDate" | "endDate" | "scheduleText" | "meetingPlatform" | "meetingLink" | "meetingPassword" | "maxStudents" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
 export type BatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   instructor?: boolean | Prisma.Batch$instructorArgs<ExtArgs>
@@ -1449,6 +1500,7 @@ export type $BatchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     slug: string
     startDate: Date | null
     endDate: Date | null
+    scheduleText: string | null
     meetingPlatform: string | null
     meetingLink: string | null
     meetingPassword: string | null
@@ -1891,6 +1943,7 @@ export interface BatchFieldRefs {
   readonly slug: Prisma.FieldRef<"Batch", 'String'>
   readonly startDate: Prisma.FieldRef<"Batch", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Batch", 'DateTime'>
+  readonly scheduleText: Prisma.FieldRef<"Batch", 'String'>
   readonly meetingPlatform: Prisma.FieldRef<"Batch", 'String'>
   readonly meetingLink: Prisma.FieldRef<"Batch", 'String'>
   readonly meetingPassword: Prisma.FieldRef<"Batch", 'String'>

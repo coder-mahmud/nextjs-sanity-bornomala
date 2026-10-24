@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Remote Image Patterns */
   images: {
     remotePatterns: [
       {
@@ -31,6 +31,22 @@ const nextConfig: NextConfig = {
       },
     ],
     dangerouslyAllowLocalIP: true,
+  },
+
+  /* Security Headers for YouTube Embeds & Iframes */
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com;",
+          },
+        ],
+      },
+    ];
   },
 };
 

@@ -13,6 +13,7 @@ import {
   Lock,
   Globe,
   UserCheck,
+  Clock,
 } from "lucide-react";
 import CreateLessonModalButton from "../_components/CreateLessonModalButton";
 import LessonList from "../_components/LessonList";
@@ -150,7 +151,7 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
             <Calendar className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-xs text-gray-400 font-medium">Batch Schedule</p>
+            <p className="text-xs text-gray-400 font-medium">Batch Timeline</p>
             <p className="text-xs font-semibold text-gray-800 mt-0.5">
               {batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "TBD"} -{" "}
               {batch.endDate ? new Date(batch.endDate).toLocaleDateString() : "TBD"}
@@ -158,6 +159,19 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
           </div>
         </div>
       </div>
+
+      {/* Custom Schedule Text Display Box */}
+      {batch.scheduleText && (
+        <div className="rounded-2xl bg-purple-50/60 border border-purple-100 p-5 shadow-sm space-y-2">
+          <div className="flex items-center gap-2 text-purple-900 font-bold text-xs">
+            <Clock className="w-4 h-4 text-purple-600" />
+            Class Schedule & Timing Details
+          </div>
+          <p className="text-xs text-purple-950 leading-relaxed font-medium whitespace-pre-wrap">
+            {batch.scheduleText}
+          </p>
+        </div>
+      )}
 
       {/* Detailed Live Meeting Details Banner */}
       <div className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm space-y-4">

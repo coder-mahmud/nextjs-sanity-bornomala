@@ -95,6 +95,11 @@ export type Instructor = Prisma.InstructorModel
  */
 export type Batch = Prisma.BatchModel
 /**
+ * Model LessonSubmission
+ * 
+ */
+export type LessonSubmission = Prisma.LessonSubmissionModel
+/**
  * Model Quiz
  * 
  */

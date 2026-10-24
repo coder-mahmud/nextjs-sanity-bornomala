@@ -1,3 +1,4 @@
+// app/admin/expenses/[id]/page.tsx
 "use client";
 
 import React, { useEffect, useState, use } from "react";
@@ -51,6 +52,16 @@ export default function DailyExpenseDetailsPage({ params }: { params: Promise<{ 
   }
 
   const profit = Number(expense.profit) || 0;
+
+  const items = [
+    { label: "Admission DELF A1", value: expense.admissionDelfA1, comment: expense.admissionDelfA1Comment },
+    { label: "Admission DELF A2", value: expense.admissionDelfA2, comment: expense.admissionDelfA2Comment },
+    { label: "Admission DELF B1", value: expense.admissionDelfB1, comment: expense.admissionDelfB1Comment },
+    { label: "Admission DELF B2", value: expense.admissionDelfB2, comment: expense.admissionDelfB2Comment },
+    { label: "DELF Exam", value: expense.delfExam, comment: expense.delfExamComment },
+    { label: "PDF", value: expense.pdf, comment: expense.pdfComment },
+    { label: "Civique", value: expense.civique, comment: expense.civiqueComment },
+  ];
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
@@ -121,54 +132,50 @@ export default function DailyExpenseDetailsPage({ params }: { params: Promise<{ 
 
       {/* Detailed Grid Breakdown */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
-        <h2 className="text-lg font-semibold text-gray-800 border-b pb-3">Income Source Breakdown</h2>
+        <h2 className="text-lg font-semibold text-gray-800 border-b pb-3">Financial Items & Comments</h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Admission DELF A1</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.admissionDelfA1).toLocaleString()}</p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          {items.map((item, idx) => (
+            <div key={idx} className="bg-gray-50/70 p-4 rounded-xl border border-gray-200 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-500 uppercase">{item.label}</span>
+                <span className="text-base font-bold text-gray-900">€{Number(item.value || 0).toLocaleString()}</span>
+              </div>
+              {item.comment ? (
+                <p className="text-xs text-gray-600 bg-white p-2.5 rounded-lg border border-gray-200 whitespace-pre-wrap">
+                  💬 {item.comment}
+                </p>
+              ) : (
+                <p className="text-[11px] text-gray-400 italic">No item comment</p>
+              )}
+            </div>
+          ))}
 
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Admission DELF A2</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.admissionDelfA2).toLocaleString()}</p>
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Admission DELF B1</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.admissionDelfB1).toLocaleString()}</p>
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Admission DELF B2</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.admissionDelfB2).toLocaleString()}</p>
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">DELF Exam</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.delfExam).toLocaleString()}</p>
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">PDF</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.pdf).toLocaleString()}</p>
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Civique</p>
-            <p className="text-lg font-bold text-gray-900 mt-1">€{Number(expense.civique).toLocaleString()}</p>
+          {/* Expenses Item Card */}
+          <div className="bg-rose-50/40 p-4 rounded-xl border border-rose-200 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-rose-700 uppercase">Expenses</span>
+              <span className="text-base font-bold text-rose-700">€{Number(expense.expenses || 0).toLocaleString()}</span>
+            </div>
+            {expense.expensesComment ? (
+              <p className="text-xs text-gray-600 bg-white p-2.5 rounded-lg border border-rose-200 whitespace-pre-wrap">
+                💬 {expense.expensesComment}
+              </p>
+            ) : (
+              <p className="text-[11px] text-gray-400 italic">No expense comment</p>
+            )}
           </div>
         </div>
 
-        {/* Comment Section */}
+        {/* Overall General Comment Section */}
         {expense.comment && (
-          <div className="pt-4 border-t border-gray-100 space-y-1">
+          <div className="pt-4 border-t border-gray-100 space-y-1.5">
             <p className="text-xs font-semibold text-gray-500 uppercase flex items-center gap-1.5">
-              <MessageSquare className="w-3.5 h-3.5" /> Comment / Notes
+              <MessageSquare className="w-3.5 h-3.5 text-gray-500" /> Overall Daily Comment / Notes
             </p>
-            <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-200">
+            <div className="text-sm text-gray-700 bg-gray-50 p-4 rounded-xl border border-gray-200 whitespace-pre-wrap">
               {expense.comment}
-            </p>
+            </div>
           </div>
         )}
       </div>

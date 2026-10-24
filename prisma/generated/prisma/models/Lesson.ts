@@ -343,6 +343,7 @@ export type LessonWhereInput = {
   batch?: Prisma.XOR<Prisma.BatchNullableScalarRelationFilter, Prisma.BatchWhereInput> | null
   quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
   progressRecords?: Prisma.LessonProgressListRelationFilter
+  submissions?: Prisma.LessonSubmissionListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -366,6 +367,7 @@ export type LessonOrderByWithRelationInput = {
   batch?: Prisma.BatchOrderByWithRelationInput
   quiz?: Prisma.QuizOrderByWithRelationInput
   progressRecords?: Prisma.LessonProgressOrderByRelationAggregateInput
+  submissions?: Prisma.LessonSubmissionOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -392,6 +394,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   batch?: Prisma.XOR<Prisma.BatchNullableScalarRelationFilter, Prisma.BatchWhereInput> | null
   quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
   progressRecords?: Prisma.LessonProgressListRelationFilter
+  submissions?: Prisma.LessonSubmissionListRelationFilter
 }, "id" | "slug">
 
 export type LessonOrderByWithAggregationInput = {
@@ -461,6 +464,7 @@ export type LessonCreateInput = {
   batch?: Prisma.BatchCreateNestedOneWithoutLessonsInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonsInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  submissions?: Prisma.LessonSubmissionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -482,6 +486,7 @@ export type LessonUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  submissions?: Prisma.LessonSubmissionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -503,6 +508,7 @@ export type LessonUpdateInput = {
   batch?: Prisma.BatchUpdateOneWithoutLessonsNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonsNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  submissions?: Prisma.LessonSubmissionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -524,6 +530,7 @@ export type LessonUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  submissions?: Prisma.LessonSubmissionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -707,6 +714,20 @@ export type LessonUncheckedUpdateManyWithoutBatchNestedInput = {
   deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
 }
 
+export type LessonCreateNestedOneWithoutSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutSubmissionsInput, Prisma.LessonUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutSubmissionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutSubmissionsInput, Prisma.LessonUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutSubmissionsInput
+  upsert?: Prisma.LessonUpsertWithoutSubmissionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.LessonUpdateWithoutSubmissionsInput>, Prisma.LessonUncheckedUpdateWithoutSubmissionsInput>
+}
+
 export type LessonCreateNestedManyWithoutQuizInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutQuizInput, Prisma.LessonUncheckedCreateWithoutQuizInput> | Prisma.LessonCreateWithoutQuizInput[] | Prisma.LessonUncheckedCreateWithoutQuizInput[]
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutQuizInput | Prisma.LessonCreateOrConnectWithoutQuizInput[]
@@ -781,6 +802,7 @@ export type LessonCreateWithoutBatchInput = {
   updatedAt?: Date | string
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonsInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  submissions?: Prisma.LessonSubmissionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutBatchInput = {
@@ -801,6 +823,7 @@ export type LessonUncheckedCreateWithoutBatchInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  submissions?: Prisma.LessonSubmissionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutBatchInput = {
@@ -852,6 +875,106 @@ export type LessonScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
 }
 
+export type LessonCreateWithoutSubmissionsInput = {
+  id?: string
+  title: string
+  slug: string
+  description?: string | null
+  videoUrl?: string | null
+  order: number
+  isPreview?: boolean
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
+  attachments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  batch?: Prisma.BatchCreateNestedOneWithoutLessonsInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonsInput
+  progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutSubmissionsInput = {
+  id?: string
+  batchId?: string | null
+  quizId?: string | null
+  title: string
+  slug: string
+  description?: string | null
+  videoUrl?: string | null
+  order: number
+  isPreview?: boolean
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
+  bunnyLibraryId?: string | null
+  bunnyVideoId?: string | null
+  attachments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutSubmissionsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutSubmissionsInput, Prisma.LessonUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type LessonUpsertWithoutSubmissionsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutSubmissionsInput, Prisma.LessonUncheckedUpdateWithoutSubmissionsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutSubmissionsInput, Prisma.LessonUncheckedCreateWithoutSubmissionsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutSubmissionsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutSubmissionsInput, Prisma.LessonUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type LessonUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batch?: Prisma.BatchUpdateOneWithoutLessonsNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonsNestedInput
+  progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  batchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bunnyLibraryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bunnyVideoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+}
+
 export type LessonCreateWithoutQuizInput = {
   id?: string
   title: string
@@ -870,6 +993,7 @@ export type LessonCreateWithoutQuizInput = {
   updatedAt?: Date | string
   batch?: Prisma.BatchCreateNestedOneWithoutLessonsInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  submissions?: Prisma.LessonSubmissionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutQuizInput = {
@@ -890,6 +1014,7 @@ export type LessonUncheckedCreateWithoutQuizInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  submissions?: Prisma.LessonSubmissionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutQuizInput = {
@@ -936,6 +1061,7 @@ export type LessonCreateWithoutProgressRecordsInput = {
   updatedAt?: Date | string
   batch?: Prisma.BatchCreateNestedOneWithoutLessonsInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonsInput
+  submissions?: Prisma.LessonSubmissionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutProgressRecordsInput = {
@@ -956,6 +1082,7 @@ export type LessonUncheckedCreateWithoutProgressRecordsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  submissions?: Prisma.LessonSubmissionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutProgressRecordsInput = {
@@ -992,6 +1119,7 @@ export type LessonUpdateWithoutProgressRecordsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   batch?: Prisma.BatchUpdateOneWithoutLessonsNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonsNestedInput
+  submissions?: Prisma.LessonSubmissionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutProgressRecordsInput = {
@@ -1012,6 +1140,7 @@ export type LessonUncheckedUpdateWithoutProgressRecordsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submissions?: Prisma.LessonSubmissionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyBatchInput = {
@@ -1051,6 +1180,7 @@ export type LessonUpdateWithoutBatchInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   quiz?: Prisma.QuizUpdateOneWithoutLessonsNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  submissions?: Prisma.LessonSubmissionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutBatchInput = {
@@ -1071,6 +1201,7 @@ export type LessonUncheckedUpdateWithoutBatchInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  submissions?: Prisma.LessonSubmissionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutBatchInput = {
@@ -1129,6 +1260,7 @@ export type LessonUpdateWithoutQuizInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   batch?: Prisma.BatchUpdateOneWithoutLessonsNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  submissions?: Prisma.LessonSubmissionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutQuizInput = {
@@ -1149,6 +1281,7 @@ export type LessonUncheckedUpdateWithoutQuizInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  submissions?: Prisma.LessonSubmissionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutQuizInput = {
@@ -1177,10 +1310,12 @@ export type LessonUncheckedUpdateManyWithoutQuizInput = {
 
 export type LessonCountOutputType = {
   progressRecords: number
+  submissions: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   progressRecords?: boolean | LessonCountOutputTypeCountProgressRecordsArgs
+  submissions?: boolean | LessonCountOutputTypeCountSubmissionsArgs
 }
 
 /**
@@ -1198,6 +1333,13 @@ export type LessonCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
  */
 export type LessonCountOutputTypeCountProgressRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LessonProgressWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonSubmissionWhereInput
 }
 
 
@@ -1222,6 +1364,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   batch?: boolean | Prisma.Lesson$batchArgs<ExtArgs>
   quiz?: boolean | Prisma.Lesson$quizArgs<ExtArgs>
   progressRecords?: boolean | Prisma.Lesson$progressRecordsArgs<ExtArgs>
+  submissions?: boolean | Prisma.Lesson$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1294,6 +1437,7 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   batch?: boolean | Prisma.Lesson$batchArgs<ExtArgs>
   quiz?: boolean | Prisma.Lesson$quizArgs<ExtArgs>
   progressRecords?: boolean | Prisma.Lesson$progressRecordsArgs<ExtArgs>
+  submissions?: boolean | Prisma.Lesson$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1311,6 +1455,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     batch: Prisma.$BatchPayload<ExtArgs> | null
     quiz: Prisma.$QuizPayload<ExtArgs> | null
     progressRecords: Prisma.$LessonProgressPayload<ExtArgs>[]
+    submissions: Prisma.$LessonSubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1727,6 +1872,7 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   batch<T extends Prisma.Lesson$batchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$batchArgs<ExtArgs>>): Prisma.Prisma__BatchClient<runtime.Types.Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   quiz<T extends Prisma.Lesson$quizArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$quizArgs<ExtArgs>>): Prisma.Prisma__QuizClient<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   progressRecords<T extends Prisma.Lesson$progressRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$progressRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissions<T extends Prisma.Lesson$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2228,6 +2374,30 @@ export type Lesson$progressRecordsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.LessonProgressScalarFieldEnum | Prisma.LessonProgressScalarFieldEnum[]
+}
+
+/**
+ * Lesson.submissions
+ */
+export type Lesson$submissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonSubmission
+   */
+  select?: Prisma.LessonSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonSubmission
+   */
+  omit?: Prisma.LessonSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonSubmissionInclude<ExtArgs> | null
+  where?: Prisma.LessonSubmissionWhereInput
+  orderBy?: Prisma.LessonSubmissionOrderByWithRelationInput | Prisma.LessonSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.LessonSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonSubmissionScalarFieldEnum | Prisma.LessonSubmissionScalarFieldEnum[]
 }
 
 /**

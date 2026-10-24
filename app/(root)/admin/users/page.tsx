@@ -1,19 +1,13 @@
+// app/(root)/admin/users/page.tsx
+
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import SubmitButton from "@/components/shared/SubmitButton";
+import CreateUserModalButton from "./_components/CreateUserModalButton";
 
-type UserWithCount = Prisma.UserGetPayload<{
-  include: {
-    _count: {
-      select: {
-        payments: true;
-        courseAccesses: true;
-      };
-    };
-  };
-}>;
+type UserWithoutRelations = Prisma.UserGetPayload<{}>;
 
 async function updateUserRole(formData: FormData) {
   "use server";
@@ -25,13 +19,13 @@ async function updateUserRole(formData: FormData) {
   }
 
   const userId = formData.get("userId") as string;
-  const role = formData.get("role") as "USER" | "ADMIN" | "SUPERADMIN";
+  const role = formData.get("role") as "USER" | "ADMIN" | "SUPERADMIN" | "STUDENT";
 
   if (!userId || !role) {
     redirect("/admin/users?error=missing-fields");
   }
 
-  if (!["USER", "ADMIN", "SUPERADMIN"].includes(role)) {
+  if (!["USER", "ADMIN", "SUPERADMIN", "STUDENT"].includes(role)) {
     redirect("/admin/users?error=invalid-role");
   }
 
@@ -76,31 +70,30 @@ const AdminUsersPage = async ({
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      _count: {
-        select: {
-          payments: true,
-          courseAccesses: true,
-        },
-      },
-    },
-  })) as unknown as UserWithCount[];
+  })) as unknown as UserWithoutRelations[];
 
   return (
     <section className="min-h-[70vh] bg-slate-50 py-10">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Staff & Admin Accounts
-          </h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Manage administrative personnel, superadmins, and staff roles[cite: 10].
-          </p>
+        {/* Header with Create User Button */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              Staff & Admin Accounts
+            </h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Manage administrative personnel, superadmins, and staff roles.
+            </p>
+          </div>
+
+          {session.user?.role === "SUPERADMIN" && (
+            <CreateUserModalButton />
+          )}
         </div>
 
         {params?.success === "role-updated" && (
           <div className="mb-6 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-            User role updated successfully[cite: 10].
+            User role updated successfully.
           </div>
         )}
 
@@ -111,16 +104,15 @@ const AdminUsersPage = async ({
           </div>
         )}
 
-        <div className="overflow-x-auto rounded-3xl border border-gray-200 bg-white shadow-sm">
-          <table className="w-full min-w-[900px] text-left text-sm">
+        {/* Scrollable container for smaller screens */}
+        <div className="rounded-3xl border border-gray-200 bg-white shadow-sm overflow-x-auto">
+          <table className="w-full min-w-[700px] text-left text-sm">
             <thead className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
               <tr>
-                <th className="px-6 py-4 font-semibold">User</th>
-                <th className="px-6 py-4 font-semibold">Role</th>
-                <th className="px-6 py-4 font-semibold">Course Accesses</th>
-                <th className="px-6 py-4 font-semibold">Payments</th>
-                <th className="px-6 py-4 font-semibold">Joined Date</th>
-                <th className="px-6 py-4 font-semibold">Action</th>
+                <th className="w-[35%] px-6 py-4 font-semibold">User</th>
+                <th className="w-[20%] px-6 py-4 font-semibold">Role</th>
+                <th className="w-[20%] px-6 py-4 font-semibold">Joined</th>
+                <th className="w-[25%] px-6 py-4 font-semibold">Action</th>
               </tr>
             </thead>
 
@@ -132,41 +124,33 @@ const AdminUsersPage = async ({
                   <tr key={user.id} className="transition hover:bg-gray-50/50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-sm font-bold text-white">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-xs font-bold text-white">
                           {user.name?.charAt(0) ||
                             user.email.charAt(0).toUpperCase()}
                         </div>
 
-                        <div>
-                          <p className="font-semibold text-gray-900">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-gray-900 text-xs truncate">
                             {user.name || "No name"}
                           </p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <p className="text-[11px] text-gray-500 truncate">{user.email}</p>
                         </div>
                       </div>
                     </td>
 
                     <td className="px-6 py-4">
-                      <span className="rounded-full bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                      <span className="inline-block rounded-full bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
                         {user.role}
                       </span>
                     </td>
 
-                    <td className="px-6 py-4 text-gray-600 font-medium">
-                      {user._count.courseAccesses}
-                    </td>
-
-                    <td className="px-6 py-4 text-gray-600 font-medium">
-                      {user._count.payments}
-                    </td>
-
-                    <td className="px-6 py-4 text-gray-500 text-xs">
+                    <td className="px-6 py-4 text-gray-500 text-xs whitespace-nowrap">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
 
                     <td className="px-6 py-4">
                       {session.user?.role === "SUPERADMIN" ? (
-                        <>
+                        <div className="flex flex-col items-start gap-1">
                           <form action={updateUserRole} className="flex items-center gap-2">
                             <input type="hidden" name="userId" value={user.id} />
 
@@ -174,22 +158,23 @@ const AdminUsersPage = async ({
                               name="role"
                               defaultValue={user.role}
                               disabled={isCurrentUser}
-                              className="rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none focus:border-gray-900 disabled:cursor-not-allowed disabled:bg-gray-100"
+                              className="rounded-xl border border-gray-200 px-2.5 py-1.5 text-xs outline-none focus:border-gray-900 disabled:cursor-not-allowed disabled:bg-gray-100 cursor-pointer bg-white"
                             >
+                              <option value="STUDENT">STUDENT</option>
                               <option value="USER">USER</option>
                               <option value="ADMIN">ADMIN</option>
                               <option value="SUPERADMIN">SUPERADMIN</option>
                             </select>
 
-                            <SubmitButton text="Update" loadingText="Updating..." />
+                            <SubmitButton text="Save" loadingText="..." />
                           </form>
 
                           {isCurrentUser && (
-                            <p className="mt-1 text-[11px] text-gray-400">
-                              You cannot change your own role[cite: 10].
+                            <p className="text-[10px] text-gray-400">
+                              Cannot change own role.
                             </p>
                           )}
-                        </>
+                        </div>
                       ) : (
                         <p className="text-xs font-medium text-gray-400">Superadmin only</p>
                       )}

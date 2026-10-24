@@ -30,6 +30,7 @@ model User {
   quizAccesses       QuizAccess[]
   quizAttempts       QuizAttempt[]
   sessions           Session[]
+  lessonSubmissions LessonSubmission[]
 }
 
 model Account {
@@ -238,6 +239,7 @@ model Lesson {
   batch           Batch?           @relation(fields: [batchId], references: [id], onDelete: SetNull)
   quiz            Quiz?            @relation(fields: [quizId], references: [id], onDelete: SetNull)
   progressRecords LessonProgress[]
+  submissions     LessonSubmission[]
 
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
@@ -282,6 +284,8 @@ model Batch {
   startDate       DateTime?
   endDate         DateTime?   // Batch access expiry threshold
   
+  scheduleText    String?     // Textarea input field for custom batch schedules/times
+  
   meetingPlatform String?     // e.g. "ZOOM", "GOOGLE_MEET"
   meetingLink     String?     // Fixed class URL
   meetingPassword String?     // Passcode
@@ -303,6 +307,25 @@ model Batch {
   @@index([status])
 }
 
+model LessonSubmission {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  
+  fileUrl     String?  // For the uploaded Image or PDF URL
+  videoUrl    String?  // Text field for Google Drive video link or other links
+  comment     String?  // Optional text notes from the student
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, lessonId]) // Ensures 1 submission per user per lesson (change or remove if multiple attempts are allowed)
+  @@index([userId])
+  @@index([lessonId])
+}
 
 
 enum CourseType {
@@ -705,6 +728,7 @@ model Student {
   @@index([inventoryId])
 }
 
+/*
 model DailyExpense {
   id               String   @id @default(cuid())
   date             DateTime // DATE
@@ -732,6 +756,52 @@ model DailyExpense {
   @@index([branchId])
   @@index([date])
 }
+*/
+
+model DailyExpense {
+  id                      String   @id @default(cuid())
+  date                    DateTime // DATE
+
+  admissionDelfA1         Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF A1
+  admissionDelfA1Comment  String?  // Comment for Admission DELF A1
+
+  admissionDelfA2         Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF A2
+  admissionDelfA2Comment  String?  // Comment for Admission DELF A2
+
+  admissionDelfB1         Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF B1
+  admissionDelfB1Comment  String?  // Comment for Admission DELF B1
+
+  admissionDelfB2         Decimal  @default(0) @db.Decimal(10, 2) // Admission DELF B2
+  admissionDelfB2Comment  String?  // Comment for Admission DELF B2
+
+  delfExam                Decimal  @default(0) @db.Decimal(10, 2) // DELF EXAM
+  delfExamComment         String?  // Comment for DELF EXAM
+
+  pdf                     Decimal  @default(0) @db.Decimal(10, 2) // PDF
+  pdfComment              String?  // Comment for PDF
+
+  civique                 Decimal  @default(0) @db.Decimal(10, 2) // CIVIQUE
+  civiqueComment          String?  // Comment for CIVIQUE
+
+  total                   Decimal  @default(0) @db.Decimal(10, 2) // Total (Sum of income sources)
+  expenses                Decimal  @default(0) @db.Decimal(10, 2) // Expenses
+  expensesComment         String?  // Comment for Expenses
+
+  profit                  Decimal  @default(0) @db.Decimal(10, 2) // Daily PROFIT/LOSS (Total - Expenses)
+
+  comment                 String?  // Overall daily summary comment
+
+  branchId                String
+  branch                  Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([branchId])
+  @@index([date])
+}
+
+
 
 // ==========================================
 // ENUMS

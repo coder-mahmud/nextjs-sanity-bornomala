@@ -56,14 +56,22 @@ export type DailyExpenseMinAggregateOutputType = {
   id: string | null
   date: Date | null
   admissionDelfA1: runtime.Decimal | null
+  admissionDelfA1Comment: string | null
   admissionDelfA2: runtime.Decimal | null
+  admissionDelfA2Comment: string | null
   admissionDelfB1: runtime.Decimal | null
+  admissionDelfB1Comment: string | null
   admissionDelfB2: runtime.Decimal | null
+  admissionDelfB2Comment: string | null
   delfExam: runtime.Decimal | null
+  delfExamComment: string | null
   pdf: runtime.Decimal | null
+  pdfComment: string | null
   civique: runtime.Decimal | null
+  civiqueComment: string | null
   total: runtime.Decimal | null
   expenses: runtime.Decimal | null
+  expensesComment: string | null
   profit: runtime.Decimal | null
   comment: string | null
   branchId: string | null
@@ -75,14 +83,22 @@ export type DailyExpenseMaxAggregateOutputType = {
   id: string | null
   date: Date | null
   admissionDelfA1: runtime.Decimal | null
+  admissionDelfA1Comment: string | null
   admissionDelfA2: runtime.Decimal | null
+  admissionDelfA2Comment: string | null
   admissionDelfB1: runtime.Decimal | null
+  admissionDelfB1Comment: string | null
   admissionDelfB2: runtime.Decimal | null
+  admissionDelfB2Comment: string | null
   delfExam: runtime.Decimal | null
+  delfExamComment: string | null
   pdf: runtime.Decimal | null
+  pdfComment: string | null
   civique: runtime.Decimal | null
+  civiqueComment: string | null
   total: runtime.Decimal | null
   expenses: runtime.Decimal | null
+  expensesComment: string | null
   profit: runtime.Decimal | null
   comment: string | null
   branchId: string | null
@@ -94,14 +110,22 @@ export type DailyExpenseCountAggregateOutputType = {
   id: number
   date: number
   admissionDelfA1: number
+  admissionDelfA1Comment: number
   admissionDelfA2: number
+  admissionDelfA2Comment: number
   admissionDelfB1: number
+  admissionDelfB1Comment: number
   admissionDelfB2: number
+  admissionDelfB2Comment: number
   delfExam: number
+  delfExamComment: number
   pdf: number
+  pdfComment: number
   civique: number
+  civiqueComment: number
   total: number
   expenses: number
+  expensesComment: number
   profit: number
   comment: number
   branchId: number
@@ -141,14 +165,22 @@ export type DailyExpenseMinAggregateInputType = {
   id?: true
   date?: true
   admissionDelfA1?: true
+  admissionDelfA1Comment?: true
   admissionDelfA2?: true
+  admissionDelfA2Comment?: true
   admissionDelfB1?: true
+  admissionDelfB1Comment?: true
   admissionDelfB2?: true
+  admissionDelfB2Comment?: true
   delfExam?: true
+  delfExamComment?: true
   pdf?: true
+  pdfComment?: true
   civique?: true
+  civiqueComment?: true
   total?: true
   expenses?: true
+  expensesComment?: true
   profit?: true
   comment?: true
   branchId?: true
@@ -160,14 +192,22 @@ export type DailyExpenseMaxAggregateInputType = {
   id?: true
   date?: true
   admissionDelfA1?: true
+  admissionDelfA1Comment?: true
   admissionDelfA2?: true
+  admissionDelfA2Comment?: true
   admissionDelfB1?: true
+  admissionDelfB1Comment?: true
   admissionDelfB2?: true
+  admissionDelfB2Comment?: true
   delfExam?: true
+  delfExamComment?: true
   pdf?: true
+  pdfComment?: true
   civique?: true
+  civiqueComment?: true
   total?: true
   expenses?: true
+  expensesComment?: true
   profit?: true
   comment?: true
   branchId?: true
@@ -179,14 +219,22 @@ export type DailyExpenseCountAggregateInputType = {
   id?: true
   date?: true
   admissionDelfA1?: true
+  admissionDelfA1Comment?: true
   admissionDelfA2?: true
+  admissionDelfA2Comment?: true
   admissionDelfB1?: true
+  admissionDelfB1Comment?: true
   admissionDelfB2?: true
+  admissionDelfB2Comment?: true
   delfExam?: true
+  delfExamComment?: true
   pdf?: true
+  pdfComment?: true
   civique?: true
+  civiqueComment?: true
   total?: true
   expenses?: true
+  expensesComment?: true
   profit?: true
   comment?: true
   branchId?: true
@@ -285,14 +333,22 @@ export type DailyExpenseGroupByOutputType = {
   id: string
   date: Date
   admissionDelfA1: runtime.Decimal
+  admissionDelfA1Comment: string | null
   admissionDelfA2: runtime.Decimal
+  admissionDelfA2Comment: string | null
   admissionDelfB1: runtime.Decimal
+  admissionDelfB1Comment: string | null
   admissionDelfB2: runtime.Decimal
+  admissionDelfB2Comment: string | null
   delfExam: runtime.Decimal
+  delfExamComment: string | null
   pdf: runtime.Decimal
+  pdfComment: string | null
   civique: runtime.Decimal
+  civiqueComment: string | null
   total: runtime.Decimal
   expenses: runtime.Decimal
+  expensesComment: string | null
   profit: runtime.Decimal
   comment: string | null
   branchId: string
@@ -327,14 +383,22 @@ export type DailyExpenseWhereInput = {
   id?: Prisma.StringFilter<"DailyExpense"> | string
   date?: Prisma.DateTimeFilter<"DailyExpense"> | Date | string
   admissionDelfA1?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfA2?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfB1?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfB2?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   delfExam?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   pdf?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   civique?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   total?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   profit?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   branchId?: Prisma.StringFilter<"DailyExpense"> | string
@@ -347,14 +411,22 @@ export type DailyExpenseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   date?: Prisma.SortOrder
   admissionDelfA1?: Prisma.SortOrder
+  admissionDelfA1Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionDelfA2?: Prisma.SortOrder
+  admissionDelfA2Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionDelfB1?: Prisma.SortOrder
+  admissionDelfB1Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionDelfB2?: Prisma.SortOrder
+  admissionDelfB2Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   delfExam?: Prisma.SortOrder
+  delfExamComment?: Prisma.SortOrderInput | Prisma.SortOrder
   pdf?: Prisma.SortOrder
+  pdfComment?: Prisma.SortOrderInput | Prisma.SortOrder
   civique?: Prisma.SortOrder
+  civiqueComment?: Prisma.SortOrderInput | Prisma.SortOrder
   total?: Prisma.SortOrder
   expenses?: Prisma.SortOrder
+  expensesComment?: Prisma.SortOrderInput | Prisma.SortOrder
   profit?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
   branchId?: Prisma.SortOrder
@@ -370,14 +442,22 @@ export type DailyExpenseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DailyExpenseWhereInput | Prisma.DailyExpenseWhereInput[]
   date?: Prisma.DateTimeFilter<"DailyExpense"> | Date | string
   admissionDelfA1?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfA2?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfB1?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfB2?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   delfExam?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   pdf?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   civique?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   total?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   profit?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   branchId?: Prisma.StringFilter<"DailyExpense"> | string
@@ -390,14 +470,22 @@ export type DailyExpenseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   date?: Prisma.SortOrder
   admissionDelfA1?: Prisma.SortOrder
+  admissionDelfA1Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionDelfA2?: Prisma.SortOrder
+  admissionDelfA2Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionDelfB1?: Prisma.SortOrder
+  admissionDelfB1Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   admissionDelfB2?: Prisma.SortOrder
+  admissionDelfB2Comment?: Prisma.SortOrderInput | Prisma.SortOrder
   delfExam?: Prisma.SortOrder
+  delfExamComment?: Prisma.SortOrderInput | Prisma.SortOrder
   pdf?: Prisma.SortOrder
+  pdfComment?: Prisma.SortOrderInput | Prisma.SortOrder
   civique?: Prisma.SortOrder
+  civiqueComment?: Prisma.SortOrderInput | Prisma.SortOrder
   total?: Prisma.SortOrder
   expenses?: Prisma.SortOrder
+  expensesComment?: Prisma.SortOrderInput | Prisma.SortOrder
   profit?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
   branchId?: Prisma.SortOrder
@@ -417,14 +505,22 @@ export type DailyExpenseScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"DailyExpense"> | string
   date?: Prisma.DateTimeWithAggregatesFilter<"DailyExpense"> | Date | string
   admissionDelfA1?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   admissionDelfA2?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   admissionDelfB1?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   admissionDelfB2?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   delfExam?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   pdf?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   civique?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   total?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   profit?: Prisma.DecimalWithAggregatesFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.StringNullableWithAggregatesFilter<"DailyExpense"> | string | null
   branchId?: Prisma.StringWithAggregatesFilter<"DailyExpense"> | string
@@ -436,14 +532,22 @@ export type DailyExpenseCreateInput = {
   id?: string
   date: Date | string
   admissionDelfA1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: string | null
   admissionDelfA2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: string | null
   admissionDelfB1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: string | null
   admissionDelfB2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: string | null
   delfExam?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: string | null
   pdf?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: string | null
   civique?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: string | null
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: string | null
   createdAt?: Date | string
@@ -455,14 +559,22 @@ export type DailyExpenseUncheckedCreateInput = {
   id?: string
   date: Date | string
   admissionDelfA1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: string | null
   admissionDelfA2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: string | null
   admissionDelfB1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: string | null
   admissionDelfB2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: string | null
   delfExam?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: string | null
   pdf?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: string | null
   civique?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: string | null
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: string | null
   branchId: string
@@ -474,14 +586,22 @@ export type DailyExpenseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -493,14 +613,22 @@ export type DailyExpenseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -512,14 +640,22 @@ export type DailyExpenseCreateManyInput = {
   id?: string
   date: Date | string
   admissionDelfA1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: string | null
   admissionDelfA2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: string | null
   admissionDelfB1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: string | null
   admissionDelfB2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: string | null
   delfExam?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: string | null
   pdf?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: string | null
   civique?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: string | null
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: string | null
   branchId: string
@@ -531,14 +667,22 @@ export type DailyExpenseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -549,14 +693,22 @@ export type DailyExpenseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -578,14 +730,22 @@ export type DailyExpenseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   date?: Prisma.SortOrder
   admissionDelfA1?: Prisma.SortOrder
+  admissionDelfA1Comment?: Prisma.SortOrder
   admissionDelfA2?: Prisma.SortOrder
+  admissionDelfA2Comment?: Prisma.SortOrder
   admissionDelfB1?: Prisma.SortOrder
+  admissionDelfB1Comment?: Prisma.SortOrder
   admissionDelfB2?: Prisma.SortOrder
+  admissionDelfB2Comment?: Prisma.SortOrder
   delfExam?: Prisma.SortOrder
+  delfExamComment?: Prisma.SortOrder
   pdf?: Prisma.SortOrder
+  pdfComment?: Prisma.SortOrder
   civique?: Prisma.SortOrder
+  civiqueComment?: Prisma.SortOrder
   total?: Prisma.SortOrder
   expenses?: Prisma.SortOrder
+  expensesComment?: Prisma.SortOrder
   profit?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
@@ -610,14 +770,22 @@ export type DailyExpenseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   date?: Prisma.SortOrder
   admissionDelfA1?: Prisma.SortOrder
+  admissionDelfA1Comment?: Prisma.SortOrder
   admissionDelfA2?: Prisma.SortOrder
+  admissionDelfA2Comment?: Prisma.SortOrder
   admissionDelfB1?: Prisma.SortOrder
+  admissionDelfB1Comment?: Prisma.SortOrder
   admissionDelfB2?: Prisma.SortOrder
+  admissionDelfB2Comment?: Prisma.SortOrder
   delfExam?: Prisma.SortOrder
+  delfExamComment?: Prisma.SortOrder
   pdf?: Prisma.SortOrder
+  pdfComment?: Prisma.SortOrder
   civique?: Prisma.SortOrder
+  civiqueComment?: Prisma.SortOrder
   total?: Prisma.SortOrder
   expenses?: Prisma.SortOrder
+  expensesComment?: Prisma.SortOrder
   profit?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
@@ -629,14 +797,22 @@ export type DailyExpenseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   date?: Prisma.SortOrder
   admissionDelfA1?: Prisma.SortOrder
+  admissionDelfA1Comment?: Prisma.SortOrder
   admissionDelfA2?: Prisma.SortOrder
+  admissionDelfA2Comment?: Prisma.SortOrder
   admissionDelfB1?: Prisma.SortOrder
+  admissionDelfB1Comment?: Prisma.SortOrder
   admissionDelfB2?: Prisma.SortOrder
+  admissionDelfB2Comment?: Prisma.SortOrder
   delfExam?: Prisma.SortOrder
+  delfExamComment?: Prisma.SortOrder
   pdf?: Prisma.SortOrder
+  pdfComment?: Prisma.SortOrder
   civique?: Prisma.SortOrder
+  civiqueComment?: Prisma.SortOrder
   total?: Prisma.SortOrder
   expenses?: Prisma.SortOrder
+  expensesComment?: Prisma.SortOrder
   profit?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
@@ -703,14 +879,22 @@ export type DailyExpenseCreateWithoutBranchInput = {
   id?: string
   date: Date | string
   admissionDelfA1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: string | null
   admissionDelfA2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: string | null
   admissionDelfB1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: string | null
   admissionDelfB2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: string | null
   delfExam?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: string | null
   pdf?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: string | null
   civique?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: string | null
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: string | null
   createdAt?: Date | string
@@ -721,14 +905,22 @@ export type DailyExpenseUncheckedCreateWithoutBranchInput = {
   id?: string
   date: Date | string
   admissionDelfA1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: string | null
   admissionDelfA2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: string | null
   admissionDelfB1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: string | null
   admissionDelfB2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: string | null
   delfExam?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: string | null
   pdf?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: string | null
   civique?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: string | null
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: string | null
   createdAt?: Date | string
@@ -768,14 +960,22 @@ export type DailyExpenseScalarWhereInput = {
   id?: Prisma.StringFilter<"DailyExpense"> | string
   date?: Prisma.DateTimeFilter<"DailyExpense"> | Date | string
   admissionDelfA1?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfA2?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfB1?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   admissionDelfB2?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   delfExam?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   pdf?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   civique?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   total?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   profit?: Prisma.DecimalFilter<"DailyExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.StringNullableFilter<"DailyExpense"> | string | null
   branchId?: Prisma.StringFilter<"DailyExpense"> | string
@@ -787,14 +987,22 @@ export type DailyExpenseCreateManyBranchInput = {
   id?: string
   date: Date | string
   admissionDelfA1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: string | null
   admissionDelfA2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: string | null
   admissionDelfB1?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: string | null
   admissionDelfB2?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: string | null
   delfExam?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: string | null
   pdf?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: string | null
   civique?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: string | null
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: string | null
   createdAt?: Date | string
@@ -805,14 +1013,22 @@ export type DailyExpenseUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -823,14 +1039,22 @@ export type DailyExpenseUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -841,14 +1065,22 @@ export type DailyExpenseUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admissionDelfA1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfA2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfA2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB1?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB1Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   admissionDelfB2?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  admissionDelfB2Comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delfExam?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  delfExamComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pdf?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pdfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   civique?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  civiqueComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   expenses?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expensesComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -861,14 +1093,22 @@ export type DailyExpenseSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   date?: boolean
   admissionDelfA1?: boolean
+  admissionDelfA1Comment?: boolean
   admissionDelfA2?: boolean
+  admissionDelfA2Comment?: boolean
   admissionDelfB1?: boolean
+  admissionDelfB1Comment?: boolean
   admissionDelfB2?: boolean
+  admissionDelfB2Comment?: boolean
   delfExam?: boolean
+  delfExamComment?: boolean
   pdf?: boolean
+  pdfComment?: boolean
   civique?: boolean
+  civiqueComment?: boolean
   total?: boolean
   expenses?: boolean
+  expensesComment?: boolean
   profit?: boolean
   comment?: boolean
   branchId?: boolean
@@ -881,14 +1121,22 @@ export type DailyExpenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   date?: boolean
   admissionDelfA1?: boolean
+  admissionDelfA1Comment?: boolean
   admissionDelfA2?: boolean
+  admissionDelfA2Comment?: boolean
   admissionDelfB1?: boolean
+  admissionDelfB1Comment?: boolean
   admissionDelfB2?: boolean
+  admissionDelfB2Comment?: boolean
   delfExam?: boolean
+  delfExamComment?: boolean
   pdf?: boolean
+  pdfComment?: boolean
   civique?: boolean
+  civiqueComment?: boolean
   total?: boolean
   expenses?: boolean
+  expensesComment?: boolean
   profit?: boolean
   comment?: boolean
   branchId?: boolean
@@ -901,14 +1149,22 @@ export type DailyExpenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   date?: boolean
   admissionDelfA1?: boolean
+  admissionDelfA1Comment?: boolean
   admissionDelfA2?: boolean
+  admissionDelfA2Comment?: boolean
   admissionDelfB1?: boolean
+  admissionDelfB1Comment?: boolean
   admissionDelfB2?: boolean
+  admissionDelfB2Comment?: boolean
   delfExam?: boolean
+  delfExamComment?: boolean
   pdf?: boolean
+  pdfComment?: boolean
   civique?: boolean
+  civiqueComment?: boolean
   total?: boolean
   expenses?: boolean
+  expensesComment?: boolean
   profit?: boolean
   comment?: boolean
   branchId?: boolean
@@ -921,14 +1177,22 @@ export type DailyExpenseSelectScalar = {
   id?: boolean
   date?: boolean
   admissionDelfA1?: boolean
+  admissionDelfA1Comment?: boolean
   admissionDelfA2?: boolean
+  admissionDelfA2Comment?: boolean
   admissionDelfB1?: boolean
+  admissionDelfB1Comment?: boolean
   admissionDelfB2?: boolean
+  admissionDelfB2Comment?: boolean
   delfExam?: boolean
+  delfExamComment?: boolean
   pdf?: boolean
+  pdfComment?: boolean
   civique?: boolean
+  civiqueComment?: boolean
   total?: boolean
   expenses?: boolean
+  expensesComment?: boolean
   profit?: boolean
   comment?: boolean
   branchId?: boolean
@@ -936,7 +1200,7 @@ export type DailyExpenseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DailyExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "admissionDelfA1" | "admissionDelfA2" | "admissionDelfB1" | "admissionDelfB2" | "delfExam" | "pdf" | "civique" | "total" | "expenses" | "profit" | "comment" | "branchId" | "createdAt" | "updatedAt", ExtArgs["result"]["dailyExpense"]>
+export type DailyExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "admissionDelfA1" | "admissionDelfA1Comment" | "admissionDelfA2" | "admissionDelfA2Comment" | "admissionDelfB1" | "admissionDelfB1Comment" | "admissionDelfB2" | "admissionDelfB2Comment" | "delfExam" | "delfExamComment" | "pdf" | "pdfComment" | "civique" | "civiqueComment" | "total" | "expenses" | "expensesComment" | "profit" | "comment" | "branchId" | "createdAt" | "updatedAt", ExtArgs["result"]["dailyExpense"]>
 export type DailyExpenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }
@@ -956,14 +1220,22 @@ export type $DailyExpensePayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     date: Date
     admissionDelfA1: runtime.Decimal
+    admissionDelfA1Comment: string | null
     admissionDelfA2: runtime.Decimal
+    admissionDelfA2Comment: string | null
     admissionDelfB1: runtime.Decimal
+    admissionDelfB1Comment: string | null
     admissionDelfB2: runtime.Decimal
+    admissionDelfB2Comment: string | null
     delfExam: runtime.Decimal
+    delfExamComment: string | null
     pdf: runtime.Decimal
+    pdfComment: string | null
     civique: runtime.Decimal
+    civiqueComment: string | null
     total: runtime.Decimal
     expenses: runtime.Decimal
+    expensesComment: string | null
     profit: runtime.Decimal
     comment: string | null
     branchId: string
@@ -1396,14 +1668,22 @@ export interface DailyExpenseFieldRefs {
   readonly id: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly date: Prisma.FieldRef<"DailyExpense", 'DateTime'>
   readonly admissionDelfA1: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly admissionDelfA1Comment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly admissionDelfA2: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly admissionDelfA2Comment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly admissionDelfB1: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly admissionDelfB1Comment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly admissionDelfB2: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly admissionDelfB2Comment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly delfExam: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly delfExamComment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly pdf: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly pdfComment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly civique: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly civiqueComment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly total: Prisma.FieldRef<"DailyExpense", 'Decimal'>
   readonly expenses: Prisma.FieldRef<"DailyExpense", 'Decimal'>
+  readonly expensesComment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly profit: Prisma.FieldRef<"DailyExpense", 'Decimal'>
   readonly comment: Prisma.FieldRef<"DailyExpense", 'String'>
   readonly branchId: Prisma.FieldRef<"DailyExpense", 'String'>

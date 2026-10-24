@@ -399,6 +399,7 @@ export const ModelName = {
   Lesson: 'Lesson',
   Instructor: 'Instructor',
   Batch: 'Batch',
+  LessonSubmission: 'LessonSubmission',
   Quiz: 'Quiz',
   LessonProgress: 'LessonProgress',
   Question: 'Question',
@@ -433,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "course" | "lesson" | "instructor" | "batch" | "quiz" | "lessonProgress" | "question" | "questionOption" | "payment" | "courseAccess" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "courseCertificate" | "coupon" | "couponUsage" | "branch" | "schedule" | "scheduleEntry" | "courseCard" | "inventory" | "student" | "dailyExpense"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "course" | "lesson" | "instructor" | "batch" | "lessonSubmission" | "quiz" | "lessonProgress" | "question" | "questionOption" | "payment" | "courseAccess" | "quizAccess" | "quizAttempt" | "quizAttemptAnswer" | "courseCertificate" | "coupon" | "couponUsage" | "branch" | "schedule" | "scheduleEntry" | "courseCard" | "inventory" | "student" | "dailyExpense"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1100,6 +1101,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BatchCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BatchCountAggregateOutputType> | number
+        }
+      }
+    }
+    LessonSubmission: {
+      payload: Prisma.$LessonSubmissionPayload<ExtArgs>
+      fields: Prisma.LessonSubmissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LessonSubmissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LessonSubmissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>
+        }
+        findFirst: {
+          args: Prisma.LessonSubmissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LessonSubmissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>
+        }
+        findMany: {
+          args: Prisma.LessonSubmissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>[]
+        }
+        create: {
+          args: Prisma.LessonSubmissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>
+        }
+        createMany: {
+          args: Prisma.LessonSubmissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LessonSubmissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>[]
+        }
+        delete: {
+          args: Prisma.LessonSubmissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>
+        }
+        update: {
+          args: Prisma.LessonSubmissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.LessonSubmissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LessonSubmissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LessonSubmissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.LessonSubmissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSubmissionPayload>
+        }
+        aggregate: {
+          args: Prisma.LessonSubmissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonSubmission>
+        }
+        groupBy: {
+          args: Prisma.LessonSubmissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonSubmissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LessonSubmissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonSubmissionCountAggregateOutputType> | number
         }
       }
     }
@@ -2700,6 +2775,7 @@ export const BatchScalarFieldEnum = {
   slug: 'slug',
   startDate: 'startDate',
   endDate: 'endDate',
+  scheduleText: 'scheduleText',
   meetingPlatform: 'meetingPlatform',
   meetingLink: 'meetingLink',
   meetingPassword: 'meetingPassword',
@@ -2710,6 +2786,20 @@ export const BatchScalarFieldEnum = {
 } as const
 
 export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
+
+
+export const LessonSubmissionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  fileUrl: 'fileUrl',
+  videoUrl: 'videoUrl',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonSubmissionScalarFieldEnum = (typeof LessonSubmissionScalarFieldEnum)[keyof typeof LessonSubmissionScalarFieldEnum]
 
 
 export const QuizScalarFieldEnum = {
@@ -2979,14 +3069,22 @@ export const DailyExpenseScalarFieldEnum = {
   id: 'id',
   date: 'date',
   admissionDelfA1: 'admissionDelfA1',
+  admissionDelfA1Comment: 'admissionDelfA1Comment',
   admissionDelfA2: 'admissionDelfA2',
+  admissionDelfA2Comment: 'admissionDelfA2Comment',
   admissionDelfB1: 'admissionDelfB1',
+  admissionDelfB1Comment: 'admissionDelfB1Comment',
   admissionDelfB2: 'admissionDelfB2',
+  admissionDelfB2Comment: 'admissionDelfB2Comment',
   delfExam: 'delfExam',
+  delfExamComment: 'delfExamComment',
   pdf: 'pdf',
+  pdfComment: 'pdfComment',
   civique: 'civique',
+  civiqueComment: 'civiqueComment',
   total: 'total',
   expenses: 'expenses',
+  expensesComment: 'expensesComment',
   profit: 'profit',
   comment: 'comment',
   branchId: 'branchId',
@@ -3342,6 +3440,7 @@ export type GlobalOmitConfig = {
   lesson?: Prisma.LessonOmit
   instructor?: Prisma.InstructorOmit
   batch?: Prisma.BatchOmit
+  lessonSubmission?: Prisma.LessonSubmissionOmit
   quiz?: Prisma.QuizOmit
   lessonProgress?: Prisma.LessonProgressOmit
   question?: Prisma.QuestionOmit

@@ -139,13 +139,13 @@ export default async function Home() {
   return (
     <>
       <HomeHero data={{numberOfStudents,successRate, certifiedStudents, homeSubtitle, homeTitle, homeDescription, homeImage}} />
+      <AllCourses />
       <FeaturesSection data={{successRate}} />
       <TestimonialsSection testimonials={testimonials} subtitleBelowTestimonials={subtitleBelowTestimonials} />
       {/* <CoursesSection /> */}
-      <AllCourses />
       <WhyChooseUsSection data={{numberOfStudents,successRate, certifiedStudents}} />
       {/* <ScheduleSectionNew /> */}
-      <ScheduleSectionPrisma />
+      {/* <ScheduleSectionPrisma /> */}
       <ContactSection />
       <FAQSection faqs={faqs} />
 

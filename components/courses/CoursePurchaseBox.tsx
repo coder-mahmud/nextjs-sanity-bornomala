@@ -25,7 +25,7 @@ export default function CoursePurchaseBox({
     return (
       <Link
         href={`/login?callbackUrl=/courses/${courseSlug}`}
-        className="inline-flex items-center justify-center gap-2 rounded bg-blue-600 px-8 py-3 text-white hover:bg-blue-700"
+        className="inline-flex items-center justify-center gap-2 rounded bg-blue-600 px-8 py-3 text-white hover:bg-blue-700 w-full"
       >
         Login to Take Course
       </Link>
@@ -48,9 +48,9 @@ export default function CoursePurchaseBox({
       {/* Trigger Button to Open Modal */}
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center justify-center gap-2 rounded bg-blue-600 px-8 py-3 text-white hover:bg-blue-700 font-semibold"
+        className="inline-flex items-center justify-center gap-2 rounded bg-[#3a7867] px-8 py-3 text-white hover:bg-white border border-[#3a7867] hover:text-[#3a7867] font-semibold cursor-pointer"
       >
-        Enroll / Buy Now
+        Enroll Now
       </button>
 
       {/* Modal Popup */}

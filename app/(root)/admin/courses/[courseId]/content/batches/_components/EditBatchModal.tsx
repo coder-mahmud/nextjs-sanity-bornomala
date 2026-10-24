@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Loader2, X, Video, Calendar, UserCheck } from "lucide-react";
+import { Pencil, Loader2, X, Video, Calendar, UserCheck, Clock } from "lucide-react";
 import { toast } from "react-toastify";
 import { updateBatch } from "../actions";
 
@@ -22,6 +22,7 @@ interface BatchData {
   status: string;
   startDate: Date | null;
   endDate: Date | null;
+  scheduleText?: string | null; // <--- Added scheduleText property
   maxStudents: number | null;
   meetingPlatform: string | null;
   meetingLink: string | null;
@@ -51,6 +52,7 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
     maxStudents: batch.maxStudents ? String(batch.maxStudents) : "",
     startDate: formatDateForInput(batch.startDate),
     endDate: formatDateForInput(batch.endDate),
+    scheduleText: batch.scheduleText || "", // <--- Initialized scheduleText state
     meetingPlatform: batch.meetingPlatform || "ZOOM",
     meetingLink: batch.meetingLink || "",
     meetingPassword: batch.meetingPassword || "",
@@ -69,6 +71,7 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
       data.append("maxStudents", formData.maxStudents);
       data.append("startDate", formData.startDate);
       data.append("endDate", formData.endDate);
+      data.append("scheduleText", formData.scheduleText); // <--- Appended scheduleText to FormData
       data.append("meetingPlatform", formData.meetingPlatform);
       data.append("meetingLink", formData.meetingLink);
       data.append("meetingPassword", formData.meetingPassword);
@@ -161,7 +164,7 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
                 <select
                   value={formData.instructorId}
                   onChange={(e) => setFormData({ ...formData, instructorId: e.target.value })}
-                  className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white font-medium"
+                  className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white font-medium cursor-pointer"
                 >
                   <option value="">-- No Instructor Assigned --</option>
                   {instructors.map((inst) => (
@@ -178,7 +181,7 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white font-semibold"
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white font-semibold cursor-pointer"
                   >
                     <option value="UPCOMING">UPCOMING</option>
                     <option value="ONGOING">ONGOING</option>
@@ -199,7 +202,7 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
                 </div>
               </div>
 
-              {/* Schedule Dates */}
+              {/* Schedule Dates & Custom Schedule Text */}
               <div className="p-3.5 bg-gray-50 rounded-xl space-y-3 border border-gray-100">
                 <div className="flex items-center gap-2 text-xs font-bold text-gray-800">
                   <Calendar className="w-4 h-4 text-purple-600" />
@@ -225,6 +228,21 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
                     />
                   </div>
                 </div>
+
+                {/* Schedule Text Field */}
+                <div className="space-y-1 pt-1">
+                  <label className="text-[11px] font-semibold text-gray-700 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-purple-600" />
+                    Custom Schedule Text / Times
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="e.g., Every Monday & Wednesday at 8:00 PM..."
+                    value={formData.scheduleText}
+                    onChange={(e) => setFormData({ ...formData, scheduleText: e.target.value })}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
               </div>
 
               {/* Live Meeting Details */}
@@ -240,7 +258,7 @@ export default function EditBatchModal({ batch, instructors = [] }: EditBatchMod
                     <select
                       value={formData.meetingPlatform}
                       onChange={(e) => setFormData({ ...formData, meetingPlatform: e.target.value })}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
                     >
                       <option value="ZOOM">ZOOM</option>
                       <option value="GOOGLE_MEET">GOOGLE_MEET</option>

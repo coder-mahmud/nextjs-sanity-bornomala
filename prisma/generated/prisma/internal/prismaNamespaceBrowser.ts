@@ -58,6 +58,7 @@ export const ModelName = {
   Lesson: 'Lesson',
   Instructor: 'Instructor',
   Batch: 'Batch',
+  LessonSubmission: 'LessonSubmission',
   Quiz: 'Quiz',
   LessonProgress: 'LessonProgress',
   Question: 'Question',
@@ -247,6 +248,7 @@ export const BatchScalarFieldEnum = {
   slug: 'slug',
   startDate: 'startDate',
   endDate: 'endDate',
+  scheduleText: 'scheduleText',
   meetingPlatform: 'meetingPlatform',
   meetingLink: 'meetingLink',
   meetingPassword: 'meetingPassword',
@@ -257,6 +259,20 @@ export const BatchScalarFieldEnum = {
 } as const
 
 export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
+
+
+export const LessonSubmissionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  fileUrl: 'fileUrl',
+  videoUrl: 'videoUrl',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonSubmissionScalarFieldEnum = (typeof LessonSubmissionScalarFieldEnum)[keyof typeof LessonSubmissionScalarFieldEnum]
 
 
 export const QuizScalarFieldEnum = {
@@ -526,14 +542,22 @@ export const DailyExpenseScalarFieldEnum = {
   id: 'id',
   date: 'date',
   admissionDelfA1: 'admissionDelfA1',
+  admissionDelfA1Comment: 'admissionDelfA1Comment',
   admissionDelfA2: 'admissionDelfA2',
+  admissionDelfA2Comment: 'admissionDelfA2Comment',
   admissionDelfB1: 'admissionDelfB1',
+  admissionDelfB1Comment: 'admissionDelfB1Comment',
   admissionDelfB2: 'admissionDelfB2',
+  admissionDelfB2Comment: 'admissionDelfB2Comment',
   delfExam: 'delfExam',
+  delfExamComment: 'delfExamComment',
   pdf: 'pdf',
+  pdfComment: 'pdfComment',
   civique: 'civique',
+  civiqueComment: 'civiqueComment',
   total: 'total',
   expenses: 'expenses',
+  expensesComment: 'expensesComment',
   profit: 'profit',
   comment: 'comment',
   branchId: 'branchId',

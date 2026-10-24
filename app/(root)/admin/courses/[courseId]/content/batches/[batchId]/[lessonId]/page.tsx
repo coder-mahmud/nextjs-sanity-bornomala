@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
+import AdminSubmissionsList from "./AdminSubmissionsList";
 import {
   ChevronLeft,
   Video,
@@ -16,6 +19,7 @@ import {
   Paperclip,
   Download,
   Clapperboard,
+  UploadCloud,
 } from "lucide-react";
 
 type LessonWithRelations = Prisma.LessonGetPayload<{
@@ -35,6 +39,21 @@ type LessonWithRelations = Prisma.LessonGetPayload<{
         user: { select: { id: true; name: true; email: true } };
       };
     };
+    submissions: {
+      include: {
+        user: { 
+          select: { 
+            id: true; 
+            name: true; 
+            email: true; 
+            image: true; 
+            role: true; 
+            isActive: true; 
+            createdAt: true 
+          } 
+        };
+      };
+    };
   };
 }>;
 
@@ -49,6 +68,27 @@ interface LessonDetailsPageProps {
     batchId: string;
     lessonId: string;
   }>;
+}
+
+// Server Action for admin to delete a student homework submission
+async function deleteHomeworkSubmission(formData: FormData) {
+  "use server";
+
+  const submissionId = formData.get("submissionId") as string;
+  const courseId = formData.get("courseId") as string;
+  const batchId = formData.get("batchId") as string;
+  const lessonId = formData.get("lessonId") as string;
+
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error("Unauthorized");
+  }
+
+  await prisma.lessonSubmission.delete({
+    where: { id: submissionId },
+  });
+
+  revalidatePath(`/admin/courses/${courseId}/content/batches/${batchId}/lessons/${lessonId}`);
 }
 
 export default async function LessonDetailsPage({ params }: LessonDetailsPageProps) {
@@ -75,6 +115,22 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
           user: { select: { id: true, name: true, email: true } },
         },
       },
+      submissions: {
+        include: {
+          user: { 
+            select: { 
+              id: true, 
+              name: true, 
+              email: true, 
+              image: true, 
+              role: true, 
+              isActive: true, 
+              createdAt: true 
+            } 
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
     },
   })) as LessonWithRelations | null;
 
@@ -83,7 +139,8 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
   }
 
   const completedCount = lesson.progressRecords.filter((p) => p.isCompleted).length;
-  const attachments = (lesson.attachments as AttachmentItem[]) || [];
+  const attachments = (lesson.attachments as unknown as AttachmentItem[]) || [];
+  const submissions = lesson.submissions || [];
 
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
@@ -154,27 +211,21 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
           </div>
         </div>
 
-        {/* Linked Quiz Summary Card */}
+        {/* Homework Submissions Count Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm">
-          <div className="p-2.5 bg-purple-50 text-purple-600 rounded-lg">
-            <HelpCircle className="w-5 h-5" />
+          <div className="p-2.5 bg-amber-50 text-amber-600 rounded-lg">
+            <UploadCloud className="w-5 h-5" />
           </div>
-          <div className="overflow-hidden">
-            <p className="text-xs text-gray-400 font-medium">Linked Quiz</p>
-            {lesson.quiz ? (
-              <p className="text-xs font-semibold text-purple-900 truncate" title={lesson.quiz.title}>
-                {lesson.quiz.title} ({lesson.quiz.questions?.length || 0} Qs)
-              </p>
-            ) : (
-              <p className="text-xs text-gray-400 italic">No quiz linked</p>
-            )}
+          <div>
+            <p className="text-xs text-gray-400 font-medium">Homework Submissions</p>
+            <p className="text-lg font-bold text-gray-900">{submissions.length} Uploaded</p>
           </div>
         </div>
       </div>
 
       {/* Main Content Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Columns: Video, Notes & Attachments */}
+        {/* Left 2 Columns: Description, Video, Bunny, Notes, Attachments, and Submissions at the Very Bottom */}
         <div className="lg:col-span-2 space-y-6">
           {/* Description Section */}
           {lesson.description && (
@@ -275,6 +326,15 @@ export default async function LessonDetailsPage({ params }: LessonDetailsPagePro
               <p className="text-xs text-gray-400 italic">No attachments added.</p>
             )}
           </div>
+
+          {/* Student Homework Submissions Section - Moved to the Very Bottom */}
+          <AdminSubmissionsList
+            submissions={submissions}
+            courseId={courseId}
+            batchId={batchId}
+            lessonId={lessonId}
+            deleteAction={deleteHomeworkSubmission}
+          />
         </div>
 
         {/* Right Column: Student Progress */}

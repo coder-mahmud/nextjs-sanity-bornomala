@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { FileText, CalendarClock, Paperclip, Download, HelpCircle, CheckCircle } from "lucide-react";
+import StudentHomeworkForm from "./_components/StudentHomeworkForm";
 
 interface LessonPageProps {
   params: Promise<{
@@ -57,6 +58,60 @@ async function markLessonCompleted(formData: FormData) {
   redirect(`/dashboard/courses/${courseSlug}/lessons/${lessonSlug}`);
 }
 
+// Server action for handling student homework submissions
+async function handleHomeworkSubmission(formData: FormData) {
+  "use server";
+
+  const lessonId = formData.get("lessonId") as string;
+  const courseSlug = formData.get("courseSlug") as string;
+  const lessonSlug = formData.get("lessonSlug") as string;
+  const fileUrl = formData.get("fileUrl") as string;
+  const videoUrl = formData.get("videoUrl") as string;
+  const comment = formData.get("comment") as string;
+
+  const session = await auth();
+  if (!session?.user?.email) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true },
+  });
+
+  if (!user) {
+    return { success: false, error: "User not found" };
+  }
+
+  try {
+    await prisma.lessonSubmission.upsert({
+      where: {
+        userId_lessonId: {
+          userId: user.id,
+          lessonId,
+        },
+      },
+      update: {
+        fileUrl: fileUrl || null,
+        videoUrl: videoUrl || null,
+        comment: comment || null,
+      },
+      create: {
+        userId: user.id,
+        lessonId,
+        fileUrl: fileUrl || null,
+        videoUrl: videoUrl || null,
+        comment: comment || null,
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Homework submission error:", error);
+    return { success: false, error: "Database error during submission" };
+  }
+}
+
 export default async function LessonPage({ params }: LessonPageProps) {
   const { slug, lessonSlug } = await params;
 
@@ -76,7 +131,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   /*
-   * 1. Lesson with relation to quiz
+   * 1. Lesson with relation to quiz and submissions
    */
   const lesson = await prisma.lesson.findUnique({
     where: { slug: lessonSlug },
@@ -87,8 +142,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
           title: true,
           durationMinutes: true,
           passingScore: true,
-          slug:true,
+          slug: true,
         },
+      },
+      submissions: {
+        where: { userId: user.id },
       },
     },
   });
@@ -96,6 +154,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
   if (!lesson || !lesson.batchId) {
     redirect("/dashboard/courses");
   }
+
+  const existingSubmission = lesson.submissions[0] || null;
 
   /*
    * 2. Batch details
@@ -192,8 +252,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
       ? batchLessons[lessonIndex + 1]
       : null;
 
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
+  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
-  console.log("Lesson quiz:", lesson.quiz)
   return (
     <section className="py-8 max-w-4xl mx-auto px-4 space-y-6">
       {/* Breadcrumb & Header */}
@@ -238,7 +299,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
                 <button
                   type="submit"
-                  className="rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition shadow-sm"
+                  className="rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition shadow-sm cursor-pointer"
                 >
                   Mark as Completed
                 </button>
@@ -248,55 +309,54 @@ export default async function LessonPage({ params }: LessonPageProps) {
         </div>
       </div>
 
-    {/* Quiz Time Window (If Scheduled) */}
-    {(lesson.startsAt || lesson.endsAt) && (
-      <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-5 space-y-2 shadow-sm">
-        <div className="flex items-center gap-2 text-purple-800 text-xs font-bold">
-          <CalendarClock className="w-4 h-4 text-purple-600" />
-          Quiz time Window
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-purple-950 font-medium">
-          <div>
-            <span className="text-purple-600 block text-[11px]">Starts At:</span>
-            {lesson.startsAt
-              ? new Date(lesson.startsAt).toLocaleString("en-US", { timeZone: "UTC" })
-              : "Immediate"}
+      {/* Quiz Time Window (If Scheduled) */}
+      {(lesson.startsAt || lesson.endsAt) && (
+        <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-5 space-y-2 shadow-sm">
+          <div className="flex items-center gap-2 text-purple-800 text-xs font-bold">
+            <CalendarClock className="w-4 h-4 text-purple-600" />
+            Quiz time Window
           </div>
-          <div>
-            <span className="text-purple-600 block text-[11px]">Ends At:</span>
-            {lesson.endsAt
-              ? new Date(lesson.endsAt).toLocaleString("en-US", { timeZone: "UTC" })
-              : "No Limit"}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-purple-950 font-medium">
+            <div>
+              <span className="text-purple-600 block text-[11px]">Starts At:</span>
+              {lesson.startsAt
+                ? new Date(lesson.startsAt).toLocaleString("en-US", { timeZone: "UTC" })
+                : "Immediate"}
+            </div>
+            <div>
+              <span className="text-purple-600 block text-[11px]">Ends At:</span>
+              {lesson.endsAt
+                ? new Date(lesson.endsAt).toLocaleString("en-US", { timeZone: "UTC" })
+                : "No Limit"}
+            </div>
           </div>
         </div>
-      </div>
-    )}
-    
-    {/* Linked Quiz Details */}
-    {lesson.quiz && (
-      <div className="rounded-2xl border border-indigo-100 bg-white p-5 space-y-3 shadow-sm">
-        <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs">
-          <HelpCircle className="w-4 h-4 text-indigo-600" />
-          Associated Quiz
-        </div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-indigo-50/40 border border-indigo-100">
-          <div>
-            <p className="text-xs font-bold text-gray-900">{lesson.quiz.title}</p>
-            <p className="text-[11px] text-gray-500 mt-0.5">
-              Duration: {lesson.quiz.durationMinutes} mins • Passing Score: {lesson.quiz.passingScore}%
-            </p>
+      )}
+      
+      {/* Linked Quiz Details */}
+      {lesson.quiz && (
+        <div className="rounded-2xl border border-indigo-100 bg-white p-5 space-y-3 shadow-sm">
+          <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs">
+            <HelpCircle className="w-4 h-4 text-indigo-600" />
+            Associated Quiz
           </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-indigo-50/40 border border-indigo-100">
+            <div>
+              <p className="text-xs font-bold text-gray-900">{lesson.quiz.title}</p>
+              <p className="text-[11px] text-gray-500 mt-0.5">
+                Duration: {lesson.quiz.durationMinutes} mins • Passing Score: {lesson.quiz.passingScore}%
+              </p>
+            </div>
 
-          {/* Nested relative route to the lesson's quiz */}
-          <Link
-            href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${lesson.quiz.slug}/`}
-            className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition shrink-0"
-          >
-            See Quiz Details →
-          </Link>
+            <Link
+              href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${lesson.quiz.slug}/`}
+              className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition shrink-0"
+            >
+              See Quiz Details →
+            </Link>
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
       {/* Lecture Notes */}
       {lesson.notes && (
@@ -312,14 +372,20 @@ export default async function LessonPage({ params }: LessonPageProps) {
       )}
 
       {/* Attachments & Resources */}
-      {lesson.attachments && lesson.attachments.length > 0 && (
+      {lesson.attachments && Array.isArray(lesson.attachments) && lesson.attachments.length > 0 && (
         <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
             <Paperclip className="w-4 h-4 text-blue-600" />
             Attachments & Downloads ({lesson.attachments.length})
           </div>
           <div className="space-y-2">
-            {lesson.attachments.map((fileUrl, index) => {
+            {lesson.attachments.map((item: any, index: number) => {
+              // Extract name and URL safely depending on stored JSON structure
+              const fileUrl = typeof item === 'string' ? item : item?.url || "";
+              const fileName = typeof item === 'object' && item?.name
+                ? item.name
+                : fileUrl.split('/').pop() || `Attachment ${index + 1}`;
+
               const downloadUrl = fileUrl.includes("/upload/")
                 ? fileUrl.replace("/upload/", "/upload/fl_attachment/")
                 : fileUrl;
@@ -332,7 +398,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 text-xs transition"
                 >
-                  <span className="font-mono text-gray-700 truncate max-w-[75%]">{fileUrl}</span>
+                  <div className="flex items-center gap-2.5 min-w-0 max-w-[80%]">
+                    <Paperclip className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span className="font-semibold text-gray-800 truncate">{fileName}</span>
+                  </div>
                   <span className="inline-flex items-center gap-1 font-semibold text-blue-600 shrink-0">
                     <Download className="w-3.5 h-3.5" /> Download
                   </span>
@@ -342,6 +411,17 @@ export default async function LessonPage({ params }: LessonPageProps) {
           </div>
         </div>
       )}
+
+      {/* Student Homework Form Component Integration */}
+      <StudentHomeworkForm
+        lessonId={lesson.id}
+        courseSlug={course.slug}
+        lessonSlug={lesson.slug}
+        cloudName={cloudName}
+        uploadPreset={uploadPreset}
+        initialSubmission={existingSubmission}
+        submitAction={handleHomeworkSubmission}
+      />
 
       {/* Bottom Navigation */}
       <div className="pt-4 flex items-center justify-between border-t border-gray-200">

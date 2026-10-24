@@ -1,3 +1,4 @@
+// actions/expense.ts
 "use server";
 
 import { prisma } from "@/lib/prisma";
@@ -59,13 +60,21 @@ export async function createDailyExpense(formData: {
   date: string;
   branchId: string;
   admissionDelfA1: number;
+  admissionDelfA1Comment?: string;
   admissionDelfA2: number;
+  admissionDelfA2Comment?: string;
   admissionDelfB1: number;
+  admissionDelfB1Comment?: string;
   admissionDelfB2: number;
+  admissionDelfB2Comment?: string;
   delfExam: number;
+  delfExamComment?: string;
   pdf: number;
+  pdfComment?: string;
   civique: number;
+  civiqueComment?: string;
   expenses: number;
+  expensesComment?: string;
   comment?: string;
 }) {
   try {
@@ -87,14 +96,22 @@ export async function createDailyExpense(formData: {
         date: new Date(formData.date),
         branchId: formData.branchId,
         admissionDelfA1: a1,
+        admissionDelfA1Comment: formData.admissionDelfA1Comment || null,
         admissionDelfA2: a2,
+        admissionDelfA2Comment: formData.admissionDelfA2Comment || null,
         admissionDelfB1: b1,
+        admissionDelfB1Comment: formData.admissionDelfB1Comment || null,
         admissionDelfB2: b2,
+        admissionDelfB2Comment: formData.admissionDelfB2Comment || null,
         delfExam: exam,
+        delfExamComment: formData.delfExamComment || null,
         pdf: pdf,
+        pdfComment: formData.pdfComment || null,
         civique: civique,
+        civiqueComment: formData.civiqueComment || null,
         total: total,
         expenses: exp,
+        expensesComment: formData.expensesComment || null,
         profit: profit,
         comment: formData.comment || null,
       },
@@ -113,13 +130,21 @@ export async function updateDailyExpense(
     date: string;
     branchId: string;
     admissionDelfA1: number;
+    admissionDelfA1Comment?: string;
     admissionDelfA2: number;
+    admissionDelfA2Comment?: string;
     admissionDelfB1: number;
+    admissionDelfB1Comment?: string;
     admissionDelfB2: number;
+    admissionDelfB2Comment?: string;
     delfExam: number;
+    delfExamComment?: string;
     pdf: number;
+    pdfComment?: string;
     civique: number;
+    civiqueComment?: string;
     expenses: number;
+    expensesComment?: string;
     comment?: string;
   }
 ) {
@@ -142,14 +167,22 @@ export async function updateDailyExpense(
         date: new Date(formData.date),
         branchId: formData.branchId,
         admissionDelfA1: a1,
+        admissionDelfA1Comment: formData.admissionDelfA1Comment || null,
         admissionDelfA2: a2,
+        admissionDelfA2Comment: formData.admissionDelfA2Comment || null,
         admissionDelfB1: b1,
+        admissionDelfB1Comment: formData.admissionDelfB1Comment || null,
         admissionDelfB2: b2,
+        admissionDelfB2Comment: formData.admissionDelfB2Comment || null,
         delfExam: exam,
+        delfExamComment: formData.delfExamComment || null,
         pdf: pdf,
+        pdfComment: formData.pdfComment || null,
         civique: civique,
+        civiqueComment: formData.civiqueComment || null,
         total: total,
         expenses: exp,
+        expensesComment: formData.expensesComment || null,
         profit: profit,
         comment: formData.comment || null,
       },

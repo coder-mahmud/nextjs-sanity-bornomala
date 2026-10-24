@@ -12,6 +12,7 @@ export async function createBatch(prevState: any, formData: FormData) {
     const instructorId = formData.get("instructorId") as string;
     const startDate = formData.get("startDate") as string;
     const endDate = formData.get("endDate") as string;
+    const scheduleText = formData.get("scheduleText") as string;
     const meetingPlatform = formData.get("meetingPlatform") as string;
     const meetingLink = formData.get("meetingLink") as string;
     const meetingPassword = formData.get("meetingPassword") as string;
@@ -35,6 +36,7 @@ export async function createBatch(prevState: any, formData: FormData) {
         instructorId: instructorId || null,
         startDate: startDate ? new Date(startDate) : null,
         endDate: endDate ? new Date(endDate) : null,
+        scheduleText: scheduleText || null,
         meetingPlatform: meetingPlatform || null,
         meetingLink: meetingLink || null,
         meetingPassword: meetingPassword || null,
@@ -58,6 +60,7 @@ export async function updateBatch(batchId: string, courseId: string, formData: F
     const instructorId = formData.get("instructorId") as string;
     const startDate = formData.get("startDate") as string;
     const endDate = formData.get("endDate") as string;
+    const scheduleText = formData.get("scheduleText") as string;
     const meetingPlatform = formData.get("meetingPlatform") as string;
     const meetingLink = formData.get("meetingLink") as string;
     const meetingPassword = formData.get("meetingPassword") as string;
@@ -87,6 +90,7 @@ export async function updateBatch(batchId: string, courseId: string, formData: F
         instructorId: instructorId || null,
         startDate: startDate ? new Date(startDate) : null,
         endDate: endDate ? new Date(endDate) : null,
+        scheduleText: scheduleText || null,
         meetingPlatform: meetingPlatform || null,
         meetingLink: meetingLink || null,
         meetingPassword: meetingPassword || null,

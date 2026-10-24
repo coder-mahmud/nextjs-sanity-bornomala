@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, X, Calendar, Video, Users, UserCheck } from "lucide-react";
+import { Plus, X, Calendar, Video, Users, UserCheck, Clock } from "lucide-react";
 import { toast } from "react-toastify";
 import { createBatch } from "../actions";
 
@@ -32,6 +32,7 @@ export default function CreateBatchModalButton({
     instructorId: "",
     startDate: "",
     endDate: "",
+    scheduleText: "",
     meetingPlatform: "ZOOM",
     meetingLink: "",
     meetingPassword: "",
@@ -60,6 +61,7 @@ export default function CreateBatchModalButton({
         data.append("instructorId", formData.instructorId);
         data.append("startDate", formData.startDate);
         data.append("endDate", formData.endDate);
+        data.append("scheduleText", formData.scheduleText);
         data.append("meetingPlatform", formData.meetingPlatform);
         data.append("meetingLink", formData.meetingLink);
         data.append("meetingPassword", formData.meetingPassword);
@@ -77,6 +79,7 @@ export default function CreateBatchModalButton({
             instructorId: "",
             startDate: "",
             endDate: "",
+            scheduleText: "",
             meetingPlatform: "ZOOM",
             meetingLink: "",
             meetingPassword: "",
@@ -158,7 +161,7 @@ export default function CreateBatchModalButton({
 
               {/* Instructor Selection */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+                <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
                   <UserCheck className="w-4 h-4 text-blue-600" />
                   Assigned Instructor (Optional)
                 </label>
@@ -208,11 +211,26 @@ export default function CreateBatchModalButton({
                 </div>
               </div>
 
+              {/* Schedule Textarea Input */}
+              <div>
+                <label className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-emerald-600" />
+                  Batch Class Schedule / Times (Text)
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="e.g. Mon, Wed, Fri at 8:00 PM - 10:00 PM (GMT+6)"
+                  value={formData.scheduleText}
+                  onChange={(e) => setFormData({ ...formData, scheduleText: e.target.value })}
+                  className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-xs focus:border-blue-500 focus:outline-none bg-white"
+                />
+              </div>
+
               {/* Schedule Dates */}
               <div className="rounded-xl bg-gray-50 p-4 border border-gray-200 space-y-3">
                 <div className="flex items-center gap-2 text-gray-700 font-semibold text-xs">
                   <Calendar className="w-4 h-4 text-blue-600" />
-                  Batch Schedule
+                  Batch Start/End Dates
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>

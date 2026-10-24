@@ -1,3 +1,4 @@
+// app/.../AdminSidebar.jsx
 'use client';
 
 import Link from "next/link";
@@ -50,6 +51,7 @@ const menuItems = [
     label: "Payments",
     href: "/admin/payments",
     icon: ShoppingCart,
+    superAdminOnly: true,
   },
   {
     label: "Coupons",
@@ -60,11 +62,13 @@ const menuItems = [
     label: "Inventories",
     href: "/admin/inventories",
     icon: Package,
+    superAdminOnly: true,
   },
   {
     label: "Expenses",
     href: "/admin/expenses",
     icon: Calculator,
+    superAdminOnly: true,
   },
   {
     label: "Settings",
@@ -73,9 +77,19 @@ const menuItems = [
   },
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ role = "user" }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  console.log("User role from sidebar", role);
+
+  // Filter menu items: hide superAdminOnly items if role is not SUPERADMIN (case-insensitive check)
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (item.superAdminOnly) {
+      return role?.toUpperCase() === "SUPERADMIN";
+    }
+    return true;
+  });
 
   return (
     <>
@@ -125,7 +139,7 @@ export default function AdminSidebar() {
 
         <nav className="p-4">
           <ul className="space-y-2">
-            {menuItems.map((item) => {
+            {filteredMenuItems.map((item) => {
               const Icon = item.icon;
               const isActive =
                 pathname === item.href ||
