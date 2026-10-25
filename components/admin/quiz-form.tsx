@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Papa from "papaparse";
+import * as XLSX from "xlsx";
 
 type QuizStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
@@ -36,6 +38,17 @@ type QuizFormProps = {
   mode: "create" | "edit";
   quizId?: string;
   initialValues?: QuizFormValues;
+};
+
+// CSV Row Structure matching your sample file
+type CsvRow = {
+  question?: string;
+  option_a?: string;
+  option_b?: string;
+  option_c?: string;
+  option_d?: string;
+  correct_answer?: string; // 'A', 'B', 'C', or 'D'
+  explanation?: string;
 };
 
 function slugify(value: string) {
@@ -103,9 +116,153 @@ export default function QuizForm({
   const [message, setMessage] = useState("");
   const [slugTouched, setSlugTouched] = useState(Boolean(initialValues?.slug));
 
-  const titlePreview = useMemo(() => {
-    return form.slug || slugify(form.title);
-  }, [form.slug, form.title]);
+  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+
+    // -------------------------------------------------------------
+    // Helper to process row objects into Question state format
+    // -------------------------------------------------------------
+    const processRows = (rows: any[]) => {
+      if (!rows || rows.length === 0) {
+        toast.error("The uploaded file appears to be empty.");
+        return;
+      }
+
+      const parsedQuestions: Question[] = [];
+
+      rows.forEach((row) => {
+        // Normalize keys (lowercase and remove spaces/quotes)
+        const normalizedRow: Record<string, any> = {};
+        Object.keys(row).forEach((key) => {
+          const cleanKey = key.trim().toLowerCase().replace(/^["']|["']$/g, "").replace(/;/g, "");
+          normalizedRow[cleanKey] = row[key];
+        });
+
+        const qText = normalizedRow["question"];
+        const optA = normalizedRow["option_a"];
+        const optB = normalizedRow["option_b"];
+        const optC = normalizedRow["option_c"];
+        const optD = normalizedRow["option_d"];
+        const correctAns = normalizedRow["correct_answer"] || "A";
+        const expl = normalizedRow["explanation"] || "";
+
+        const cleanText = (val: any) =>
+          val !== undefined && val !== null
+            ? val.toString().trim().replace(/^["']|["']$/g, "").replace(/""/g, '"')
+            : "";
+
+        const questionText = cleanText(qText);
+
+        // Skip empty rows or header echoes
+        if (!questionText || questionText.toLowerCase() === "question") return;
+
+        const correctKey = cleanText(correctAns).toUpperCase();
+
+        const options: QuestionOption[] = [
+          { text: cleanText(optA), isCorrect: correctKey === "A", order: 1 },
+          { text: cleanText(optB), isCorrect: correctKey === "B", order: 2 },
+          { text: cleanText(optC), isCorrect: correctKey === "C", order: 3 },
+          { text: cleanText(optD), isCorrect: correctKey === "D", order: 4 },
+        ];
+
+        parsedQuestions.push({
+          text: questionText,
+          explanation: cleanText(expl),
+          marks: 1,
+          order: parsedQuestions.length + 1,
+          options,
+        });
+      });
+
+      if (parsedQuestions.length === 0) {
+        toast.error("No valid questions found in the file structure.");
+        return;
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        questions: parsedQuestions,
+      }));
+
+      toast.success(`Successfully imported ${parsedQuestions.length} questions!`);
+    };
+
+    // -------------------------------------------------------------
+    // 1. Process EXCEL Files (.xlsx, .xls)
+    // -------------------------------------------------------------
+    if (fileExtension === "xlsx" || fileExtension === "xls") {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = new Uint8Array(event.target?.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+
+          // Read the first sheet
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+
+          // Convert sheet to JSON rows
+          const rows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+          processRows(rows);
+        } catch (err) {
+          console.error("Excel Read Error:", err);
+          toast.error("Failed to parse Excel file. Make sure the file is valid.");
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } 
+    // -------------------------------------------------------------
+    // 2. Process CSV Files (.csv)
+    // -------------------------------------------------------------
+    else if (fileExtension === "csv") {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        let csvText = event.target?.result as string;
+        if (!csvText) return;
+
+        // Clean outer line quotes if present in malformed CSVs
+        const lines = csvText.split(/\r?\n/);
+        const cleanedLines = lines.map((line) => {
+          let trimmed = line.trim();
+          if (trimmed.startsWith('"') && trimmed.endsWith('";')) {
+            trimmed = trimmed.slice(1, -2);
+          } else if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+            trimmed = trimmed.slice(1, -1);
+          }
+          return trimmed;
+        });
+
+        Papa.parse<any>(cleanedLines.join("\n"), {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            try {
+              processRows(results.data);
+            } catch (err) {
+              console.error("CSV Parse Error:", err);
+              toast.error("Failed to parse CSV file.");
+            }
+          },
+          error: (err:any) => {
+            console.error(err);
+            toast.error("Error reading CSV file.");
+          },
+        });
+      };
+      reader.readAsText(file);
+    } else {
+      toast.error("Unsupported file type. Please upload a .csv, .xlsx, or .xls file.");
+    }
+
+    e.target.value = "";
+  }
+
+
+
+
 
   function addQuestion() {
     setForm((prev) => ({
@@ -245,7 +402,7 @@ export default function QuizForm({
               {mode === "create" ? "Create Quiz" : "Edit Quiz"}
             </h1>
             <p className="mt-2 text-sm text-gray-600">
-              Create a structured quiz with one correct answer per question.
+              Create a structured quiz manually or upload via CSV.
             </p>
           </div>
 
@@ -429,17 +586,30 @@ export default function QuizForm({
                     Questions
                   </h2>
                   <p className="mt-1 text-sm text-gray-500">
-                    Add questions and mark one correct option for each.
+                    Import questions via CSV or add them manually below.
                   </p>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={addQuestion}
-                  className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-                >
-                  + Add Question
-                </button>
+                <div className="flex items-center gap-3">
+                  {/* CSV Upload Button */}
+                  <label className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2">
+                    📁 Import Questions CSV
+                    <input
+                      type="file"
+                      accept=".csv, .xlsx, .xls"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={addQuestion}
+                    className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+                  >
+                    + Add Question
+                  </button>
+                </div>
               </div>
             </div>
 

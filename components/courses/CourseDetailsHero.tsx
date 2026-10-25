@@ -179,7 +179,7 @@ export default function CourseDetailsHero({
 
       {/* Render Portal directly to document.body so modal escapes parent containers & transform bounds */}
       {mounted && activeVideoUrl && createPortal(
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
             <button
               type="button"

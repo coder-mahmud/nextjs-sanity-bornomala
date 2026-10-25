@@ -361,7 +361,7 @@ export default function EditDailyExpensePage({ params }: { params: Promise<{ id:
 
         {/* Overall General Comment */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
+          <label className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-gray-500" /> Overall Daily Comment / Notes
           </label>
           <textarea
