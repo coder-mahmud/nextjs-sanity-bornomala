@@ -276,6 +276,14 @@ export default async function QuizDetailsPage({
                       View Detailed Result
                     </Link>
 
+                    {/* NEW: Retake / Restart Quiz Link */}
+                    <Link
+                      href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/start`}
+                      className="w-full text-center bg-black text-white px-6 py-3 rounded-xl text-xs font-semibold hover:bg-gray-800 transition"
+                    >
+                      Retake Quiz
+                    </Link>
+
                     <Link
                       href={`/dashboard/courses/${slug}/lessons/${lessonSlug}`}
                       className="w-full text-center border border-slate-300 bg-white text-slate-700 px-6 py-3 rounded-xl text-xs font-semibold hover:bg-slate-50 transition"

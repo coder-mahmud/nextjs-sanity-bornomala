@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
   },
 
   /* Security Headers for YouTube Embeds & Iframes */
+
+  /*
   async headers() {
     return [
       {
@@ -48,6 +50,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  */
 };
 
 export default nextConfig;

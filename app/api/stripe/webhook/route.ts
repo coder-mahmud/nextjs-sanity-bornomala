@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
     const couponId = session.metadata?.couponId || null;
     const couponCode = session.metadata?.couponCode || null;
 
-    // const userEmail = session.customer_email;
     const userEmail = session.customer_email || session.customer_details?.email;
 
     const stripeSessionId = session.id;
@@ -86,6 +85,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ received: true });
       }
 
+      // Calculate expiration: 1 month from now if isExamCivique is true, otherwise null (lifetime/batch-based)
+      let expiresAt: Date | null = null;
+      if (course.isExamCivique) {
+        const d = new Date();
+        d.setMonth(d.getMonth() + 1);
+        expiresAt = d;
+      }
+
       await prisma.$transaction(async (tx) => {
         const payment = await tx.payment.upsert({
           where: {
@@ -125,6 +132,7 @@ export async function POST(req: NextRequest) {
             data: {
               paymentId: payment.id,
               grantedAt: new Date(),
+              expiresAt: expiresAt, // Sets or updates the 1-month expiry if Exam Civique
             },
           });
         } else {
@@ -134,6 +142,7 @@ export async function POST(req: NextRequest) {
               courseId: course.id,
               paymentId: payment.id,
               grantedAt: new Date(),
+              expiresAt: expiresAt, // Sets the 1-month expiry if Exam Civique
             },
           });
         }
@@ -166,6 +175,8 @@ export async function POST(req: NextRequest) {
         courseId,
         stripeSessionId,
         couponCode,
+        isExamCivique: course.isExamCivique,
+        expiresAt,
       });
     }
 

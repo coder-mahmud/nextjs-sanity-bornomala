@@ -596,7 +596,8 @@ export default function QuizForm({
                     📁 Import Questions CSV
                     <input
                       type="file"
-                      accept=".csv, .xlsx, .xls"
+                      // accept=".csv, .xlsx, .xls"
+                      accept=".xlsx, .xls"
                       onChange={handleFileUpload}
                       className="hidden"
                     />

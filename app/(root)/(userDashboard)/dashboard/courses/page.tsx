@@ -16,27 +16,52 @@ export default async function CoursesPage() {
 
   if (!user) redirect("/login");
 
-  /*
-   * Course accesses for this user (newest first). Expired access is ignored.
-   * Loaded with a plain query so we do not depend on `include` result types.
-   */
   const now = new Date();
 
+  // 1. Fetch course accesses for this user (ignoring expired ones)
   const accesses = await prisma.courseAccess.findMany({
     where: {
       userId: user.id,
       OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
     },
     orderBy: { grantedAt: "desc" },
-    select: { courseId: true },
+  });
+
+  // 2. Extract all unique non-null batchIds to check their status separately
+  const batchIds = Array.from(
+    new Set(accesses.map((access) => access.batchId).filter((id): id is string => id !== null))
+  );
+
+  // 3. Fetch the status of those batches
+  const batches =
+    batchIds.length > 0
+      ? await prisma.batch.findMany({
+          where: { id: { in: batchIds } },
+          select: { id: true, status: true },
+        })
+      : [];
+
+  const batchStatusMap = new Map(batches.map((b) => [b.id, b.status]));
+
+  // 4. Filter out access rows where the selected batch is COMPLETED or CANCELLED
+  const validAccesses = accesses.filter((access) => {
+    // If no batch is selected, keep the course
+    if (!access.batchId) return true;
+
+    // Check batch status
+    const status = batchStatusMap.get(access.batchId);
+    if (status === "COMPLETED" || status === "CANCELLED") {
+      return false; // Remove course from student's page
+    }
+
+    return true;
   });
 
   /*
-   * A user can have several access rows for the same course (one per batch),
-   * so keep each course only once, in newest-first order.
+   * Keep each unique course ID only once in newest-first order.
    */
   const courseIds: string[] = [];
-  for (const access of accesses) {
+  for (const access of validAccesses) {
     if (!courseIds.includes(access.courseId)) {
       courseIds.push(access.courseId);
     }
@@ -61,7 +86,7 @@ export default async function CoursesPage() {
         <h1 className="text-2xl font-bold mb-4">My Courses</h1>
         <div className="rounded-2xl border border-dashed border-gray-200 p-8 text-center">
           <p className="text-sm text-gray-500">
-            You do not have access to any courses yet.
+            You do not have access to any active courses yet.
           </p>
           <Link
             href="/courses"
@@ -84,7 +109,7 @@ export default async function CoursesPage() {
             href={`/dashboard/courses/${course.slug}`}
             className="group rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition"
           >
-            <div className="h-40 w-full overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 to-gray-800">
+            <div className="h-40 w-full overflow-hidden rounded-xl bg-linear-to-br from-gray-900 to-gray-800">
               {course.thumbnail ? (
                 <img
                   src={course.thumbnail}

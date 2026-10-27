@@ -69,7 +69,7 @@ export default function PublicQuizListPage() {
   }, [quizzes, search]);
 
   return (
-    <section className="bg-gradient-to-b from-slate-50 via-white to-slate-100 py-16">
+    <section className="bg-linear-to-b from-slate-50 via-white to-slate-100 py-16">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 rounded-3xl border border-slate-200 bg-white/80 p-8 shadow-sm backdrop-blur md:p-10">

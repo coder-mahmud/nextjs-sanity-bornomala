@@ -531,7 +531,7 @@ model QuizAttempt {
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt
 
-  @@unique([userId, quizId])
+  // REMOVED: @@unique([userId, quizId]) so users can take the quiz multiple times!
   @@index([userId])
   @@index([quizId])
 }

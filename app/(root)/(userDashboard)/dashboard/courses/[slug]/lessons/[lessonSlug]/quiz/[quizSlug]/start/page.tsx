@@ -1,3 +1,4 @@
+// app/dashboard/courses/[slug]/lessons/[lessonSlug]/quiz/[quizSlug]/start/page.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
@@ -64,49 +65,37 @@ export default async function StartQuizPage({ params }: StartQuizPageProps) {
     throw new Error("Quiz not found");
   }
 
-  // 3. Check for an existing attempt
-  const existingAttempt = await prisma.quizAttempt.findFirst({
+  // 3. Check for any currently ACTIVE ("STARTED") attempt
+  const activeAttempt = await prisma.quizAttempt.findFirst({
     where: {
       userId: dbUser.id,
       quizId: quiz.id,
+      status: AttemptStatus.STARTED,
     },
-    select: { id: true, status: true },
+    select: { id: true },
     orderBy: { createdAt: "desc" },
   });
 
-  // If an existing attempt is already finished/submitted, redirect to result
-  if (
-    existingAttempt &&
-    (existingAttempt.status === AttemptStatus.SUBMITTED ||
-     existingAttempt.status === AttemptStatus.EVALUATED)
-  ) {
-    redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/result/${existingAttempt.id}`);
+  // If there is already an ongoing active attempt, resume it instead of creating a new one
+  if (activeAttempt) {
+    redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/attempt/${activeAttempt.id}`);
   }
 
-  // If an active attempt exists, they can continue even if the window just closed, 
-  // but if NO attempt exists, we must enforce the France time window guard.
-  if (!existingAttempt) {
-    const timeZone = "Europe/Paris";
-    const nowParisTime = new Date(new Date().toLocaleString("en-US", { timeZone })).getTime();
-    const startTime = lesson?.startsAt ? new Date(new Date(lesson.startsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
-    const endTime = lesson?.endsAt ? new Date(new Date(lesson.endsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
+  // 4. Enforce France time window guard for launching a brand new attempt
+  const timeZone = "Europe/Paris";
+  const nowParisTime = new Date(new Date().toLocaleString("en-US", { timeZone })).getTime();
+  const startTime = lesson?.startsAt ? new Date(new Date(lesson.startsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
+  const endTime = lesson?.endsAt ? new Date(new Date(lesson.endsAt).toLocaleString("en-US", { timeZone })).getTime() : null;
 
-    const isBeforeStart = startTime !== null ? nowParisTime < startTime : false;
-    const isAfterEnd = endTime !== null ? nowParisTime > endTime : false;
+  const isBeforeStart = startTime !== null ? nowParisTime < startTime : false;
+  const isAfterEnd = endTime !== null ? nowParisTime > endTime : false;
 
-    // Block starting a new attempt outside the allowed France time window
-    if (isBeforeStart || isAfterEnd) {
-      redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}`);
-    }
+  // Block starting a new attempt outside the allowed France time window
+  if (isBeforeStart || isAfterEnd) {
+    redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}`);
   }
 
-  let attemptId: string;
-
-  if (existingAttempt) {
-    redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/attempt/${existingAttempt.id}`);
-  }
-
-  // Fetch questions separately if no attempt exists
+  // 5. Fetch questions and create a brand new independent attempt for retaking
   const questions = await prisma.question.findMany({
     where: { quizId: quiz.id },
     orderBy: { order: "asc" },
@@ -128,9 +117,7 @@ export default async function StartQuizPage({ params }: StartQuizPageProps) {
       id: true,
     },
   });
-  
-  attemptId = newAttempt.id;
 
-  // 4. Redirect directly to the nested attempt page
-  redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/attempt/${attemptId}`);
+  // 6. Redirect directly to the newly created attempt page
+  redirect(`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${quizSlug}/attempt/${newAttempt.id}`);
 }

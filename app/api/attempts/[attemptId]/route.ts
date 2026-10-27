@@ -1,3 +1,4 @@
+// app/api/attempts/[attemptId]/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
@@ -35,7 +36,6 @@ export async function POST(
 ) {
   try {
     const { attemptId } = await params;
-    console.log("attempt id from [attemptId]/route:", attemptId);
     const body = await _req.json();
     const { userId } = body;
 
@@ -46,8 +46,6 @@ export async function POST(
       );
     }
 
-    console.log("User id from route file: [attemptId]/route", userId);
-
     const dbUser = await prisma.user.findUnique({
       where: { id: userId },
       select: { id: true },
@@ -57,6 +55,7 @@ export async function POST(
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    // Fetch attempt by its unique attemptId (Supports multiple attempts per user)
     const attempt = (await prisma.quizAttempt.findUnique({
       where: { id: attemptId },
       include: {
@@ -98,9 +97,12 @@ export async function POST(
       );
     }
 
+    // Optional: If you want students to view past submitted attempts in read-only mode,
+    // you can remove or modify this check. If they are starting a brand new attempt,
+    // status will be "STARTED" anyway.
     if (attempt.status !== "STARTED") {
       return NextResponse.json(
-        { message: "Attempt already closed" },
+        { message: "This attempt is already submitted or closed." },
         { status: 400 }
       );
     }

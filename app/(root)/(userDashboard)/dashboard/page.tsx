@@ -9,6 +9,9 @@ type UserWithDashboardData = Prisma.UserGetPayload<{
     courseAccesses: {
       include: {
         course: true;
+        batch: {
+          select: { status: true };
+        };
       };
     };
     payments: {
@@ -34,6 +37,9 @@ const UserDashboardPage = async () => {
       courseAccesses: {
         include: {
           course: true,
+          batch: {
+            select: { status: true },
+          },
         },
         orderBy: {
           grantedAt: "desc",
@@ -56,16 +62,37 @@ const UserDashboardPage = async () => {
 
   const now = new Date();
   
-  // Filter active/non-expired course accesses
-  const activeCourseAccesses = user.courseAccesses.filter(
-    (access) => !access.expiresAt || new Date(access.expiresAt) > now
-  );
+  // 1. Filter out expired accesses and batches that are COMPLETED or CANCELLED
+  const activeCourseAccesses = user.courseAccesses.filter((access) => {
+    // Check expiration date
+    const isExpired = access.expiresAt && new Date(access.expiresAt) <= now;
+    if (isExpired) return false;
 
-  const totalCourses = activeCourseAccesses.length;
+    // Check batch status if a batch is selected
+    if (access.batch) {
+      const batchStatus = access.batch.status;
+      if (batchStatus === "COMPLETED" || batchStatus === "CANCELLED") {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Ensure each unique course appears only once (newest first)
+  const uniqueCourseMap = new Map();
+  for (const access of activeCourseAccesses) {
+    if (!uniqueCourseMap.has(access.courseId)) {
+      uniqueCourseMap.set(access.courseId, access);
+    }
+  }
+  const uniqueActiveAccesses = Array.from(uniqueCourseMap.values());
+
+  const totalCourses = uniqueActiveAccesses.length;
   const totalPayments = user.payments.length;
   const completedPayments = user.payments.filter((p) => p.status === "CAPTURED" || p.status === "APPROVED").length;
 
-  const enrolledCourses = activeCourseAccesses.slice(0, 6);
+  const enrolledCourses = uniqueActiveAccesses.slice(0, 6);
   const recentPayments = user.payments.slice(0, 5);
 
   return (
@@ -102,7 +129,7 @@ const UserDashboardPage = async () => {
             </div>
 
             {enrolledCourses.length === 0 ? (
-              <EmptyState message="You do not have access to any courses yet." actionUrl="/courses" actionText="Browse Courses" />
+              <EmptyState message="You do not have access to any active courses yet." actionUrl="/courses" actionText="Browse Courses" />
             ) : (
               <div className="space-y-4">
                 {enrolledCourses.map((access) => (
