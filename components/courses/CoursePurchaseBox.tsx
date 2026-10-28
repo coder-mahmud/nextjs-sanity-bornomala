@@ -58,12 +58,12 @@ export default function CoursePurchaseBox({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative text-gray-800">
             {/* Close Button */}
-            <button
+            {/* <button
               onClick={() => setIsOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold"
             >
               &times;
-            </button>
+            </button> */}
 
             <h3 className="text-2xl font-bold mb-2">Complete Your Enrollment</h3>
             <p className="text-sm text-gray-600 mb-6">

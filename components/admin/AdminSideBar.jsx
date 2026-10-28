@@ -62,7 +62,7 @@ const menuItems = [
     label: "Inventories",
     href: "/admin/inventories",
     icon: Package,
-    superAdminOnly: true,
+    // superAdminOnly: true,
   },
   {
     label: "Expenses",

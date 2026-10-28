@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { Grid, X, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 
 type Option = {
   id: string;
@@ -45,6 +46,7 @@ export default function QuizPlayer({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const currentQuestion = attempt.questions[currentIndex];
   const totalQuestions = attempt.questions.length;
@@ -74,7 +76,7 @@ export default function QuizPlayer({
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   }, [remainingSeconds]);
 
-  const isLowTime = remainingSeconds < 60; // Under 1 minute left
+  const isLowTime = remainingSeconds < 60;
 
   async function saveAnswer(questionId: string, selectedOptionId: string) {
     setAttempt((prev) => ({
@@ -103,45 +105,110 @@ export default function QuizPlayer({
     });
   }
 
-  return (
-    <div className="mx-auto min-h-[85vh] max-w-7xl px-4 py-8">
-      {/* Top Header Bar */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-xs">
+  const NavigatorContent = () => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
         <div>
-          <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-xs font-semibold text-indigo-700">
+          <h3 className="font-bold text-slate-900 text-sm">Question Navigator</h3>
+          <p className="text-xs text-slate-400 mt-0.5">Jump directly to any question</p>
+        </div>
+        <button 
+          onClick={() => setIsDrawerOpen(false)} 
+          className="lg:hidden p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-5 sm:grid-cols-5 gap-2 max-h-[50vh] overflow-y-auto p-1">
+        {attempt.questions.map((q, index) => {
+          const answered = !!q.selectedOptionId;
+          const active = index === currentIndex;
+
+          let btnStyles = "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100";
+          if (active) {
+            btnStyles = "border-indigo-600 bg-indigo-600 text-white font-bold ring-2 ring-indigo-600/20 shadow-xs";
+          } else if (answered) {
+            btnStyles = "border-emerald-200 bg-emerald-50 text-emerald-700 font-medium hover:bg-emerald-100";
+          }
+
+          return (
+            <button
+              key={q.id}
+              onClick={() => {
+                setCurrentIndex(index);
+                setIsDrawerOpen(false);
+              }}
+              className={`h-10 rounded-xl border text-xs font-semibold transition-all flex items-center justify-center ${btnStyles}`}
+            >
+              {index + 1}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="border-t border-slate-100 pt-4 space-y-2 text-xs text-slate-600">
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-3 rounded-md border border-indigo-600 bg-indigo-600" />
+          <span>Current Question</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-3 rounded-md border border-emerald-300 bg-emerald-50" />
+          <span>Answered</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-3 rounded-md border border-slate-200 bg-slate-50" />
+          <span>Unanswered</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="mx-auto min-h-[90vh] max-w-[1400px] px-2 sm:px-6 py-4 sm:py-6">
+      {/* Top Header Bar */}
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl sm:rounded-3xl border border-slate-200 bg-white px-4 sm:px-8 py-4 shadow-xs">
+        <div>
+          <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">
             Assessment in Progress
           </span>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="mt-1.5 text-lg sm:text-2xl font-bold tracking-tight text-slate-900 line-clamp-1">
             {attempt.quiz.title}
           </h1>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="text-right hidden sm:block">
-            <p className="text-xs font-medium text-slate-400">Time Remaining</p>
+        <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+          <div className="text-left sm:text-right">
+            <p className="text-[11px] font-medium text-slate-400">Time Remaining</p>
             <p className="text-xs font-semibold text-slate-700">{answeredCount} of {totalQuestions} answered</p>
           </div>
-          <div className={`flex items-center gap-2 rounded-2xl border px-5 py-3 font-mono text-xl font-bold shadow-xs transition-colors ${
+          
+          <div className={`flex items-center gap-2 rounded-xl border px-3 sm:px-4 py-2 font-mono text-base sm:text-lg font-bold shadow-xs transition-colors ${
             isLowTime 
               ? "border-red-300 bg-red-50 text-red-600 animate-pulse" 
               : "border-slate-200 bg-slate-50 text-slate-800"
           }`}>
-            <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <Clock className="w-4 h-4 text-slate-400 shrink-0" />
             {formattedTime}
           </div>
+
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className="lg:hidden flex items-center justify-center rounded-xl border border-slate-200 bg-slate-900 text-white p-2.5 shadow-xs hover:bg-slate-800 transition"
+            title="Open Question Navigator"
+          >
+            <Grid className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      {/* Main Grid Content */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
+      {/* Main Grid Content - Expanded Width */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_280px]">
         
         {/* Left Card: Question and Options Panel */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xs flex flex-col justify-between">
+        <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:px-10 sm:py-8 shadow-xs flex flex-col justify-between">
           <div>
-            {/* Progress Bar & Question Counter */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold tracking-wider uppercase text-indigo-600">
                 Question {currentIndex + 1} of {totalQuestions}
               </span>
@@ -150,56 +217,50 @@ export default function QuizPlayer({
               </span>
             </div>
             
-            <div className="w-full bg-slate-100 h-2 rounded-full mb-8 overflow-hidden">
+            <div className="w-full bg-slate-100 h-1.5 rounded-full mb-5 sm:mb-6 overflow-hidden">
               <div 
                 className="bg-indigo-600 h-full transition-all duration-300 ease-out" 
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
 
-            {/* Question Text */}
-            <h2 className="text-xl sm:text-2xl font-bold leading-snug text-slate-900 mb-8">
+            <h2 className="text-base sm:text-xl font-bold leading-snug text-slate-900 mb-5 sm:mb-6">
               {currentQuestion.text}
             </h2>
 
             {/* Answer Options Container */}
-            <div className="space-y-4">
+            <div className="space-y-2.5 sm:space-y-3">
               {currentQuestion.options
                 .sort((a, b) => a.order - b.order)
                 .map((option, idx) => {
                   const checked = currentQuestion.selectedOptionId === option.id;
-                  const optionLetters = ["A", "B", "C", "D", "E", "F"];
+                  const shortLetters = ["A", "B", "C", "D", "E", "F"];
 
                   return (
                     <div
                       key={option.id}
                       onClick={() => saveAnswer(currentQuestion.id, option.id)}
-                      className={`group flex cursor-pointer items-center gap-4 rounded-2xl border p-5 transition-all ${
+                      className={`group flex flex-col cursor-pointer rounded-xl border px-4 py-3 sm:px-5 sm:py-3.5 transition-all ${
                         checked
                           ? "border-indigo-600 bg-indigo-50/60 ring-2 ring-indigo-600/20 shadow-xs"
                           : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
                       }`}
                     >
-                      {/* Option Badge */}
-                      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-bold transition-colors ${
-                        checked 
-                          ? "bg-indigo-600 text-white" 
-                          : "bg-slate-100 text-slate-600 group-hover:bg-slate-200"
-                      }`}>
-                        {optionLetters[idx] || idx + 1}
+                      {/* Option Letter Row */}
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-[11px] font-bold uppercase transition-colors ${
+                          checked 
+                            ? "bg-indigo-600 text-white" 
+                            : "bg-slate-100 text-slate-600 group-hover:bg-slate-200"
+                        }`}>
+                          {shortLetters[idx] || idx + 1}
+                        </div>
                       </div>
 
-                      {/* Option Text */}
-                      <span className={`text-sm sm:text-base font-medium flex-1 ${checked ? "text-indigo-950 font-semibold" : "text-slate-700"}`}>
+                      {/* Option Answer Text Row */}
+                      <span className={`text-xs sm:text-sm font-medium pl-0.5 ${checked ? "text-indigo-950 font-semibold" : "text-slate-700"}`}>
                         {option.text}
                       </span>
-
-                      {/* Custom Radio Check Indicator */}
-                      <div className={`h-5 w-5 rounded-full border flex items-center justify-center transition-colors ${
-                        checked ? "border-indigo-600 bg-indigo-600" : "border-slate-300 bg-white"
-                      }`}>
-                        {checked && <div className="h-2 w-2 rounded-full bg-white" />}
-                      </div>
                     </div>
                   );
                 })}
@@ -207,13 +268,13 @@ export default function QuizPlayer({
           </div>
 
           {/* Navigation Controls Footer */}
-          <div className="mt-10 flex items-center justify-between border-t border-slate-100 pt-6">
+          <div className="mt-6 sm:mt-8 flex items-center justify-between border-t border-slate-100 pt-4 gap-3">
             <button
               onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
               disabled={currentIndex === 0}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
-              ← Previous
+              <ChevronLeft className="w-4 h-4" /> Previous
             </button>
 
             {currentIndex < totalQuestions - 1 ? (
@@ -221,15 +282,15 @@ export default function QuizPlayer({
                 onClick={() =>
                   setCurrentIndex((i) => Math.min(totalQuestions - 1, i + 1))
                 }
-                className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition shadow-xs"
+                className="inline-flex items-center gap-1 rounded-xl bg-slate-900 px-5 py-2 text-xs font-semibold text-white hover:bg-slate-800 transition shadow-xs"
               >
-                Next Question →
+                Next <ChevronRight className="w-4 h-4" />
               </button>
             ) : (
               <button
                 onClick={handleSubmit}
                 disabled={isPending}
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-2.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 transition shadow-xs"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 transition shadow-xs"
               >
                 {isPending ? "Submitting..." : "Submit Assessment"}
               </button>
@@ -237,55 +298,21 @@ export default function QuizPlayer({
           </div>
         </div>
 
-        {/* Right Sidebar: Question Palette & Navigation Map */}
-        <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 shadow-xs space-y-6">
-          <div>
-            <h3 className="font-bold text-slate-900 text-sm">Question Navigator</h3>
-            <p className="text-xs text-slate-400 mt-0.5">Click any number to jump directly</p>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2.5">
-            {attempt.questions.map((q, index) => {
-              const answered = !!q.selectedOptionId;
-              const active = index === currentIndex;
-
-              let btnStyles = "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100";
-              if (active) {
-                btnStyles = "border-indigo-600 bg-indigo-600 text-white font-bold ring-2 ring-indigo-600/20 shadow-xs";
-              } else if (answered) {
-                btnStyles = "border-emerald-200 bg-emerald-50 text-emerald-700 font-medium hover:bg-emerald-100";
-              }
-
-              return (
-                <button
-                  key={q.id}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`h-11 rounded-xl border text-xs font-semibold transition-all flex items-center justify-center ${btnStyles}`}
-                >
-                  {index + 1}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Palette Legend */}
-          <div className="border-t border-slate-100 pt-5 space-y-2.5 text-xs text-slate-600">
-            <div className="flex items-center gap-2.5">
-              <div className="h-3.5 w-3.5 rounded-lg border border-indigo-600 bg-indigo-600" />
-              <span>Current Question</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="h-3.5 w-3.5 rounded-lg border border-emerald-300 bg-emerald-50" />
-              <span>Answered</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="h-3.5 w-3.5 rounded-lg border border-slate-200 bg-slate-50" />
-              <span>Unanswered</span>
-            </div>
-          </div>
+        {/* Right Sidebar: Question Palette */}
+        <aside className="hidden lg:block h-fit rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 shadow-xs">
+          <NavigatorContent />
         </aside>
 
       </div>
+
+      {/* Mobile Bottom Drawer for Question Navigator */}
+      {isDrawerOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex items-end bg-slate-900/50 backdrop-blur-xs transition-opacity">
+          <div className="w-full bg-white rounded-t-3xl p-5 shadow-2xl border-t border-slate-200 animate-in slide-in-from-bottom duration-200">
+            <NavigatorContent />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
