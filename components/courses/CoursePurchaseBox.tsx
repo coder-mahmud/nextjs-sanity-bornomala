@@ -9,14 +9,14 @@ interface CoursePurchaseBoxProps {
   courseId: string;
   courseSlug: string;
   session: any;
-  hasPurchased: boolean;
+  hasValidAccess: boolean; // Updated prop name
 }
 
 export default function CoursePurchaseBox({
   courseId,
   courseSlug,
   session,
-  hasPurchased,
+  hasValidAccess,
 }: CoursePurchaseBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
@@ -32,11 +32,12 @@ export default function CoursePurchaseBox({
     );
   }
 
-  if (hasPurchased) {
+  // Renders "Go to Course" only when access is active, not expired, and batch isn't completed/cancelled
+  if (hasValidAccess) {
     return (
       <Link
         href={`/dashboard/courses/${courseSlug}`}
-        className="inline-flex items-center justify-center gap-2 rounded bg-green-600 px-8 py-3 text-white hover:bg-green-700"
+        className="inline-flex items-center justify-center gap-2 rounded bg-green-600 px-8 py-3 text-white hover:bg-green-700 w-full"
       >
         Go to Course
       </Link>
@@ -45,32 +46,21 @@ export default function CoursePurchaseBox({
 
   return (
     <>
-      {/* Trigger Button to Open Modal */}
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center justify-center gap-2 rounded bg-[#3a7867] px-8 py-3 text-white hover:bg-white border border-[#3a7867] hover:text-[#3a7867] font-semibold cursor-pointer"
+        className="inline-flex items-center justify-center gap-2 rounded bg-[#3a7867] px-8 py-3 text-white hover:bg-white border border-[#3a7867] hover:text-[#3a7867] font-semibold cursor-pointer w-full"
       >
         Enroll Now
       </button>
 
-      {/* Modal Popup */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative text-gray-800">
-            {/* Close Button */}
-            {/* <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold"
-            >
-              &times;
-            </button> */}
-
             <h3 className="text-2xl font-bold mb-2">Complete Your Enrollment</h3>
             <p className="text-sm text-gray-600 mb-6">
               Have a coupon code? Enter it below before proceeding with your purchase.
             </p>
 
-            {/* Single Coupon Code Input */}
             <div className="mb-6">
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">
                 Coupon Code
@@ -84,7 +74,6 @@ export default function CoursePurchaseBox({
               />
             </div>
 
-            {/* Actions */}
             <div className="flex items-center justify-end gap-3">
               <button
                 onClick={() => setIsOpen(false)}

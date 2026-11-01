@@ -122,7 +122,7 @@ export default function CourseDetailsHero({
             courseId={course.id}
             courseSlug={course.slug}
             session={session}
-            hasPurchased={hasPurchased}
+            hasValidAccess={hasPurchased} // Change hasPurchased to hasValidAccess
           />
         )}
 

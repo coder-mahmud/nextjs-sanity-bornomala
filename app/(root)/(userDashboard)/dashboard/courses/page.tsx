@@ -82,8 +82,8 @@ export default async function CoursesPage() {
 
   if (courses.length === 0) {
     return (
-      <section className="py-8">
-        <h1 className="text-2xl font-bold mb-4">My Courses</h1>
+      <section className="py-2 md:py-8">
+        <h1 className="text-2xl font-bold px-2 mb-4">My Courses!</h1>
         <div className="rounded-2xl border border-dashed border-gray-200 p-8 text-center">
           <p className="text-sm text-gray-500">
             You do not have access to any active courses yet.
@@ -100,8 +100,8 @@ export default async function CoursesPage() {
   }
 
   return (
-    <section className="py-8">
-      <h1 className="text-2xl font-bold mb-6">My Courses</h1>
+    <section className="py-2 md:py-8">
+      <h1 className="px-2 text-2xl font-bold mb-6">My Courses</h1>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
           <Link

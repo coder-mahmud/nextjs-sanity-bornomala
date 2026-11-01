@@ -78,7 +78,7 @@ export default function StudentHomeworkForm({
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
+    <div className="rounded-2xl border border-gray-200 bg-white p-2 md:p-6 shadow-sm space-y-4">
       <div className="flex items-center justify-between border-b pb-3">
         <div className="flex items-center gap-2 text-gray-900 font-bold text-sm">
           <UploadCloud className="w-4 h-4 text-emerald-600" />

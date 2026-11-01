@@ -1,3 +1,4 @@
+// app/courses/AllCoursesClient.tsx
 "use client";
 
 import { useState } from "react";
@@ -21,7 +22,6 @@ function getYouTubeEmbedUrl(url: string) {
     videoId = url.split("shorts/")[1]?.split("?")[0];
   }
 
-  // Fallback if raw ID was provided
   if (!videoId && url.length === 11) {
     videoId = url;
   }
@@ -46,13 +46,13 @@ interface Course {
 interface AllCoursesClientProps {
   courses: Course[];
   session: any;
-  userAccesses?: string[]; // Array of course IDs the user has purchased
+  validCourseAccessIds?: string[]; // Updated prop
 }
 
 export default function AllCoursesClient({
   courses,
   session,
-  userAccesses = [],
+  validCourseAccessIds = [],
 }: AllCoursesClientProps) {
   const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
@@ -61,7 +61,6 @@ export default function AllCoursesClient({
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Hero Section Header */}
       <section className="py-16 bg-gray-50 border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
@@ -76,7 +75,6 @@ export default function AllCoursesClient({
         </div>
       </section>
 
-      {/* Online Courses Section */}
       {onlineCourses.length > 0 && (
         <section className="py-16 container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 mb-8 border-b pb-4">
@@ -93,14 +91,13 @@ export default function AllCoursesClient({
                 onOpenVideo={(url) => setActiveVideoUrl(url)}
                 isOnline={true}
                 session={session}
-                hasPurchased={userAccesses.includes(course.id)}
+                hasValidAccess={validCourseAccessIds.includes(course.id)}
               />
             ))}
           </div>
         </section>
       )}
 
-      {/* Offline Courses Section */}
       {offlineCourses.length > 0 && (
         <section className="py-16 container mx-auto px-4 sm:px-6 lg:px-8 bg-gray-50/50">
           <div className="flex items-center gap-2 mb-8 border-b pb-4">
@@ -117,14 +114,13 @@ export default function AllCoursesClient({
                 onOpenVideo={(url) => setActiveVideoUrl(url)}
                 isOnline={false}
                 session={session}
-                hasPurchased={false}
+                hasValidAccess={false}
               />
             ))}
           </div>
         </section>
       )}
 
-      {/* YouTube Video Modal Popup */}
       {activeVideoUrl && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
@@ -157,14 +153,14 @@ function CourseCardItem({
   onOpenVideo,
   isOnline,
   session,
-  hasPurchased,
+  hasValidAccess,
 }: {
   course: Course;
   idx: number;
   onOpenVideo: (url: string) => void;
   isOnline: boolean;
   session: any;
-  hasPurchased: boolean;
+  hasValidAccess: boolean;
 }) {
   return (
     <Card
@@ -221,7 +217,6 @@ function CourseCardItem({
       </CardContent>
 
       <div className="px-6 pb-6 mt-auto space-y-2">
-        {/* Preview Video Modal Button */}
         {course.courseVideo && (
           <Button
             type="button"
@@ -234,29 +229,23 @@ function CourseCardItem({
           </Button>
         )}
 
-        {/* Action Button Grid */}
         <div className="grid grid-cols-1 gap-2">
-            <Link className="w-full"  href={`/courses/${course.slug}`}>
+          <Link className="w-full" href={`/courses/${course.slug}`}>
             <button className="inline-flex items-center justify-center gap-2 rounded bg-[#3a7867] px-8 py-3 text-white hover:bg-white border border-[#3a7867] hover:text-[#3a7867] font-semibold cursor-pointer w-full">
-
               See Details
             </button>
-            </Link>
-
+          </Link>
 
           {isOnline ? (
-            /* Same Purchase Component & Functionality as Course Details Page */
             <div className="w-full [&_button]:w-full">
               <CoursePurchaseBox
                 courseId={course.id}
                 courseSlug={course.slug}
                 session={session}
-                hasPurchased={hasPurchased}
+                hasValidAccess={hasValidAccess}
               />
             </div>
-          ) : (
-            null
-          )}
+          ) : null}
         </div>
       </div>
     </Card>

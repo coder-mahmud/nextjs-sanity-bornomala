@@ -39,8 +39,8 @@ export default async function DashboardLayout({
           <div className="flex min-h-screen flex-col md:flex-row">
             <UserSidebar />
 
-            <main className="flex-1 px-4 md:px-6">
-              <div className="min-h-[calc(100vh-2rem)] rounded-2xl border border-gray-200 bg-white p-4 shadow-sm md:p-6">
+            <main className="flex-1 px-0 md:px-6">
+              <div className="min-h-[calc(100vh-2rem)] rounded-2xl border border-gray-200 bg-white shadow-sm md:p-6">
                 {children}
               </div>
             </main>

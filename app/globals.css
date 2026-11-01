@@ -221,3 +221,7 @@ html {
   .wp-content h2 { font-size: 1.4rem; }
   .wp-content h3 { font-size: 1.2rem; }
 }
+
+/* *{
+  border:1px solid red; 
+} */

@@ -1,3 +1,4 @@
+// app/courses/page.tsx (or wherever AllCourses is located)
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import AllCoursesClient from "./AllCoursesClient";
@@ -9,14 +10,36 @@ export default async function AllCoursesPage() {
     where: { status: "PUBLISHED" },
   });
 
-  // Check user purchases to reflect correct button state (e.g. "Access Course" vs "Buy Course")
-  let userAccesses: string[] = [];
+  // Thorough validation for user course access
+  let validCourseAccessIds: string[] = [];
   if (session?.user?.id) {
+    const now = new Date();
+
+    // 1. Fetch active course accesses (ignoring expired ones)
     const accesses = await prisma.courseAccess.findMany({
-      where: { userId: session.user.id },
-      select: { courseId: true },
+      where: {
+        userId: session.user.id,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+      },
+      include: {
+        batch: {
+          select: { id: true, status: true },
+        },
+      },
     });
-    userAccesses = accesses.map((a) => a.courseId);
+
+    // 2. Filter out rows where the assigned batch is COMPLETED or CANCELLED
+    const validAccesses = accesses.filter((access) => {
+      if (!access.batchId) return true; // If no batch is linked, access remains valid
+      const batchStatus = access.batch?.status;
+      if (batchStatus === "COMPLETED" || batchStatus === "CANCELLED") {
+        return false;
+      }
+      return true;
+    });
+
+    // 3. Collect unique valid course IDs
+    validCourseAccessIds = Array.from(new Set(validAccesses.map((a) => a.courseId)));
   }
 
   // Sort logic
@@ -37,7 +60,7 @@ export default async function AllCoursesPage() {
     <AllCoursesClient
       courses={serializedCourses}
       session={session}
-      userAccesses={userAccesses}
+      validCourseAccessIds={validCourseAccessIds}
     />
   );
 }

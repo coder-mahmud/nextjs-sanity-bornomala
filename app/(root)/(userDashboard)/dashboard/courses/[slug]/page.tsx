@@ -367,7 +367,7 @@ export default async function CourseDetailPage({
     totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
 
   return (
-    <section className="py-8 space-y-6 max-w-4xl mx-auto px-4">
+    <section className="py-2 md:py-8 space-y-6 max-w-4xl mx-auto px-2 md:px-4">
       <div className="space-y-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{course.title}</h1>
@@ -383,13 +383,13 @@ export default async function CourseDetailPage({
         {/* Course Book Section */}
         {course.courseBook && (
           <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col md:flex-row items-start gap-3">
               <div className="p-2.5 bg-blue-100 text-blue-700 rounded-xl">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-blue-900">Recommended Course Book</h3>
-                <p className="text-xs text-blue-700 mt-0.5">
+                <h3 className="font-bold text-blue-900">Recommended Course Book</h3>
+                <p className="text-blue-700 mt-0.5">
                   Lesson book is available for this course. Buy from Amazon link
                 </p>
               </div>
@@ -454,7 +454,7 @@ export default async function CourseDetailPage({
           {batches.map((batch: BatchItemFormatted) => (
             <div
               key={batch.id}
-              className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4"
+              className="rounded-2xl border border-gray-200 bg-white p-2 md:p-6 shadow-sm space-y-4"
             >
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-lg font-bold text-gray-900">
@@ -512,10 +512,10 @@ export default async function CourseDetailPage({
                     return (
                       <li
                         key={lesson.id}
-                        className={`flex items-center justify-between rounded-xl border p-4 transition ${
+                        className={`flex flex-col md:flex-row gap-2 items-start justify-between rounded-xl border-b md:p-4 transition pb-2 md:pb-4 ${
                           isCompleted
                             ? "border-green-200 bg-green-50/50"
-                            : "border-gray-100 bg-white hover:border-gray-200"
+                            : "border-gray-300 bg-white hover:border-gray-200"
                         }`}
                       >
                         <div>

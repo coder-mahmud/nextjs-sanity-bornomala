@@ -96,10 +96,10 @@ const UserDashboardPage = async () => {
   const recentPayments = user.payments.slice(0, 5);
 
   return (
-    <section className="min-h-[50vh] bg-slate-50 py-10">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section className="min-h-[50vh] bg-slate-50 py-4 md:py-10">
+      <div className="mx-auto px-4 max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-lg md:text-3xl font-bold tracking-tight text-gray-900">
             Welcome back, {user.name || "Student"}
           </h1>
           <p className="mt-1 text-sm text-gray-500">
@@ -122,7 +122,7 @@ const UserDashboardPage = async () => {
               </h2>
               <Link
                 href="/dashboard/courses"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                className="hidden md:block text-xs font-semibold text-blue-600 hover:text-blue-700"
               >
                 View all courses →
               </Link>
@@ -145,7 +145,7 @@ const UserDashboardPage = async () => {
                       {access.course.shortDescription || access.course.description || "No description available."}
                     </p>
 
-                    <div className="mt-4 flex items-center justify-between gap-3">
+                    <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3">
                       <span className="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                         Access Active
                       </span>
@@ -157,6 +157,8 @@ const UserDashboardPage = async () => {
                         Go to Course
                       </Link>
                     </div>
+
+
                   </div>
                 ))}
               </div>
@@ -165,7 +167,7 @@ const UserDashboardPage = async () => {
 
           {/* Payment & Transaction History Section */}
           <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 flex flex-col md:flex-row items-center justify-between">
               <h2 className="text-xl font-bold text-gray-900">
                 Recent Payments
               </h2>
@@ -183,7 +185,7 @@ const UserDashboardPage = async () => {
                     key={payment.id}
                     className="rounded-2xl border border-gray-100 bg-gray-50/50 p-4"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col md:flex-row items-start justify-between gap-4">
                       <div>
                         <h3 className="font-semibold text-gray-900 text-sm">
                           {payment.course?.title || "Course Enrollment"}
@@ -219,6 +221,8 @@ const UserDashboardPage = async () => {
             )}
           </div>
         </div>
+
+        
       </div>
     </section>
   );

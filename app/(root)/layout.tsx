@@ -57,6 +57,7 @@ export default async function RootLayout({
   const headerLogo = siteOptions?.headerLogo?.node?.sourceUrl
   return (
     <div className="flex min-h-screen flex-col">
+      
       <Header logo={headerLogo} />
       <main className="flex-1 wrapper mt-[50px] md:mt-0">
         {children}

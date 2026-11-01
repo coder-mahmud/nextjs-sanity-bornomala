@@ -65,7 +65,7 @@ const menuItems = [
     // superAdminOnly: true,
   },
   {
-    label: "Expenses",
+    label: "Revenue",
     href: "/admin/expenses",
     icon: Calculator,
     // superAdminOnly: true,

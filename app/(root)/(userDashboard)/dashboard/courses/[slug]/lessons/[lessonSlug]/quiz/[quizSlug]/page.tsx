@@ -139,9 +139,9 @@ export default async function QuizDetailsPage({
   };
 
   return (
-    <main className="bg-slate-50 min-h-screen py-12">
-      <section className="container mx-auto px-4">
-        <div className="mx-auto max-w-5xl space-y-6">
+    <main className="bg-slate-50 min-h-screen py-3 md:py-12">
+      <section className=" mx-auto md:px-4">
+        <div className="mx-auto max-w-5xl space-y-6 px-2">
           {/* Breadcrumb */}
           <Link
             href={`/dashboard/courses/${slug}/lessons/${lessonSlug}`}
@@ -151,7 +151,7 @@ export default async function QuizDetailsPage({
           </Link>
 
           <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
-            <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm space-y-6">
+            <div className="rounded-xl md:rounded-3xl border border-slate-200 bg-white p-2 md:p-8 shadow-sm space-y-6">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-4 py-1 text-xs font-semibold text-indigo-700">
                   Lesson Quiz
@@ -164,7 +164,7 @@ export default async function QuizDetailsPage({
                 </span>
               </div>
 
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+              <h1 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900">
                 {quiz.title}
               </h1>
 
@@ -182,8 +182,8 @@ export default async function QuizDetailsPage({
                 </div>
               )}
 
-              <div className="grid gap-4 sm:grid-cols-3 pt-4">
-                <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200">
+              <div className="grid gap-4 sm:grid-cols-3 pt-2 md:pt-4">
+                <div className="rounded-xl md:rounded-2xl bg-slate-50 p-2 md:p-5 border border-slate-200">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                     Duration
                   </p>
@@ -192,7 +192,7 @@ export default async function QuizDetailsPage({
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200">
+                <div className="rounded-xl md:rounded-2xl bg-slate-50 p-5 border border-slate-200">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                     Passing Score
                   </p>
@@ -201,7 +201,7 @@ export default async function QuizDetailsPage({
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200">
+                <div className="rounded-xl md:rounded-2xl bg-slate-50 p-5 border border-slate-200">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                     Questions
                   </p>
@@ -211,7 +211,7 @@ export default async function QuizDetailsPage({
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 space-y-3">
+              <div className="rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-2 md:p-6 space-y-3">
                 <h2 className="text-sm font-bold text-slate-900">
                   Instructions Before You Begin
                 </h2>
@@ -232,7 +232,7 @@ export default async function QuizDetailsPage({
               </div>
             </div>
 
-            <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+            <aside className="h-fit rounded-xl md:rounded-3xl border border-slate-200 bg-white p-2 md:p-6 shadow-sm space-y-5">
               {existingAttempt && (existingAttempt.status === "SUBMITTED" || existingAttempt.status === "EVALUATED") ? (
                 <>
                   <div className="flex items-center justify-between">
@@ -249,7 +249,7 @@ export default async function QuizDetailsPage({
                     You have already completed this quiz. Here is a summary of your performance.
                   </p>
 
-                  <div className="space-y-3 rounded-2xl bg-slate-50 p-4 border border-slate-200 text-xs">
+                  <div className="space-y-3 rounded-2xl bg-slate-50 p-2 md:p-4 border border-slate-200 text-xs">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500">Score</span>
                       <span className="font-semibold text-slate-800">

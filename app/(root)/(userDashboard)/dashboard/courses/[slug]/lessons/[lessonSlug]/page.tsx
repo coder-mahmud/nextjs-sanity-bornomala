@@ -209,7 +209,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   if (!hasAccess) {
     return (
-      <section className="py-8 max-w-4xl mx-auto px-4">
+      <section className="py-8 max-w-4xl mx-auto px-1 md:px-4">
         <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
           <p className="text-red-600 font-medium">
             You do not have access to this lesson. Please purchase the course to unlock its contents.
@@ -256,7 +256,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
   return (
-    <section className="py-8 max-w-4xl mx-auto px-4 space-y-6">
+    <section className="py-2 md:py-8 max-w-4xl mx-auto px-2 md:px-4 space-y-6">
       {/* Breadcrumb & Header */}
       <div>
         <Link
@@ -266,7 +266,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           ← Back to {course.title}
         </Link>
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl bg-white border border-gray-200 p-6 shadow-sm">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl bg-white border border-gray-200 p-2 md:p-6 shadow-sm">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-gray-600">
@@ -311,7 +311,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
       {/* Quiz Time Window (If Scheduled) */}
       {(lesson.startsAt || lesson.endsAt) && (
-        <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-5 space-y-2 shadow-sm">
+        <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-2 md:p-5 space-y-2 shadow-sm">
           <div className="flex items-center gap-2 text-purple-800 text-xs font-bold">
             <CalendarClock className="w-4 h-4 text-purple-600" />
             Quiz time Window
@@ -335,7 +335,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
       
       {/* Linked Quiz Details */}
       {lesson.quiz && (
-        <div className="rounded-2xl border border-indigo-100 bg-white p-5 space-y-3 shadow-sm">
+        <div className="rounded-2xl border border-indigo-100 bg-white p-2 md:p-5 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs">
             <HelpCircle className="w-4 h-4 text-indigo-600" />
             Associated Quiz
@@ -360,7 +360,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
       {/* Lecture Notes */}
       {lesson.notes && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-2 md:p-6 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
             <FileText className="w-4 h-4 text-blue-600" />
             Lecture Notes & Content
@@ -373,7 +373,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
       {/* Attachments & Resources */}
       {lesson.attachments && Array.isArray(lesson.attachments) && lesson.attachments.length > 0 && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-2 md:p-6 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
             <Paperclip className="w-4 h-4 text-blue-600" />
             Attachments & Downloads ({lesson.attachments.length})

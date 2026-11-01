@@ -3,10 +3,15 @@
 import { prisma } from "@/lib/prisma";
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
+
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-04-22.dahlia",
 });
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -168,7 +173,39 @@ export async function POST(req: NextRequest) {
             },
           });
         }
+ 
       });
+
+      try {
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ecolebornomala.com";
+        
+        await resend.emails.send({
+          from: "Echole Bornomala <no-reply@ecolebornomala.com>",
+          // to: 'bornomalaecole@gmail.com',          
+          to: userEmail,
+          subject: `Enrollment Confirmed: ${course.title}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+              <h2 style="color: #111827;">Welcome to ${course.title}! 🎉</h2>
+              <p style="color: #4b5563;">Hi ${user.name || "Student"},</p>
+              <p style="color: #4b5563;">Your payment was successful and your enrollment is confirmed. You can now access all course materials.</p>
+              <div style="margin: 30px 0;">
+                <a href="${appUrl}/dashboard/courses/${course.slug}" 
+                   style="background: #3a7867; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                  Go to Course
+                </a>
+              </div>
+              <p style="color: #9ca3af; font-size: 14px;">If you have any questions, feel free to reply to this email.</p>
+            </div>
+          `,
+        });
+
+        console.log("Course purchase confirmation email sent successfully to:", userEmail);
+      } catch (emailError) {
+        console.error("Failed to send course purchase email:", emailError);
+      }
+
+
 
       console.log("Course access granted:", {
         userEmail,

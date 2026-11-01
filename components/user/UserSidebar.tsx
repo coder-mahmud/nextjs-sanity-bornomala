@@ -59,7 +59,7 @@ export default function UserSidebar() {
 
   return (
     <>
-      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-4 md:hidden">
+      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-white md:px-4 md:py-4 md:hidden">
         <h2 className="text-lg font-semibold text-gray-900">Student Panel</h2>
 
         <button
