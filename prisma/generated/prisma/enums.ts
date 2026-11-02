@@ -69,7 +69,8 @@ export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 export const AttemptStatus = {
   STARTED: 'STARTED',
   SUBMITTED: 'SUBMITTED',
-  EVALUATED: 'EVALUATED'
+  EVALUATED: 'EVALUATED',
+  CANCELLED: 'CANCELLED'
 } as const
 
 export type AttemptStatus = (typeof AttemptStatus)[keyof typeof AttemptStatus]

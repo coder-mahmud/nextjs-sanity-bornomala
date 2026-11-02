@@ -167,10 +167,10 @@ export default function PublicQuizListPage() {
                   className="group flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="mb-4 flex items-center justify-between gap-3">
-                    <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                    <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600">
                       {quiz._count?.questions ?? 0} Questions
                     </span>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-sm text-slate-400">
                       {formatDate(quiz.createdAt)}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ export default function PublicQuizListPage() {
 
                     <div className="mt-6 grid grid-cols-2 gap-3">
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        <p className="text-sm font-medium uppercase tracking-wide text-slate-400">
                           Price
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-800">
@@ -199,7 +199,7 @@ export default function PublicQuizListPage() {
                       </div>
 
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        <p className="text-sm font-medium uppercase tracking-wide text-slate-400">
                           Duration
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-800">
@@ -208,7 +208,7 @@ export default function PublicQuizListPage() {
                       </div>
 
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        <p className="text-sm font-medium uppercase tracking-wide text-slate-400">
                           Passing Score
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-800">
@@ -217,7 +217,7 @@ export default function PublicQuizListPage() {
                       </div>
 
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        <p className="text-sm font-medium uppercase tracking-wide text-slate-400">
                           Level
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-800">

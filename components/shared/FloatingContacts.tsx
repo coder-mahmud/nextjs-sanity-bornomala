@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Phone, MessageCircle, Facebook, X, Plus } from 'lucide-react'
 
 export default function FloatingContact() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-center gap-3">

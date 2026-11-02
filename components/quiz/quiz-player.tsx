@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Grid, X, Clock, ChevronLeft, ChevronRight } from "lucide-react";
+import { toast } from "react-toastify"; // <-- 1. Import toast
 
 type Option = {
   id: string;
@@ -35,11 +36,13 @@ export default function QuizPlayer({
   courseSlug,
   lessonSlug,
   quizSlug,
+  userId
 }: {
   initialData: AttemptData;
   courseSlug: string;
   lessonSlug: string;
   quizSlug: string;
+  userId: string;
 }) {
   const router = useRouter();
   const [attempt, setAttempt] = useState(initialData);
@@ -47,6 +50,8 @@ export default function QuizPlayer({
   const [remainingSeconds, setRemainingSeconds] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   const currentQuestion = attempt.questions[currentIndex];
   const totalQuestions = attempt.questions.length;
@@ -110,7 +115,7 @@ export default function QuizPlayer({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="font-bold text-slate-900 text-sm">Question Navigator</h3>
-          <p className="text-xs text-slate-400 mt-0.5">Jump directly to any question</p>
+          <p className="text-sm text-slate-400 mt-0.5">Jump directly to any question</p>
         </div>
         <button 
           onClick={() => setIsDrawerOpen(false)} 
@@ -139,7 +144,7 @@ export default function QuizPlayer({
                 setCurrentIndex(index);
                 setIsDrawerOpen(false);
               }}
-              className={`h-10 rounded-xl border text-xs font-semibold transition-all flex items-center justify-center ${btnStyles}`}
+              className={`h-10 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center ${btnStyles}`}
             >
               {index + 1}
             </button>
@@ -147,7 +152,7 @@ export default function QuizPlayer({
         })}
       </div>
 
-      <div className="border-t border-slate-100 pt-4 space-y-2 text-xs text-slate-600">
+      <div className="border-t border-slate-100 pt-4 space-y-2 text-sm text-slate-600">
         <div className="flex items-center gap-2">
           <div className="h-3 w-3 rounded-md border border-indigo-600 bg-indigo-600" />
           <span>Current Question</span>
@@ -164,12 +169,53 @@ export default function QuizPlayer({
     </div>
   );
 
+  // 2. Updated handleCancelAttempt using toast.promise
+  async function handleCancelAttempt() {
+    setIsCancelling(true);
+    setShowCancelModal(false); // Close modal right away to show toast clearly
+
+    const cancelPromise = async () => {
+      const res = await fetch(`/api/attempts/${attempt.id}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to cancel attempt");
+      }
+
+      return res.json();
+    };
+
+    toast.promise(
+      cancelPromise(),
+      {
+        pending: "Cancelling your exam attempt...",
+        success: {
+          render() {
+            // Redirect after successful cancellation notification resolves
+            router.replace(`/dashboard/courses/${courseSlug}/lessons/${lessonSlug}`);
+            return "Exam attempt successfully cancelled!";
+          },
+        },
+        error: {
+          render({ data }: { data: any }) {
+            setIsCancelling(false);
+            return data?.message || "Something went wrong while cancelling.";
+          },
+        },
+      }
+    );
+  }
+
   return (
     <div className="mx-auto min-h-[90vh] max-w-[1400px] px-2 sm:px-6 py-4 sm:py-6">
       {/* Top Header Bar */}
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl sm:rounded-3xl border border-slate-200 bg-white px-4 sm:px-8 py-4 shadow-xs">
         <div>
-          <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">
+          <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-sm font-semibold text-indigo-700">
             Assessment in Progress
           </span>
           <h1 className="mt-1.5 text-lg sm:text-2xl font-bold tracking-tight text-slate-900 line-clamp-1">
@@ -180,7 +226,7 @@ export default function QuizPlayer({
         <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
           <div className="text-left sm:text-right">
             <p className="text-[11px] font-medium text-slate-400">Time Remaining</p>
-            <p className="text-xs font-semibold text-slate-700">{answeredCount} of {totalQuestions} answered</p>
+            <p className="text-sm font-semibold text-slate-700">{answeredCount} of {totalQuestions} answered</p>
           </div>
           
           <div className={`flex items-center gap-2 rounded-xl border px-3 sm:px-4 py-2 font-mono text-base sm:text-lg font-bold shadow-xs transition-colors ${
@@ -207,16 +253,24 @@ export default function QuizPlayer({
         
         {/* Left Card: Question and Options Panel */}
         <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:px-10 sm:py-8 shadow-xs flex flex-col justify-between">
+          
+          <button
+            onClick={() => setShowCancelModal(true)}
+            className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs sm:text-sm font-semibold text-red-600 hover:bg-red-100 transition mb-4 w-fit"
+          >
+            Cancel Exam
+          </button>
+          
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold tracking-wider uppercase text-indigo-600">
+              <span className="text-sm font-bold tracking-wider uppercase text-indigo-600">
                 Question {currentIndex + 1} of {totalQuestions}
               </span>
-              <span className="text-xs font-semibold text-slate-400">
+              <span className="text-sm font-semibold text-slate-400">
                 {progressPercentage}% Completed
               </span>
             </div>
-            
+
             <div className="w-full bg-slate-100 h-1.5 rounded-full mb-5 sm:mb-6 overflow-hidden">
               <div 
                 className="bg-indigo-600 h-full transition-all duration-300 ease-out" 
@@ -258,7 +312,7 @@ export default function QuizPlayer({
                       </div>
 
                       {/* Option Answer Text Row */}
-                      <span className={`text-xs sm:text-sm font-medium pl-0.5 ${checked ? "text-indigo-950 font-semibold" : "text-slate-700"}`}>
+                      <span className={`text-sm sm:text-sm font-medium pl-0.5 ${checked ? "text-indigo-950 font-semibold" : "text-slate-700"}`}>
                         {option.text}
                       </span>
                     </div>
@@ -268,11 +322,11 @@ export default function QuizPlayer({
           </div>
 
           {/* Navigation Controls Footer */}
-          <div className="mt-6 sm:mt-8 flex items-center justify-between border-t border-slate-100 pt-4 gap-3">
+          <div className="mt-6 sm:mt-8 flex flex-col md:flex-row items-center justify-between border-t border-slate-100 pt-4 gap-3">
             <button
               onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
               disabled={currentIndex === 0}
-              className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
               <ChevronLeft className="w-4 h-4" /> Previous
             </button>
@@ -282,7 +336,7 @@ export default function QuizPlayer({
                 onClick={() =>
                   setCurrentIndex((i) => Math.min(totalQuestions - 1, i + 1))
                 }
-                className="inline-flex items-center gap-1 rounded-xl bg-slate-900 px-5 py-2 text-xs font-semibold text-white hover:bg-slate-800 transition shadow-xs"
+                className="inline-flex items-center gap-1 rounded-xl bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition shadow-xs"
               >
                 Next <ChevronRight className="w-4 h-4" />
               </button>
@@ -290,7 +344,7 @@ export default function QuizPlayer({
               <button
                 onClick={handleSubmit}
                 disabled={isPending}
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 transition shadow-xs"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 transition shadow-xs"
               >
                 {isPending ? "Submitting..." : "Submit Assessment"}
               </button>
@@ -310,6 +364,33 @@ export default function QuizPlayer({
         <div className="fixed inset-0 z-50 lg:hidden flex items-end bg-slate-900/50 backdrop-blur-xs transition-opacity">
           <div className="w-full bg-white rounded-t-3xl p-5 shadow-2xl border-t border-slate-200 animate-in slide-in-from-bottom duration-200">
             <NavigatorContent />
+          </div>
+        </div>
+      )}
+
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <h3 className="text-lg font-bold text-slate-900">Cancel Quiz?</h3>
+            <p className="text-sm text-slate-500">
+              Are you sure you want to cancel this attempt? All your selected answers for this session will be discarded.
+            </p>
+            <div className="flex flex-col md:flex-row items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                disabled={isCancelling}
+                className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+              >
+                Continue Quiz
+              </button>
+              <button
+                onClick={handleCancelAttempt}
+                disabled={isCancelling}
+                className="px-4 py-2 rounded-xl bg-red-600 text-sm font-semibold text-white hover:bg-red-700 transition disabled:opacity-50"
+              >
+                {isCancelling ? "Cancelling..." : "Yes, Cancel Exam"}
+              </button>
+            </div>
           </div>
         </div>
       )}

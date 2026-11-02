@@ -85,7 +85,7 @@ export default function StudentHomeworkForm({
           Lesson Homework Submission
         </div>
         {initialSubmission && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 border border-emerald-200">
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-sm font-semibold text-emerald-700 border border-emerald-200">
             <CheckCircle2 className="w-3.5 h-3.5" /> Submitted
           </span>
         )}
@@ -106,7 +106,7 @@ export default function StudentHomeworkForm({
 
         {/* Google Drive Video Link Field */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+          <label className="mb-1.5 text-sm font-semibold text-gray-700 flex items-center gap-1.5">
             <Video className="w-3.5 h-3.5 text-blue-600" /> Video Link (Google Drive / YouTube)
           </label>
           <input
@@ -115,13 +115,13 @@ export default function StudentHomeworkForm({
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
             placeholder="https://drive.google.com/file/d/.../view"
-            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-xs outline-none focus:border-blue-500 bg-white"
+            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500 bg-white"
           />
         </div>
 
         {/* Optional Comment / Description */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+          <label className="mb-1.5 text-sm font-semibold text-gray-700 flex items-center gap-1.5">
             <FileText className="w-3.5 h-3.5 text-gray-600" /> Student Comments / Notes
           </label>
           <textarea
@@ -130,14 +130,14 @@ export default function StudentHomeworkForm({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Add any additional comments or notes about your homework..."
-            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-xs outline-none focus:border-blue-500 bg-white"
+            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500 bg-white"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-emerald-700 transition shadow-sm cursor-pointer disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition shadow-sm cursor-pointer disabled:opacity-50"
         >
           {initialSubmission ? "Update Homework Submission" : "Submit Homework"}
         </button>

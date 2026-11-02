@@ -85,12 +85,12 @@ export default async function CoursesPage() {
       <section className="py-2 md:py-8">
         <h1 className="text-2xl font-bold px-2 mb-4">My Courses!</h1>
         <div className="rounded-2xl border border-dashed border-gray-200 p-8 text-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-base text-gray-500">
             You do not have access to any active courses yet.
           </p>
           <Link
             href="/courses"
-            className="mt-4 inline-block rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            className="mt-4 inline-block rounded-lg bg-gray-900 px-4 py-2 text-base font-medium text-white hover:bg-gray-800"
           >
             Browse Courses
           </Link>
@@ -129,7 +129,7 @@ export default async function CoursesPage() {
               {course.title}
             </h2>
             {course.shortDescription && (
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-base text-gray-500">
                 {course.shortDescription}
               </p>
             )}

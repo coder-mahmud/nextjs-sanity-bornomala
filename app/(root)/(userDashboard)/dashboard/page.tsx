@@ -117,12 +117,12 @@ const UserDashboardPage = async () => {
           {/* Enrolled Courses Section */}
           <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900 text-center md:text-left w-full">
                 My Courses
               </h2>
               <Link
                 href="/dashboard/courses"
-                className="hidden md:block text-xs font-semibold text-blue-600 hover:text-blue-700"
+                className="hidden text-sm font-semibold text-blue-600 hover:text-blue-700"
               >
                 View all courses →
               </Link>
@@ -137,22 +137,22 @@ const UserDashboardPage = async () => {
                     key={access.id}
                     className="rounded-2xl border border-gray-100 bg-gray-50/50 p-4 transition hover:bg-gray-50"
                   >
-                    <h3 className="font-semibold text-gray-900">
+                    <h3 className="font-semibold text-gray-900 text-center">
                       {access.course.title}
                     </h3>
 
-                    <p className="mt-1 line-clamp-2 text-xs text-gray-500">
+                    <p className="mt-1 line-clamp-2 text-sm text-gray-500 text-center">
                       {access.course.shortDescription || access.course.description || "No description available."}
                     </p>
 
                     <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3">
-                      <span className="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                      <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                         Access Active
                       </span>
 
                       <Link
                         href={`/dashboard/courses/${access.course.slug}`}
-                        className="rounded-xl bg-gray-900 px-4 py-2 text-xs font-semibold text-white hover:bg-gray-800 transition"
+                        className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 transition"
                       >
                         Go to Course
                       </Link>
@@ -171,7 +171,7 @@ const UserDashboardPage = async () => {
               <h2 className="text-xl font-bold text-gray-900">
                 Recent Payments
               </h2>
-              <span className="text-xs font-medium text-gray-400">
+              <span className="text-sm font-medium text-gray-400">
                 Latest transactions
               </span>
             </div>
@@ -190,9 +190,7 @@ const UserDashboardPage = async () => {
                         <h3 className="font-semibold text-gray-900 text-sm">
                           {payment.course?.title || "Course Enrollment"}
                         </h3>
-                        <p className="mt-0.5 text-xs text-gray-400 uppercase tracking-wide">
-                          ID: {payment.id}
-                        </p>
+
                       </div>
 
                       <span className="text-sm font-bold text-gray-900">
@@ -200,7 +198,7 @@ const UserDashboardPage = async () => {
                       </span>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-between text-xs">
+                    <div className="mt-4 flex items-center justify-between text-sm">
                       <span className={`font-semibold px-2.5 py-1 rounded-full ${
                         payment.status === "CAPTURED" || payment.status === "APPROVED"
                           ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
@@ -239,7 +237,7 @@ const DashboardCard = ({
 }) => {
   return (
     <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">{title}</p>
+      <p className="text-sm font-semibold uppercase tracking-wider text-gray-400">{title}</p>
       <h3 className="mt-2 text-3xl font-extrabold text-gray-900">{value}</h3>
     </div>
   );
@@ -248,11 +246,11 @@ const DashboardCard = ({
 const EmptyState = ({ message, actionUrl, actionText }: { message: string; actionUrl?: string; actionText?: string }) => {
   return (
     <div className="rounded-2xl border border-dashed border-gray-200 p-8 text-center bg-gray-50/50">
-      <p className="text-xs text-gray-500">{message}</p>
+      <p className="text-sm text-gray-500">{message}</p>
       {actionUrl && actionText && (
         <Link
           href={actionUrl}
-          className="mt-4 inline-block rounded-xl bg-gray-900 px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition"
+          className="mt-4 inline-block rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
           {actionText}
         </Link>

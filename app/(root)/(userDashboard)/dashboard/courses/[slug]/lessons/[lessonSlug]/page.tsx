@@ -217,7 +217,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
           <Link
             href={`/dashboard/courses/${course.slug}`}
-            className="mt-4 inline-block rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition"
+            className="mt-4 inline-block rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
             Back to Course Overview
           </Link>
@@ -261,7 +261,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
       <div>
         <Link
           href={`/dashboard/courses/${course.slug}`}
-          className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1 mb-3"
+          className="text-sm font-semibold text-blue-600 hover:underline inline-flex items-center gap-1 mb-3"
         >
           ← Back to {course.title}
         </Link>
@@ -269,11 +269,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl bg-white border border-gray-200 p-2 md:p-6 shadow-sm">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-gray-600">
+              <span className="rounded-md bg-gray-100 px-2 py-0.5 text-sm font-mono font-semibold text-gray-600">
                 Lesson #{lesson.order}
               </span>
               {lesson.isPreview && (
-                <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700 border border-blue-200">
+                <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-sm font-semibold text-blue-700 border border-blue-200">
                   Free Preview
                 </span>
               )}
@@ -282,13 +282,13 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <h1 className="text-2xl font-bold text-gray-900">{lesson.title}</h1>
 
             {lesson.description && (
-              <p className="text-xs text-gray-600 leading-relaxed">{lesson.description}</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{lesson.description}</p>
             )}
           </div>
 
           <div>
             {isCompleted ? (
-              <span className="inline-flex items-center gap-1.5 rounded-xl bg-green-50 border border-green-200 px-4 py-2 text-xs font-semibold text-green-700">
+              <span className="inline-flex items-center gap-1.5 rounded-xl bg-green-50 border border-green-200 px-4 py-2 text-sm font-semibold text-green-700">
                 <CheckCircle className="w-4 h-4" /> Completed
               </span>
             ) : (
@@ -299,7 +299,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
                 <button
                   type="submit"
-                  className="rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition shadow-sm cursor-pointer"
+                  className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition shadow-sm cursor-pointer"
                 >
                   Mark as Completed
                 </button>
@@ -312,19 +312,19 @@ export default async function LessonPage({ params }: LessonPageProps) {
       {/* Quiz Time Window (If Scheduled) */}
       {(lesson.startsAt || lesson.endsAt) && (
         <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-2 md:p-5 space-y-2 shadow-sm">
-          <div className="flex items-center gap-2 text-purple-800 text-xs font-bold">
+          <div className="flex items-center gap-2 text-purple-800 text-sm font-bold">
             <CalendarClock className="w-4 h-4 text-purple-600" />
             Quiz time Window
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-purple-950 font-medium">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-purple-950 font-medium">
             <div>
-              <span className="text-purple-600 block text-[11px]">Starts At:</span>
+              <span className="text-purple-600 block text-sm">Starts At:</span>
               {lesson.startsAt
                 ? new Date(lesson.startsAt).toLocaleString("en-US", { timeZone: "UTC" })
                 : "Immediate"}
             </div>
             <div>
-              <span className="text-purple-600 block text-[11px]">Ends At:</span>
+              <span className="text-purple-600 block text-sm">Ends At:</span>
               {lesson.endsAt
                 ? new Date(lesson.endsAt).toLocaleString("en-US", { timeZone: "UTC" })
                 : "No Limit"}
@@ -336,21 +336,21 @@ export default async function LessonPage({ params }: LessonPageProps) {
       {/* Linked Quiz Details */}
       {lesson.quiz && (
         <div className="rounded-2xl border border-indigo-100 bg-white p-2 md:p-5 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs">
+          <div className="flex items-center gap-2 text-indigo-900 font-bold text-sm">
             <HelpCircle className="w-4 h-4 text-indigo-600" />
             Associated Quiz
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-indigo-50/40 border border-indigo-100">
             <div>
-              <p className="text-xs font-bold text-gray-900">{lesson.quiz.title}</p>
-              <p className="text-[11px] text-gray-500 mt-0.5">
+              <p className="text-sm font-bold text-gray-900">{lesson.quiz.title}</p>
+              <p className="text-sm text-gray-500 mt-0.5">
                 Duration: {lesson.quiz.durationMinutes} mins • Passing Score: {lesson.quiz.passingScore}%
               </p>
             </div>
 
             <Link
               href={`/dashboard/courses/${slug}/lessons/${lessonSlug}/quiz/${lesson.quiz.slug}/`}
-              className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700 transition shrink-0"
+              className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition shrink-0"
             >
               See Quiz Details →
             </Link>
@@ -361,11 +361,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
       {/* Lecture Notes */}
       {lesson.notes && (
         <div className="rounded-2xl border border-gray-200 bg-white p-2 md:p-6 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
+          <div className="flex items-center gap-2 text-gray-900 font-bold text-sm">
             <FileText className="w-4 h-4 text-blue-600" />
             Lecture Notes & Content
           </div>
-          <div className="prose prose-sm text-gray-700 text-xs leading-relaxed max-w-none whitespace-pre-wrap">
+          <div className="prose prose-sm text-gray-700 text-sm leading-relaxed max-w-none whitespace-pre-wrap">
             {lesson.notes}
           </div>
         </div>
@@ -374,7 +374,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
       {/* Attachments & Resources */}
       {lesson.attachments && Array.isArray(lesson.attachments) && lesson.attachments.length > 0 && (
         <div className="rounded-2xl border border-gray-200 bg-white p-2 md:p-6 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-gray-900 font-bold text-xs">
+          <div className="flex items-center gap-2 text-gray-900 font-bold text-sm">
             <Paperclip className="w-4 h-4 text-blue-600" />
             Attachments & Downloads ({lesson.attachments.length})
           </div>
@@ -396,7 +396,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                   href={downloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 text-xs transition"
+                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 text-sm transition"
                 >
                   <div className="flex items-center gap-2.5 min-w-0 max-w-[80%]">
                     <Paperclip className="w-3.5 h-3.5 text-gray-400 shrink-0" />
@@ -429,7 +429,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           {prevLesson ? (
             <Link
               href={`/dashboard/courses/${course.slug}/lessons/${prevLesson.slug}`}
-              className="text-xs font-semibold text-gray-700 hover:text-black transition inline-flex items-center gap-1"
+              className="text-sm font-semibold text-gray-700 hover:text-black transition inline-flex items-center gap-1"
             >
               ← Previous Lesson
             </Link>
@@ -440,7 +440,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           {nextLesson && (
             <Link
               href={`/dashboard/courses/${course.slug}/lessons/${nextLesson.slug}`}
-              className="text-xs font-semibold text-gray-700 hover:text-black transition inline-flex items-center gap-1"
+              className="text-sm font-semibold text-gray-700 hover:text-black transition inline-flex items-center gap-1"
             >
               Next Lesson →
             </Link>

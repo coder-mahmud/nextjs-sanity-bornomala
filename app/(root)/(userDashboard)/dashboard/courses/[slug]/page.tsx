@@ -147,13 +147,13 @@ export default async function CourseDetailPage({
       <section className="py-8 max-w-3xl mx-auto px-4 space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
-          <p className="mt-1 text-xs text-gray-600">
+          <p className="mt-1 text-sm text-gray-600">
             You have enrolled in this course! Please choose your batch below to access class schedules and materials.
           </p>
         </div>
 
         {batchRows.length === 0 ? (
-          <p className="text-xs text-gray-500 italic">No batches available for this course yet.</p>
+          <p className="text-sm text-gray-500 italic">No batches available for this course yet.</p>
         ) : (
           <div className="space-y-4">
             <h2 className="text-sm font-bold text-gray-800">Select Your Batch</h2>
@@ -172,7 +172,7 @@ export default async function CourseDetailPage({
                     </div>
 
                     {(batch.startDate || batch.endDate) && (
-                      <p className="mt-1 text-xs text-gray-500 flex items-center gap-1.5">
+                      <p className="mt-1 text-sm text-gray-500 flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-gray-400" />
                         {batch.startDate &&
                           `Starts: ${batch.startDate.toLocaleDateString("en-US", {
@@ -195,7 +195,7 @@ export default async function CourseDetailPage({
                     <input type="hidden" name="batchId" value={batch.id} />
                     <button
                       type="submit"
-                      className="rounded-xl bg-black px-5 py-2.5 text-xs font-semibold text-white hover:bg-gray-800 transition cursor-pointer shadow-xs shrink-0"
+                      className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition cursor-pointer shadow-xs shrink-0"
                     >
                       Select This Batch →
                     </button>
@@ -208,14 +208,14 @@ export default async function CourseDetailPage({
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5 text-emerald-600" /> Class Schedule / Times
                     </span>
-                    <p className="text-xs text-emerald-950 font-medium whitespace-pre-wrap">
+                    <p className="text-sm text-emerald-950 font-medium whitespace-pre-wrap">
                       {batch.scheduleText}
                     </p>
                   </div>
                 )}
 
                 {/* Additional Details Grid: Instructor & Capacity */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm pt-1">
                   {/* Assigned Instructor */}
                   <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center font-bold text-gray-600 shrink-0">
@@ -399,7 +399,7 @@ export default async function CourseDetailPage({
               href={course.courseBook}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 transition shrink-0 shadow-xs"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition shrink-0 shadow-xs"
             >
               <span>Buy from Amazon</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -410,17 +410,17 @@ export default async function CourseDetailPage({
         {hasAccess && (
           <div className="rounded-2xl border border-green-200 bg-green-50 p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+              <p className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
                 Enrolled Batch Active
               </p>
 
-              <p className="text-xs font-medium text-green-700">
+              <p className="text-sm font-medium text-green-700">
                 {completedLessons} of {totalLessons} lessons completed
               </p>
             </div>
 
             <div className="mt-4">
-              <div className="mb-2 flex justify-between text-xs text-green-800 font-medium">
+              <div className="mb-2 flex justify-between text-sm text-green-800 font-medium">
                 <span>Course Progress</span>
                 <span>{progressPercentage}%</span>
               </div>
@@ -439,7 +439,7 @@ export default async function CourseDetailPage({
           <div>
             <Link
               href={`/api/certificates/course/${course.id}`}
-              className="inline-flex rounded-xl bg-green-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-green-700 transition shadow-xs"
+              className="inline-flex rounded-xl bg-green-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition shadow-xs"
             >
               Download Certificate
             </Link>
@@ -448,7 +448,7 @@ export default async function CourseDetailPage({
       </div>
 
       {batches.length === 0 ? (
-        <p className="text-xs text-gray-500 italic">No batches or lessons available.</p>
+        <p className="text-sm text-gray-500 italic">No batches or lessons available.</p>
       ) : (
         <div className="space-y-6">
           {batches.map((batch: BatchItemFormatted) => (
@@ -461,11 +461,11 @@ export default async function CourseDetailPage({
                   {batch.title}
                 </h2>
 
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-600">
                   {batch.status}
                 </span>
 
-                <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                <span className="rounded-full bg-green-100 px-2 py-0.5 text-sm font-medium text-green-700">
                   Selected Batch
                 </span>
               </div>
@@ -475,14 +475,14 @@ export default async function CourseDetailPage({
                   <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-emerald-600" /> Class Schedule / Times
                   </span>
-                  <p className="text-xs text-emerald-950 font-medium whitespace-pre-wrap">
+                  <p className="text-sm text-emerald-950 font-medium whitespace-pre-wrap">
                     {batch.scheduleText}
                   </p>
                 </div>
               )}
 
               {(batch.startDate || batch.endDate) && (
-                <p className="text-xs text-gray-500 flex items-center gap-1">
+                <p className="text-sm text-gray-500 flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   {batch.startDate &&
                     `Starts ${batch.startDate.toLocaleDateString("en-US", {
@@ -501,7 +501,7 @@ export default async function CourseDetailPage({
               )}
 
               {batch.lessons.length === 0 ? (
-                <p className="text-xs text-gray-500 italic">No lessons in this batch.</p>
+                <p className="text-sm text-gray-500 italic">No lessons in this batch.</p>
               ) : (
                 <ul className="space-y-3">
                   {batch.lessons.map((lesson: LessonItem) => {
@@ -520,7 +520,7 @@ export default async function CourseDetailPage({
                       >
                         <div>
                           <div className="flex flex-wrap items-center gap-2">
-                            <p className="text-xs font-semibold text-gray-900">
+                            <p className="text-sm font-semibold text-gray-900">
                               {lesson.title}
                             </p>
 
@@ -534,7 +534,7 @@ export default async function CourseDetailPage({
 
                         <Link
                           href={`/dashboard/courses/${course.slug}/lessons/${lesson.slug}`}
-                          className={`rounded-xl px-4 py-2 text-xs font-semibold text-white transition ${
+                          className={`rounded-xl px-4 py-2 text-sm font-semibold text-white transition ${
                             isCompleted
                               ? "bg-green-600 hover:bg-green-700"
                               : "bg-black hover:bg-gray-800"
@@ -554,7 +554,7 @@ export default async function CourseDetailPage({
 
       {!hasAccess && (
         <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 shadow-xs">
-          <p className="text-xs font-medium text-yellow-800">
+          <p className="text-sm font-medium text-yellow-800">
             You do not have access to this course. Please purchase to unlock all lessons.
           </p>
         </div>

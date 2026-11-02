@@ -15,6 +15,8 @@ async function getAttempt(attemptId: string, userId: string) {
     }),
   });
 
+  console.log("Attempt res:", res)
+
   if (!res.ok) throw new Error("Failed to load attempt");
   return res.json();
 }
@@ -54,6 +56,7 @@ export default async function AttemptPage({
       courseSlug={slug}
       lessonSlug={lessonsSlug}
       quizSlug={quizSlug}
+      userId={userId}
     />
   );
 }

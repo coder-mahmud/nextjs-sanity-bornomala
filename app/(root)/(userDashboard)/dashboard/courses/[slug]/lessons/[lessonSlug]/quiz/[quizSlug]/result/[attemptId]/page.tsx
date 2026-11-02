@@ -69,7 +69,7 @@ export default async function ResultPage({
             ? "border-emerald-200 bg-emerald-50/40 text-emerald-950" 
             : "border-red-200 bg-red-50/40 text-red-950"
         }`}>
-          <div className="flex items-center gap-5 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
             <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ${
               result.passed ? "bg-emerald-600 text-white" : "bg-red-600 text-white"
             }`}>
