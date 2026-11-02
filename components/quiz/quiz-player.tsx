@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Grid, X, Clock, ChevronLeft, ChevronRight } from "lucide-react";
-import { toast } from "react-toastify"; // <-- 1. Import toast
+import { toast } from "react-toastify";
 
 type Option = {
   id: string;
@@ -172,7 +172,7 @@ export default function QuizPlayer({
   // 2. Updated handleCancelAttempt using toast.promise
   async function handleCancelAttempt() {
     setIsCancelling(true);
-    setShowCancelModal(false); // Close modal right away to show toast clearly
+    setShowCancelModal(false); // Close modal right away
 
     const cancelPromise = async () => {
       const res = await fetch(`/api/attempts/${attempt.id}/cancel`, {
@@ -190,16 +190,14 @@ export default function QuizPlayer({
     };
 
     toast.promise(
-      cancelPromise(),
+      cancelPromise().then((data) => {
+        // Safe navigation execution after promise successfully resolves
+        router.replace(`/dashboard/courses/${courseSlug}`);
+        return data;
+      }),
       {
         pending: "Cancelling your exam attempt...",
-        success: {
-          render() {
-            // Redirect after successful cancellation notification resolves
-            router.replace(`/dashboard/courses/${courseSlug}/lessons/${lessonSlug}`);
-            return "Exam attempt successfully cancelled!";
-          },
-        },
+        success: "Exam attempt successfully cancelled!",
         error: {
           render({ data }: { data: any }) {
             setIsCancelling(false);
