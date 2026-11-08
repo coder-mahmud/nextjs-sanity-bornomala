@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, CreditCard, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, BookOpen, CreditCard, CheckCircle2, Clock, Phone } from "lucide-react";
 
 type StudentDetailsPayload = Prisma.UserGetPayload<{
   include: {
@@ -128,6 +128,13 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
                 </span>
               </div>
               <p className="text-sm text-gray-500 mt-0.5">{student.email}</p>
+              
+              {/* Phone Number Display */}
+              <div className="flex items-center gap-1.5 text-sm text-gray-600 mt-1 font-medium">
+                <Phone className="h-3.5 w-3.5 text-indigo-600" />
+                <span>{student.phoneNumber || "No phone number provided"}</span>
+              </div>
+
               <p className="text-xs text-gray-400 mt-1">Joined: {new Date(student.createdAt).toLocaleDateString()}</p>
             </div>
           </div>

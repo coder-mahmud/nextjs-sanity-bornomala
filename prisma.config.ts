@@ -7,8 +7,8 @@ import { defineConfig, env } from "prisma/config";
 
 // for development purpose only
 dotenv.config({
-  // path: ".env.local",
-  path: ".env",
+  path: ".env.local",
+  // path: ".env",
   override: true,
 });
 

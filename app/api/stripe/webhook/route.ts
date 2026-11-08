@@ -180,7 +180,7 @@ export async function POST(req: NextRequest) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ecolebornomala.com";
         
         await resend.emails.send({
-          from: "Echole Bornomala <no-reply@ecolebornomala.com>",
+          from: "Ecole Bornomala <no-reply@ecolebornomala.com>",
           // to: 'bornomalaecole@gmail.com',          
           to: userEmail,
           subject: `Enrollment Confirmed: ${course.title}`,

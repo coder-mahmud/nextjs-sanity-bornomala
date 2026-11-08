@@ -14,6 +14,7 @@ import {
   Globe,
   UserCheck,
   Clock,
+  Eye,
 } from "lucide-react";
 import CreateLessonModalButton from "../_components/CreateLessonModalButton";
 import LessonList from "../_components/LessonList";
@@ -27,6 +28,11 @@ type BatchWithRelations = Prisma.BatchGetPayload<{
       include: {
         quiz: { select: { id: true; title: true } };
         _count: { select: { progressRecords: true } };
+      };
+    };
+    accesses: {
+      include: {
+        user: true;
       };
     };
     _count: { select: { accesses: true } };
@@ -58,6 +64,12 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
           _count: { select: { progressRecords: true } },
         },
         orderBy: { order: "asc" },
+      },
+      accesses: {
+        include: {
+          user: true,
+        },
+        orderBy: { grantedAt: "desc" },
       },
       _count: {
         select: {
@@ -224,6 +236,62 @@ export default async function BatchDetailsPage({ params }: BatchDetailsPageProps
             </p>
           </div>
         )}
+      </div>
+
+      {/* Enrolled Students Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between border-b pb-3">
+          <h2 className="text-base font-bold text-gray-900">Enrolled Students</h2>
+          <span className="text-xs text-gray-400">{batch.accesses.length} Students</span>
+        </div>
+
+        <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-gray-50 text-gray-600 border-b border-gray-100 text-xs">
+              <tr>
+                <th className="px-4 py-3 font-medium">Student Name</th>
+                <th className="px-4 py-3 font-medium">Email</th>
+                <th className="px-4 py-3 font-medium">Phone Number</th>
+                <th className="px-4 py-3 font-medium">Enrolled At</th>
+                <th className="px-4 py-3 font-medium text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 text-xs">
+              {batch.accesses.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-gray-400 italic">
+                    No students enrolled in this batch yet.
+                  </td>
+                </tr>
+              ) : (
+                batch.accesses.map((access) => {
+                  const student = access.user;
+                  return (
+                    <tr key={access.id} className="hover:bg-gray-50/50">
+                      <td className="px-4 py-3 font-medium text-gray-900">
+                        {student.name || "Unnamed Student"}
+                      </td>
+                      <td className="px-4 py-3 text-gray-600">{student.email}</td>
+                      <td className="px-4 py-3 text-gray-600">{student.phoneNumber || "Not provided"}</td>
+                      <td className="px-4 py-3 text-gray-500">
+                        {new Date(access.grantedAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <Link
+                          href={`/admin/students/${student.id}`}
+                          title="View Student Details"
+                          className="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white p-1.5 text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-gray-900"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Lessons Section */}

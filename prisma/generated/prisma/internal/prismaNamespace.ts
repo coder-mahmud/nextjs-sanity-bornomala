@@ -2633,6 +2633,7 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   password: 'password',
+  phoneNumber: 'phoneNumber',
   role: 'role'
 } as const
 

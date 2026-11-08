@@ -6,10 +6,11 @@ import { z } from "zod"
 import { registerAction } from "./actions"
 import { Eye, EyeClosed } from "lucide-react"
 
-
+// 1. Add phoneNumber validation to client schema
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Please enter a valid email"),
+  phoneNumber: z.string().min(6, "Please enter a valid phone number"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Confirm Password must be at least 6 characters"),
 })
@@ -22,9 +23,11 @@ export default function RegisterPage() {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
 
+  // 2. Add phoneNumber to form state
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
   })
@@ -68,9 +71,7 @@ export default function RegisterPage() {
         <form onSubmit={onSubmit} className="space-y-5">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Name
-            </label>
+            <label className="block text-sm font-medium mb-1">Name</label>
             <input
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
@@ -81,9 +82,7 @@ export default function RegisterPage() {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium mb-1">Email</label>
             <input
               type="email"
               value={form.email}
@@ -93,12 +92,21 @@ export default function RegisterPage() {
             />
           </div>
 
+          {/* Phone Number Field */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Phone Number</label>
+            <input
+              type="tel"
+              value={form.phoneNumber}
+              onChange={(e) => update("phoneNumber", e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              placeholder="+33 7 58 34 49 08"
+            />
+          </div>
+
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Password
-            </label>
-
+            <label className="block text-sm font-medium mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPass ? 'text' : "password"}
@@ -108,22 +116,14 @@ export default function RegisterPage() {
                 placeholder="••••••••"
               />
               <span onClick={() => setShowPass(!showPass)} className="absolute right-2 top-[35%]">
-                {showPass? (
-                  <EyeClosed className="w-4 h-4 cursor-pointer" />
-                ) : (
-                  <Eye className="w-4 h-4 cursor-pointer" />
-                )}
+                {showPass ? <EyeClosed className="w-4 h-4 cursor-pointer" /> : <Eye className="w-4 h-4 cursor-pointer" />}
               </span>
             </div>
-
           </div>
           
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Confirm Password
-            </label>
-
+            <label className="block text-sm font-medium mb-1">Confirm Password</label>
             <div className="relative">
               <input
                 type={showConfirmPass ? 'text' : "password"}
@@ -133,19 +133,12 @@ export default function RegisterPage() {
                 placeholder="••••••••"
               />
               <span onClick={() => setConfirmShowPass(!showConfirmPass)} className="absolute right-2 top-[35%]">
-                {showConfirmPass? (
-                  <EyeClosed className="w-4 h-4 cursor-pointer" />
-                ) : (
-                  <Eye className="w-4 h-4 cursor-pointer" />
-                )}
+                {showConfirmPass ? <EyeClosed className="w-4 h-4 cursor-pointer" /> : <Eye className="w-4 h-4 cursor-pointer" />}
               </span>
             </div>
-
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"
@@ -158,9 +151,7 @@ export default function RegisterPage() {
 
         <p className="text-sm text-center mt-6 text-gray-500">
           Already have an account?{" "}
-          <a href="/login" className="text-black font-medium">
-            Login
-          </a>
+          <a href="/login" className="text-black font-medium">Login</a>
         </p>
       </div>
     </div>

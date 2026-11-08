@@ -11,6 +11,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const registerSchema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email"),
+  phoneNumber: z.string().min(6, "Phone number is required"),
   password: z.string().min(6, "Minimum 6 characters"),
 })
 
@@ -24,7 +25,7 @@ export async function registerAction(values: unknown) {
     }
   }
 
-  const { name, email, password } = parsed.data
+  const { name, email,phoneNumber, password } = parsed.data
 
   const existing = await prisma.user.findUnique({ where: { email } })
   if (existing) {
@@ -34,7 +35,7 @@ export async function registerAction(values: unknown) {
   const hashed = await bcrypt.hash(password, 10)
 
   await prisma.user.create({
-    data: { name, email, password: hashed },
+    data: { name, email,phoneNumber, password: hashed },
   })
 
   try {
@@ -44,7 +45,7 @@ export async function registerAction(values: unknown) {
       from: "Welcome <no-reply@ecolebornomala.com>",
       to: email,
       // to: 'bornomalaecole@gmail.com',
-      subject: "Welcome to Our Platform! 🎉",
+      subject: "Welcome to Echole Bornomala! 🎉",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <h2 style="color: #111827;">Welcome aboard, ${name}! 👋</h2>

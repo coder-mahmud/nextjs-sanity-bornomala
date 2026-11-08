@@ -36,7 +36,8 @@ export default async function CoursesPage() {
   const batches =
     batchIds.length > 0
       ? await prisma.batch.findMany({
-          where: { id: { in: batchIds } },
+          where: { id: { in: batchIds }, },
+          
           select: { id: true, status: true },
         })
       : [];

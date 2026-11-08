@@ -30,6 +30,7 @@ type BatchItemFormatted = {
   meetingPlatform: string | null;
   meetingLink: string | null;
   maxStudents: number | null;
+  enrolledCount: number; // Added enrollment count
   instructor: {
     name: string;
     title: string | null;
@@ -94,11 +95,26 @@ export default async function CourseDetailPage({
 
   const hasAccess = accesses.length > 0;
 
-  // Server Action to attach the selected batch to the user's access
+  // Server Action to securely attach the selected batch if capacity allows
   async function selectBatchAction(formData: FormData) {
     "use server";
     const selectedBatchId = formData.get("batchId") as string;
     if (!selectedBatchId) return;
+
+    // Verify batch capacity on the server before updating
+    const batchToCheck = await prisma.batch.findUnique({
+      where: { id: selectedBatchId },
+      include: {
+        _count: { select: { accesses: true } },
+      },
+    });
+
+    if (!batchToCheck) return;
+
+    if (batchToCheck.maxStudents !== null && batchToCheck._count.accesses >= batchToCheck.maxStudents) {
+      // Prevent selection if full
+      return;
+    }
 
     const accessToUpdate = await prisma.courseAccess.findFirst({
       where: {
@@ -118,7 +134,7 @@ export default async function CourseDetailPage({
     redirect(`/dashboard/courses/${slug}`);
   }
 
-  // Fetch batches with inferred typing to avoid payload mismatch
+  // Fetch batches with enrollment count using _count
   const batchRows = await prisma.batch.findMany({
     where: {
       courseId: course.id,
@@ -131,6 +147,9 @@ export default async function CourseDetailPage({
           designation: true,
           imageUrl: true,
         },
+      },
+      _count: {
+        select: { accesses: true },
       },
     },
     orderBy: {
@@ -157,122 +176,143 @@ export default async function CourseDetailPage({
         ) : (
           <div className="space-y-4">
             <h2 className="text-sm font-bold text-gray-800">Select Your Batch</h2>
-            {batchRows.map((batch) => (
-              <div
-                key={batch.id}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4 transition hover:border-gray-300"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-base font-bold text-gray-900">{batch.title}</h3>
-                      <span className="rounded-full bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 text-[11px] font-semibold">
-                        {batch.status}
-                      </span>
-                    </div>
+            {batchRows.map((batch) => {
+              const enrolledCount = batch._count?.accesses || 0;
+              const maxLimit = batch.maxStudents;
+              const isFull = maxLimit !== null && enrolledCount >= maxLimit;
 
-                    {(batch.startDate || batch.endDate) && (
-                      <p className="mt-1 text-sm text-gray-500 flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                        {batch.startDate &&
-                          `Starts: ${batch.startDate.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}`}
-                        {batch.startDate && batch.endDate && " — "}
-                        {batch.endDate &&
-                          `Ends: ${batch.endDate.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}`}
-                      </p>
-                    )}
-                  </div>
+              return (
+                <div
+                  key={batch.id}
+                  className={`rounded-2xl border p-6 shadow-sm space-y-4 transition ${
+                    isFull ? "bg-gray-50 border-gray-200 opacity-90" : "bg-white border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-bold text-gray-900">{batch.title}</h3>
+                        <span className="rounded-full bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 text-[11px] font-semibold">
+                          {batch.status}
+                        </span>
+                        {isFull && (
+                          <span className="rounded-full bg-red-100 text-red-700 border border-red-200 px-2.5 py-0.5 text-[11px] font-semibold">
+                            Batch Full
+                          </span>
+                        )}
+                      </div>
 
-                  <form action={selectBatchAction}>
-                    <input type="hidden" name="batchId" value={batch.id} />
-                    <button
-                      type="submit"
-                      className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition cursor-pointer shadow-xs shrink-0"
-                    >
-                      Select This Batch →
-                    </button>
-                  </form>
-                </div>
-
-                {/* Batch Times Text Display */}
-                {batch.scheduleText && (
-                  <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-emerald-600" /> Class Schedule / Times
-                    </span>
-                    <p className="text-sm text-emerald-950 font-medium whitespace-pre-wrap">
-                      {batch.scheduleText}
-                    </p>
-                  </div>
-                )}
-
-                {/* Additional Details Grid: Instructor & Capacity */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm pt-1">
-                  {/* Assigned Instructor */}
-                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center font-bold text-gray-600 shrink-0">
-                      {batch.instructor?.imageUrl ? (
-                        <img
-                          src={batch.instructor.imageUrl}
-                          alt={batch.instructor.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <User className="w-4 h-4 text-gray-500" />
-                      )}
-                    </div>
-                    <div className="overflow-hidden">
-                      <span className="text-[10px] text-gray-400 font-semibold block uppercase tracking-wider">
-                        Instructor
-                      </span>
-                      <p className="font-bold text-gray-800 truncate">
-                        {batch.instructor?.name || "Instructor Unassigned"}
-                      </p>
-                      {batch.instructor?.title && (
-                        <p className="text-[11px] text-gray-500 truncate">
-                          {batch.instructor.title}
+                      {(batch.startDate || batch.endDate) && (
+                        <p className="mt-1 text-sm text-gray-500 flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                          {batch.startDate &&
+                            `Starts: ${batch.startDate.toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}`}
+                          {batch.startDate && batch.endDate && " — "}
+                          {batch.endDate &&
+                            `Ends: ${batch.endDate.toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}`}
                         </p>
                       )}
                     </div>
+
+                    {/* Disable or hide button if full */}
+                    {isFull ? (
+                      <button
+                        disabled
+                        className="rounded-xl bg-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-400 cursor-not-allowed shrink-0"
+                      >
+                        Batch Full
+                      </button>
+                    ) : (
+                      <form action={selectBatchAction}>
+                        <input type="hidden" name="batchId" value={batch.id} />
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition cursor-pointer shadow-xs shrink-0"
+                        >
+                          Select This Batch →
+                        </button>
+                      </form>
+                    )}
                   </div>
 
-                  {/* Class Platform & Capacity */}
-                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
-                    <span className="text-[10px] text-gray-400 font-semibold block uppercase tracking-wider">
-                      Batch Details
-                    </span>
-                    <div className="flex items-center justify-between text-gray-700">
-                      <span className="flex items-center gap-1">
-                        <Video className="w-3.5 h-3.5 text-blue-600" />
-                        Platform:
+                  {/* Batch Times Text Display */}
+                  {batch.scheduleText && (
+                    <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl space-y-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-emerald-600" /> Class Schedule / Times
                       </span>
-                      <span className="font-semibold text-gray-900">
-                        {batch.meetingPlatform || "Online / Recorded"}
-                      </span>
+                      <p className="text-sm text-emerald-950 font-medium whitespace-pre-wrap">
+                        {batch.scheduleText}
+                      </p>
                     </div>
-                    {batch.maxStudents && (
+                  )}
+
+                  {/* Additional Details Grid: Instructor & Capacity */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm pt-1">
+                    {/* Assigned Instructor */}
+                    <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center font-bold text-gray-600 shrink-0">
+                        {batch.instructor?.imageUrl ? (
+                          <img
+                            src={batch.instructor.imageUrl}
+                            alt={batch.instructor.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <User className="w-4 h-4 text-gray-500" />
+                        )}
+                      </div>
+                      <div className="overflow-hidden">
+                        <span className="text-[10px] text-gray-400 font-semibold block uppercase tracking-wider">
+                          Instructor
+                        </span>
+                        <p className="font-bold text-gray-800 truncate">
+                          {batch.instructor?.name || "Instructor Unassigned"}
+                        </p>
+                        {batch.instructor?.title && (
+                          <p className="text-[11px] text-gray-500 truncate">
+                            {batch.instructor.title}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Class Platform & Capacity */}
+                    <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
+                      <span className="text-[10px] text-gray-400 font-semibold block uppercase tracking-wider">
+                        Batch Details
+                      </span>
+                      <div className="flex items-center justify-between text-gray-700">
+                        <span className="flex items-center gap-1">
+                          <Video className="w-3.5 h-3.5 text-blue-600" />
+                          Platform:
+                        </span>
+                        <span className="font-semibold text-gray-900">
+                          {batch.meetingPlatform || "Online / Recorded"}
+                        </span>
+                      </div>
                       <div className="flex items-center justify-between text-gray-700">
                         <span className="flex items-center gap-1">
                           <Users className="w-3.5 h-3.5 text-emerald-600" />
                           Capacity:
                         </span>
                         <span className="font-semibold text-gray-900">
-                          {batch.maxStudents} Students Max
+                          {enrolledCount} {batch.maxStudents ? `/ ${batch.maxStudents}` : ""} Students
                         </span>
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
@@ -353,6 +393,7 @@ export default async function CourseDetailPage({
       meetingPlatform: batch.meetingPlatform,
       meetingLink: batch.meetingLink,
       maxStudents: batch.maxStudents,
+      enrolledCount: batch._count?.accesses || 0,
       instructor: batch.instructor,
       lessons: lessonsByBatch.get(batch.id) ?? [],
     }));

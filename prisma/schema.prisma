@@ -19,6 +19,7 @@ model User {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   password           String?
+  phoneNumber        String?
   role               Role                @default(STUDENT)
   accounts           Account[]
   authenticators     Authenticator[]
