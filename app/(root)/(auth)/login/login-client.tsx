@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react"
 import { Eye, EyeClosed } from "lucide-react"
 import { getSession } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 
 
 
@@ -147,6 +148,17 @@ export default function LoginPage() {
         >
           Continue with Google
         </button> */}
+
+
+        <div className="flex justify-end mt-1.5">
+          <Link
+            href="/forgot-password"
+            className="text-xs text-gray-600 hover:text-black underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
 
         <p className="text-sm text-center mt-6 text-gray-500">
           Don't have an account?{" "}
